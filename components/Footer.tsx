@@ -3,113 +3,112 @@ import { Instagram, ArrowUpRight, MessageCircle, Twitter, Facebook } from 'lucid
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-stone-950 text-stone-400 py-16 md:py-24 font-sans text-sm relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
+    <footer className="bg-black text-white pt-20 pb-6 font-sans overflow-hidden">
+      <div className="container mx-auto px-6">
         
-        {/* Top Section: Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 border-b border-stone-800 pb-16 mb-16">
+        {/* Top Grid Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-16 border-b border-stone-800 pb-16">
           
-          {/* Column 1: Brand Identity & Contact */}
-          <div className="lg:col-span-4 flex flex-col justify-between h-full space-y-8">
+          {/* Column 1: Brand & Info */}
+          <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              {/* Circular Icon/Logo placeholder matching reference */}
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-bold text-xl mb-6">
-                W
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-black text-xl">
+                  W
+                </div>
+                <h3 className="text-xs font-bold tracking-widest uppercase leading-tight text-stone-300">
+                  INTERVENÇÕES ARTÍSTICAS ÚNICAS //<br/>
+                  EXPERIÊNCIAS IMERSIVAS
+                </h3>
               </div>
-              <h3 className="text-white text-xs font-bold tracking-widest uppercase mb-4">
-                Intervenções Artísticas Únicas //<br/>
-                Tatuagem Neotradicional
-              </h3>
-              <p className="text-stone-500 leading-relaxed max-w-sm text-sm">
-                Fundada por William Siqueira, unimos técnica clássica e visão contemporânea, 
-                redefinindo as possibilidades da arte na pele. Cada projeto é uma colaboração única.
+              
+              <p className="text-stone-500 text-sm leading-relaxed max-w-sm mb-12">
+                Fundada por William Siqueira, unimos décadas de prática artística e visão neotradicional, redefinindo as possibilidades da arte na pele e no ambiente construído.
               </p>
             </div>
             
-            <div className="space-y-2 text-xs uppercase tracking-wide">
-              <p className="text-white">Estúdio Privado</p>
-              <p>São Paulo, SP - Brasil</p>
-              <a href="mailto:contato@wsart.com" className="block hover:text-white transition-colors mt-4 lowercase">hello@williamsiqueira.art</a>
+            <div className="space-y-4 text-sm text-stone-400">
+              <p>Estúdio Privado, São Paulo - SP</p>
+              <a href="mailto:contato@wsart.com" className="block text-white hover:text-stone-300 transition-colors">hello@williamsiqueira.art</a>
               
-              <div className="flex gap-4 mt-6">
-                <a href="#" className="hover:text-white transition-colors"><Instagram size={18} /></a>
-                <a href="#" className="hover:text-white transition-colors"><Twitter size={18} /></a>
-                <a href="#" className="hover:text-white transition-colors"><Facebook size={18} /></a>
+              <div className="flex gap-4 mt-6 pt-6 border-t border-stone-800 w-fit">
+                <a href="#" className="hover:text-white transition-colors"><Instagram size={20} /></a>
+                <a href="#" className="hover:text-white transition-colors"><Twitter size={20} /></a>
+                <a href="#" className="hover:text-white transition-colors"><Facebook size={20} /></a>
               </div>
             </div>
           </div>
 
-          {/* Column 2: Navigation Links (Stacked with borders) */}
+          {/* Column 2: Navigation Links */}
           <div className="lg:col-span-4 flex flex-col">
             {[
-              { name: 'SOBRE', href: '#about' },
-              { name: 'GALERIA', href: '#gallery' },
-              { name: 'FLASH DAY', href: '#flashday' },
-              { name: 'DÚVIDAS', href: '#faq' },
+              { name: 'INÍCIO', href: '#' },
+              { name: 'PROJETOS', href: '#gallery' },
+              { name: 'O QUE FAZEMOS', href: '#about' },
+              { name: 'ÚLTIMAS NOTÍCIAS', href: '#flashday' },
             ].map((link, i) => (
               <a 
                 key={i} 
                 href={link.href}
-                className="group flex justify-between items-center py-5 border-b border-stone-800 first:border-t hover:text-white transition-colors"
+                className="group flex justify-between items-center py-6 border-b border-stone-800 first:border-t hover:pl-4 transition-all duration-300 cursor-pointer"
               >
-                <span className="tracking-widest uppercase text-xs font-bold">{link.name}</span>
-                <ArrowUpRight size={14} className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform opacity-0 group-hover:opacity-100" />
+                <span className="tracking-[0.2em] uppercase text-xs font-bold text-stone-300 group-hover:text-white">{link.name}</span>
+                <ArrowUpRight size={16} className="text-stone-500 group-hover:text-white transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
               </a>
             ))}
              <a 
                 href="#booking"
-                className="group flex justify-between items-center py-5 border-b border-stone-800 hover:text-white transition-colors"
+                className="group flex justify-between items-center py-6 border-b border-stone-800 hover:pl-4 transition-all duration-300 cursor-pointer"
               >
-                <span className="tracking-widest uppercase text-xs font-bold text-white">ENTRE EM CONTATO</span>
-                <ArrowUpRight size={14} className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform opacity-0 group-hover:opacity-100" />
+                <span className="tracking-[0.2em] uppercase text-xs font-bold text-white">ENTRE EM CONTATO</span>
+                <ArrowUpRight size={16} className="text-white transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
               </a>
           </div>
 
-          {/* Column 3: Big CTA */}
-          <div className="lg:col-span-4 flex flex-col justify-between">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-serif text-white leading-tight mb-6">
-                Pronto para dar início a uma sessão de descoberta?
-              </h2>
-              <p className="text-stone-500 text-sm mb-8">
-                Compartilhe suas ideias conosco e começaremos a transformar sua visão em realidade hoje mesmo.
-              </p>
-            </div>
+          {/* Column 3: CTA */}
+          <div className="lg:col-span-4 flex flex-col">
+            <h2 className="text-4xl md:text-5xl font-serif text-white leading-[1.1] mb-6">
+              Pronto para dar início a uma sessão de descoberta?
+            </h2>
+            <p className="text-stone-500 text-sm leading-relaxed mb-8">
+              Compartilhe suas ideias conosco e começaremos a transformar sua visão em realidade hoje mesmo.
+            </p>
             
-            <div className="flex justify-end relative">
-               <div className="fixed bottom-8 right-8 z-50">
-                  <a 
-                    href="https://wa.me/5511999999999" 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="flex items-center justify-center w-14 h-14 bg-green-500 rounded-full text-white shadow-lg hover:bg-green-600 transition-colors animate-bounce"
-                  >
-                    <MessageCircle size={28} />
-                  </a>
-               </div>
+            <div className="mt-auto flex justify-end">
+               {/* Fixed WhatsApp Bubble for usability */}
+               <a 
+                 href="https://wa.me/5511999999999" 
+                 target="_blank" 
+                 rel="noreferrer"
+                 className="flex items-center gap-3 text-green-400 hover:text-green-300 transition-colors group"
+               >
+                 <span className="uppercase tracking-widest text-xs font-bold">Iniciar conversa</span>
+                 <MessageCircle size={32} className="group-hover:scale-110 transition-transform"/>
+               </a>
             </div>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row justify-between items-end relative">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-4 text-xs uppercase tracking-wide text-stone-600 mb-8 md:mb-0">
-             <a href="#" className="hover:text-stone-400">Guia de cuidados</a>
-             <a href="#" className="hover:text-stone-400">Showroom</a>
-             <a href="#" className="hover:text-stone-400">Contate-nos</a>
-             <a href="#" className="hover:text-stone-400">Aluguel de móveis</a>
-             <a href="#" className="hover:text-stone-400">Devoluções e reembolsos</a>
-             <a href="#" className="hover:text-stone-400">Programa Comercial</a>
-             <a href="#" className="hover:text-stone-400">Garantia</a>
+        <div className="pt-12 flex flex-col md:flex-row items-end justify-between relative">
+          
+          {/* Small Links Grid */}
+          <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-[10px] uppercase tracking-wider text-stone-500 mb-12 md:mb-0 w-full md:w-auto">
+             <a href="#" className="hover:text-white transition-colors">Guia de cuidados</a>
+             <a href="#" className="hover:text-white transition-colors">Showroom</a>
+             <a href="#" className="hover:text-white transition-colors">Política de Privacidade</a>
+             <a href="#" className="hover:text-white transition-colors">Termos e Condições</a>
+             <a href="#" className="hover:text-white transition-colors">Devoluções</a>
+             <a href="#" className="hover:text-white transition-colors">Garantia</a>
           </div>
           
-          <div className="text-right">
-             <h1 className="text-[12vw] md:text-[14vw] font-black text-white leading-none tracking-tighter mix-blend-difference opacity-90 select-none pointer-events-none">
+          {/* Massive Brand Name */}
+          <div className="w-full text-right relative">
+             <h1 className="text-[18vw] leading-[0.75] font-black text-white tracking-tighter mix-blend-difference select-none pointer-events-none -mb-4 md:-mb-8">
                SIQUEIRA
              </h1>
-             <div className="flex justify-between items-center text-[10px] uppercase tracking-wider text-stone-600 mt-2">
-                <span>© 2024 William Siqueira Art Ltd.</span>
-                <span>Termos e Condições</span>
+             <div className="absolute bottom-2 left-0 md:left-auto md:right-0 w-full md:w-auto text-center md:text-right">
+                <p className="text-[10px] uppercase tracking-widest text-stone-600 mt-4 md:mt-0">© 2024 William Siqueira Art Ltd.</p>
              </div>
           </div>
         </div>
