@@ -7,68 +7,77 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
               rose: {
-                50: '#fff0f3',
-                100: '#ffe4e9',
-                200: '#fecdd8',
-                300: '#fda4be',
-                400: '#fb719a',
-                500: '#f02e65', // Stronger Vibrant Pink
-                600: '#dd1b50',
-                700: '#b81040',
-                900: '#881337',
+                50: '#FDF7F8',  /* Quase branco, toque de blush - Mais elegante */
+                100: '#FCEEF2',
+                200: '#F5D0DB',
+                300: '#EBA6B9', /* Dusty Rose Claro */
+                400: '#D66D8C',
+                500: '#BE3E65', /* Cor principal: Vinho/Rosa elegante, não neon */
+                600: '#9F2A4D', /* Darker Elegant */
+                700: '#831E3D',
+                800: '#6D1A34',
+                900: '#5A162D',
               },
               stone: {
-                850: '#1c1917',
+                850: '#141211', /* Quase preto, mas quente */
+                900: '#0c0a09',
               }
             },
             fontFamily: {
               serif: ['"Cormorant Garamond"', 'serif'],
               sans: ['"Montserrat"', 'sans-serif'],
             },
-            animation: {
-              'fade-in': 'fadeIn 1.5s ease-out forwards',
-              'slide-up': 'slideUp 1s ease-out forwards',
-              'slide-in-right': 'slideInRight 1s ease-out forwards',
-            },
-            keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              slideUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              slideInRight: {
-                '0%': { opacity: '0', transform: 'translateX(20px)' },
-                '100%': { opacity: '1', transform: 'translateX(0)' },
-              }
-            },
             backgroundImage: {
-              'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.05\"/%3E%3C/svg%3E')",
+              'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.7\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.04\"/%3E%3C/svg%3E')",
             }
           },
         },
       }
     </script>
     <style>
-      /* Smooth scrolling for anchor links */
-      html {
-        scroll-behavior: smooth;
+      /* Lenis Recommended CSS */
+      html.lenis, html.lenis body {
+        height: auto;
       }
+      .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+      }
+      .lenis.lenis-smooth [data-lenis-prevent] {
+        overscroll-behavior: contain;
+      }
+      .lenis.lenis-stopped {
+        overflow: hidden;
+      }
+      .lenis.lenis-scrolling iframe {
+        pointer-events: none;
+      }
+
       body {
-        background-color: #fff0f3; /* New Rose 50 */
+        background-color: #FDF7F8;
       }
-      .text-stroke {
-        -webkit-text-stroke: 1px black;
-        color: transparent;
+      
+      ::selection {
+        background-color: #BE3E65;
+        color: white;
+      }
+      
+      /* Hide scrollbar for cleaner look */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #FDF7F8;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #D66D8C;
+        border-radius: 4px;
       }
     </style>
 <script type="importmap">
@@ -78,8 +87,11 @@
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
     "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "gsap": "https://esm.sh/gsap@^3.14.2",
+    "gsap/": "https://esm.sh/gsap@^3.14.2/",
     "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "@studio-freight/lenis": "https://esm.sh/@studio-freight/lenis@^1.0.42"
   }
 }
 </script>

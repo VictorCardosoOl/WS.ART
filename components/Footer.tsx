@@ -3,116 +3,93 @@ import { Instagram, ArrowUpRight, MessageCircle, Twitter, Facebook } from 'lucid
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-black text-white pt-20 pb-6 font-sans overflow-hidden">
-      <div className="container mx-auto px-6">
+    <footer className="relative h-screen min-h-[700px] bg-stone-900 text-white flex flex-col justify-between font-sans overflow-hidden">
+      
+      <div className="container mx-auto px-6 pt-20 flex-grow flex flex-col">
         
-        {/* Top Grid Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-16 border-b border-stone-800 pb-16">
+        {/* Top Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 flex-grow">
           
-          {/* Column 1: Brand & Info */}
-          <div className="lg:col-span-4 flex flex-col justify-between h-full">
-            <div>
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-black text-xl">
-                  W
-                </div>
-                <h3 className="text-xs font-bold tracking-widest uppercase leading-tight text-stone-300">
-                  INTERVENÇÕES ARTÍSTICAS ÚNICAS //<br/>
-                  EXPERIÊNCIAS IMERSIVAS
-                </h3>
+          {/* Brand & Contact */}
+          <div className="lg:col-span-5 flex flex-col">
+            <div className="flex items-center gap-3 mb-10">
+              <div className="w-10 h-10 bg-rose-600 rounded-full flex items-center justify-center text-white font-serif italic text-xl">
+                W
               </div>
-              
-              <p className="text-stone-500 text-sm leading-relaxed max-w-sm mb-12">
-                Fundada por William Siqueira, unimos décadas de prática artística e visão neotradicional, redefinindo as possibilidades da arte na pele e no ambiente construído.
-              </p>
+              <h3 className="text-[10px] font-bold tracking-[0.2em] uppercase leading-tight text-stone-400">
+                William Siqueira<br/>Art & Tattoo
+              </h3>
             </div>
             
-            <div className="space-y-4 text-sm text-stone-400">
-              <p>Estúdio Privado, São Paulo - SP</p>
-              <a href="mailto:contato@wsart.com" className="block text-white hover:text-stone-300 transition-colors">hello@williamsiqueira.art</a>
-              
-              <div className="flex gap-4 mt-6 pt-6 border-t border-stone-800 w-fit">
-                <a href="#" className="hover:text-white transition-colors"><Instagram size={20} /></a>
-                <a href="#" className="hover:text-white transition-colors"><Twitter size={20} /></a>
-                <a href="#" className="hover:text-white transition-colors"><Facebook size={20} /></a>
-              </div>
+            <h2 className="text-3xl md:text-5xl font-serif leading-tight mb-8 text-stone-100">
+              Vamos criar algo <br/> <span className="text-rose-500 italic">único</span> juntos?
+            </h2>
+
+            <div className="mt-auto space-y-6">
+               <a href="mailto:contato@wsart.com" className="text-xl md:text-2xl hover:text-rose-400 transition-colors block">
+                 hello@williamsiqueira.art
+               </a>
+               
+               <div className="flex gap-6">
+                 <a href="#" className="w-10 h-10 rounded-full border border-stone-700 flex items-center justify-center hover:bg-white hover:text-stone-900 transition-all"><Instagram size={18} /></a>
+                 <a href="#" className="w-10 h-10 rounded-full border border-stone-700 flex items-center justify-center hover:bg-white hover:text-stone-900 transition-all"><Twitter size={18} /></a>
+                 <a href="#" className="w-10 h-10 rounded-full border border-stone-700 flex items-center justify-center hover:bg-white hover:text-stone-900 transition-all"><Facebook size={18} /></a>
+               </div>
             </div>
           </div>
 
-          {/* Column 2: Navigation Links */}
-          <div className="lg:col-span-4 flex flex-col">
+          {/* Links Column */}
+          <div className="lg:col-span-3 lg:col-start-7 flex flex-col justify-center space-y-2">
             {[
-              { name: 'INÍCIO', href: '#' },
-              { name: 'PROJETOS', href: '#gallery' },
-              { name: 'O QUE FAZEMOS', href: '#about' },
-              { name: 'ÚLTIMAS NOTÍCIAS', href: '#flashday' },
+              { name: 'Home', href: '#' },
+              { name: 'Galeria', href: '#gallery' },
+              { name: 'Sobre', href: '#about' },
+              { name: 'Flash Day', href: '#flashday' },
+              { name: 'FAQ', href: '#faq' },
             ].map((link, i) => (
               <a 
                 key={i} 
                 href={link.href}
-                className="group flex justify-between items-center py-6 border-b border-stone-800 first:border-t hover:pl-4 transition-all duration-300 cursor-pointer"
+                className="group flex items-center gap-4 py-3 hover:pl-4 transition-all duration-300"
               >
-                <span className="tracking-[0.2em] uppercase text-xs font-bold text-stone-300 group-hover:text-white">{link.name}</span>
-                <ArrowUpRight size={16} className="text-stone-500 group-hover:text-white transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                <span className="w-2 h-2 bg-stone-800 rounded-full group-hover:bg-rose-500 transition-colors"></span>
+                <span className="text-2xl font-serif text-stone-400 group-hover:text-white group-hover:italic">{link.name}</span>
               </a>
             ))}
+          </div>
+
+          {/* CTA Column */}
+          <div className="lg:col-span-3 flex flex-col justify-end items-start lg:items-end pb-10 lg:pb-0">
              <a 
-                href="#booking"
-                className="group flex justify-between items-center py-6 border-b border-stone-800 hover:pl-4 transition-all duration-300 cursor-pointer"
-              >
-                <span className="tracking-[0.2em] uppercase text-xs font-bold text-white">ENTRE EM CONTATO</span>
-                <ArrowUpRight size={16} className="text-white transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
-              </a>
+               href="https://wa.me/5511999999999" 
+               target="_blank" 
+               rel="noreferrer"
+               className="group relative inline-flex items-center gap-3 px-8 py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-all duration-300"
+             >
+               <span className="uppercase tracking-widest text-xs font-bold">WhatsApp</span>
+               <MessageCircle size={20} />
+             </a>
           </div>
+        </div>
 
-          {/* Column 3: CTA */}
-          <div className="lg:col-span-4 flex flex-col">
-            <h2 className="text-4xl md:text-5xl font-serif text-white leading-[1.1] mb-6">
-              Pronto para dar início a uma sessão de descoberta?
-            </h2>
-            <p className="text-stone-500 text-sm leading-relaxed mb-8">
-              Compartilhe suas ideias conosco e começaremos a transformar sua visão em realidade hoje mesmo.
-            </p>
-            
-            <div className="mt-auto flex justify-end">
-               {/* Fixed WhatsApp Bubble for usability */}
-               <a 
-                 href="https://wa.me/5511999999999" 
-                 target="_blank" 
-                 rel="noreferrer"
-                 className="flex items-center gap-3 text-green-400 hover:text-green-300 transition-colors group"
-               >
-                 <span className="uppercase tracking-widest text-xs font-bold">Iniciar conversa</span>
-                 <MessageCircle size={32} className="group-hover:scale-110 transition-transform"/>
-               </a>
+      </div>
+
+      {/* Bottom Big Text & Copyright - Separate container to avoid overlap */}
+      <div className="relative w-full mt-auto">
+         
+         {/* Copyright Bar */}
+         <div className="absolute top-0 left-0 w-full flex justify-between px-6 py-4 text-[10px] uppercase tracking-widest text-stone-500 z-20 border-t border-stone-800/50 backdrop-blur-sm bg-stone-900/10">
+            <span>© 2024 William Siqueira</span>
+            <div className="flex gap-4">
+              <a href="#" className="hover:text-white">Privacidade</a>
+              <a href="#" className="hover:text-white">Termos</a>
             </div>
-          </div>
-        </div>
+         </div>
 
-        {/* Bottom Section */}
-        <div className="pt-12 flex flex-col md:flex-row items-end justify-between relative">
-          
-          {/* Small Links Grid */}
-          <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-[10px] uppercase tracking-wider text-stone-500 mb-12 md:mb-0 w-full md:w-auto">
-             <a href="#" className="hover:text-white transition-colors">Guia de cuidados</a>
-             <a href="#" className="hover:text-white transition-colors">Showroom</a>
-             <a href="#" className="hover:text-white transition-colors">Política de Privacidade</a>
-             <a href="#" className="hover:text-white transition-colors">Termos e Condições</a>
-             <a href="#" className="hover:text-white transition-colors">Devoluções</a>
-             <a href="#" className="hover:text-white transition-colors">Garantia</a>
-          </div>
-          
-          {/* Massive Brand Name */}
-          <div className="w-full text-right relative">
-             <h1 className="text-[18vw] leading-[0.75] font-black text-white tracking-tighter mix-blend-difference select-none pointer-events-none -mb-4 md:-mb-8">
-               SIQUEIRA
-             </h1>
-             <div className="absolute bottom-2 left-0 md:left-auto md:right-0 w-full md:w-auto text-center md:text-right">
-                <p className="text-[10px] uppercase tracking-widest text-stone-600 mt-4 md:mt-0">© 2024 William Siqueira Art Ltd.</p>
-             </div>
-          </div>
-        </div>
-
+         {/* Big Text */}
+         <h1 className="text-[17vw] leading-[0.75] font-black text-stone-800 text-center tracking-tighter select-none pointer-events-none transform translate-y-2 md:translate-y-4">
+           SIQUEIRA
+         </h1>
       </div>
     </footer>
   );
