@@ -1,48 +1,60 @@
 import React from 'react';
+import Reveal from './Reveal';
+import { ArrowDown } from 'lucide-react';
 
 const Hero: React.FC = () => {
   return (
-    <section className="relative h-[100dvh] min-h-[600px] flex flex-col justify-between overflow-hidden bg-rose-50 bg-noise pt-28 md:pt-40">
+    <section className="relative h-screen w-full flex items-end justify-start overflow-hidden bg-stone-900">
       
-      {/* Decorative Gradient Blurs */}
-      <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-rose-200/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[100px] opacity-50 animate-pulse pointer-events-none"></div>
-      
-      <div className="container mx-auto px-6 relative z-20 flex-grow flex flex-col">
-        
-        {/* Top Content Row - Description Text */}
-        <div className="flex justify-end mb-8 md:mb-12">
-          <div className="max-w-full md:max-w-xl text-right">
-             <p className="font-sans text-base md:text-xl leading-relaxed text-stone-800 font-medium animate-slide-in-right">
-               A <span className="font-bold">WILLIAM SIQUEIRA</span> é um estúdio de arte na pele que elabora experiências únicas e perenes. 
-               <span className="hidden sm:inline"> Conectamos sua história à sua anatomia, transformando valores e memórias em narrativas visuais neotradicionais.</span>
-             </p>
-             {/* Mobile only simplified text extension if needed, or keep hidden/inline logic */}
-             <p className="font-sans text-base leading-relaxed text-stone-800 font-medium sm:hidden mt-2">
-               Conectamos sua história à sua anatomia em narrativas visuais.
-             </p>
-          </div>
-        </div>
-
-        {/* Location Text - Responsive Positioning */}
-        {/* Raised bottom position to account for the larger WILLIAM text */}
-        <div className="absolute left-6 md:left-12 bottom-[26vw] md:bottom-[28vw] z-30">
-          <div className="text-left animate-fade-in delay-300">
-             <span className="block text-[10px] md:text-xs font-bold tracking-widest uppercase text-rose-600 mb-1 md:mb-2">Localização</span>
-             <p className="font-sans font-bold text-stone-900 text-sm md:text-base leading-tight">
-               Estúdio Privado<br/>
-               São Paulo, Brasil
-             </p>
-          </div>
-        </div>
-
+      {/* Background Image - Full Cover */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://picsum.photos/1920/1200?grayscale&random=99" 
+          alt="William Siqueira Art" 
+          className="w-full h-full object-cover opacity-50"
+        />
+        {/* Gradient Overlay for Text Readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/30 to-transparent"></div>
       </div>
 
-      {/* Massive Bottom Text - WILLIAM */}
-      <div className="absolute bottom-0 left-0 w-full flex justify-center items-end z-10 pointer-events-none select-none">
-        {/* Slightly reduced text size from previous iteration to pull back slightly from edges */}
-        <h1 className="text-[19vw] md:text-[23vw] font-black text-stone-900 text-center tracking-tighter leading-[0.75] mix-blend-hard-light pb-2 md:pb-0 translate-y-2 md:translate-y-4">
-          WILLIAM
-        </h1>
+      {/* Content */}
+      <div className="container mx-auto px-6 pb-20 md:pb-24 relative z-10">
+        <div className="flex flex-col">
+          
+          <Reveal>
+            <div className="flex items-center gap-4 mb-4 md:mb-8 ml-2">
+                <div className="h-[1px] w-8 md:w-12 bg-rose-500"></div>
+                <p className="font-sans text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-rose-400">
+                  Estúdio Privado
+                </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={200}>
+            <h1 className="font-serif text-[22vw] md:text-[16vw] leading-[0.75] tracking-tighter text-white select-none mix-blend-screen">
+              WILLIAM
+            </h1>
+          </Reveal>
+          
+          <Reveal delay={400}>
+            <div className="flex flex-col md:flex-row md:items-baseline justify-between mt-2 md:mt-0 px-2">
+                <h2 className="font-serif text-3xl md:text-5xl italic text-stone-400 font-light tracking-wide">
+                    Siqueira
+                </h2>
+                
+                <p className="hidden md:block text-stone-400 text-xs font-mono uppercase tracking-widest max-w-md text-right opacity-70">
+                   Neotraditional • Fine Art • São Paulo
+                </p>
+            </div>
+          </Reveal>
+
+        </div>
+      </div>
+
+      {/* Scroll Hint */}
+      <div className="absolute bottom-8 right-8 z-20 hidden md:flex items-center gap-3 text-stone-500 animate-pulse">
+        <span className="text-[10px] uppercase tracking-widest">Scroll</span>
+        <ArrowDown size={16} />
       </div>
 
     </section>

@@ -1,52 +1,75 @@
 import React from 'react';
 import SectionTitle from './SectionTitle';
+import Reveal from './Reveal';
 import { GalleryItem } from '../types';
+import { ArrowUpRight } from 'lucide-react';
 
 const galleryItems: GalleryItem[] = [
-  { id: 1, src: "https://picsum.photos/400/600?random=1", category: "Neotraditional", title: "Lady Face" },
-  { id: 2, src: "https://picsum.photos/400/400?random=2", category: "Color", title: "Floral Piece" },
-  { id: 3, src: "https://picsum.photos/400/550?random=3", category: "Cover-up", title: "Tiger Back" },
-  { id: 4, src: "https://picsum.photos/400/350?random=4", category: "Neotraditional", title: "Dagger" },
-  { id: 5, src: "https://picsum.photos/400/650?random=5", category: "Concept", title: "Surrealism" },
-  { id: 6, src: "https://picsum.photos/400/450?random=6", category: "Neotraditional", title: "Animal Portrait" },
+  { id: 1, src: "https://picsum.photos/600/900?random=1", category: "Neotraditional", title: "Lady Face" },
+  { id: 2, src: "https://picsum.photos/600/600?random=2", category: "Color", title: "Floral Piece" },
+  { id: 3, src: "https://picsum.photos/600/800?random=3", category: "Cover-up", title: "Tiger Back" },
+  { id: 4, src: "https://picsum.photos/600/500?random=4", category: "Neotraditional", title: "Dagger" },
+  { id: 5, src: "https://picsum.photos/600/1000?random=5", category: "Concept", title: "Surrealism" },
+  { id: 6, src: "https://picsum.photos/600/700?random=6", category: "Neotraditional", title: "Animal Portrait" },
 ];
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="py-16 md:py-24 bg-rose-50">
+    <section id="gallery" className="py-24 md:py-40 bg-white">
       <div className="container mx-auto px-6">
-        <SectionTitle subtitle="Portfólio" title="Trabalhos Recentes" />
         
-        <p className="text-center text-stone-600 text-sm md:text-base max-w-2xl mx-auto mb-10 md:mb-12 leading-relaxed">
-          Peças autorais, coberturas e reformas. Cada projeto é único e desenvolvido exclusivamente para a anatomia do cliente.
-        </p>
+        <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-32">
+          <Reveal>
+             <h2 className="text-5xl md:text-8xl font-serif text-stone-900 leading-[0.9]">
+               Trabalhos<br/>
+               <span className="italic text-rose-500">Selecionados</span>
+             </h2>
+          </Reveal>
+          <Reveal delay={200}>
+            <p className="max-w-xs text-stone-500 text-sm mt-8 md:mt-0 font-medium uppercase tracking-wide">
+              Uma curadoria de projetos que exploram anatomia, cor e narrativa visual.
+            </p>
+          </Reveal>
+        </div>
 
-        {/* Masonry Layout: 1 col mobile, 2 cols tablet, 3 cols desktop */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
-          {galleryItems.map((item) => (
-            <div key={item.id} className="break-inside-avoid group relative overflow-hidden rounded-lg shadow-md cursor-pointer bg-stone-200">
-              <img 
-                src={item.src} 
-                alt={item.title} 
-                className="w-full h-auto transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-              />
-              {/* Overlay: Visible on hover for desktop, subtle gradient usually best for mobile but keeping consistent here */}
-              <div className="absolute inset-0 bg-stone-900/60 transition-opacity duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                <div className="text-center text-white p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="font-serif text-2xl md:text-3xl">{item.title}</h3>
-                  <p className="text-xs font-sans uppercase tracking-widest mt-2 opacity-90">{item.category}</p>
+        {/* Clean Masonry Layout */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+          {galleryItems.map((item, index) => (
+            <div key={item.id} className="break-inside-avoid">
+              <Reveal delay={index % 3 * 150}>
+                <div className="group relative overflow-hidden cursor-none-target">
+                  <img 
+                    src={item.src} 
+                    alt={item.title} 
+                    className="w-full h-auto grayscale group-hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
+                  />
+                  
+                  {/* Minimal Hover Info */}
+                  <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/20 transition-colors duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                     <div className="bg-white/10 backdrop-blur-md p-4 rounded-full">
+                        <ArrowUpRight className="text-white w-8 h-8" />
+                     </div>
+                  </div>
                 </div>
-              </div>
+                
+                <div className="mt-4 flex justify-between items-baseline border-b border-stone-100 pb-2">
+                   <span className="font-serif text-2xl text-stone-900">{item.title}</span>
+                   <span className="text-[10px] uppercase tracking-widest text-stone-400">{item.category}</span>
+                </div>
+              </Reveal>
             </div>
           ))}
         </div>
         
-        <div className="text-center mt-12 md:mt-16">
-           <a href="https://instagram.com" target="_blank" rel="noreferrer" className="inline-block text-stone-800 border-b border-rose-500 pb-1 hover:text-rose-600 transition-colors text-sm md:text-base uppercase tracking-wider font-medium">
-             Ver mais no Instagram
-           </a>
+        <div className="mt-24 text-center">
+           <Reveal>
+             <a href="https://instagram.com" className="inline-block relative group py-2">
+               <span className="font-serif italic text-2xl md:text-3xl text-stone-900">Ver arquivo completo</span>
+               <div className="absolute bottom-0 left-0 w-full h-[1px] bg-stone-300 group-hover:bg-rose-500 transition-colors"></div>
+             </a>
+           </Reveal>
         </div>
+
       </div>
     </section>
   );
