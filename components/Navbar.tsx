@@ -13,12 +13,12 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Updated Links to match new order: Portfolio, Services, FAQ, About
+  // Updated Links to match new order: Portfolio, Services (Antes da sessão), About, FAQ
   const navLinks = [
     { name: 'Galeria', href: '#gallery' },
     { name: 'Serviços', href: '#services' },
-    { name: 'Dúvidas', href: '#faq' },
     { name: 'Sobre', href: '#about' },
+    { name: 'Dúvidas', href: '#faq' },
   ];
 
   return (
