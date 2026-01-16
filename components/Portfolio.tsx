@@ -15,7 +15,8 @@ const galleryItems: GalleryItem[] = [
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="py-24 md:py-40 bg-white">
+    // Changed bg-white to a subtle gradient
+    <section id="gallery" className="py-24 md:py-40 bg-gradient-to-b from-[#fff0f3] to-white">
       <div className="container mx-auto px-6">
         
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-32">
@@ -45,16 +46,16 @@ const Portfolio: React.FC = () => {
                   />
                   
                   {/* Minimal Hover Info */}
-                  <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/20 transition-colors duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <div className="absolute inset-0 bg-rose-500/10 group-hover:bg-rose-900/20 transition-colors duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
                      <div className="bg-white/10 backdrop-blur-md p-4 rounded-full">
                         <ArrowUpRight className="text-white w-8 h-8" />
                      </div>
                   </div>
                 </div>
                 
-                <div className="mt-4 flex justify-between items-baseline border-b border-stone-100 pb-2">
+                <div className="mt-4 flex justify-between items-baseline border-b border-rose-100 pb-2">
                    <span className="font-serif text-2xl text-stone-900">{item.title}</span>
-                   <span className="text-[10px] uppercase tracking-widest text-stone-400">{item.category}</span>
+                   <span className="text-[10px] uppercase tracking-widest text-rose-400">{item.category}</span>
                 </div>
               </Reveal>
             </div>
@@ -65,7 +66,7 @@ const Portfolio: React.FC = () => {
            <Reveal>
              <a href="https://instagram.com" className="inline-block relative group py-2">
                <span className="font-serif italic text-2xl md:text-3xl text-stone-900">Ver arquivo completo</span>
-               <div className="absolute bottom-0 left-0 w-full h-[1px] bg-stone-300 group-hover:bg-rose-500 transition-colors"></div>
+               <div className="absolute bottom-0 left-0 w-full h-[1px] bg-rose-300 group-hover:bg-rose-500 transition-colors"></div>
              </a>
            </Reveal>
         </div>
