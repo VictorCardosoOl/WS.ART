@@ -3,7 +3,7 @@ import { Instagram, ArrowUpRight, MessageCircle, Twitter, Facebook } from 'lucid
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-black text-white pt-20 pb-6 font-sans overflow-hidden">
+    <footer className="bg-black text-white pt-20 pb-0 font-sans overflow-hidden">
       <div className="container mx-auto px-6">
         
         {/* Top Grid Section */}
@@ -75,7 +75,6 @@ const Footer: React.FC = () => {
             </p>
             
             <div className="mt-auto flex justify-end">
-               {/* Fixed WhatsApp Bubble for usability */}
                <a 
                  href="https://wa.me/5511999999999" 
                  target="_blank" 
@@ -90,10 +89,10 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="pt-12 flex flex-col md:flex-row items-end justify-between relative">
+        <div className="pt-12 flex flex-col md:flex-row items-end justify-between relative pb-8 md:pb-12">
           
           {/* Small Links Grid */}
-          <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-[10px] uppercase tracking-wider text-stone-500 mb-12 md:mb-0 w-full md:w-auto">
+          <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-[10px] uppercase tracking-wider text-stone-500 mb-12 md:mb-4 w-full md:w-auto relative z-10">
              <a href="#" className="hover:text-white transition-colors">Guia de cuidados</a>
              <a href="#" className="hover:text-white transition-colors">Showroom</a>
              <a href="#" className="hover:text-white transition-colors">Política de Privacidade</a>
@@ -102,13 +101,13 @@ const Footer: React.FC = () => {
              <a href="#" className="hover:text-white transition-colors">Garantia</a>
           </div>
           
-          {/* Massive Brand Name */}
-          <div className="w-full text-right relative">
-             <h1 className="text-[18vw] leading-[0.75] font-black text-white tracking-tighter mix-blend-difference select-none pointer-events-none -mb-4 md:-mb-8">
-               SIQUEIRA
+          {/* Massive Brand Name - Changed to WILLIAM */}
+          <div className="w-full text-right relative h-auto overflow-visible">
+             <h1 className="text-[20vw] leading-[0.75] font-black text-white tracking-tighter mix-blend-difference select-none pointer-events-none translate-y-[12%]">
+               WILLIAM
              </h1>
-             <div className="absolute bottom-2 left-0 md:left-auto md:right-0 w-full md:w-auto text-center md:text-right">
-                <p className="text-[10px] uppercase tracking-widest text-stone-600 mt-4 md:mt-0">© 2024 William Siqueira Art Ltd.</p>
+             <div className="absolute bottom-6 left-0 md:left-auto md:right-0 w-full md:w-auto text-center md:text-right z-20">
+                <p className="text-[10px] uppercase tracking-widest text-stone-600">© 2024 William Siqueira Art Ltd.</p>
              </div>
           </div>
         </div>

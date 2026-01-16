@@ -27,14 +27,14 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Middle Indicators Row */}
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-4 text-xs md:text-sm font-bold tracking-widest uppercase text-stone-900 mt-auto mb-20 md:mb-32 items-end relative z-20">
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-4 text-xs md:text-sm font-bold tracking-widest uppercase text-stone-900 mt-auto mb-32 md:mb-48 items-end relative z-20">
           
           {/* Studio Location - Lifted up */}
           <div className="col-span-1 md:col-span-4 text-left animate-fade-in delay-300 pb-8 md:pb-16">
             Estúdio Privado<br/>São Paulo, Brasil
           </div>
           
-          {/* Middle Spacer (Old text removed) */}
+          {/* Middle Spacer */}
           <div className="hidden md:block md:col-span-4"></div>
           
           {/* CTA Circle */}
@@ -50,14 +50,14 @@ const Hero: React.FC = () => {
 
       </div>
 
-      {/* Massive Bottom Text */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden select-none pointer-events-none flex justify-center items-end leading-none z-0">
-        <h1 className="text-[17vw] md:text-[19vw] font-black text-stone-900 text-center tracking-tighter animate-slide-up whitespace-nowrap leading-[0.8] transform -translate-y-6 md:-translate-y-10">
-          SIQUEIRA
+      {/* Massive Bottom Text - Changed to WILLIAM */}
+      <div className="absolute bottom-0 left-0 w-full overflow-visible select-none pointer-events-none flex justify-center items-end z-0">
+        <h1 className="text-[19vw] md:text-[22vw] font-black text-stone-900 text-center tracking-tighter animate-slide-up whitespace-nowrap leading-[0.75] translate-y-[2%]">
+          WILLIAM
         </h1>
         
         {/* Overlay texture */}
-        <div className="absolute inset-0 bg-noise mix-blend-overlay opacity-50"></div>
+        <div className="absolute inset-0 bg-noise mix-blend-overlay opacity-50 h-full w-full pointer-events-none"></div>
       </div>
 
     </section>
