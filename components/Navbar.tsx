@@ -13,11 +13,12 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Updated Links to match new order: Portfolio, Services, FAQ, About
   const navLinks = [
-    { name: 'Sobre', href: '#about' },
     { name: 'Galeria', href: '#gallery' },
-    { name: 'Flash Day', href: '#flashday' },
+    { name: 'Serviços', href: '#services' },
     { name: 'Dúvidas', href: '#faq' },
+    { name: 'Sobre', href: '#about' },
   ];
 
   return (
@@ -69,8 +70,11 @@ const Navbar: React.FC = () => {
                 <Instagram size={18} strokeWidth={1.5} />
               </a>
               
+              {/* WhatsApp CTA in Navbar instead of Booking Form anchor */}
               <a
-                href="#booking"
+                href="https://wa.me/5511999999999"
+                target="_blank"
+                rel="noreferrer"
                 className={`
                   relative px-6 py-2 overflow-hidden rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-500 border border-stone-900
                   group
@@ -80,7 +84,7 @@ const Navbar: React.FC = () => {
                 `}
               >
                 <span className="absolute inset-0 w-full h-full bg-stone-900 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out"></span>
-                <span className="relative z-10">Agendar</span>
+                <span className="relative z-10">Contato</span>
               </a>
             </div>
           </div>
@@ -117,11 +121,13 @@ const Navbar: React.FC = () => {
           <div className="w-12 h-[1px] bg-stone-300 my-8"></div>
           
           <a
-            href="#booking"
+            href="https://wa.me/5511999999999"
+            target="_blank"
+            rel="noreferrer"
             onClick={() => setIsOpen(false)}
             className="text-xs font-sans uppercase tracking-[0.2em] font-bold text-rose-600 border border-rose-200 px-8 py-4 rounded-full hover:bg-rose-50 transition-colors"
           >
-            Solicitar Orçamento
+            Falar no WhatsApp
           </a>
         </nav>
       </div>

@@ -13,35 +13,37 @@ const galleryItems: GalleryItem[] = [
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="py-24 bg-rose-50">
+    <section id="gallery" className="py-16 md:py-24 bg-rose-50">
       <div className="container mx-auto px-6">
         <SectionTitle subtitle="Portfólio" title="Trabalhos Recentes" />
         
-        <p className="text-center text-stone-500 max-w-2xl mx-auto mb-12">
+        <p className="text-center text-stone-600 text-sm md:text-base max-w-2xl mx-auto mb-10 md:mb-12 leading-relaxed">
           Peças autorais, coberturas e reformas. Cada projeto é único e desenvolvido exclusivamente para a anatomia do cliente.
         </p>
 
-        {/* Masonry Layout using columns */}
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+        {/* Masonry Layout: 1 col mobile, 2 cols tablet, 3 cols desktop */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
           {galleryItems.map((item) => (
-            <div key={item.id} className="break-inside-avoid group relative overflow-hidden rounded-lg shadow-md cursor-pointer">
+            <div key={item.id} className="break-inside-avoid group relative overflow-hidden rounded-lg shadow-md cursor-pointer bg-stone-200">
               <img 
                 src={item.src} 
                 alt={item.title} 
                 className="w-full h-auto transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
               />
-              <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/60 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="font-serif text-2xl">{item.title}</h3>
-                  <p className="text-sm font-sans uppercase tracking-widest mt-2">{item.category}</p>
+              {/* Overlay: Visible on hover for desktop, subtle gradient usually best for mobile but keeping consistent here */}
+              <div className="absolute inset-0 bg-stone-900/60 transition-opacity duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                <div className="text-center text-white p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                  <h3 className="font-serif text-2xl md:text-3xl">{item.title}</h3>
+                  <p className="text-xs font-sans uppercase tracking-widest mt-2 opacity-90">{item.category}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
         
-        <div className="text-center mt-12">
-           <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-stone-800 border-b border-rose-500 pb-1 hover:text-rose-600 transition-colors">
+        <div className="text-center mt-12 md:mt-16">
+           <a href="https://instagram.com" target="_blank" rel="noreferrer" className="inline-block text-stone-800 border-b border-rose-500 pb-1 hover:text-rose-600 transition-colors text-sm md:text-base uppercase tracking-wider font-medium">
              Ver mais no Instagram
            </a>
         </div>

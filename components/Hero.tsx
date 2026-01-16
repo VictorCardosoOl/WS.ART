@@ -2,62 +2,47 @@ import React from 'react';
 
 const Hero: React.FC = () => {
   return (
-    <section className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-rose-50 bg-noise pt-32 md:pt-44 pb-0">
+    <section className="relative h-[100dvh] min-h-[600px] flex flex-col justify-between overflow-hidden bg-rose-50 bg-noise pt-28 md:pt-40">
       
       {/* Decorative Gradient Blurs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-200/40 rounded-full mix-blend-multiply filter blur-[100px] opacity-50 animate-pulse pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-rose-200/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[100px] opacity-50 animate-pulse pointer-events-none"></div>
       
-      <div className="container mx-auto px-6 relative z-10 flex-grow flex flex-col">
+      <div className="container mx-auto px-6 relative z-20 flex-grow flex flex-col">
         
-        {/* Top Content Row */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-8 md:mb-12">
-          {/* Empty Left Space */}
-          <div className="hidden md:block md:col-span-6"></div>
-
-          {/* Right Text Block */}
-          <div className="md:col-span-6 flex flex-col items-end text-right md:text-right">
-             <div className="max-w-xl">
-               <p className="font-sans text-lg md:text-xl leading-relaxed text-stone-800 font-medium animate-slide-in-right">
-                 A <span className="font-bold">WILLIAM SIQUEIRA</span> é um estúdio de arte na pele que elabora experiências únicas e perenes. 
-                 Conectamos sua história à sua anatomia, transformando valores e memórias em narrativas visuais neotradicionais. 
-                 Nossa missão é criar uma conexão emocional profunda através da tinta.
-               </p>
-             </div>
+        {/* Top Content Row - Description Text */}
+        <div className="flex justify-end mb-8 md:mb-12">
+          <div className="max-w-full md:max-w-xl text-right">
+             <p className="font-sans text-base md:text-xl leading-relaxed text-stone-800 font-medium animate-slide-in-right">
+               A <span className="font-bold">WILLIAM SIQUEIRA</span> é um estúdio de arte na pele que elabora experiências únicas e perenes. 
+               <span className="hidden sm:inline"> Conectamos sua história à sua anatomia, transformando valores e memórias em narrativas visuais neotradicionais.</span>
+             </p>
+             {/* Mobile only simplified text extension if needed, or keep hidden/inline logic */}
+             <p className="font-sans text-base leading-relaxed text-stone-800 font-medium sm:hidden mt-2">
+               Conectamos sua história à sua anatomia em narrativas visuais.
+             </p>
           </div>
         </div>
 
-        {/* Middle Indicators Row */}
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-4 text-xs md:text-sm font-bold tracking-widest uppercase text-stone-900 mt-auto mb-32 md:mb-48 items-end relative z-20">
-          
-          {/* Studio Location - Lifted up */}
-          <div className="col-span-1 md:col-span-4 text-left animate-fade-in delay-300 pb-8 md:pb-16">
-            Estúdio Privado<br/>São Paulo, Brasil
-          </div>
-          
-          {/* Middle Spacer */}
-          <div className="hidden md:block md:col-span-4"></div>
-          
-          {/* CTA Circle */}
-          <div className="col-span-2 md:col-span-4 flex justify-center md:justify-end mt-6 md:mt-0 animate-fade-in delay-700">
-            <a href="#booking" className="group relative inline-flex items-center justify-center w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-stone-800 hover:bg-stone-900 hover:text-white transition-all duration-300 cursor-pointer bg-rose-50/50 backdrop-blur-sm">
-              <span className="font-serif text-xl italic relative z-10 group-hover:scale-110 transition-transform">Orçar<br/>Projeto</span>
-              <svg className="absolute w-full h-full text-stone-800 group-hover:text-white transition-colors opacity-0 group-hover:opacity-20" viewBox="0 0 100 100">
-                 <path d="M10,50 Q25,25 50,50 T90,50" fill="none" stroke="currentColor" strokeWidth="2" />
-              </svg>
-            </a>
+        {/* Location Text - Responsive Positioning */}
+        {/* Adjusted bottom position to scale with viewport width so it stays above the big name */}
+        <div className="absolute left-6 md:left-12 bottom-[20vw] md:bottom-[22vw] z-30">
+          <div className="text-left animate-fade-in delay-300">
+             <span className="block text-[10px] md:text-xs font-bold tracking-widest uppercase text-rose-600 mb-1 md:mb-2">Localização</span>
+             <p className="font-sans font-bold text-stone-900 text-sm md:text-base leading-tight">
+               Estúdio Privado<br/>
+               São Paulo, Brasil
+             </p>
           </div>
         </div>
 
       </div>
 
-      {/* Massive Bottom Text - Changed to WILLIAM */}
-      <div className="absolute bottom-0 left-0 w-full overflow-visible select-none pointer-events-none flex justify-center items-end z-0">
-        <h1 className="text-[19vw] md:text-[22vw] font-black text-stone-900 text-center tracking-tighter animate-slide-up whitespace-nowrap leading-[0.75] translate-y-[2%]">
+      {/* Massive Bottom Text - WILLIAM */}
+      <div className="absolute bottom-0 left-0 w-full flex justify-center items-end z-10 pointer-events-none select-none">
+        {/* Reduced text size from 23vw to 18vw/15vw and removed translate-y to prevent clipping */}
+        <h1 className="text-[15vw] md:text-[18vw] font-black text-stone-900 text-center tracking-tighter leading-[0.8] mix-blend-hard-light pb-2 md:pb-4">
           WILLIAM
         </h1>
-        
-        {/* Overlay texture */}
-        <div className="absolute inset-0 bg-noise mix-blend-overlay opacity-50 h-full w-full pointer-events-none"></div>
       </div>
 
     </section>

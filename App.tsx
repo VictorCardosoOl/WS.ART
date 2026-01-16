@@ -3,8 +3,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Portfolio from './components/Portfolio';
-import FlashDay from './components/FlashDay';
-import BookingForm from './components/BookingForm';
+import Services from './components/Services';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 
@@ -14,11 +13,10 @@ const App: React.FC = () => {
       <Navbar />
       <main>
         <Hero />
-        <About />
         <Portfolio />
-        <FlashDay />
+        <Services />
         <FAQ />
-        <BookingForm />
+        <About />
       </main>
       <Footer />
     </div>
