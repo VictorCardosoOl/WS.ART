@@ -7,24 +7,26 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <!-- Added weights 700, 800, 900 to Montserrat for thicker Hero text -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
               rose: {
-                50: '#fdf7f8', // Warm White/Blush
-                100: '#fce7ec',
-                200: '#facdbe',
-                300: '#f2a6b0',
-                400: '#e67386', // Sophisticated Pink
-                500: '#d1435b', // Dusty Rose (Primary)
-                600: '#ba2d45',
-                700: '#9f2237',
-                800: '#862033',
-                900: '#731f2f',
-                950: '#400d16',
+                // New Sophisticated "Dusty Rose" Palette
+                50: '#f2e8e9', // Hero Background (Darker, warmer pink/beige)
+                100: '#e6cfd3',
+                200: '#d5aab1',
+                300: '#c0828d',
+                400: '#a85d6b', // Elegant darker pink
+                500: '#8f3e4d', // Primary sophisticated
+                600: '#752d3b',
+                700: '#61222e',
+                800: '#521d27',
+                900: '#451a22',
+                950: '#260c10',
               },
               stone: {
                 850: '#1c1917',
@@ -66,7 +68,9 @@
         scroll-behavior: smooth;
       }
       body {
-        background-color: #fdf7f8; /* New Rose 50 */
+        background-color: #ffffff;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       .text-stroke {
         -webkit-text-stroke: 1px black;
