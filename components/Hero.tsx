@@ -24,8 +24,8 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Location Text - Responsive Positioning */}
-        {/* Adjusted bottom position to scale with viewport width so it stays above the big name */}
-        <div className="absolute left-6 md:left-12 bottom-[20vw] md:bottom-[22vw] z-30">
+        {/* Raised bottom position to account for the larger WILLIAM text */}
+        <div className="absolute left-6 md:left-12 bottom-[26vw] md:bottom-[28vw] z-30">
           <div className="text-left animate-fade-in delay-300">
              <span className="block text-[10px] md:text-xs font-bold tracking-widest uppercase text-rose-600 mb-1 md:mb-2">Localização</span>
              <p className="font-sans font-bold text-stone-900 text-sm md:text-base leading-tight">
@@ -39,8 +39,8 @@ const Hero: React.FC = () => {
 
       {/* Massive Bottom Text - WILLIAM */}
       <div className="absolute bottom-0 left-0 w-full flex justify-center items-end z-10 pointer-events-none select-none">
-        {/* Reduced text size from 23vw to 18vw/15vw and removed translate-y to prevent clipping */}
-        <h1 className="text-[15vw] md:text-[18vw] font-black text-stone-900 text-center tracking-tighter leading-[0.8] mix-blend-hard-light pb-2 md:pb-4">
+        {/* Slightly reduced text size from previous iteration to pull back slightly from edges */}
+        <h1 className="text-[19vw] md:text-[23vw] font-black text-stone-900 text-center tracking-tighter leading-[0.75] mix-blend-hard-light pb-2 md:pb-0 translate-y-2 md:translate-y-4">
           WILLIAM
         </h1>
       </div>
