@@ -3,6 +3,7 @@ import { Menu, X, Instagram } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
 
@@ -10,7 +11,10 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Show navbar if scrolling up or at the very top, hide if scrolling down
+      // Update background state
+      setIsScrolled(currentScrollY > 50);
+
+      // Smart hide/show logic
       if (currentScrollY < lastScrollY.current || currentScrollY < 50) {
         setIsVisible(true);
       } else if (currentScrollY > 50 && currentScrollY > lastScrollY.current) {
@@ -26,7 +30,7 @@ const Navbar: React.FC = () => {
 
   const navLinks = [
     { name: 'Galeria', href: '#gallery' },
-    { name: 'Serviços', href: '#services' },
+    { name: 'O Processo', href: '#services' },
     { name: 'Sobre', href: '#about' },
     { name: 'Dúvidas', href: '#faq' },
   ];
@@ -34,16 +38,17 @@ const Navbar: React.FC = () => {
   return (
     <>
       <nav 
-        className={`fixed w-full z-50 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] 
+        className={`fixed w-full z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] 
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-        bg-white/0 backdrop-blur-[2px]`}
+        ${isScrolled ? 'bg-rose-50/80 backdrop-blur-md border-b border-rose-100/50 py-4 shadow-sm' : 'bg-transparent py-6'}
+        `}
       >
-        <div className="max-w-[1920px] mx-auto px-6 md:px-12 py-6 flex justify-between items-center">
+        <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex justify-between items-center">
           
           {/* Logo */}
           <a href="#" className="group flex items-center gap-1 z-50 relative">
-            <span className="font-sans font-black text-2xl tracking-tighter hover:opacity-70 transition-opacity text-stone-900">
-              WS<span className="text-rose-500">.</span>Art
+            <span className={`font-serif font-bold text-2xl tracking-tighter transition-colors duration-300 ${isScrolled ? 'text-stone-800' : 'text-stone-900'}`}>
+              W<span className="text-rose-500">.</span>Siqueira
             </span>
           </a>
 
@@ -62,14 +67,14 @@ const Navbar: React.FC = () => {
               ))}
             </div>
 
-            <div className="w-[1px] h-4 bg-stone-300"></div>
+            <div className={`w-[1px] h-4 ${isScrolled ? 'bg-stone-300' : 'bg-stone-400'}`}></div>
 
             <div className="flex items-center gap-6">
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-rose-500 transition-colors hover:scale-110 transform duration-300 text-stone-400"
+                className="hover:text-rose-500 transition-colors hover:scale-110 transform duration-300 text-stone-500"
                 aria-label="Instagram"
               >
                 <Instagram size={18} strokeWidth={1.5} />
@@ -77,7 +82,7 @@ const Navbar: React.FC = () => {
               
               <a
                 href="#booking"
-                className="relative px-6 py-2 overflow-hidden rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-500 border border-stone-900 group hover:border-rose-500"
+                className={`relative px-6 py-2 overflow-hidden rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-500 border group hover:border-rose-500 ${isScrolled ? 'border-stone-800 text-stone-800' : 'border-stone-900 text-stone-900'}`}
               >
                 <span className="absolute inset-0 w-full h-full bg-stone-900 transform translate-x-0 group-hover:translate-x-full transition-transform duration-300 ease-out"></span>
                 <span className="relative z-10 text-white group-hover:text-stone-900 transition-colors">Agendar</span>
@@ -97,7 +102,7 @@ const Navbar: React.FC = () => {
       </nav>
 
       {/* Mobile Nav Overlay */}
-      <div className={`fixed inset-0 bg-[#fff0f3] z-40 flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${isOpen ? 'clip-circle-full' : 'clip-circle-0 pointer-events-none'}`}>
+      <div className={`fixed inset-0 bg-[#fdf7f8] z-40 flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${isOpen ? 'clip-circle-full' : 'clip-circle-0 pointer-events-none'}`}>
         <style>{`.clip-circle-0 { clip-path: circle(0% at 100% 0); } .clip-circle-full { clip-path: circle(140% at 100% 0); }`}</style>
         
         <nav className="flex flex-col items-center space-y-8 relative z-10">
