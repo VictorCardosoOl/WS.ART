@@ -3,11 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FAF7F7" />
     
     <!-- SEO & Meta Tags -->
     <title>William Siqueira | Tatuagem Neotradicional e Arte em SP</title>
     <meta name="description" content="Estúdio privado de tatuagem em São Paulo especializado em estilo Neotradicional, Coberturas (Cover-up) e projetos autorais. Arte na pele por William Siqueira." />
-    <meta name="keywords" content="tatuagem neotradicional, tattoo sp, william siqueira, cover-up, tatuagem colorida, estúdio privado, tatuador são paulo" />
+    <meta name="keywords" content="tatuagem neotradicional, tattoo sp, william siqueira, cover-up, tatuagem colorida, estúdio privado, tatuador são paulo, arte autoral" />
     <meta name="author" content="William Siqueira" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://williamsiqueira.art" />
@@ -17,7 +18,7 @@
     <meta property="og:url" content="https://williamsiqueira.art/" />
     <meta property="og:title" content="William Siqueira | Tatuagem Neotradicional" />
     <meta property="og:description" content="Conectamos sua história à sua anatomia. Estúdio privado em São Paulo especializado em arte neotradicional exclusiva." />
-    <meta property="og:image" content="https://picsum.photos/1200/630?grayscale&blur=2" /> <!-- Placeholder for actual social image -->
+    <meta property="og:image" content="https://picsum.photos/1200/630?grayscale&blur=2" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -26,14 +27,13 @@
     <meta property="twitter:description" content="Experiências únicas em arte na pele. Projetos autorais e exclusivos em SP." />
     <meta property="twitter:image" content="https://picsum.photos/1200/630?grayscale&blur=2" />
 
-    <!-- Schema.org Structured Data (Local Business) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "TattooParlor",
       "name": "William Siqueira Tattoo Art",
       "image": ["https://picsum.photos/600/600"],
-      "description": "Estúdio de tatuagem especializado em estilo Neotradicional e artes visuais.",
+      "description": "Estúdio de tatuagem especializado em estilo Neotradicional, reformas e projetos autorais em São Paulo.",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Av. Paulista, 1000",
@@ -54,93 +54,66 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <script>
+       /* Basic tailwind config for instant loading, full config in tailwind.config.js */
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              rose: {
-                50: '#f2e8e9', 
-                100: '#e6cfd3',
-                200: '#d5aab1',
-                300: '#c0828d',
-                400: '#a85d6b', 
-                500: '#8f3e4d', 
-                600: '#752d3b',
-                700: '#61222e',
-                800: '#521d27',
-                900: '#451a22',
-                950: '#260c10',
-              },
-              stone: {
-                850: '#1c1917',
-              }
-            },
-            fontFamily: {
-              serif: ['"Cormorant Garamond"', 'serif'],
-              sans: ['"Montserrat"', 'sans-serif'],
-            },
-            transitionTimingFunction: {
-              // The "Luxury" Curve: Fast start, very slow smooth stop
-              'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
-            },
-            letterSpacing: {
-              'tighter': '-0.05em',
-              'tight': '-0.025em',
-              'normal': '0em',
-              'wide': '0.025em',
-              'wider': '0.05em',
-              'widest': '0.25em',
-              'ultra': '0.35em', // Added for small caps labels
-            },
-            backgroundImage: {
-              'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.05\"/%3E%3C/svg%3E')",
+               pantone: { skin: '#F2E8E9', ink: '#1A1A1A', accent: '#D48C95' }
             }
-          },
-        },
+          }
+        }
       }
     </script>
     <style>
-      html {
-        scroll-behavior: smooth;
+      html.lenis, html.lenis body {
+        height: auto;
+      }
+      .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+      }
+      .lenis.lenis-smooth [data-lenis-prevent] {
+        overscroll-behavior: contain;
+      }
+      .lenis.lenis-stopped {
+        overflow: hidden;
+      }
+      html, body {
+        width: 100%;
+        min-height: 100vh;
       }
       body {
-        background-color: #ffffff;
+        background-color: #FAF7F7;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility; /* Improved font rendering */
+        text-rendering: optimizeLegibility;
       }
-      
-      /* Universal Anti-Deformation Rule */
       img, video, iframe, svg {
         max-width: 100%;
         height: auto;
         display: block;
       }
-
-      /* Scrollbar Styling for Webkit */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f2e8e9; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #c0828d; 
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #8f3e4d; 
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: #FAF7F7; }
+      ::-webkit-scrollbar-thumb { background: #D48C95; border-radius: 4px; }
+      
+      /* Hide Cursor for Custom Cursor Component */
+      @media (min-width: 768px) {
+        body, a, button { cursor: none; }
       }
     </style>
-<script type="importmap">
+  <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
     "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "framer-motion": "https://esm.sh/framer-motion@^12.26.2",
+    "@studio-freight/lenis": "https://esm.sh/@studio-freight/lenis@^1.0.42",
     "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "three": "https://esm.sh/three@^0.182.0"
   }
 }
 </script>

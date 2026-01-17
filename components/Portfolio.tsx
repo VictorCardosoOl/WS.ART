@@ -1,8 +1,8 @@
-import React from 'react';
-import SectionTitle from './SectionTitle';
+import React, { useRef } from 'react';
 import Reveal from './Reveal';
 import { GalleryItem } from '../types';
 import { ArrowUpRight } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const galleryItems: GalleryItem[] = [
   { id: 1, src: "https://picsum.photos/600/900?random=1", category: "Neotraditional", title: "Lady Face" },
@@ -13,6 +13,36 @@ const galleryItems: GalleryItem[] = [
   { id: 6, src: "https://picsum.photos/600/700?random=6", category: "Neotraditional", title: "Animal Portrait" },
 ];
 
+const ParallaxImage = ({ src, alt }: { src: string; alt: string }) => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
+  return (
+    <div ref={ref} className="group relative overflow-hidden cursor-none-target w-full aspect-[3/4]">
+      <motion.div style={{ y, scale: 1.2 }} className="w-full h-full">
+        <img 
+            src={src} 
+            alt={alt} 
+            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+            loading="lazy"
+        />
+      </motion.div>
+      
+      {/* Minimal Hover Info */}
+      <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/30 transition-colors duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100 z-10">
+            <div className="bg-white/10 backdrop-blur-md p-4 rounded-full border border-white/20">
+            <ArrowUpRight className="text-white w-8 h-8" />
+            </div>
+      </div>
+    </div>
+  );
+};
+
 const Portfolio: React.FC = () => {
   return (
     <section id="gallery" className="py-24 md:py-40 bg-white">
@@ -20,9 +50,9 @@ const Portfolio: React.FC = () => {
         
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-32">
           <Reveal>
-             <h2 className="text-5xl md:text-8xl font-serif text-stone-900 leading-[0.9]">
+             <h2 className="text-5xl md:text-8xl font-serif text-pantone-ink leading-[0.9] tracking-tighter">
                Trabalhos<br/>
-               <span className="italic text-rose-500">Selecionados</span>
+               <span className="italic text-pantone-accent">Selecionados</span>
              </h2>
           </Reveal>
           <Reveal delay={200}>
@@ -32,30 +62,15 @@ const Portfolio: React.FC = () => {
           </Reveal>
         </div>
 
-        {/* Clean Masonry Layout - CSS Columns for Fluidity */}
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+        {/* Clean Masonry Layout - CSS Columns */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-16">
           {galleryItems.map((item, index) => (
             <div key={item.id} className="break-inside-avoid">
               <Reveal delay={index % 3 * 150}>
-                <div className="group relative overflow-hidden cursor-none-target w-full">
-                  {/* Image Rule: w-full ensures it fits container, h-auto maintains aspect ratio */}
-                  <img 
-                    src={item.src} 
-                    alt={item.title} 
-                    className="w-full h-auto block grayscale group-hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  
-                  {/* Minimal Hover Info */}
-                  <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/30 transition-colors duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                     <div className="bg-white/10 backdrop-blur-md p-4 rounded-full border border-white/20">
-                        <ArrowUpRight className="text-white w-8 h-8" />
-                     </div>
-                  </div>
-                </div>
+                <ParallaxImage src={item.src} alt={item.title} />
                 
-                <div className="mt-4 flex justify-between items-baseline border-b border-stone-100 pb-2">
-                   <span className="font-serif text-2xl text-stone-900 group-hover:text-rose-500 transition-colors">{item.title}</span>
+                <div className="mt-6 flex justify-between items-baseline border-b border-stone-100 pb-2">
+                   <span className="font-serif text-2xl text-pantone-ink group-hover:text-pantone-accent transition-colors">{item.title}</span>
                    <span className="text-[10px] uppercase tracking-widest text-stone-400">{item.category}</span>
                 </div>
               </Reveal>
@@ -63,11 +78,11 @@ const Portfolio: React.FC = () => {
           ))}
         </div>
         
-        <div className="mt-24 text-center">
+        <div className="mt-32 text-center">
            <Reveal>
              <a href="https://instagram.com" className="inline-block relative group py-2">
-               <span className="font-serif italic text-2xl md:text-3xl text-stone-900">Ver arquivo completo</span>
-               <div className="absolute bottom-0 left-0 w-full h-[1px] bg-stone-200 group-hover:bg-rose-500 transition-colors"></div>
+               <span className="font-serif italic text-2xl md:text-3xl text-pantone-ink">Ver arquivo completo</span>
+               <div className="absolute bottom-0 left-0 w-full h-[1px] bg-stone-200 group-hover:bg-pantone-accent transition-colors"></div>
              </a>
            </Reveal>
         </div>

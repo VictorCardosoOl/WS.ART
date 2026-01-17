@@ -1,23 +1,26 @@
 import React from 'react';
 import Reveal from './Reveal';
+import FluidBackground from './FluidBackground';
 
 const Hero: React.FC = () => {
   return (
-    // Pink Hero Background
-    <section className="relative h-[100dvh] w-full flex flex-col justify-between overflow-hidden bg-rose-50">
+    <section className="relative h-[100dvh] w-full flex flex-col justify-between overflow-hidden bg-rose-50/50">
       
-      {/* Texture Overlay */}
-      <div className="absolute inset-0 bg-noise opacity-[0.04] pointer-events-none mix-blend-multiply"></div>
+      {/* 1. WebGL Background */}
+      <FluidBackground />
 
-      {/* Content Container */}
+      {/* 2. Texture Overlay (Grain) */}
+      <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none"></div>
+
+      {/* Content */}
       <div className="container mx-auto px-6 relative z-10 h-full flex flex-col pt-32 md:pt-40 pb-0">
         
-        {/* Top Section: Intro Text (Right Aligned) */}
-        <div className="flex flex-col md:flex-row justify-end items-start w-full flex-grow">
+        {/* Intro Text */}
+        <div className="flex flex-col md:flex-row justify-end items-start w-full flex-grow pointer-events-none">
             <Reveal delay={200}>
-              <div className="max-w-md text-right md:text-right mt-8 md:mt-0">
-                <h2 className="font-serif text-3xl md:text-4xl text-stone-900 leading-tight font-light tracking-tight">
-                  A <span className="font-bold text-rose-500">WILLIAM SIQUEIRA</span> é um estúdio de arte na pele que elabora experiências únicas.
+              <div className="max-w-md text-right md:text-right mt-8 md:mt-0 pointer-events-auto">
+                <h2 className="font-serif text-3xl md:text-4xl text-pantone-ink leading-tight font-light tracking-tight">
+                  A <span className="font-bold text-pantone-accent">WILLIAM SIQUEIRA</span> é um estúdio de arte na pele que elabora experiências únicas.
                 </h2>
                 <p className="font-sans text-[11px] md:text-xs text-stone-600 mt-6 leading-relaxed tracking-widest uppercase font-bold">
                   Conectamos sua história à sua anatomia,<br/> transformando valores em narrativas visuais.
@@ -26,22 +29,22 @@ const Hero: React.FC = () => {
             </Reveal>
         </div>
 
-        {/* Middle/Bottom Information (Left Aligned) */}
-        <div className="relative w-full flex justify-between items-end pb-8 md:pb-12 z-20">
-            <div className="block">
+        {/* Info Line */}
+        <div className="relative w-full flex justify-between items-end pb-8 md:pb-12 z-20 pointer-events-none">
+            <div className="block pointer-events-auto">
                <Reveal>
                   <div className="flex flex-col gap-2">
-                    <span className="block text-[10px] font-black uppercase tracking-ultra text-stone-900 border-l-2 border-stone-900 pl-3">Estúdio Privado</span>
-                    <span className="block text-[10px] font-bold uppercase tracking-widest text-rose-600 pl-3">São Paulo, Brasil</span>
+                    <span className="block text-[10px] font-black uppercase tracking-ultra text-pantone-ink border-l-2 border-pantone-ink pl-3">Estúdio Privado</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-widest text-pantone-accent pl-3">São Paulo, Brasil</span>
                   </div>
                </Reveal>
             </div>
         </div>
 
-        {/* Massive Typography - Semantic H1 for SEO */}
+        {/* Massive Typography - Interacts with Shader */}
         <div className="w-full flex justify-center items-end leading-none z-10 pb-0 md:pb-0 px-2 md:px-0">
            <Reveal delay={300} width="100%">
-              <h1 className="font-sans font-black text-[19.5vw] text-stone-950 tracking-tighter text-center leading-[0.75] mix-blend-multiply opacity-90 select-none w-full transform translate-y-2 lg:translate-y-4">
+              <h1 className="font-sans font-black text-[19.5vw] text-stone-900 tracking-tighter text-center leading-[0.75] mix-blend-overlay opacity-90 select-none w-full transform translate-y-2 lg:translate-y-4">
                 WILLIAM
               </h1>
            </Reveal>
