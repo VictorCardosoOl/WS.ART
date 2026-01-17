@@ -1,39 +1,31 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Menu, X, Instagram } from 'lucide-react';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   
-  // Refs for Scroll Aware Logic
-  const lastScrollY = useRef(0);
-  const navbarHeight = 80; // approximate height for calculations
+  const { scrollY } = useScroll();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // 1. Scrolled State (Glassmorphism trigger)
-      // We add a small buffer (20px) to avoid flickering at the very top
-      setIsScrolled(currentScrollY > 20);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() || 0;
+    
+    // Set Scrolled State for Glassmorphism
+    if (latest > 20) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
 
-      // 2. Smart Hide/Show Logic (Scroll Direction Awareness)
-      if (currentScrollY > lastScrollY.current && currentScrollY > navbarHeight) {
-        // Scrolling DOWN and past the navbar area -> Hide
-        setIsVisible(false);
-      } else {
-        // Scrolling UP or at the very top -> Show
-        setIsVisible(true);
-      }
-      
-      lastScrollY.current = currentScrollY;
-    };
-
-    // Passive event listener for performance
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    // Hide/Show Logic
+    if (latest > previous && latest > 150) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  });
 
   const navLinks = [
     { name: 'Galeria', href: '#gallery' },
@@ -44,15 +36,16 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      {/* 
-        Navbar Container 
-        - Transition: 'menu-slide' (custom cubic-bezier) for that "heavy/luxurious" feel.
-        - Transform: Translates Y based on visibility state.
-      */}
-      <nav 
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ease-menu-slide
-        ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-        ${isScrolled 
+      {/* Navbar Container with Framer Motion */}
+      <motion.nav 
+        variants={{
+          visible: { y: 0 },
+          hidden: { y: "-100%" },
+        }}
+        animate={hidden ? "hidden" : "visible"}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
+        className={`fixed top-0 left-0 w-full z-50 transition-colors duration-500
+        ${scrolled 
           ? 'bg-[#fbf7f6]/85 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.03)] border-b border-rose-200/40 py-4' 
           : 'bg-transparent py-6 md:py-8'
         }
@@ -84,7 +77,7 @@ const Navbar: React.FC = () => {
             </div>
 
             {/* Separator */}
-            <div className={`w-[1px] h-4 ${isScrolled ? 'bg-rose-200' : 'bg-stone-300/50'}`}></div>
+            <div className={`w-[1px] h-4 ${scrolled ? 'bg-rose-200' : 'bg-stone-300/50'}`}></div>
 
             {/* Actions */}
             <div className="flex items-center gap-6">
@@ -106,14 +99,14 @@ const Navbar: React.FC = () => {
                   text-[10px] font-bold uppercase tracking-[0.2em] 
                   transition-all duration-500 
                   border group/btn
-                  ${isScrolled 
+                  ${scrolled 
                     ? 'border-rose-900 text-rose-950 hover:text-white' 
                     : 'border-stone-900 text-stone-900 hover:text-white'
                   }
                 `}
               >
                 {/* Fill effect from bottom-left */}
-                <span className={`absolute inset-0 w-full h-full transform scale-x-0 origin-left group-hover/btn:scale-x-100 transition-transform duration-500 ease-out-expo ${isScrolled ? 'bg-rose-900' : 'bg-stone-900'}`}></span>
+                <span className={`absolute inset-0 w-full h-full transform scale-x-0 origin-left group-hover/btn:scale-x-100 transition-transform duration-500 ease-out-expo ${scrolled ? 'bg-rose-900' : 'bg-stone-900'}`}></span>
                 <span className="relative z-10">Agendar</span>
               </a>
             </div>
@@ -123,53 +116,66 @@ const Navbar: React.FC = () => {
           <button
             className="md:hidden z-50 p-2 text-stone-900 hover:text-rose-600 transition-colors"
             onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle Menu"
+            aria-label={isOpen ? "Fechar Menu" : "Abrir Menu"}
           >
             {isOpen ? <X size={24} strokeWidth={1} /> : <Menu size={24} strokeWidth={1} />}
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* 
         Mobile Nav Overlay 
-        - Using 'clip-path' for a circular reveal transition.
-        - Background is a warm, solid rose-50 to cover content entirely.
+        - Using AnimatePresence for mount/unmount animations
       */}
-      <div 
-        className={`fixed inset-0 bg-[#fbf7f6] z-40 flex flex-col items-center justify-center transition-all duration-1000 ease-[cubic-bezier(0.85,0,0.15,1)] 
-        ${isOpen ? 'clip-circle-full pointer-events-auto' : 'clip-circle-0 pointer-events-none'}`}
-      >
-        <style>{`.clip-circle-0 { clip-path: circle(0% at 100% 0); } .clip-circle-full { clip-path: circle(150% at 100% 0); }`}</style>
-        
-        {/* Decorative noise texture for the menu */}
-        <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none"></div>
-
-        <nav className="flex flex-col items-center space-y-10 relative z-10">
-          {navLinks.map((link, index) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className={`font-serif text-5xl font-light italic text-stone-900 hover:text-rose-600 transition-all duration-500 transform 
-              ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}
-              style={{ transitionDelay: `${150 + index * 100}ms` }}
-            >
-              {link.name}
-            </a>
-          ))}
-          
-          <div className={`w-16 h-[1px] bg-rose-300 my-8 transition-all duration-700 delay-500 ${isOpen ? 'scale-x-100' : 'scale-x-0'}`}></div>
-          
-          <a
-            href="#booking"
-            onClick={() => setIsOpen(false)}
-            className={`text-xs font-sans uppercase tracking-[0.25em] font-bold text-white bg-rose-900 px-8 py-4 rounded-sm hover:bg-rose-800 transition-all duration-500 delay-700
-            ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ clipPath: "circle(0% at 100% 0)" }}
+            animate={{ clipPath: "circle(150% at 100% 0)" }}
+            exit={{ clipPath: "circle(0% at 100% 0)" }}
+            transition={{ duration: 0.7, ease: [0.85, 0, 0.15, 1] }} // Custom Quint-like easing
+            className="fixed inset-0 bg-[#fbf7f6] z-40 flex flex-col items-center justify-center pointer-events-auto"
           >
-            Solicitar Orçamento
-          </a>
-        </nav>
-      </div>
+            {/* Decorative noise texture for the menu */}
+            <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none"></div>
+
+            <nav className="flex flex-col items-center space-y-8 relative z-10">
+              {navLinks.map((link, index) => (
+                <motion.a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  initial={{ y: 40, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 20, opacity: 0 }}
+                  transition={{ delay: 0.2 + (index * 0.1), duration: 0.5 }}
+                  className="font-serif text-4xl md:text-5xl font-light italic text-stone-900 hover:text-rose-600 transition-colors"
+                >
+                  {link.name}
+                </motion.a>
+              ))}
+              
+              <motion.div 
+                initial={{ scaleX: 0 }} 
+                animate={{ scaleX: 1 }} 
+                transition={{ delay: 0.6, duration: 0.7 }}
+                className="w-16 h-[1px] bg-rose-300 my-6" 
+              />
+              
+              <motion.a
+                href="#booking"
+                onClick={() => setIsOpen(false)}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.7 }}
+                className="text-xs font-sans uppercase tracking-[0.25em] font-bold text-white bg-rose-900 px-8 py-4 rounded-sm hover:bg-rose-800 transition-colors"
+              >
+                Solicitar Orçamento
+              </motion.a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
