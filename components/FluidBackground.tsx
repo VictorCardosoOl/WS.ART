@@ -12,6 +12,8 @@ const FluidBackground: React.FC = () => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     
+    // Configura limpeza transparente
+    renderer.setClearColor(0x000000, 0); 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
@@ -21,62 +23,46 @@ const FluidBackground: React.FC = () => {
       uniform float u_time;
       uniform vec2 u_resolution;
 
-      // PALETA REFINADA (Valores normalizados RGB 0.0 - 1.0)
-      
-      // Fundo #FAF7F7 -> (0.98, 0.97, 0.97)
-      const vec3 C_BG = vec3(0.98, 0.969, 0.969);
-      
-      // Centro Escuro #754548 -> (0.46, 0.27, 0.28)
-      const vec3 C_CENTER_DARK = vec3(0.46, 0.27, 0.28); 
-      
-      // Anel Médio #D9A9B0 -> (0.85, 0.66, 0.69)
-      const vec3 C_RING_DARK = vec3(0.85, 0.66, 0.69);
-      
-      // Anel Claro #F2E8E9 -> (0.95, 0.91, 0.91)
-      const vec3 C_RING_LIGHT = vec3(0.95, 0.91, 0.91);
+      // PALETA REFINADA
+      const vec3 C_BG = vec3(0.98, 0.969, 0.969);      // Fundo Site
+      const vec3 C_CENTER_DARK = vec3(0.46, 0.27, 0.28); // Rosa Escuro
+      const vec3 C_RING_DARK = vec3(0.85, 0.66, 0.69);   // Rosa Médio
+      const vec3 C_RING_LIGHT = vec3(0.95, 0.91, 0.91);  // Rosa Claro
 
-      // Função de Ruído (Film Grain suave)
       float random(vec2 st) {
           return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
       }
 
       void main() {
-          // Normalização de UV com correção de Aspect Ratio
           vec2 uv = gl_FragCoord.xy / u_resolution.xy;
           float aspect = u_resolution.x / u_resolution.y;
           uv.x *= aspect;
 
           // --- POSICIONAMENTO ---
-          // Alinhado para ficar atrás da palavra EMOTION (Esquerda e Topo)
-          vec2 center = vec2(0.35 * aspect, 0.65);
+          // Centro da Orbe: Alinhado com o texto EMOTION na esquerda
+          // Ajustado para telas largas (aspect > 1) e mobile
+          float xPos = aspect > 1.0 ? 0.25 * aspect : 0.5 * aspect;
+          vec2 center = vec2(xPos, 0.7);
           
-          // Respiração lenta e orgânica
-          float breathe = sin(u_time * 0.4) * 0.02; // Movimento muito sutil
-          center.y += breathe; 
+          // Movimento sutil
+          center.y += sin(u_time * 0.3) * 0.03; 
 
           float dist = distance(uv, center);
 
-          // --- GRADIENTE RADIAL COMPLEXO ---
-          
-          // Camada 1: Núcleo (Escuro -> Médio)
-          // Um núcleo pequeno e intenso que se dissipa rapidamente
-          float stepCore = smoothstep(0.0, 0.5, dist); 
+          // --- GRADIENTE ---
+          float stepCore = smoothstep(0.0, 0.45, dist); 
           vec3 colorCore = mix(C_CENTER_DARK, C_RING_DARK, stepCore);
 
-          // Camada 2: Corpo (Resultado anterior -> Claro)
-          // A transição principal que dá o volume
-          float stepBody = smoothstep(0.2, 0.9, dist);
+          float stepBody = smoothstep(0.15, 0.8, dist);
           vec3 colorBody = mix(colorCore, C_RING_LIGHT, stepBody);
 
-          // Camada 3: Fusão (Resultado anterior -> Fundo do Site)
-          // Fade out longo para não ter "borda" visível
-          float stepFade = smoothstep(0.6, 1.4, dist);
+          // Fade out suave para o fundo do site
+          float stepFade = smoothstep(0.5, 1.3, dist);
           vec3 finalColor = mix(colorBody, C_BG, stepFade);
 
-          // --- TEXTURA ---
-          // Grão fino para imitar papel de alta qualidade
+          // Textura
           float grain = random(uv + u_time * 0.1);
-          finalColor -= grain * 0.04; // 4% de ruído subtrativo
+          finalColor -= grain * 0.03;
 
           gl_FragColor = vec4(finalColor, 1.0);
       }
@@ -138,7 +124,7 @@ const FluidBackground: React.FC = () => {
   return (
     <div 
       ref={containerRef} 
-      className="absolute inset-0 w-full h-full -z-10"
+      className="absolute inset-0 w-full h-full"
     />
   );
 };
