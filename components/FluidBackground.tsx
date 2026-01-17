@@ -12,59 +12,66 @@ const FluidBackground: React.FC = () => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     
-    // Configura limpeza transparente
-    renderer.setClearColor(0x000000, 0); 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
 
-    // 2. SHADER "VELVET ORB"
+    // 2. SHADER "ETHEREAL RADIAL"
     const fragmentShader = `
       uniform float u_time;
       uniform vec2 u_resolution;
 
-      // PALETA REFINADA
-      const vec3 C_BG = vec3(0.98, 0.969, 0.969);      // Fundo Site
-      const vec3 C_CENTER_DARK = vec3(0.46, 0.27, 0.28); // Rosa Escuro
-      const vec3 C_RING_DARK = vec3(0.85, 0.66, 0.69);   // Rosa Médio
-      const vec3 C_RING_LIGHT = vec3(0.95, 0.91, 0.91);  // Rosa Claro
+      // Cores (RGB Normalizado)
+      const vec3 C_CORE = vec3(0.46, 0.27, 0.28); // #754548
+      const vec3 C_MID = vec3(0.85, 0.66, 0.69);  // #D9A9B0
+      const vec3 C_OUTER = vec3(0.95, 0.91, 0.91); // #F2E8E9 (Quase branco rosado)
 
+      // Função de Ruído de Alta Frequência (Film Grain)
       float random(vec2 st) {
           return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
       }
 
       void main() {
+          // Normalização e correção de Aspect Ratio
           vec2 uv = gl_FragCoord.xy / u_resolution.xy;
           float aspect = u_resolution.x / u_resolution.y;
           uv.x *= aspect;
 
-          // --- POSICIONAMENTO ---
-          // Centro da Orbe: Alinhado com o texto EMOTION na esquerda
-          // Ajustado para telas largas (aspect > 1) e mobile
-          float xPos = aspect > 1.0 ? 0.25 * aspect : 0.5 * aspect;
-          vec2 center = vec2(xPos, 0.7);
+          // --- CONFIGURAÇÃO DO CENTRO ---
+          // Define o centro do gradiente. 
+          // Ajuste fino para posicionar atrás do texto "EMOTION" (Esquerda)
+          vec2 center = vec2(0.30 * aspect, 0.6);
           
-          // Movimento sutil
-          center.y += sin(u_time * 0.3) * 0.03; 
-
+          // Respiração orgânica lenta (expansão e contração imperceptível)
+          float breathe = sin(u_time * 0.2) * 0.02; 
+          
+          // Distância radial pura
           float dist = distance(uv, center);
 
-          // --- GRADIENTE ---
-          float stepCore = smoothstep(0.0, 0.45, dist); 
-          vec3 colorCore = mix(C_CENTER_DARK, C_RING_DARK, stepCore);
+          // --- MÁSCARA DE OPACIDADE (ALPHA) ---
+          // CRUCIAL: O alpha deve chegar a 0.0 ANTES de atingir a borda do canvas/div.
+          // smoothstep(borda_interna, borda_externa, valor)
+          // Tudo acima de 0.9 de distância será totalmente transparente.
+          float alpha = 1.0 - smoothstep(0.0, 0.95 + breathe, dist);
+          
+          // Curva exponencial para suavizar ainda mais o final (evita degrau linear)
+          alpha = pow(alpha, 1.8);
 
-          float stepBody = smoothstep(0.15, 0.8, dist);
-          vec3 colorBody = mix(colorCore, C_RING_LIGHT, stepBody);
+          // --- MISTURA DE CORES ---
+          // Núcleo
+          float coreIntensity = 1.0 - smoothstep(0.0, 0.3, dist);
+          vec3 color = mix(C_MID, C_CORE, coreIntensity);
 
-          // Fade out suave para o fundo do site
-          float stepFade = smoothstep(0.5, 1.3, dist);
-          vec3 finalColor = mix(colorBody, C_BG, stepFade);
+          // Borda externa
+          float outerIntensity = smoothstep(0.2, 0.8, dist);
+          color = mix(color, C_OUTER, outerIntensity);
 
-          // Textura
-          float grain = random(uv + u_time * 0.1);
-          finalColor -= grain * 0.03;
+          // --- TEXTURA (GRAIN) ---
+          // Aplica ruído apenas onde há cor visível
+          float grain = random(uv * 2.0 + u_time * 0.1);
+          color -= grain * 0.04; // Textura sutil
 
-          gl_FragColor = vec4(finalColor, 1.0);
+          gl_FragColor = vec4(color, alpha);
       }
     `;
 
@@ -83,7 +90,8 @@ const FluidBackground: React.FC = () => {
       vertexShader,
       fragmentShader,
       uniforms,
-      transparent: true
+      transparent: true,
+      depthWrite: false, // Importante para não bloquear outros objetos
     });
 
     const geometry = new THREE.PlaneGeometry(2, 2);
@@ -125,6 +133,7 @@ const FluidBackground: React.FC = () => {
     <div 
       ref={containerRef} 
       className="absolute inset-0 w-full h-full"
+      style={{ mixBlendMode: 'normal' }} 
     />
   );
 };
