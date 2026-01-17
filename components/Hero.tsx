@@ -38,11 +38,12 @@ const Hero: React.FC = () => {
             </div>
         </div>
 
-        {/* Massive Typography - BLACK & THICK */}
+        {/* Massive Typography - BLACK & THICK - Fluid Size */}
         <div className="w-full flex justify-center items-end leading-none z-10 pb-0 md:pb-0 px-2 md:px-0">
            <Reveal delay={300} width="100%">
-              {/* Changed text-rose-400 to text-stone-950 (Black) and ensured font-black (weight 900) */}
-              <h1 className="font-sans font-black text-[19.5vw] text-stone-950 tracking-tighter text-center leading-[0.75] mix-blend-multiply opacity-90 select-none w-full transform translate-y-2">
+              {/* Using VW for fluid typography, but overflow-hidden in parent ensures no scrollbar.
+                  The translation accounts for line-height discrepancies in huge text. */}
+              <h1 className="font-sans font-black text-[19.5vw] text-stone-950 tracking-tighter text-center leading-[0.75] mix-blend-multiply opacity-90 select-none w-full transform translate-y-2 lg:translate-y-4">
                 WILLIAM
               </h1>
            </Reveal>

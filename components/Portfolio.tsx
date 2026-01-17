@@ -32,16 +32,18 @@ const Portfolio: React.FC = () => {
           </Reveal>
         </div>
 
-        {/* Clean Masonry Layout */}
+        {/* Clean Masonry Layout - CSS Columns for Fluidity */}
         <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
           {galleryItems.map((item, index) => (
             <div key={item.id} className="break-inside-avoid">
               <Reveal delay={index % 3 * 150}>
-                <div className="group relative overflow-hidden cursor-none-target">
+                <div className="group relative overflow-hidden cursor-none-target w-full">
+                  {/* Image Rule: w-full ensures it fits container, h-auto maintains aspect ratio */}
                   <img 
                     src={item.src} 
                     alt={item.title} 
-                    className="w-full h-auto grayscale group-hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
+                    className="w-full h-auto block grayscale group-hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
+                    loading="lazy"
                   />
                   
                   {/* Minimal Hover Info */}

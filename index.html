@@ -76,6 +76,16 @@
         -webkit-text-stroke: 1px black;
         color: transparent;
       }
+
+      /* 
+         REGRA UNIVERSAL "ANTI-DEFORMAÇÃO" 
+         Conforme solicitado para garantir responsividade fluida 
+      */
+      img, video, iframe, svg {
+        max-width: 100%; /* Garante que nunca vazem do pai */
+        height: auto;    /* Mantém a proporção original, evitando achatamento */
+        display: block;  /* Remove espaços estranhos abaixo da imagem (ghost space) */
+      }
     </style>
 <script type="importmap">
 {
