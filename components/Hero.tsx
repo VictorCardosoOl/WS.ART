@@ -3,11 +3,11 @@ import Reveal from './Reveal';
 
 const Hero: React.FC = () => {
   return (
-    // Changed bg-white to bg-rose-50 (Pink Hero)
+    // Pink Hero Background with slight parallax feel via CSS
     <section className="relative h-[100dvh] w-full flex flex-col justify-between overflow-hidden bg-rose-50">
       
-      {/* Texture Overlay */}
-      <div className="absolute inset-0 bg-noise opacity-[0.04] pointer-events-none mix-blend-multiply"></div>
+      {/* Texture Overlay with Animated Pulse for 'Living' feel */}
+      <div className="absolute inset-0 bg-noise opacity-[0.06] pointer-events-none mix-blend-multiply animate-pulse"></div>
 
       {/* Content Container */}
       <div className="container mx-auto px-6 relative z-10 h-full flex flex-col pt-32 md:pt-40 pb-0">
@@ -16,10 +16,10 @@ const Hero: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-end items-start w-full flex-grow">
             <Reveal delay={200}>
               <div className="max-w-md text-right md:text-right mt-8 md:mt-0">
-                <p className="font-serif text-2xl md:text-3xl text-stone-900 leading-snug font-light">
+                <h2 className="font-serif text-3xl md:text-4xl text-stone-900 leading-tight font-light tracking-tight">
                   A <span className="font-bold text-rose-500">WILLIAM SIQUEIRA</span> é um estúdio de arte na pele que elabora experiências únicas.
-                </p>
-                <p className="font-sans text-[11px] md:text-xs text-stone-600 mt-6 leading-relaxed tracking-[0.15em] uppercase font-bold">
+                </h2>
+                <p className="font-sans text-[11px] md:text-xs text-stone-600 mt-6 leading-relaxed tracking-widest uppercase font-bold">
                   Conectamos sua história à sua anatomia,<br/> transformando valores em narrativas visuais.
                 </p>
               </div>
@@ -30,20 +30,18 @@ const Hero: React.FC = () => {
         <div className="relative w-full flex justify-between items-end pb-8 md:pb-12 z-20">
             <div className="block">
                <Reveal>
-                  <div className="flex flex-col gap-1">
-                    <span className="block text-[10px] font-black uppercase tracking-[0.3em] text-stone-900">Estúdio Privado</span>
-                    <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-rose-600">São Paulo, Brasil</span>
+                  <div className="flex flex-col gap-2">
+                    <span className="block text-[10px] font-black uppercase tracking-ultra text-stone-900 border-l-2 border-stone-900 pl-3">Estúdio Privado</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-widest text-rose-600 pl-3">São Paulo, Brasil</span>
                   </div>
                </Reveal>
             </div>
         </div>
 
-        {/* Massive Typography - BLACK & THICK - Fluid Size */}
+        {/* Massive Typography - Semantic H1 for SEO */}
         <div className="w-full flex justify-center items-end leading-none z-10 pb-0 md:pb-0 px-2 md:px-0">
            <Reveal delay={300} width="100%">
-              {/* Using VW for fluid typography, but overflow-hidden in parent ensures no scrollbar.
-                  The translation accounts for line-height discrepancies in huge text. */}
-              <h1 className="font-sans font-black text-[19.5vw] text-stone-950 tracking-tighter text-center leading-[0.75] mix-blend-multiply opacity-90 select-none w-full transform translate-y-2 lg:translate-y-4">
+              <h1 className="font-sans font-black text-[19.5vw] text-stone-950 tracking-tighter text-center leading-[0.75] mix-blend-multiply opacity-90 select-none w-full transform translate-y-2 lg:translate-y-4 hover:scale-[1.01] transition-transform duration-[2000ms] ease-out-expo">
                 WILLIAM
               </h1>
            </Reveal>

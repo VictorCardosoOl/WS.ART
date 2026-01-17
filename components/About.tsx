@@ -8,40 +8,41 @@ const About: React.FC = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative">
           
-          {/* Typography Header - Spans full width visually */}
+          {/* Typography Header - Decorative Element (Changed from h2 to div for SEO) */}
           <div className="lg:col-span-12 mb-8 md:mb-16">
              <Reveal>
-               <h2 className="text-[12vw] md:text-[8vw] font-serif leading-[0.8] text-rose-300 opacity-30 select-none">
+               <div className="text-[12vw] md:text-[8vw] font-serif leading-[0.8] text-rose-300 opacity-30 select-none pointer-events-none" aria-hidden="true">
                  ARTISTA
-               </h2>
+               </div>
              </Reveal>
           </div>
 
-          {/* Image Block */}
+          {/* Image Block with Scale Reveal Animation */}
           <div className="lg:col-span-5 relative z-10">
              <Reveal>
-                <div className="relative aspect-[4/5] overflow-hidden">
+                <div className="relative aspect-[4/5] overflow-hidden group">
                     <img 
                       src="https://picsum.photos/600/800?grayscale&random=20" 
-                      alt="Portrait" 
-                      className="w-full h-full object-cover"
+                      alt="Retrato de William Siqueira - Tatuador Especialista em Neotradicional" 
+                      className="w-full h-full object-cover transform transition-transform duration-[1.5s] ease-out-expo scale-110 group-hover:scale-100"
                     />
-                    <div className="absolute inset-0 bg-stone-900/10 mix-blend-multiply"></div>
+                    <div className="absolute inset-0 bg-stone-900/10 mix-blend-multiply transition-opacity duration-700 group-hover:opacity-0"></div>
                 </div>
                 <div className="flex gap-4 mt-6">
                     <span className="text-xs font-bold uppercase tracking-widest text-stone-900 border-b border-stone-900 pb-1">Manifesto</span>
-                    <span className="text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-stone-900 cursor-pointer transition-colors">Processo</span>
+                    <span className="text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-stone-900 cursor-pointer transition-colors">Processo Criativo</span>
                 </div>
              </Reveal>
           </div>
 
-          {/* Text Content - Overlapping feeling */}
+          {/* Text Content */}
           <div className="lg:col-span-7 lg:pl-12 pt-8 lg:pt-20">
             <Reveal delay={200}>
-                <h3 className="font-serif text-4xl md:text-5xl text-stone-900 mb-8 leading-tight">
+                {/* Semantic H2 for the section */}
+                <h2 className="font-serif text-4xl md:text-5xl text-stone-900 mb-8 leading-tight">
                   Não sigo regras rígidas.<br/>
                   Meu estilo é <span className="italic text-rose-600">liberdade</span>.
-                </h3>
+                </h2>
             </Reveal>
             
             <Reveal delay={300}>
@@ -50,7 +51,7 @@ const About: React.FC = () => {
                     A arte sempre foi minha linguagem. Do design gráfico ao cinema de animação, explorei diversas formas de expressão visual até encontrar na tatuagem o meio definitivo.
                   </p>
                   <p>
-                    O Neotradicional me permite mesclar a solidez do clássico com a vibração do contemporâneo. É vibrante, detalhado e, acima de tudo, conceitual. Busco sempre criar uma conexão intrínseca entre a obra e a pessoa que a carrega.
+                    O <strong>Neotradicional</strong> me permite mesclar a solidez do clássico com a vibração do contemporâneo. É vibrante, detalhado e, acima de tudo, conceitual. Busco sempre criar uma conexão intrínseca entre a obra e a pessoa que a carrega.
                   </p>
                   <div className="pl-6 border-l-2 border-rose-200 italic text-stone-500 my-8">
                     "Para mim, é extremamente gratificante saber que alguém escolheu carregar um pedaço da minha visão artística pelo resto da vida."
@@ -59,7 +60,7 @@ const About: React.FC = () => {
             </Reveal>
 
             <Reveal delay={400}>
-                <img src="https://signature.freefire-name.com/img.php?f=7&t=William" alt="Assinatura" className="h-16 mt-12 opacity-80" />
+                <img src="https://signature.freefire-name.com/img.php?f=7&t=William" alt="Assinatura William Siqueira" className="h-16 mt-12 opacity-80" />
             </Reveal>
           </div>
 

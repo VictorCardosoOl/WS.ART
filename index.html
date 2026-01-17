@@ -3,25 +3,69 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>William Siqueira | Tattoo Art</title>
+    <meta name="theme-color" content="#f2e8e9" />
+    
+    <!-- SEO & Meta Tags -->
+    <title>William Siqueira | Tatuagem Neotradicional e Arte em SP</title>
+    <meta name="description" content="Estúdio privado de tatuagem em São Paulo especializado em estilo Neotradicional, Coberturas (Cover-up) e projetos autorais. Arte na pele por William Siqueira." />
+    <meta name="keywords" content="tatuagem neotradicional, tattoo sp, william siqueira, cover-up, tatuagem colorida, estúdio privado, tatuador são paulo" />
+    <meta name="author" content="William Siqueira" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://williamsiqueira.art" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://williamsiqueira.art/" />
+    <meta property="og:title" content="William Siqueira | Tatuagem Neotradicional" />
+    <meta property="og:description" content="Conectamos sua história à sua anatomia. Estúdio privado em São Paulo especializado em arte neotradicional exclusiva." />
+    <meta property="og:image" content="https://picsum.photos/1200/630?grayscale&blur=2" /> <!-- Placeholder for actual social image -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://williamsiqueira.art/" />
+    <meta property="twitter:title" content="William Siqueira | Tatuagem Neotradicional" />
+    <meta property="twitter:description" content="Experiências únicas em arte na pele. Projetos autorais e exclusivos em SP." />
+    <meta property="twitter:image" content="https://picsum.photos/1200/630?grayscale&blur=2" />
+
+    <!-- Schema.org Structured Data (Local Business) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TattooParlor",
+      "name": "William Siqueira Tattoo Art",
+      "image": ["https://picsum.photos/600/600"],
+      "description": "Estúdio de tatuagem especializado em estilo Neotradicional e artes visuais.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Paulista, 1000",
+        "addressLocality": "São Paulo",
+        "addressRegion": "SP",
+        "postalCode": "01310-100",
+        "addressCountry": "BR"
+      },
+      "priceRange": "$$$",
+      "openingHours": "Tu-Sa 10:00-19:00",
+      "telephone": "+5511999999999"
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Added weights 700, 800, 900 to Montserrat for thicker Hero text -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
               rose: {
-                // New Sophisticated "Dusty Rose" Palette
-                50: '#f2e8e9', // Hero Background (Darker, warmer pink/beige)
+                50: '#f2e8e9', 
                 100: '#e6cfd3',
                 200: '#d5aab1',
                 300: '#c0828d',
-                400: '#a85d6b', // Elegant darker pink
-                500: '#8f3e4d', // Primary sophisticated
+                400: '#a85d6b', 
+                500: '#8f3e4d', 
                 600: '#752d3b',
                 700: '#61222e',
                 800: '#521d27',
@@ -36,34 +80,41 @@
               serif: ['"Cormorant Garamond"', 'serif'],
               sans: ['"Montserrat"', 'sans-serif'],
             },
-            animation: {
-              'fade-in': 'fadeIn 1.5s ease-out forwards',
-              'slide-up': 'slideUp 1s ease-out forwards',
-              'slide-in-right': 'slideInRight 1s ease-out forwards',
+            transitionTimingFunction: {
+              'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
+              'out-circ': 'cubic-bezier(0, 0.55, 0.45, 1)',
             },
-            keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              slideUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              slideInRight: {
-                '0%': { opacity: '0', transform: 'translateX(20px)' },
-                '100%': { opacity: '1', transform: 'translateX(0)' },
-              }
+            letterSpacing: {
+              'tighter': '-0.05em',
+              'tight': '-0.025em',
+              'normal': '0em',
+              'wide': '0.025em',
+              'wider': '0.05em',
+              'widest': '0.25em',
+              'ultra': '0.35em',
             },
             backgroundImage: {
               'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.05\"/%3E%3C/svg%3E')",
+            },
+            animation: {
+              'slow-pan': 'pan 20s linear infinite',
+              'soft-pulse': 'pulseScale 8s ease-in-out infinite',
+            },
+            keyframes: {
+              pan: {
+                '0%': { backgroundPosition: '0% 0%' },
+                '100%': { backgroundPosition: '100% 100%' },
+              },
+              pulseScale: {
+                '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+                '50%': { transform: 'scale(1.05)', opacity: '0.8' },
+              }
             }
           },
         },
       }
     </script>
     <style>
-      /* Smooth scrolling for anchor links */
       html {
         scroll-behavior: smooth;
       }
@@ -71,20 +122,29 @@
         background-color: #ffffff;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
       }
-      .text-stroke {
-        -webkit-text-stroke: 1px black;
-        color: transparent;
+      
+      /* Universal Anti-Deformation Rule */
+      img, video, iframe, svg {
+        max-width: 100%;
+        height: auto;
+        display: block;
       }
 
-      /* 
-         REGRA UNIVERSAL "ANTI-DEFORMAÇÃO" 
-         Conforme solicitado para garantir responsividade fluida 
-      */
-      img, video, iframe, svg {
-        max-width: 100%; /* Garante que nunca vazem do pai */
-        height: auto;    /* Mantém a proporção original, evitando achatamento */
-        display: block;  /* Remove espaços estranhos abaixo da imagem (ghost space) */
+      /* Scrollbar Styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f2e8e9; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #c0828d; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #8f3e4d; 
       }
     </style>
 <script type="importmap">

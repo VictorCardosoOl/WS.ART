@@ -18,7 +18,10 @@ const Reveal: React.FC<RevealProps> = ({ children, width = 'fit-content', delay 
           observer.disconnect();
         }
       },
-      { threshold: 0.15 } // Trigger when 15% visible
+      { 
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px" // Slightly offset trigger for better timing
+      } 
     );
 
     if (ref.current) {
@@ -29,10 +32,12 @@ const Reveal: React.FC<RevealProps> = ({ children, width = 'fit-content', delay 
   }, []);
 
   return (
-    <div ref={ref} style={{ width, position: 'relative', overflow: 'hidden' }}>
+    <div ref={ref} style={{ width, position: 'relative', overflow: 'visible' }}>
       <div
-        className={`transition-all duration-1000 ease-[cubic-bezier(0.17,0.55,0.55,1)] ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+        className={`transform transition-all duration-[1200ms] ease-out-expo ${
+          isVisible 
+            ? 'opacity-100 translate-y-0 blur-0 scale-100' 
+            : 'opacity-0 translate-y-12 blur-[10px] scale-[0.98]'
         }`}
         style={{ transitionDelay: `${delay}ms` }}
       >

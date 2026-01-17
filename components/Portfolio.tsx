@@ -32,30 +32,30 @@ const Portfolio: React.FC = () => {
           </Reveal>
         </div>
 
-        {/* Clean Masonry Layout - CSS Columns for Fluidity */}
+        {/* Clean Masonry Layout */}
         <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
           {galleryItems.map((item, index) => (
             <div key={item.id} className="break-inside-avoid">
               <Reveal delay={index % 3 * 150}>
                 <div className="group relative overflow-hidden cursor-none-target w-full">
-                  {/* Image Rule: w-full ensures it fits container, h-auto maintains aspect ratio */}
+                  {/* Enhanced SEO Alt Text & Smoother Scale Animation */}
                   <img 
                     src={item.src} 
-                    alt={item.title} 
-                    className="w-full h-auto block grayscale group-hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
+                    alt={`${item.title} - Tatuagem estilo ${item.category} por William Siqueira`} 
+                    className="w-full h-auto block grayscale group-hover:grayscale-0 transition-all duration-[800ms] ease-out-expo group-hover:scale-105 will-change-transform"
                     loading="lazy"
                   />
                   
-                  {/* Minimal Hover Info */}
-                  <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/30 transition-colors duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                     <div className="bg-white/10 backdrop-blur-md p-4 rounded-full border border-white/20">
+                  {/* Minimal Hover Info with Fade In */}
+                  <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/20 transition-colors duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                     <div className="bg-white/10 backdrop-blur-md p-4 rounded-full border border-white/20 transform scale-90 group-hover:scale-100 transition-transform duration-500">
                         <ArrowUpRight className="text-white w-8 h-8" />
                      </div>
                   </div>
                 </div>
                 
                 <div className="mt-4 flex justify-between items-baseline border-b border-stone-100 pb-2">
-                   <span className="font-serif text-2xl text-stone-900 group-hover:text-rose-500 transition-colors">{item.title}</span>
+                   <h3 className="font-serif text-2xl text-stone-900 group-hover:text-rose-500 transition-colors">{item.title}</h3>
                    <span className="text-[10px] uppercase tracking-widest text-stone-400">{item.category}</span>
                 </div>
               </Reveal>
@@ -65,7 +65,7 @@ const Portfolio: React.FC = () => {
         
         <div className="mt-24 text-center">
            <Reveal>
-             <a href="https://instagram.com" className="inline-block relative group py-2">
+             <a href="https://instagram.com" className="inline-block relative group py-2" aria-label="Ver portfólio completo no Instagram">
                <span className="font-serif italic text-2xl md:text-3xl text-stone-900">Ver arquivo completo</span>
                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-stone-200 group-hover:bg-rose-500 transition-colors"></div>
              </a>
