@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f2e8e9" />
+    <meta name="theme-color" content="#fbf7f6" />
     
     <!-- SEO & Meta Tags -->
     <title>William Siqueira | Tatuagem Neotradicional e Arte em SP</title>
@@ -59,18 +59,19 @@
         theme: {
           extend: {
             colors: {
+              // Custom "Dusty Rose" Palette - Sophisticated & Deep
               rose: {
-                50: '#f2e8e9', 
-                100: '#e6cfd3',
-                200: '#d5aab1',
-                300: '#c0828d',
-                400: '#a85d6b', 
-                500: '#8f3e4d', 
-                600: '#752d3b',
-                700: '#61222e',
-                800: '#521d27',
-                900: '#451a22',
-                950: '#260c10',
+                50: '#fbf7f6',  // Warm Off-White (Papel antigo)
+                100: '#f5ebeb',
+                200: '#edd5d8',
+                300: '#e0b5bb',
+                400: '#ce8a96', // Dusty Pink
+                500: '#b66271', // Primary Brand Color
+                600: '#9d4a5a',
+                700: '#843a47', // Deep Red/Pink
+                800: '#6f323c',
+                900: '#5f2d35', // Dark Chocolate/Wine
+                950: '#3a161b',
               },
               stone: {
                 850: '#1c1917',
@@ -81,8 +82,10 @@
               sans: ['"Montserrat"', 'sans-serif'],
             },
             transitionTimingFunction: {
+              // The "Luxury" Curves
               'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
               'out-circ': 'cubic-bezier(0, 0.55, 0.45, 1)',
+              'menu-slide': 'cubic-bezier(0.22, 1, 0.36, 1)', // Smooth inertia
             },
             letterSpacing: {
               'tighter': '-0.05em',
@@ -119,7 +122,7 @@
         scroll-behavior: smooth;
       }
       body {
-        background-color: #ffffff;
+        background-color: #fbf7f6; /* Rose-50 */
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
@@ -137,14 +140,14 @@
         width: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #f2e8e9; 
+        background: #fbf7f6; 
       }
       ::-webkit-scrollbar-thumb {
-        background: #c0828d; 
+        background: #ce8a96; /* Rose-400 */
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #8f3e4d; 
+        background: #b66271; /* Rose-500 */
       }
     </style>
 <script type="importmap">
