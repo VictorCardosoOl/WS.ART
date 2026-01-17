@@ -12,14 +12,10 @@ const Navbar: React.FC = () => {
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() || 0;
     
-    // Set Scrolled State for Glassmorphism
-    if (latest > 20) {
-      setScrolled(true);
-    } else {
-      setScrolled(false);
-    }
+    // Glassmorphism activation
+    setScrolled(latest > 20);
 
-    // Hide/Show Logic
+    // Hide on scroll down, show on scroll up
     if (latest > previous && latest > 150) {
       setHidden(true);
     } else {
@@ -36,7 +32,6 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      {/* Navbar Container with Framer Motion */}
       <motion.nav 
         variants={{
           visible: { y: 0 },
@@ -44,23 +39,21 @@ const Navbar: React.FC = () => {
         }}
         animate={hidden ? "hidden" : "visible"}
         transition={{ duration: 0.35, ease: "easeInOut" }}
-        className={`fixed top-0 left-0 w-full z-50 transition-colors duration-500
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500
         ${scrolled 
-          ? 'bg-[#fbf7f6]/85 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.03)] border-b border-rose-200/40 py-4' 
-          : 'bg-transparent py-6 md:py-8'
-        }
-        `}
+          ? 'bg-[#fbf7f6]/85 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.03)] border-b border-rose-200/40 py-3 md:py-4' 
+          : 'bg-transparent py-5 md:py-8'
+        }`}
       >
         <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex justify-between items-center">
           
-          {/* Logo - Elegant & Deep */}
-          <a href="#" className="group flex items-center gap-1 z-50 relative mix-blend-multiply">
+          <a href="#" className="group flex items-center gap-1 z-50 relative mix-blend-multiply" aria-label="William Siqueira Home">
             <span className="font-serif font-bold text-2xl md:text-3xl tracking-tight text-rose-950 transition-colors duration-300">
               W<span className="text-rose-500 group-hover:text-rose-600 transition-colors">.</span>Siqueira
             </span>
           </a>
 
-          {/* Desktop Nav - Clean & Sophisticated */}
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-12 lg:gap-16">
             <div className="flex items-center gap-8 lg:gap-10">
               {navLinks.map((link) => (
@@ -70,16 +63,13 @@ const Navbar: React.FC = () => {
                   className="relative text-[11px] font-bold uppercase tracking-[0.2em] text-stone-600 hover:text-rose-900 transition-colors py-2 group/link"
                 >
                   {link.name}
-                  {/* Center-out underline animation */}
                   <span className="absolute bottom-0 left-1/2 w-0 h-[1px] bg-rose-500 transition-all duration-500 ease-out group-hover/link:w-full group-hover/link:left-0 opacity-80"></span>
                 </a>
               ))}
             </div>
 
-            {/* Separator */}
             <div className={`w-[1px] h-4 ${scrolled ? 'bg-rose-200' : 'bg-stone-300/50'}`}></div>
 
-            {/* Actions */}
             <div className="flex items-center gap-6">
               <a
                 href="https://instagram.com"
@@ -91,7 +81,6 @@ const Navbar: React.FC = () => {
                 <Instagram size={20} strokeWidth={1.5} />
               </a>
               
-              {/* Booking Button - High Contrast & Prominent */}
               <a
                 href="#booking"
                 className={`
@@ -105,7 +94,6 @@ const Navbar: React.FC = () => {
                   }
                 `}
               >
-                {/* Fill effect from bottom-left */}
                 <span className={`absolute inset-0 w-full h-full transform scale-x-0 origin-left group-hover/btn:scale-x-100 transition-transform duration-500 ease-out-expo ${scrolled ? 'bg-rose-900' : 'bg-stone-900'}`}></span>
                 <span className="relative z-10">Agendar</span>
               </a>
@@ -123,20 +111,15 @@ const Navbar: React.FC = () => {
         </div>
       </motion.nav>
 
-      {/* 
-        Mobile Nav Overlay 
-        - Using AnimatePresence for mount/unmount animations
-      */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
             initial={{ clipPath: "circle(0% at 100% 0)" }}
             animate={{ clipPath: "circle(150% at 100% 0)" }}
             exit={{ clipPath: "circle(0% at 100% 0)" }}
-            transition={{ duration: 0.7, ease: [0.85, 0, 0.15, 1] }} // Custom Quint-like easing
+            transition={{ duration: 0.7, ease: [0.85, 0, 0.15, 1] }}
             className="fixed inset-0 bg-[#fbf7f6] z-40 flex flex-col items-center justify-center pointer-events-auto"
           >
-            {/* Decorative noise texture for the menu */}
             <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none"></div>
 
             <nav className="flex flex-col items-center space-y-8 relative z-10">

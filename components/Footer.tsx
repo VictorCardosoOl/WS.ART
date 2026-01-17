@@ -1,6 +1,5 @@
 import React from 'react';
 import { Instagram, ArrowUpRight, MessageCircle, Twitter, Facebook } from 'lucide-react';
-import Reveal from './Reveal';
 
 const Footer: React.FC = () => {
   return (
@@ -11,9 +10,9 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 border-b border-stone-800 pb-12 md:pb-16">
           
           {/* Column 1: Brand & Info */}
-          <div className="lg:col-span-4 flex flex-col justify-between h-full space-y-8">
+          <div className="lg:col-span-4 flex flex-col justify-between h-full space-y-8 text-center md:text-left">
             <div>
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center justify-center md:justify-start gap-3 mb-6">
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-black text-xl flex-shrink-0">
                   W
                 </div>
@@ -23,7 +22,7 @@ const Footer: React.FC = () => {
                 </h3>
               </div>
               
-              <p className="text-stone-500 text-sm leading-relaxed max-w-sm">
+              <p className="text-stone-500 text-sm leading-relaxed max-w-sm mx-auto md:mx-0">
                 Fundada por William Siqueira, unimos décadas de prática artística e visão neotradicional, redefinindo as possibilidades da arte na pele e no ambiente construído.
               </p>
             </div>
@@ -32,7 +31,7 @@ const Footer: React.FC = () => {
               <p>Estúdio Privado, São Paulo - SP</p>
               <a href="mailto:contato@wsart.com" className="block text-white hover:text-stone-300 transition-colors">hello@williamsiqueira.art</a>
               
-              <nav aria-label="Social Media" className="flex gap-4 mt-6 pt-6 border-t border-stone-800 w-fit">
+              <nav aria-label="Social Media" className="flex gap-4 mt-6 pt-6 border-t border-stone-800 w-fit mx-auto md:mx-0">
                 <a href="#" aria-label="Instagram" className="hover:text-white transition-colors"><Instagram size={20} /></a>
                 <a href="#" aria-label="Twitter" className="hover:text-white transition-colors"><Twitter size={20} /></a>
                 <a href="#" aria-label="Facebook" className="hover:text-white transition-colors"><Facebook size={20} /></a>
@@ -67,7 +66,7 @@ const Footer: React.FC = () => {
           </nav>
 
           {/* Column 3: CTA */}
-          <div className="lg:col-span-4 flex flex-col md:items-start lg:items-end text-left lg:text-right">
+          <div className="lg:col-span-4 flex flex-col items-center md:items-start lg:items-end text-center md:text-left lg:text-right">
             <h2 className="text-3xl md:text-5xl font-serif text-white leading-[1.1] mb-6">
               Pronto para dar início a uma sessão de descoberta?
             </h2>

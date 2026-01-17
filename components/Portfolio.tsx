@@ -19,12 +19,9 @@ const Portfolio: React.FC = () => {
       <div className="container mx-auto px-6">
         
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-32">
-          <Reveal>
-             <h2 className="text-5xl md:text-8xl font-serif text-stone-900 leading-[0.9]">
-               Trabalhos<br/>
-               <span className="italic text-rose-500">Selecionados</span>
-             </h2>
-          </Reveal>
+          <div className="max-w-2xl">
+            <SectionTitle subtitle="Galeria" title="Trabalhos Selecionados" align="left" />
+          </div>
           <Reveal delay={200}>
             <p className="max-w-xs text-stone-500 text-sm mt-8 md:mt-0 font-medium uppercase tracking-wide">
               Uma curadoria de projetos que exploram anatomia, cor e narrativa visual.
@@ -37,22 +34,21 @@ const Portfolio: React.FC = () => {
           {galleryItems.map((item, index) => (
             <div key={item.id} className="break-inside-avoid">
               <Reveal delay={index % 3 * 150}>
-                <div className="group relative overflow-hidden cursor-none-target w-full">
-                  {/* Enhanced SEO Alt Text & Smoother Scale Animation */}
+                <article className="group relative overflow-hidden cursor-none-target w-full">
                   <img 
                     src={item.src} 
-                    alt={`${item.title} - Tatuagem estilo ${item.category} por William Siqueira`} 
+                    alt={`Tatuagem ${item.title} estilo ${item.category} por William Siqueira em São Paulo`} 
                     className="w-full h-auto block grayscale group-hover:grayscale-0 transition-all duration-[800ms] ease-out-expo group-hover:scale-105 will-change-transform"
                     loading="lazy"
                   />
                   
-                  {/* Minimal Hover Info with Fade In */}
+                  {/* Minimal Hover Info */}
                   <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/20 transition-colors duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
                      <div className="bg-white/10 backdrop-blur-md p-4 rounded-full border border-white/20 transform scale-90 group-hover:scale-100 transition-transform duration-500">
                         <ArrowUpRight className="text-white w-8 h-8" />
                      </div>
                   </div>
-                </div>
+                </article>
                 
                 <div className="mt-4 flex justify-between items-baseline border-b border-stone-100 pb-2">
                    <h3 className="font-serif text-2xl text-stone-900 group-hover:text-rose-500 transition-colors">{item.title}</h3>

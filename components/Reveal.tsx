@@ -14,12 +14,12 @@ const Reveal: React.FC<RevealProps> = ({ children, width = 'fit-content', delay 
   return (
     <div ref={ref} style={{ width, position: 'relative', overflow: 'visible' }}>
       <motion.div
-        initial={{ opacity: 0, y: 40, filter: 'blur(10px)', scale: 0.98 }}
-        animate={isInView ? { opacity: 1, y: 0, filter: 'blur(0px)', scale: 1 } : {}}
+        initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+        animate={isInView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
         transition={{
-          duration: 1.2,
+          duration: 1.0,
           delay: delay / 1000,
-          ease: [0.19, 1, 0.22, 1] // 'ease-out-expo' matching the design system
+          ease: [0.19, 1, 0.22, 1] // 'out-expo' matching design system
         }}
       >
         {children}

@@ -8,7 +8,6 @@ const About: React.FC = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative">
           
-          {/* Typography Header - Decorative Element (Changed from h2 to div for SEO) */}
           <div className="lg:col-span-12 mb-8 md:mb-16">
              <Reveal>
                <div className="text-[12vw] md:text-[8vw] font-serif leading-[0.8] text-rose-300 opacity-30 select-none pointer-events-none" aria-hidden="true">
@@ -17,7 +16,6 @@ const About: React.FC = () => {
              </Reveal>
           </div>
 
-          {/* Image Block with Scale Reveal Animation */}
           <div className="lg:col-span-5 relative z-10">
              <Reveal>
                 <div className="relative aspect-[4/5] overflow-hidden group">
@@ -25,6 +23,7 @@ const About: React.FC = () => {
                       src="https://picsum.photos/600/800?grayscale&random=20" 
                       alt="Retrato de William Siqueira - Tatuador Especialista em Neotradicional" 
                       className="w-full h-full object-cover transform transition-transform duration-[1.5s] ease-out-expo scale-110 group-hover:scale-100"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-stone-900/10 mix-blend-multiply transition-opacity duration-700 group-hover:opacity-0"></div>
                 </div>
@@ -35,10 +34,8 @@ const About: React.FC = () => {
              </Reveal>
           </div>
 
-          {/* Text Content */}
           <div className="lg:col-span-7 lg:pl-12 pt-8 lg:pt-20">
             <Reveal delay={200}>
-                {/* Semantic H2 for the section */}
                 <h2 className="font-serif text-4xl md:text-5xl text-stone-900 mb-8 leading-tight">
                   Não sigo regras rígidas.<br/>
                   Meu estilo é <span className="italic text-rose-600">liberdade</span>.
@@ -46,17 +43,17 @@ const About: React.FC = () => {
             </Reveal>
             
             <Reveal delay={300}>
-                <div className="prose prose-lg text-stone-600 font-light space-y-6 max-w-xl">
+                <article className="prose prose-lg text-stone-600 font-light space-y-6 max-w-xl">
                   <p>
                     A arte sempre foi minha linguagem. Do design gráfico ao cinema de animação, explorei diversas formas de expressão visual até encontrar na tatuagem o meio definitivo.
                   </p>
                   <p>
                     O <strong>Neotradicional</strong> me permite mesclar a solidez do clássico com a vibração do contemporâneo. É vibrante, detalhado e, acima de tudo, conceitual. Busco sempre criar uma conexão intrínseca entre a obra e a pessoa que a carrega.
                   </p>
-                  <div className="pl-6 border-l-2 border-rose-200 italic text-stone-500 my-8">
+                  <blockquote className="pl-6 border-l-2 border-rose-200 italic text-stone-500 my-8">
                     "Para mim, é extremamente gratificante saber que alguém escolheu carregar um pedaço da minha visão artística pelo resto da vida."
-                  </div>
-                </div>
+                  </blockquote>
+                </article>
             </Reveal>
 
             <Reveal delay={400}>

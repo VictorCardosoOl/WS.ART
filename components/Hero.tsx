@@ -14,16 +14,14 @@ const Hero: React.FC = () => {
   const opacityText = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    // Pink Hero Background with slight parallax feel via CSS
     <section ref={containerRef} className="relative h-[100dvh] w-full flex flex-col justify-between overflow-hidden bg-rose-50">
       
-      {/* Texture Overlay with Animated Pulse for 'Living' feel */}
+      {/* Texture Overlay */}
       <div className="absolute inset-0 bg-noise opacity-[0.06] pointer-events-none mix-blend-multiply animate-pulse"></div>
 
-      {/* Content Container */}
       <div className="container mx-auto px-6 relative z-10 h-full flex flex-col pt-32 md:pt-40 pb-0">
         
-        {/* Top Section: Intro Text (Right Aligned) */}
+        {/* Intro Text - Semantic H2 */}
         <div className="flex flex-col md:flex-row justify-end items-start w-full flex-grow">
             <Reveal delay={200}>
               <div className="max-w-md text-right md:text-right mt-8 md:mt-0">
@@ -37,7 +35,7 @@ const Hero: React.FC = () => {
             </Reveal>
         </div>
 
-        {/* Middle/Bottom Information (Left Aligned) */}
+        {/* Info Line */}
         <div className="relative w-full flex justify-between items-end pb-8 md:pb-12 z-20">
             <div className="block">
                <Reveal>
@@ -49,7 +47,7 @@ const Hero: React.FC = () => {
             </div>
         </div>
 
-        {/* Massive Typography - Parallax H1 */}
+        {/* Massive Parallax Typography H1 */}
         <div className="w-full flex justify-center items-end leading-none z-10 pb-0 md:pb-0 px-2 md:px-0 relative">
            <motion.div 
              style={{ y: yText, opacity: opacityText }}
