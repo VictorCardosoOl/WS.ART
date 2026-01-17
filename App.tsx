@@ -10,7 +10,6 @@ import FAQ from './components/FAQ';
 import BookingForm from './components/BookingForm';
 import FlashDay from './components/FlashDay';
 import Footer from './components/Footer';
-import CustomCursor from './components/CustomCursor';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -21,8 +20,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-white cursor-none">
-      <CustomCursor />
+    <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-white">
       <Navbar />
       <main className="flex-grow">
         <Hero />

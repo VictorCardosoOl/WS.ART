@@ -3,8 +3,16 @@ import { Instagram, ArrowUpRight, MessageCircle, Twitter, Facebook } from 'lucid
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-black text-white pt-16 md:pt-20 pb-0 font-sans overflow-hidden">
-      <div className="container mx-auto px-6">
+    <footer className="relative bg-black text-white pt-24 md:pt-32 pb-0 font-sans overflow-hidden">
+      
+      {/* SEPARATOR: INVERTED CURVE FROM WHITE (BOOKING SECTION) */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
+         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-white">
+            <path d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z" className="opacity-100"></path>
+         </svg>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
         
         {/* Top Grid Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-12 md:gap-y-16 border-b border-stone-800 pb-12 md:pb-16">

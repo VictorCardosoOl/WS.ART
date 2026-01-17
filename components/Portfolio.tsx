@@ -112,8 +112,8 @@ const PortfolioItem = ({ item, index }: { item: GridGalleryItem; index: number }
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="py-32 md:py-48 bg-white border-b border-stone-100">
-      <div className="container mx-auto px-6">
+    <section id="gallery" className="relative pt-32 pb-48 md:pt-48 md:pb-64 bg-white">
+      <div className="container mx-auto px-6 relative z-10">
         
         {/* Cabeçalho */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-24 md:mb-32">
@@ -161,6 +161,14 @@ const Portfolio: React.FC = () => {
            </Reveal>
         </div>
 
+      </div>
+
+      {/* SEPARATOR: ORGANIC CURVE TO ABOUT SECTION (#FDF7F8) */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[60px] md:h-[120px] fill-[#FDF7F8]">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="transform scale-y-[-1] origin-center"></path>
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V56.44Z"></path>
+        </svg>
       </div>
     </section>
   );
