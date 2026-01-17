@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Reveal from './Reveal';
 import { GalleryItem } from '../types';
-import { ArrowUpRight } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
+// Expanded type for grid control
 interface GridGalleryItem extends GalleryItem {
-  colSpan: string; // Classes de largura (ex: md:col-span-6)
-  offset?: string; // Classes de deslocamento vertical (ex: md:mt-24)
-  aspect: string;  // Classes de proporção (ex: aspect-[3/4])
+  colSpan: string; // Tailwind class like "md:col-span-6"
+  height: string; // Tailwind class like "h-[600px]" or aspect ratio
+  offsetY?: string; // CSS translation for staggered layout
 }
 
 const galleryItems: GridGalleryItem[] = [
@@ -16,8 +17,8 @@ const galleryItems: GridGalleryItem[] = [
     category: "Neotraditional", 
     title: "Lady Face", 
     colSpan: "md:col-span-5", 
-    offset: "md:mt-0",
-    aspect: "aspect-[3/4]" 
+    height: "aspect-[3/4]",
+    offsetY: "0px"
   },
   { 
     id: 2, 
@@ -25,8 +26,8 @@ const galleryItems: GridGalleryItem[] = [
     category: "Color Study", 
     title: "Floral Piece", 
     colSpan: "md:col-span-7", 
-    offset: "md:mt-32", // Deslocamento para criar ritmo
-    aspect: "aspect-[4/3]" 
+    height: "aspect-[4/3]",
+    offsetY: "md:mt-32" // Push down to break grid line
   },
   { 
     id: 3, 
@@ -34,8 +35,8 @@ const galleryItems: GridGalleryItem[] = [
     category: "Backpiece", 
     title: "Tiger & Snake", 
     colSpan: "md:col-span-4", 
-    offset: "md:mt-12",
-    aspect: "aspect-[3/5]" 
+    height: "aspect-[3/5]",
+    offsetY: "md:-mt-24" // Pull up overlaps
   },
   { 
     id: 4, 
@@ -43,8 +44,8 @@ const galleryItems: GridGalleryItem[] = [
     category: "Detail", 
     title: "Dagger", 
     colSpan: "md:col-span-4", 
-    offset: "md:mt-48", // Deslocamento forte
-    aspect: "aspect-square" 
+    height: "aspect-square",
+    offsetY: "md:mt-12"
   },
   { 
     id: 5, 
@@ -52,59 +53,63 @@ const galleryItems: GridGalleryItem[] = [
     category: "Surrealism", 
     title: "Eye Concept", 
     colSpan: "md:col-span-4", 
-    offset: "md:mt-0",
-    aspect: "aspect-[3/4]" 
-  },
-  { 
-    id: 6, 
-    src: "https://picsum.photos/1400/800?random=6", 
-    category: "Full Body", 
-    title: "The Phoenix", 
-    colSpan: "md:col-span-12", 
-    offset: "md:mt-24",
-    aspect: "aspect-[21/9]" 
+    height: "aspect-[3/4]",
+    offsetY: "0px"
   },
 ];
 
+// Componente para Imagem com Parallax
+const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  
+  // A imagem move um pouco mais devagar que o scroll, criando profundidade
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.1, 1, 1.1]);
+
+  return (
+    <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
+      <motion.div style={{ y, scale }} className="w-full h-full">
+        <img 
+          src={src} 
+          alt={alt} 
+          className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-out"
+        />
+      </motion.div>
+    </div>
+  );
+};
+
 const PortfolioItem = ({ item, index }: { item: GridGalleryItem; index: number }) => {
   return (
-    <div className={`group relative w-full h-full flex flex-col`}>
+    <div className={`group relative w-full flex flex-col ${item.offsetY}`}>
       
       {/* Container da Imagem */}
-      <div className={`relative w-full ${item.aspect} overflow-hidden bg-stone-200`}>
-        <img 
-            src={item.src} 
-            alt={item.title} 
-            className="w-full h-full object-cover grayscale transition-all duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 group-hover:grayscale-0"
-            loading="lazy"
-        />
+      <div className={`relative w-full ${item.height} overflow-hidden bg-stone-200 mb-6`}>
+        <ParallaxImage src={item.src} alt={item.title} />
         
-        {/* Overlay Hover Minimalista */}
-        <div className="absolute inset-0 bg-stone-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        {/* Overlay Hover */}
+        <div className="absolute inset-0 bg-[#754548]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply pointer-events-none"></div>
 
-        {/* Botão Flutuante (Aparece no Hover) */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 opacity-0 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100">
-           <div className="w-20 h-20 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-stone-900 shadow-xl">
-              <span className="text-[10px] font-bold uppercase tracking-widest">Ver</span>
-           </div>
+        {/* Floating Tag */}
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">Ver Projeto</span>
         </div>
       </div>
 
-      {/* Meta Dados (Fora da Imagem - Estilo Editorial) */}
-      <div className="mt-4 flex items-start justify-between border-t border-stone-200 pt-3 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+      {/* Meta Dados Minimalistas */}
+      <div className="flex items-baseline justify-between border-b border-stone-200 pb-2 group-hover:border-[#754548] transition-colors duration-500">
          <div className="flex flex-col">
-            <span className="font-serif text-2xl md:text-3xl text-stone-900 italic leading-none mb-1">
+            <span className="font-serif text-2xl md:text-3xl text-stone-900 leading-none group-hover:italic transition-all">
               {item.title}
             </span>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">
-              {item.category}
-            </span>
          </div>
-         <div className="text-right">
-            <span className="block text-[4rem] leading-[0.8] font-serif text-stone-100 font-bold group-hover:text-rose-200 transition-colors duration-500 select-none">
-              0{index + 1}
-            </span>
-         </div>
+         <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400 group-hover:text-[#754548]">
+            {item.category}
+         </span>
       </div>
     </div>
   );
@@ -112,37 +117,36 @@ const PortfolioItem = ({ item, index }: { item: GridGalleryItem; index: number }
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="relative pt-32 pb-48 md:pt-48 md:pb-64 bg-white">
+    <section id="gallery" className="relative pt-32 pb-48 bg-white">
       <div className="container mx-auto px-6 relative z-10">
         
-        {/* Cabeçalho */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 md:mb-32">
+        {/* Header com Design Editorial */}
+        <div className="flex flex-col md:flex-row justify-between items-end mb-24 md:mb-40">
           <Reveal>
-             <h2 className="text-6xl md:text-[7vw] font-serif text-stone-900 leading-[0.85] tracking-tighter">
+             <h2 className="text-6xl md:text-[8vw] font-serif text-stone-900 leading-[0.8] tracking-tighter">
                Acervo<br/>
-               <span className="italic text-rose-400 opacity-90 ml-8 md:ml-16">Selecionado</span>
+               <span className="italic text-[#754548] opacity-80 ml-12">Selecionado</span>
              </h2>
           </Reveal>
           
           <Reveal delay={200}>
-            <div className="mt-12 md:mt-0 text-right flex flex-col items-end">
-              <div className="inline-flex items-center gap-3 px-4 py-2 border border-stone-200 rounded-full mb-4">
-                 <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>
-                 <span className="text-[10px] font-bold uppercase tracking-widest text-stone-600">Disponível para Projetos</span>
-              </div>
-              <p className="text-stone-400 text-xs max-w-[240px] leading-relaxed">
-                Navegue por uma curadoria de trabalhos recentes que exploram a anatomia e a narrativa visual.
+            <div className="mt-12 md:mt-0 max-w-xs text-right">
+              <p className="text-stone-500 text-xs leading-relaxed uppercase tracking-wide mb-4">
+                [ Arquivo 2023 — 2024 ]
+              </p>
+              <p className="text-stone-400 font-serif text-lg italic">
+                Uma curadoria de narrativas visuais<br/> eternizadas na pele.
               </p>
             </div>
           </Reveal>
         </div>
 
-        {/* Grid Editorial (Broken Layout) */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+        {/* Grid Assimétrico */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-8 gap-y-24">
           {galleryItems.map((item, index) => (
             <div 
               key={item.id} 
-              className={`${item.colSpan} ${item.offset} transition-all duration-500`}
+              className={`${item.colSpan}`}
             >
               <Reveal delay={index % 2 * 100} width="100%">
                 <PortfolioItem item={item} index={index} />
@@ -151,12 +155,13 @@ const Portfolio: React.FC = () => {
           ))}
         </div>
         
-        {/* Footer Link */}
-        <div className="mt-32 md:mt-48 text-center">
+        {/* Footer Link Minimalista */}
+        <div className="mt-40 text-center">
            <Reveal>
-             <a href="https://instagram.com" className="group inline-flex flex-col items-center">
-               <span className="font-serif italic text-3xl md:text-4xl text-stone-900 mb-2">Explorar arquivo completo</span>
-               <div className="h-[1px] w-0 bg-rose-500 group-hover:w-full transition-all duration-700"></div>
+             <a href="https://instagram.com" className="group inline-flex items-center gap-4">
+               <span className="w-12 h-[1px] bg-stone-300 group-hover:w-24 group-hover:bg-[#754548] transition-all duration-500"></span>
+               <span className="font-serif italic text-2xl text-stone-500 group-hover:text-stone-900 transition-colors">Explorar arquivo completo</span>
+               <span className="w-12 h-[1px] bg-stone-300 group-hover:w-24 group-hover:bg-[#754548] transition-all duration-500"></span>
              </a>
            </Reveal>
         </div>

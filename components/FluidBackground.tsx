@@ -12,12 +12,12 @@ const FluidBackground: React.FC = () => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     
-    // Inicializa com tamanho zero, o ResizeObserver vai ajustar imediatamente
+    // Resize é gerenciado pelo Observer
     renderer.setSize(0, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
 
-    // 2. SHADER "EMOTION AURA"
+    // 2. SHADER CONFIG
     const fragmentShader = `
       uniform float u_time;
       uniform vec2 u_resolution;
@@ -40,37 +40,37 @@ const FluidBackground: React.FC = () => {
           coord.x *= aspect;
 
           // --- POSICIONAMENTO ---
-          // X: 0.35 * aspect (Ligeiramente à esquerda, alinhado com o texto EMOTION)
-          // Y: 0.65 (Acima do centro geométrico, parte superior da seção)
+          // Center: x = 0.35 * aspect (Ligeiramente a esquerda)
+          // Center: y = 0.65 (Acima do centro vertical)
           vec2 center = vec2(0.35 * aspect, 0.65);
           
-          // Animação orgânica de flutuação
-          center.x += cos(u_time * 0.2) * 0.05; 
-          center.y += sin(u_time * 0.15) * 0.03;
+          // Animação sutil de "respiração" da posição
+          center.x += sin(u_time * 0.2) * 0.03;
+          center.y += cos(u_time * 0.15) * 0.02;
           
           float dist = distance(coord, center);
 
-          // --- GRADIENTE RADIAL EXPANSIVO ---
+          // --- GRADIENTE RADIAL SUAVE ---
           vec3 color = C_BG;
 
-          // Camada 1: Núcleo Profundo (#754548)
-          // O núcleo é concentrado mas suave
-          float step1 = smoothstep(0.0, 0.5, dist);
+          // Camada 1: Núcleo (Vinho -> Rosa Médio)
+          // Smoothstep controla a difusão
+          float step1 = smoothstep(0.0, 0.55, dist);
           vec3 layer1 = mix(C_CENTER_DARK, C_RING_DARK, step1);
 
-          // Camada 2: Auréola Externa (#D9A9B0 -> #F2E8E9)
-          float step2 = smoothstep(0.3, 0.9, dist);
+          // Camada 2: Halo (Rosa Médio -> Rosa Claro)
+          float step2 = smoothstep(0.4, 0.9, dist);
           vec3 layer2 = mix(layer1, C_RING_LIGHT, step2);
 
-          // Camada 3: Fusão Total com o Fundo (#FAF7F7)
-          // Smoothstep longo para garantir que não haja "corte" visível nas bordas da section
-          float step3 = smoothstep(0.6, 1.5, dist);
+          // Camada 3: Fusão com Fundo (#FAF7F7)
+          // O limite 1.3 garante que o gradiente se espalhe bem antes de sumir
+          float step3 = smoothstep(0.65, 1.3, dist);
           color = mix(layer2, C_BG, step3);
 
           // --- TEXTURA (FILM GRAIN) ---
-          // Adiciona ruído para evitar banding e dar textura editorial
-          float grain = random(uv * 2.0 + u_time * 0.1);
-          float grainStrength = 0.04 * (1.0 - step3); // Grão mais forte no centro, zero no fundo
+          // Adiciona ruído apenas nas áreas coloridas para evitar banding
+          float grain = random(uv * 3.0 + u_time * 1.0);
+          float grainStrength = 0.04 * (1.0 - step3); 
           color -= grain * grainStrength;
 
           gl_FragColor = vec4(color, 1.0);
@@ -85,7 +85,7 @@ const FluidBackground: React.FC = () => {
 
     const uniforms = {
       u_time: { value: 0.0 },
-      u_resolution: { value: new THREE.Vector2(1, 1) }, // Inicializa dummy
+      u_resolution: { value: new THREE.Vector2(1, 1) },
     };
 
     const material = new THREE.ShaderMaterial({
@@ -98,7 +98,7 @@ const FluidBackground: React.FC = () => {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    // 3. Animation Loop
+    // 3. Loop de Animação
     const clock = new THREE.Clock();
     let animationId: number;
 
@@ -109,8 +109,7 @@ const FluidBackground: React.FC = () => {
     };
     animate();
 
-    // 4. Robust Resize Handling (Observer)
-    // Isso garante que o canvas tenha SEMPRE o tamanho exato da div pai
+    // 4. Resize Observer para garantir preenchimento correto
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
@@ -136,8 +135,7 @@ const FluidBackground: React.FC = () => {
   return (
     <div 
       ref={containerRef} 
-      className="absolute inset-0 w-full h-full"
-      style={{ pointerEvents: 'none' }} // Garante que o mouse passe através
+      className="w-full h-full"
     />
   );
 };
