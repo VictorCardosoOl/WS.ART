@@ -3,12 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#fbf7f6" />
     
     <!-- SEO & Meta Tags -->
     <title>William Siqueira | Tatuagem Neotradicional e Arte em SP</title>
     <meta name="description" content="Estúdio privado de tatuagem em São Paulo especializado em estilo Neotradicional, Coberturas (Cover-up) e projetos autorais. Arte na pele por William Siqueira." />
-    <meta name="keywords" content="tatuagem neotradicional, tattoo sp, william siqueira, cover-up, tatuagem colorida, estúdio privado, tatuador são paulo, arte autoral" />
+    <meta name="keywords" content="tatuagem neotradicional, tattoo sp, william siqueira, cover-up, tatuagem colorida, estúdio privado, tatuador são paulo" />
     <meta name="author" content="William Siqueira" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://williamsiqueira.art" />
@@ -18,7 +17,7 @@
     <meta property="og:url" content="https://williamsiqueira.art/" />
     <meta property="og:title" content="William Siqueira | Tatuagem Neotradicional" />
     <meta property="og:description" content="Conectamos sua história à sua anatomia. Estúdio privado em São Paulo especializado em arte neotradicional exclusiva." />
-    <meta property="og:image" content="https://picsum.photos/1200/630?grayscale&blur=2" />
+    <meta property="og:image" content="https://picsum.photos/1200/630?grayscale&blur=2" /> <!-- Placeholder for actual social image -->
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -34,7 +33,7 @@
       "@type": "TattooParlor",
       "name": "William Siqueira Tattoo Art",
       "image": ["https://picsum.photos/600/600"],
-      "description": "Estúdio de tatuagem especializado em estilo Neotradicional, reformas e projetos autorais em São Paulo.",
+      "description": "Estúdio de tatuagem especializado em estilo Neotradicional e artes visuais.",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Av. Paulista, 1000",
@@ -43,22 +42,9 @@
         "postalCode": "01310-100",
         "addressCountry": "BR"
       },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "-23.561684",
-        "longitude": "-46.655981"
-      },
       "priceRange": "$$$",
-      "openingHoursSpecification": [
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-          "opens": "10:00",
-          "closes": "19:00"
-        }
-      ],
-      "telephone": "+5511999999999",
-      "url": "https://williamsiqueira.art"
+      "openingHours": "Tu-Sa 10:00-19:00",
+      "telephone": "+5511999999999"
     }
     </script>
 
@@ -73,17 +59,17 @@
           extend: {
             colors: {
               rose: {
-                50: '#fbf7f6',  
-                100: '#f5ebeb',
-                200: '#edd5d8',
-                300: '#e0b5bb',
-                400: '#ce8a96', 
-                500: '#b66271', 
-                600: '#9d4a5a',
-                700: '#843a47', 
-                800: '#6f323c',
-                900: '#5f2d35', 
-                950: '#3a161b',
+                50: '#f2e8e9', 
+                100: '#e6cfd3',
+                200: '#d5aab1',
+                300: '#c0828d',
+                400: '#a85d6b', 
+                500: '#8f3e4d', 
+                600: '#752d3b',
+                700: '#61222e',
+                800: '#521d27',
+                900: '#451a22',
+                950: '#260c10',
               },
               stone: {
                 850: '#1c1917',
@@ -94,8 +80,8 @@
               sans: ['"Montserrat"', 'sans-serif'],
             },
             transitionTimingFunction: {
+              // The "Luxury" Curve: Fast start, very slow smooth stop
               'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
-              'out-circ': 'cubic-bezier(0, 0.55, 0.45, 1)',
             },
             letterSpacing: {
               'tighter': '-0.05em',
@@ -104,78 +90,55 @@
               'wide': '0.025em',
               'wider': '0.05em',
               'widest': '0.25em',
-              'ultra': '0.35em',
+              'ultra': '0.35em', // Added for small caps labels
             },
             backgroundImage: {
               'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.05\"/%3E%3C/svg%3E')",
-            },
-            animation: {
-              'slow-pan': 'pan 20s linear infinite',
-              'soft-pulse': 'pulseScale 8s ease-in-out infinite',
-            },
-            keyframes: {
-              pan: {
-                '0%': { backgroundPosition: '0% 0%' },
-                '100%': { backgroundPosition: '100% 100%' },
-              },
-              pulseScale: {
-                '0%, 100%': { transform: 'scale(1)', opacity: '1' },
-                '50%': { transform: 'scale(1.05)', opacity: '0.8' },
-              }
             }
           },
         },
       }
     </script>
     <style>
-      /* Lenis Recommended CSS */
-      html.lenis, html.lenis body {
-        height: auto;
-      }
-      .lenis.lenis-smooth {
-        scroll-behavior: auto !important;
-      }
-      .lenis.lenis-smooth [data-lenis-prevent] {
-        overscroll-behavior: contain;
-      }
-      .lenis.lenis-stopped {
-        overflow: hidden;
-      }
-      
-      /* Base styles */
       html {
-        /* DO NOT set overflow-x hidden on html, it breaks mobile scroll */
-        width: 100%;
-        scroll-behavior: auto;
+        scroll-behavior: smooth;
       }
       body {
-        background-color: #fbf7f6;
-        width: 100%;
-        min-height: 100vh;
-        overflow-x: hidden; /* Apply overflow hidden here instead */
+        background-color: #ffffff;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
+        text-rendering: optimizeLegibility; /* Improved font rendering */
       }
+      
+      /* Universal Anti-Deformation Rule */
       img, video, iframe, svg {
         max-width: 100%;
         height: auto;
         display: block;
       }
-      ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #fbf7f6; }
-      ::-webkit-scrollbar-thumb { background: #ce8a96; border-radius: 4px; }
-      ::-webkit-scrollbar-thumb:hover { background: #b66271; }
+
+      /* Scrollbar Styling for Webkit */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f2e8e9; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #c0828d; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #8f3e4d; 
+      }
     </style>
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@18.3.1",
-    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
-    "react/": "https://esm.sh/react@18.3.1/",
-    "lucide-react": "https://esm.sh/lucide-react@0.263.1",
-    "framer-motion": "https://esm.sh/framer-motion@11.0.8",
-    "@studio-freight/lenis": "https://esm.sh/@studio-freight/lenis@1.0.42",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
     "vite": "https://esm.sh/vite@^7.3.1",
     "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }

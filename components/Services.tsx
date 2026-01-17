@@ -43,7 +43,7 @@ const Services: React.FC = () => {
         <Reveal>
             <div className="flex items-center gap-4 mb-16 md:mb-24">
                 <div className="h-[1px] w-12 bg-rose-500"></div>
-                <h2 className="uppercase tracking-[0.2em] text-sm font-medium text-rose-500">Especialidades</h2>
+                <span className="uppercase tracking-[0.2em] text-sm font-medium text-rose-500">Especialidades</span>
             </div>
         </Reveal>
 
@@ -89,16 +89,15 @@ const Services: React.FC = () => {
                    <img 
                      key={index}
                      src={service.image} 
-                     alt={`Serviço de Tatuagem: ${service.title}`}
+                     alt={service.title}
                      className={`absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 ease-out transform ${
                         hoveredIndex === index 
                         ? 'opacity-100 scale-100 rotate-0' 
                         : 'opacity-0 scale-110 rotate-2'
                      }`}
-                     loading="lazy"
                    />
                ))}
-               {/* Default State */}
+               {/* Default State image if nothing hovered */}
                <div className={`absolute inset-0 flex items-center justify-center bg-stone-800 transition-opacity duration-500 ${hoveredIndex !== null ? 'opacity-0' : 'opacity-100'}`}>
                   <p className="text-stone-600 font-serif italic text-xl">Selecione uma especialidade</p>
                </div>

@@ -19,9 +19,12 @@ const Portfolio: React.FC = () => {
       <div className="container mx-auto px-6">
         
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-32">
-          <div className="max-w-2xl">
-            <SectionTitle subtitle="Galeria" title="Trabalhos Selecionados" align="left" />
-          </div>
+          <Reveal>
+             <h2 className="text-5xl md:text-8xl font-serif text-stone-900 leading-[0.9]">
+               Trabalhos<br/>
+               <span className="italic text-rose-500">Selecionados</span>
+             </h2>
+          </Reveal>
           <Reveal delay={200}>
             <p className="max-w-xs text-stone-500 text-sm mt-8 md:mt-0 font-medium uppercase tracking-wide">
               Uma curadoria de projetos que exploram anatomia, cor e narrativa visual.
@@ -29,29 +32,30 @@ const Portfolio: React.FC = () => {
           </Reveal>
         </div>
 
-        {/* Clean Masonry Layout */}
+        {/* Clean Masonry Layout - CSS Columns for Fluidity */}
         <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
           {galleryItems.map((item, index) => (
             <div key={item.id} className="break-inside-avoid">
               <Reveal delay={index % 3 * 150}>
-                <article className="group relative overflow-hidden cursor-none-target w-full">
+                <div className="group relative overflow-hidden cursor-none-target w-full">
+                  {/* Image Rule: w-full ensures it fits container, h-auto maintains aspect ratio */}
                   <img 
                     src={item.src} 
-                    alt={`Tatuagem ${item.title} estilo ${item.category} por William Siqueira em São Paulo`} 
-                    className="w-full h-auto block grayscale group-hover:grayscale-0 transition-all duration-[800ms] ease-out-expo group-hover:scale-105 will-change-transform"
+                    alt={item.title} 
+                    className="w-full h-auto block grayscale group-hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
                     loading="lazy"
                   />
                   
                   {/* Minimal Hover Info */}
-                  <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/20 transition-colors duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                     <div className="bg-white/10 backdrop-blur-md p-4 rounded-full border border-white/20 transform scale-90 group-hover:scale-100 transition-transform duration-500">
+                  <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/30 transition-colors duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                     <div className="bg-white/10 backdrop-blur-md p-4 rounded-full border border-white/20">
                         <ArrowUpRight className="text-white w-8 h-8" />
                      </div>
                   </div>
-                </article>
+                </div>
                 
                 <div className="mt-4 flex justify-between items-baseline border-b border-stone-100 pb-2">
-                   <h3 className="font-serif text-2xl text-stone-900 group-hover:text-rose-500 transition-colors">{item.title}</h3>
+                   <span className="font-serif text-2xl text-stone-900 group-hover:text-rose-500 transition-colors">{item.title}</span>
                    <span className="text-[10px] uppercase tracking-widest text-stone-400">{item.category}</span>
                 </div>
               </Reveal>
@@ -61,7 +65,7 @@ const Portfolio: React.FC = () => {
         
         <div className="mt-24 text-center">
            <Reveal>
-             <a href="https://instagram.com" className="inline-block relative group py-2" aria-label="Ver portfólio completo no Instagram">
+             <a href="https://instagram.com" className="inline-block relative group py-2">
                <span className="font-serif italic text-2xl md:text-3xl text-stone-900">Ver arquivo completo</span>
                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-stone-200 group-hover:bg-rose-500 transition-colors"></div>
              </a>
