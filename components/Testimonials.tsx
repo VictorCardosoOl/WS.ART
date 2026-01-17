@@ -4,74 +4,66 @@ import FluidBackground from './FluidBackground';
 
 const Testimonials: React.FC = () => {
   return (
-    <section className="relative w-full py-32 md:py-64 overflow-visible bg-[#FAF7F7]">
+    <section className="relative w-full py-32 md:py-48 overflow-hidden bg-[#FAF7F7]">
       
       {/* 
-        LAYER 0: FLUID BACKGROUND EXPANDIDO
-        O container é maior que a seção (top -50%, height 200%) para garantir
-        que o degradê radial morra suavemente no branco sem corte seco.
+        LAYER 0: SHADER
+        Fundo dinâmico cobrindo toda a área.
       */}
-      <div className="absolute top-[-50%] left-0 w-full h-[200%] z-0 pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <FluidBackground />
       </div>
 
       {/* 
-        LAYER 1: TYPOGRAPHY WATERMARK
-        Centralizado e ultra sutil.
+        LAYER 1: TEXTO DECORATIVO
+        Alinhado ao Topo/Esquerda para coincidir com o "sol" do shader.
       */}
-      <div className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-0 pointer-events-none select-none mix-blend-multiply">
+      <div className="absolute top-20 left-0 w-full z-0 pointer-events-none select-none mix-blend-multiply">
          <Reveal width="100%">
-            <h2 className="text-[20vw] md:text-[15vw] font-serif font-medium leading-none text-[#754548] opacity-[0.06] tracking-tighter text-center md:text-left md:pl-[5vw] whitespace-nowrap blur-[1px]">
+            <h2 className="text-[22vw] md:text-[18vw] font-serif font-medium leading-none text-[#754548] opacity-[0.08] tracking-tighter text-left pl-[2vw] whitespace-nowrap blur-[1px]">
                 EMOTION
             </h2>
          </Reveal>
       </div>
 
       {/* 
-        LAYER 2: CONTENT GRID 
+        LAYER 2: CONTEÚDO
       */}
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 relative z-10 pt-32 md:pt-48">
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
             
-            {/* Espaço Vazio Esquerdo (Visual do Shader) */}
-            <div className="hidden md:block md:col-span-6 lg:col-span-7 h-full min-h-[400px]"></div>
+            {/* Esquerda Vazia (Permite ver o gradiente e texto) */}
+            <div className="hidden md:block md:col-span-6 h-full min-h-[300px]"></div>
 
-            {/* Coluna Direita: Conteúdo */}
-            <div className="md:col-span-6 lg:col-span-5 flex flex-col gap-12">
+            {/* Direita: Card e Imagem */}
+            <div className="md:col-span-6 flex flex-col gap-16">
               
               <Reveal delay={200}>
-                  {/* Cartão de Depoimento */}
-                  <div className="backdrop-blur-md bg-white/40 border border-white/60 p-8 md:p-10 shadow-[0_30px_60px_-15px_rgba(117,69,72,0.1)] relative">
-                      <p className="font-serif text-2xl md:text-3xl leading-snug mb-8 text-stone-800 relative z-10">
+                  {/* Card Glass */}
+                  <div className="backdrop-blur-sm bg-white/40 border border-white/60 p-8 md:p-12 shadow-sm rounded-sm relative">
+                      <p className="font-serif text-2xl md:text-3xl leading-snug mb-8 text-stone-800 relative z-10 italic">
                           "Mais que tinta, William traduziu um momento de luto em beleza pura. O processo foi uma terapia, e o resultado é uma parte de mim."
                       </p>
-                      
-                      <div className="flex flex-col gap-2 relative z-10 border-t border-rose-900/10 pt-6">
-                          <div className="flex items-center gap-4">
-                              <span className="text-xs uppercase tracking-widest text-stone-900 font-bold">Ana Clara</span>
-                              <div className="h-[1px] w-8 bg-rose-400"></div>
-                              <span className="text-[10px] uppercase tracking-wider text-stone-500">Arquiteta</span>
-                          </div>
+                      <div className="flex flex-col gap-1 relative z-10 pl-4 border-l-2 border-rose-400">
+                          <span className="text-xs uppercase tracking-widest text-stone-900 font-bold">Ana Clara</span>
+                          <span className="text-[10px] uppercase tracking-wider text-stone-500">Arquiteta</span>
                       </div>
                   </div>
               </Reveal>
 
               <Reveal delay={400}>
-                  {/* Bloco de Imagem - RETO E LIMPO */}
-                  <div className="relative w-full ml-auto">
-                       {/* Imagem alinhada, sem rotação, borda branca sólida */}
-                       <div className="relative z-10 aspect-[3/4] shadow-2xl border-[12px] border-white bg-white">
+                  {/* Imagem Reta e Clean */}
+                  <div className="relative w-full max-w-sm ml-auto bg-white p-2 shadow-2xl">
+                       <div className="relative z-10 aspect-[3/4]">
                           <img 
                               src="https://picsum.photos/800/1000?grayscale&random=99" 
                               alt="Tattoo Detail"
                               className="w-full h-full object-cover grayscale contrast-[1.1] brightness-[1.05]"
                           />
                        </div>
-                       
-                       {/* Tag Minimalista */}
-                       <div className="absolute -bottom-6 -right-6 z-20 bg-[#1a1a1a] text-white py-4 px-8 shadow-xl">
-                          <span className="font-serif italic text-xl tracking-wide">"Eterno."</span>
+                       <div className="absolute -bottom-5 -left-5 z-20 bg-[#1a1a1a] text-white py-3 px-6 shadow-xl">
+                          <span className="font-serif italic text-lg tracking-wide">"Eterno."</span>
                        </div>
                   </div>
               </Reveal>

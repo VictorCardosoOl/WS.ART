@@ -16,62 +16,60 @@ const FluidBackground: React.FC = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
 
-    // 2. SHADER "ETHEREAL RADIAL"
+    // 2. SHADER "VELVET RADIAL"
     const fragmentShader = `
       uniform float u_time;
       uniform vec2 u_resolution;
 
-      // Cores (RGB Normalizado)
-      const vec3 C_CORE = vec3(0.46, 0.27, 0.28); // #754548
-      const vec3 C_MID = vec3(0.85, 0.66, 0.69);  // #D9A9B0
-      const vec3 C_OUTER = vec3(0.95, 0.91, 0.91); // #F2E8E9 (Quase branco rosado)
+      // PALETA DE CORES
+      const vec3 C_BG = vec3(0.98, 0.969, 0.969);          // #FAF7F7
+      const vec3 C_CENTER_DARK = vec3(0.46, 0.27, 0.28);   // #754548
+      const vec3 C_RING_DARK = vec3(0.85, 0.66, 0.69);     // #D9A9B0
+      const vec3 C_RING_LIGHT = vec3(0.95, 0.91, 0.91);    // #F2E8E9
 
-      // Função de Ruído de Alta Frequência (Film Grain)
       float random(vec2 st) {
           return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
       }
 
       void main() {
-          // Normalização e correção de Aspect Ratio
           vec2 uv = gl_FragCoord.xy / u_resolution.xy;
           float aspect = u_resolution.x / u_resolution.y;
           uv.x *= aspect;
 
-          // --- CONFIGURAÇÃO DO CENTRO ---
-          // Define o centro do gradiente. 
-          // Ajuste fino para posicionar atrás do texto "EMOTION" (Esquerda)
-          vec2 center = vec2(0.30 * aspect, 0.6);
+          // --- POSICIONAMENTO ---
+          // ALINHAMENTO COM "EMOTION":
+          // Texto está no Topo/Esquerda.
+          // x: 0.25 (Esquerda)
+          // y: 0.75 (Topo - Lembre-se que UV 0,0 é inferior/esquerdo)
+          vec2 center = vec2(0.25 * aspect, 0.70);
           
-          // Respiração orgânica lenta (expansão e contração imperceptível)
-          float breathe = sin(u_time * 0.2) * 0.02; 
+          // Respiração sutil
+          float breathe = sin(u_time * 0.4) * 0.02; 
           
-          // Distância radial pura
           float dist = distance(uv, center);
 
-          // --- MÁSCARA DE OPACIDADE (ALPHA) ---
-          // CRUCIAL: O alpha deve chegar a 0.0 ANTES de atingir a borda do canvas/div.
-          // smoothstep(borda_interna, borda_externa, valor)
-          // Tudo acima de 0.9 de distância será totalmente transparente.
-          float alpha = 1.0 - smoothstep(0.0, 0.95 + breathe, dist);
-          
-          // Curva exponencial para suavizar ainda mais o final (evita degrau linear)
-          alpha = pow(alpha, 1.8);
+          // --- GRADIENTE SUAVE ---
+          vec3 color = C_BG;
 
-          // --- MISTURA DE CORES ---
-          // Núcleo
-          float coreIntensity = 1.0 - smoothstep(0.0, 0.3, dist);
-          vec3 color = mix(C_MID, C_CORE, coreIntensity);
+          // Camada central (Escura)
+          float step1 = smoothstep(0.0, 0.35 + breathe, dist);
+          vec3 layer1 = mix(C_CENTER_DARK, C_RING_DARK, step1);
 
-          // Borda externa
-          float outerIntensity = smoothstep(0.2, 0.8, dist);
-          color = mix(color, C_OUTER, outerIntensity);
+          // Camada média (Clara)
+          float step2 = smoothstep(0.2, 0.6 + breathe, dist);
+          vec3 layer2 = mix(layer1, C_RING_LIGHT, step2);
 
-          // --- TEXTURA (GRAIN) ---
-          // Aplica ruído apenas onde há cor visível
-          float grain = random(uv * 2.0 + u_time * 0.1);
-          color -= grain * 0.04; // Textura sutil
+          // Fade out para o fundo (C_BG)
+          // smoothstep longo para eliminar corte seco
+          float step3 = smoothstep(0.4, 1.1, dist);
+          color = mix(layer2, C_BG, step3);
 
-          gl_FragColor = vec4(color, alpha);
+          // --- TEXTURA ---
+          float grain = random(uv * 3.0 + u_time * 0.2);
+          float grainStrength = 0.04 * (1.0 - step3); 
+          color -= grain * grainStrength;
+
+          gl_FragColor = vec4(color, 1.0);
       }
     `;
 
@@ -90,8 +88,7 @@ const FluidBackground: React.FC = () => {
       vertexShader,
       fragmentShader,
       uniforms,
-      transparent: true,
-      depthWrite: false, // Importante para não bloquear outros objetos
+      transparent: false 
     });
 
     const geometry = new THREE.PlaneGeometry(2, 2);
@@ -133,7 +130,6 @@ const FluidBackground: React.FC = () => {
     <div 
       ref={containerRef} 
       className="absolute inset-0 w-full h-full"
-      style={{ mixBlendMode: 'normal' }} 
     />
   );
 };
