@@ -1,82 +1,151 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Reveal from './Reveal';
-import FluidBackground from './FluidBackground';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Quote } from 'lucide-react';
+
+const testimonials = [
+  {
+    id: 0,
+    client: "Ana Clara",
+    role: "Arquiteta",
+    text: "Mais que tinta, William traduziu um momento de luto em beleza pura. O processo foi uma terapia, e o resultado é uma parte de mim.",
+    image: "https://picsum.photos/800/1000?grayscale&random=99",
+    tag: "Cobertura / Floral"
+  },
+  {
+    id: 1,
+    client: "Marcos V.",
+    role: "Designer",
+    text: "A precisão anatômica é assustadora. Ele desenhou diretamente no meu braço para garantir que o fluxo seguisse minha musculatura.",
+    image: "https://picsum.photos/800/1000?grayscale&random=98",
+    tag: "Fechamento / Neotrad"
+  },
+  {
+    id: 2,
+    client: "Juliana S.",
+    role: "Chef",
+    text: "Eu nunca imaginei que uma tatuagem pudesse ser uma experiência tão tranquila. O estúdio privado faz toda a diferença.",
+    image: "https://picsum.photos/800/1000?grayscale&random=97",
+    tag: "Projeto Autoral"
+  }
+];
 
 const Testimonials: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
-    <section className="relative w-full min-h-screen py-32 md:py-48 bg-[#FAF7F7] overflow-hidden flex flex-col justify-center">
-      
-      {/* SEPARATOR TOP: Transição suave da seção anterior */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-20 pointer-events-none">
-        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[40px] md:h-[80px] fill-white rotate-180">
-             <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
-        </svg>
-      </div>
-
-      {/* 
-        LAYER 0: GRADIENT CONTAINER ("Corte Seco") 
-        Altura definida para 60% da tela para criar o corte horizontal abaixo do título.
-        Isso cria o efeito de "meio círculo" ou nascer do sol solicitado.
-      */}
-      <div className="absolute top-0 left-0 w-full h-[60vh] z-0 overflow-hidden pointer-events-none border-b border-white/0">
-        <FluidBackground />
-      </div>
-
-      {/* 
-        LAYER 1: TEXTO DECORATIVO "EMOTION"
-        Posicionado em cima do "Hotspot" do shader (aprox 20% do topo).
-      */}
-      <div className="absolute top-[15vh] left-0 w-full z-0 pointer-events-none select-none mix-blend-multiply">
-         <Reveal width="100%">
-            <h2 className="text-[20vw] md:text-[15vw] font-serif font-medium leading-none text-[#754548] opacity-[0.12] tracking-tighter text-left pl-[5vw] whitespace-nowrap blur-[2px]">
-                EMOTION
-            </h2>
-         </Reveal>
-      </div>
-
-      {/* 
-        LAYER 2: CONTEÚDO
-        Grid deslocado para baixo para não cobrir o título principal.
-      */}
-      <div className="container mx-auto px-6 relative z-10 mt-[20vh]">
+    <section className="relative w-full py-32 md:py-48 bg-[#FAF7F7] overflow-hidden" id="testimonials">
+      <div className="container mx-auto px-6">
         
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+        {/* Header Minimalista */}
+        <div className="mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8">
+            <Reveal>
+                <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tight">
+                    Narrativas<span className="text-[#754548]">.</span>
+                </h2>
+            </Reveal>
+            <Reveal delay={200}>
+                <p className="text-stone-500 uppercase tracking-widest text-xs mt-4 md:mt-0 font-bold">
+                    Experiências Reais
+                </p>
+            </Reveal>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
             
-            {/* Espaço negativo à esquerda para equilíbrio visual */}
-            <div className="hidden md:block md:col-span-5 h-full"></div>
-
-            <div className="md:col-span-7 flex flex-col gap-16 md:pl-12">
-              
-              <Reveal delay={200}>
-                  <div className="backdrop-blur-md bg-white/40 border border-white/60 p-8 md:p-12 shadow-[0_8px_32px_-8px_rgba(117,69,72,0.15)] rounded-sm relative">
-                      <div className="absolute -top-4 -left-4 text-6xl text-[#754548] opacity-20 font-serif">"</div>
-                      <p className="font-serif text-2xl md:text-3xl leading-snug mb-8 text-stone-800 relative z-10 italic">
-                          Mais que tinta, William traduziu um momento de luto em beleza pura. O processo foi uma terapia, e o resultado é uma parte de mim.
-                      </p>
-                      <div className="flex flex-col gap-1 relative z-10 pl-4 border-l-2 border-[#754548]">
-                          <span className="text-xs uppercase tracking-widest text-stone-900 font-bold">Ana Clara</span>
-                          <span className="text-[10px] uppercase tracking-wider text-[#754548]">Arquiteta</span>
-                      </div>
-                  </div>
-              </Reveal>
-
-              <Reveal delay={400}>
-                  {/* Card de Imagem com Tilt e Shadow profunda */}
-                  <div className="relative w-full max-w-sm ml-auto bg-white p-2 shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-700 ease-out-expo group cursor-none">
-                       <div className="relative z-10 aspect-[3/4] overflow-hidden">
-                          <img 
-                              src="https://picsum.photos/800/1000?grayscale&random=99" 
-                              alt="Tattoo Detail"
-                              className="w-full h-full object-cover grayscale contrast-[1.1] brightness-[1.05] group-hover:scale-110 transition-transform duration-[1.5s]"
-                          />
-                       </div>
-                       <div className="absolute -bottom-6 -left-8 z-20 bg-[#1c1917] text-white py-4 px-8 shadow-xl">
-                          <span className="font-serif italic text-lg tracking-wide">"Eterno."</span>
-                       </div>
-                  </div>
-              </Reveal>
-
+            {/* COLUNA ESQUERDA: LISTA INTERATIVA */}
+            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20">
+                {testimonials.map((item, index) => (
+                    <div 
+                        key={item.id}
+                        className="group cursor-pointer"
+                        onMouseEnter={() => setActiveIndex(index)}
+                    >
+                        <Reveal delay={index * 100} width="100%">
+                            <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
+                                <div className="mb-4">
+                                    <Quote 
+                                        size={24} 
+                                        className={`mb-4 transition-colors duration-500 ${activeIndex === index ? 'text-[#754548] fill-[#754548]/10' : 'text-stone-300'}`} 
+                                    />
+                                    <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-900 italic">
+                                        "{item.text}"
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <div className={`h-[1px] w-8 transition-all duration-500 ${activeIndex === index ? 'bg-[#754548] w-16' : 'bg-stone-300'}`}></div>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-bold uppercase tracking-widest text-stone-900">{item.client}</span>
+                                        <span className="text-[10px] uppercase tracking-wider text-stone-500">{item.role}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </Reveal>
+                    </div>
+                ))}
             </div>
+
+            {/* COLUNA DIREITA: IMAGEM STICKY / REVEAL */}
+            <div className="hidden lg:block w-1/2 relative h-[80vh]">
+                <div className="sticky top-32 w-full h-full">
+                    <div className="relative w-full h-full overflow-hidden rounded-sm shadow-2xl">
+                        {/* Frame Border Decorativo */}
+                        <div className="absolute inset-4 border border-white/20 z-20 pointer-events-none"></div>
+                        
+                        <AnimatePresence mode='wait'>
+                            <motion.div
+                                key={activeIndex}
+                                initial={{ opacity: 0, scale: 1.1 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} // Ease-out-expo
+                                className="absolute inset-0 w-full h-full"
+                            >
+                                <img 
+                                    src={testimonials[activeIndex].image} 
+                                    alt={testimonials[activeIndex].client}
+                                    className="w-full h-full object-cover grayscale contrast-[1.1]"
+                                />
+                                {/* Overlay Gradiente Sutil */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#754548]/40 to-transparent mix-blend-multiply opacity-60"></div>
+                            </motion.div>
+                        </AnimatePresence>
+
+                        {/* Tag Flutuante */}
+                        <div className="absolute bottom-8 left-8 z-30">
+                            <AnimatePresence mode='wait'>
+                                <motion.div
+                                    key={activeIndex}
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: -20, opacity: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="bg-white/90 backdrop-blur px-4 py-2"
+                                >
+                                    <span className="text-xs font-bold uppercase tracking-widest text-[#754548]">
+                                        {testimonials[activeIndex].tag}
+                                    </span>
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* MOBILE ONLY: IMAGEM ESTATICA (Apenas a ativa) */}
+            <div className="block lg:hidden w-full aspect-[4/5] mt-8 relative rounded overflow-hidden">
+                 <img 
+                    src={testimonials[activeIndex].image} 
+                    alt="Tattoo"
+                    className="w-full h-full object-cover grayscale"
+                 />
+                 <div className="absolute bottom-4 left-4 bg-white px-3 py-1">
+                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">
+                        {testimonials[activeIndex].tag}
+                    </span>
+                 </div>
+            </div>
+
         </div>
       </div>
     </section>
