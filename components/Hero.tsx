@@ -1,15 +1,11 @@
 import React from 'react';
 import Reveal from './Reveal';
-import FluidBackground from './FluidBackground';
 
 const Hero: React.FC = () => {
   return (
     <section className="relative h-[100dvh] w-full flex flex-col justify-between overflow-hidden bg-rose-50/50">
       
-      {/* 1. WebGL Background */}
-      <FluidBackground />
-
-      {/* 2. Texture Overlay (Grain) */}
+      {/* Texture Overlay (Grain) */}
       <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none"></div>
 
       {/* Content */}
