@@ -12,12 +12,18 @@ import Lenis from '@studio-freight/lenis';
 
 const App: React.FC = () => {
   useEffect(() => {
+    // Scroll to top on refresh
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
     let lenis: Lenis | null = null;
 
     try {
       lenis = new Lenis({
         duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         direction: 'vertical',
         gestureDirection: 'vertical',
         smooth: true,
@@ -31,7 +37,7 @@ const App: React.FC = () => {
 
       requestAnimationFrame(raf);
     } catch (e) {
-      console.warn("Lenis init failed, falling back to native scroll", e);
+      console.warn("Lenis failed to initialize. Native scroll will be used.", e);
     }
 
     return () => {
@@ -40,7 +46,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen font-sans text-stone-800 selection:bg-rose-200 selection:text-rose-900 overflow-x-hidden">
+    <div className="min-h-screen font-sans text-stone-800 selection:bg-rose-200 selection:text-rose-900 w-full overflow-hidden">
       <Navbar />
       <main className="flex-grow">
         <Hero />
