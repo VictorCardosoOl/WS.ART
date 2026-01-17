@@ -3,11 +3,12 @@ import Reveal from './Reveal';
 import { GalleryItem } from '../types';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-// Expanded type for grid control
+// Expanded type for grid control with specific SEO alt text
 interface GridGalleryItem extends GalleryItem {
   colSpan: string; // Tailwind class like "md:col-span-6"
   height: string; // Tailwind class like "h-[600px]" or aspect ratio
   offsetY?: string; // CSS translation for staggered layout
+  altText: string; // Descriptive text for SEO/Accessibility
 }
 
 const galleryItems: GridGalleryItem[] = [
@@ -18,7 +19,8 @@ const galleryItems: GridGalleryItem[] = [
     title: "Lady Face", 
     colSpan: "md:col-span-5", 
     height: "aspect-[3/4]",
-    offsetY: "0px"
+    offsetY: "0px",
+    altText: "Tatuagem neotradicional de rosto feminino (Lady Face) com ornamentos detalhados em preto e cinza e linhas finas."
   },
   { 
     id: 2, 
@@ -27,7 +29,8 @@ const galleryItems: GridGalleryItem[] = [
     title: "Floral Piece", 
     colSpan: "md:col-span-7", 
     height: "aspect-[4/3]",
-    offsetY: "md:mt-32" // Push down to break grid line
+    offsetY: "md:mt-32", // Push down to break grid line
+    altText: "Tatuagem floral colorida com estudo de profundidade e contraste, cobrindo ombro e braço com peônias vibrantes."
   },
   { 
     id: 3, 
@@ -36,7 +39,8 @@ const galleryItems: GridGalleryItem[] = [
     title: "Tiger & Snake", 
     colSpan: "md:col-span-4", 
     height: "aspect-[3/5]",
-    offsetY: "md:-mt-24" // Pull up overlaps
+    offsetY: "md:-mt-24", // Pull up overlaps
+    altText: "Fechamento de costas (Backpiece) neotradicional apresentando um tigre e uma serpente em batalha, composição dinâmica."
   },
   { 
     id: 4, 
@@ -45,7 +49,8 @@ const galleryItems: GridGalleryItem[] = [
     title: "Dagger", 
     colSpan: "md:col-span-4", 
     height: "aspect-square",
-    offsetY: "md:mt-12"
+    offsetY: "md:mt-12",
+    altText: "Detalhe macro de tatuagem de adaga perfurando uma rosa, com sombreamento pontilhista (whipshading) e traços sólidos."
   },
   { 
     id: 5, 
@@ -54,7 +59,8 @@ const galleryItems: GridGalleryItem[] = [
     title: "Eye Concept", 
     colSpan: "md:col-span-4", 
     height: "aspect-[3/4]",
-    offsetY: "0px"
+    offsetY: "0px",
+    altText: "Conceito surrealista de olho com elementos orgânicos e lágrimas, estilo neotradicional blackwork."
   },
 ];
 
@@ -76,7 +82,9 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
         <img 
           src={src} 
           alt={alt} 
+          title={alt}
           className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-out"
+          loading="lazy"
         />
       </motion.div>
     </div>
@@ -89,7 +97,7 @@ const PortfolioItem = ({ item, index }: { item: GridGalleryItem; index: number }
       
       {/* Container da Imagem */}
       <div className={`relative w-full ${item.height} overflow-hidden bg-stone-200 mb-6`}>
-        <ParallaxImage src={item.src} alt={item.title} />
+        <ParallaxImage src={item.src} alt={item.altText} />
         
         {/* Overlay Hover */}
         <div className="absolute inset-0 bg-[#754548]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply pointer-events-none"></div>
