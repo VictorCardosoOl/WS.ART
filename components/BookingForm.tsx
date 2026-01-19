@@ -34,7 +34,7 @@ const BookingForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    // Logic for API submission would go here
     setSubmitted(true);
   };
 

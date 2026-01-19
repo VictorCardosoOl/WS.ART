@@ -91,7 +91,7 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
   );
 };
 
-const PortfolioItem = ({ item, index }: { item: GridGalleryItem; index: number }) => {
+const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
   return (
     <div className={`group relative w-full flex flex-col ${item.offsetY}`}>
       
@@ -157,7 +157,7 @@ const Portfolio: React.FC = () => {
               className={`${item.colSpan}`}
             >
               <Reveal delay={index % 2 * 100} width="100%">
-                <PortfolioItem item={item} index={index} />
+                <PortfolioItem item={item} />
               </Reveal>
             </div>
           ))}

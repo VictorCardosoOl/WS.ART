@@ -1,11 +1,5 @@
 import React from 'react';
 
-export interface ServiceItem {
-  title: string;
-  description: string;
-  icon: React.ElementType;
-}
-
 export interface GalleryItem {
   id: number;
   src: string;
