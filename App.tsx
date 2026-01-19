@@ -34,9 +34,10 @@ const App: React.FC = () => {
     let lenis: any;
     if (window.Lenis) {
       lenis = new window.Lenis({
-        duration: 1.5, // Slower, heavier feel
+        duration: 1.8, // Slower, heavier feel for luxury
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
+        wheelMultiplier: 0.8, // Smoother feel
       });
 
       function raf(time: number) {
@@ -58,8 +59,10 @@ const App: React.FC = () => {
       {/* THE LIVING FRAME: Creates a gallery window effect */}
       <div className="fixed inset-0 border-[12px] md:border-[20px] border-[#FAF7F7] z-[60] pointer-events-none mix-blend-normal"></div>
       
-      {/* GLOBAL NOISE OVERLAY - TEXTURE PILLAR */}
-      <div className="fixed inset-0 w-full h-full bg-noise opacity-[0.06] z-[90] pointer-events-none mix-blend-overlay"></div>
+      {/* GLOBAL NOISE OVERLAY - TEXTURE PILLAR 
+          FIXED: Changed z-index from 90 to 40 to sit BEHIND the Navbar (z-50) 
+      */}
+      <div className="fixed inset-0 w-full h-full bg-noise opacity-[0.06] z-[40] pointer-events-none mix-blend-overlay"></div>
 
       <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-sophisticated selection:text-white w-full overflow-x-hidden bg-black">
         <CustomCursor />

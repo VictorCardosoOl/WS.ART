@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SectionTitle from '../ui/SectionTitle';
 import { FormData } from '../../types';
-import { AlertTriangle, Upload, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
+import { CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 import Reveal from '../ui/Reveal';
 
 const BookingForm: React.FC = () => {
@@ -16,16 +16,24 @@ const BookingForm: React.FC = () => {
     agreeToDeposit: false,
   });
 
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error on change
+    if (errors[name as keyof FormData]) {
+        setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, agreeToDeposit: e.target.checked }));
+    if (errors.agreeToDeposit) {
+        setErrors(prev => ({ ...prev, agreeToDeposit: undefined }));
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,8 +42,23 @@ const BookingForm: React.FC = () => {
     }
   };
 
+  const validate = () => {
+    const newErrors: Partial<Record<keyof FormData, string>> = {};
+    if (!formData.name) newErrors.name = "Nome é obrigatório";
+    if (!formData.phone) newErrors.phone = "Contato é obrigatório";
+    if (!formData.placement) newErrors.placement = "Local do corpo é obrigatório";
+    if (!formData.sizeCm) newErrors.sizeCm = "Tamanho aproximado é obrigatório";
+    if (!formData.description) newErrors.description = "Descreva sua ideia";
+    if (!formData.agreeToDeposit) newErrors.agreeToDeposit = "É necessário concordar com a política";
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
+
     setIsSubmitting(true);
     
     // Simulate network delay
@@ -69,6 +92,11 @@ const BookingForm: React.FC = () => {
     )
   }
 
+  // Styles for the giant editorial inputs
+  const inputBaseClasses = "w-full py-4 bg-transparent border-b-2 border-stone-100 focus:border-pantone-sophisticated focus:outline-none transition-all duration-500 font-serif placeholder-stone-300 text-stone-900";
+  const inputSizeLarge = "text-3xl md:text-5xl";
+  const inputSizeMedium = "text-2xl md:text-3xl";
+
   return (
     <section id="booking" className="py-32 md:py-48 bg-white scroll-mt-20">
       <div className="container mx-auto px-6">
@@ -76,142 +104,139 @@ const BookingForm: React.FC = () => {
              <SectionTitle subtitle="Consultoria" title="Inicie seu Projeto" align="left" />
         </div>
         
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-            
-            {/* Info Column */}
-            <div className="lg:col-span-4">
-                <Reveal>
-                    <div className="bg-[#FAF7F7] p-8 md:p-10 rounded-sm">
-                        <div className="flex items-start gap-4 mb-6">
-                            <AlertTriangle className="text-pantone-sophisticated w-5 h-5 flex-shrink-0 mt-1 stroke-1" />
-                            <h4 className="font-serif text-xl text-stone-900 italic">Protocolo</h4>
-                        </div>
-                        <ul className="space-y-6 text-stone-500 text-sm font-light leading-relaxed">
-                            <li className="flex flex-col">
-                                <span className="text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-1">Mínimo</span>
-                                <span>Valor de saída: R$ 100,00</span>
-                            </li>
-                            <li className="flex flex-col">
-                                <span className="text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-1">Reserva</span>
-                                <span>Pagamento de sinal obrigatório para bloqueio de agenda.</span>
-                            </li>
-                            <li className="flex flex-col">
-                                <span className="text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-1">Estilo</span>
-                                <span>Foco exclusivo em Neotradicional e Autoral.</span>
-                            </li>
-                        </ul>
-                    </div>
-                </Reveal>
-            </div>
-
-            {/* Form Column - Minimalist Style */}
-            <div className="lg:col-span-8">
-                <form onSubmit={handleSubmit} className="space-y-12 md:space-y-16">
-                    
-                    {/* Group 1: Identity */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
-                        <div className="group relative">
+        <div className="max-w-4xl mx-auto">
+            <form onSubmit={handleSubmit} noValidate className="space-y-16 md:space-y-24">
+                
+                {/* Section 1: Introduction */}
+                <div>
+                     <Reveal>
+                        <div className="relative">
                             <input 
-                                type="text" name="name" required placeholder=" "
-                                className="peer w-full py-4 bg-transparent border-b border-stone-200 focus:border-pantone-sophisticated focus:outline-none transition-colors text-stone-800 text-lg font-serif placeholder-transparent"
+                                type="text" name="name" 
+                                placeholder="Seu Nome Completo"
+                                className={`${inputBaseClasses} ${inputSizeLarge}`}
                                 value={formData.name} onChange={handleInputChange}
                             />
-                            <label className="absolute left-0 -top-3 text-[10px] uppercase tracking-widest font-bold text-stone-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-stone-300 peer-placeholder-shown:top-4 peer-focus:-top-3 peer-focus:text-[10px] peer-focus:font-bold peer-focus:text-pantone-sophisticated">
-                                Nome Completo
-                            </label>
+                            {errors.name && <p className="mt-2 text-xs text-rose-500 uppercase tracking-widest">{errors.name}</p>}
                         </div>
-                        <div className="group relative">
+                     </Reveal>
+                </div>
+
+                {/* Section 2: Contact */}
+                <div>
+                    <Reveal delay={100}>
+                        <div className="relative">
                             <input 
-                                type="tel" name="phone" required placeholder=" "
-                                className="peer w-full py-4 bg-transparent border-b border-stone-200 focus:border-pantone-sophisticated focus:outline-none transition-colors text-stone-800 text-lg font-serif placeholder-transparent"
+                                type="tel" name="phone" 
+                                placeholder="WhatsApp ou Telefone"
+                                className={`${inputBaseClasses} ${inputSizeLarge}`}
                                 value={formData.phone} onChange={handleInputChange}
                             />
-                            <label className="absolute left-0 -top-3 text-[10px] uppercase tracking-widest font-bold text-stone-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-stone-300 peer-placeholder-shown:top-4 peer-focus:-top-3 peer-focus:text-[10px] peer-focus:font-bold peer-focus:text-pantone-sophisticated">
-                                WhatsApp
-                            </label>
+                            {errors.phone && <p className="mt-2 text-xs text-rose-500 uppercase tracking-widest">{errors.phone}</p>}
                         </div>
-                    </div>
+                    </Reveal>
+                </div>
 
-                    {/* Group 2: Anatomy */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
-                        <div className="group relative">
+                {/* Section 3: The Project */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+                    <Reveal delay={200} width="100%">
+                        <div className="relative">
                             <input 
-                                type="text" name="placement" required placeholder=" "
-                                className="peer w-full py-4 bg-transparent border-b border-stone-200 focus:border-pantone-sophisticated focus:outline-none transition-colors text-stone-800 text-lg font-serif placeholder-transparent"
+                                type="text" name="placement" 
+                                placeholder="Local do Corpo"
+                                className={`${inputBaseClasses} ${inputSizeMedium}`}
                                 value={formData.placement} onChange={handleInputChange}
                             />
-                            <label className="absolute left-0 -top-3 text-[10px] uppercase tracking-widest font-bold text-stone-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-stone-300 peer-placeholder-shown:top-4 peer-focus:-top-3 peer-focus:text-[10px] peer-focus:font-bold peer-focus:text-pantone-sophisticated">
-                                Local do Corpo
-                            </label>
+                            {errors.placement && <p className="mt-2 text-xs text-rose-500 uppercase tracking-widest">{errors.placement}</p>}
                         </div>
-                        <div className="group relative">
+                    </Reveal>
+                    <Reveal delay={300} width="100%">
+                        <div className="relative">
                             <input 
-                                type="text" name="sizeCm" required placeholder=" "
-                                className="peer w-full py-4 bg-transparent border-b border-stone-200 focus:border-pantone-sophisticated focus:outline-none transition-colors text-stone-800 text-lg font-serif placeholder-transparent"
+                                type="text" name="sizeCm" 
+                                placeholder="Tamanho (cm)"
+                                className={`${inputBaseClasses} ${inputSizeMedium}`}
                                 value={formData.sizeCm} onChange={handleInputChange}
                             />
-                            <label className="absolute left-0 -top-3 text-[10px] uppercase tracking-widest font-bold text-stone-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-stone-300 peer-placeholder-shown:top-4 peer-focus:-top-3 peer-focus:text-[10px] peer-focus:font-bold peer-focus:text-pantone-sophisticated">
-                                Tamanho (cm)
-                            </label>
+                             {errors.sizeCm && <p className="mt-2 text-xs text-rose-500 uppercase tracking-widest">{errors.sizeCm}</p>}
+                        </div>
+                    </Reveal>
+                </div>
+
+                {/* Section 4: The Vision */}
+                <div>
+                    <Reveal delay={400}>
+                        <div className="relative">
+                            <textarea 
+                                name="description" rows={1} 
+                                placeholder="Descreva sua ideia, elementos e simbolismos..."
+                                className={`${inputBaseClasses} ${inputSizeLarge} resize-none overflow-hidden min-h-[80px]`}
+                                style={{ height: 'auto' }}
+                                onInput={(e) => {
+                                    e.currentTarget.style.height = 'auto';
+                                    e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
+                                }}
+                                value={formData.description} onChange={handleInputChange}
+                            ></textarea>
+                            {errors.description && <p className="mt-2 text-xs text-rose-500 uppercase tracking-widest">{errors.description}</p>}
+                        </div>
+                    </Reveal>
+                </div>
+
+                {/* Section 5: Reference & Policies */}
+                <Reveal delay={500}>
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-12 pt-8 border-t border-stone-100">
+                        
+                        {/* File Upload - Text Only */}
+                        <label className="cursor-pointer group flex items-center gap-4">
+                             <div className="text-3xl text-stone-300 group-hover:text-pantone-sophisticated transition-colors">+</div>
+                             <div className="flex flex-col">
+                                 <span className="font-serif text-xl text-stone-500 group-hover:text-stone-900 transition-colors italic">
+                                    {formData.referenceFile ? formData.referenceFile.name : "Adicionar Referência"}
+                                 </span>
+                                 <span className="text-[9px] uppercase tracking-widest text-stone-400">Jpg, Png (Max 5mb)</span>
+                             </div>
+                             <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                        </label>
+
+                        {/* Checkbox */}
+                        <div className="flex flex-col items-end gap-2">
+                             <label className="flex items-center gap-3 cursor-pointer group">
+                                <input 
+                                    type="checkbox" name="agreeToDeposit" 
+                                    checked={formData.agreeToDeposit} onChange={handleCheckboxChange}
+                                    className="appearance-none w-5 h-5 border border-stone-300 checked:bg-pantone-sophisticated checked:border-pantone-sophisticated transition-colors cursor-pointer"
+                                />
+                                <span className="text-xs font-bold uppercase tracking-widest text-stone-400 group-hover:text-stone-600 transition-colors">
+                                    Concordo com o Sinal de Reserva
+                                </span>
+                             </label>
+                             {errors.agreeToDeposit && <p className="text-xs text-rose-500 uppercase tracking-widest">{errors.agreeToDeposit}</p>}
                         </div>
                     </div>
+                </Reveal>
 
-                    {/* Group 3: Concept */}
-                    <div className="group relative">
-                        <textarea 
-                            name="description" rows={1} required placeholder=" "
-                            className="peer w-full py-4 bg-transparent border-b border-stone-200 focus:border-pantone-sophisticated focus:outline-none transition-colors text-stone-800 text-lg font-serif placeholder-transparent resize-y min-h-[60px]"
-                            value={formData.description} onChange={handleInputChange}
-                        ></textarea>
-                        <label className="absolute left-0 -top-3 text-[10px] uppercase tracking-widest font-bold text-stone-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-stone-300 peer-placeholder-shown:top-4 peer-focus:-top-3 peer-focus:text-[10px] peer-focus:font-bold peer-focus:text-pantone-sophisticated">
-                            Descrição do Conceito
-                        </label>
-                    </div>
-
-                    <div className="pt-4">
-                        <label className="flex flex-col md:flex-row items-center gap-6 cursor-pointer group">
-                            <div className="w-full md:w-auto h-16 px-8 border border-dashed border-stone-300 group-hover:border-pantone-sophisticated rounded-sm flex items-center justify-center transition-colors bg-stone-50/50">
-                                <Upload className="w-5 h-5 text-stone-400 group-hover:text-pantone-sophisticated transition-colors" />
-                            </div>
-                            <div className="flex-1 text-center md:text-left">
-                                <span className="text-[10px] uppercase tracking-widest font-bold text-stone-400 block mb-1">Referência Visual</span>
-                                <span className="text-sm text-stone-600 font-serif italic">
-                                    {formData.referenceFile ? formData.referenceFile.name : "Anexar imagens de inspiração"}
-                                </span>
-                            </div>
-                            <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                        </label>
-                    </div>
-
-                    <div className="flex items-center gap-4 pt-4">
-                        <input 
-                            type="checkbox" id="deposit" name="agreeToDeposit" required
-                            checked={formData.agreeToDeposit} onChange={handleCheckboxChange}
-                            className="w-4 h-4 text-pantone-sophisticated border-stone-300 rounded-sm focus:ring-0 cursor-pointer"
-                        />
-                        <label htmlFor="deposit" className="text-xs text-stone-500 tracking-wide cursor-pointer select-none">
-                            Concordo com a política de <strong>Sinal para Reserva</strong>.
-                        </label>
-                    </div>
-
+                {/* Submit */}
+                <Reveal delay={600}>
                     <button 
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full group relative py-6 bg-stone-900 text-white overflow-hidden disabled:bg-stone-300 disabled:cursor-not-allowed mt-8 transition-all hover:bg-pantone-sophisticated"
+                        className="w-full md:w-auto py-6 px-12 bg-stone-900 text-white hover:bg-pantone-sophisticated transition-colors duration-500 disabled:opacity-50 disabled:cursor-not-allowed mt-12"
                     >
-                         <div className="relative z-10 flex items-center justify-center gap-3">
+                         <div className="flex items-center gap-4">
                             {isSubmitting ? (
-                                <Loader2 className="animate-spin w-4 h-4" />
+                                <Loader2 className="animate-spin w-5 h-5" />
                             ) : (
                                 <>
-                                    <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Enviar Solicitação</span>
-                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                    <span className="text-xs font-bold uppercase tracking-[0.3em]">Enviar Solicitação</span>
+                                    <ArrowRight className="w-5 h-5" />
                                 </>
                             )}
                          </div>
                     </button>
-                </form>
-            </div>
+                </Reveal>
+
+            </form>
         </div>
       </div>
     </section>

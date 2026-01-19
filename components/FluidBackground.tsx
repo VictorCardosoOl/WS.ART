@@ -12,9 +12,12 @@ const FluidBackground: React.FC = () => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     
-    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    containerRef.current.appendChild(renderer.domElement);
+    // Check if container still exists before appending
+    if (containerRef.current) {
+        renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        containerRef.current.appendChild(renderer.domElement);
+    }
 
     // 2. SHADER CONFIG
     const fragmentShader = `
@@ -103,7 +106,7 @@ const FluidBackground: React.FC = () => {
 
     const uniforms = {
       u_time: { value: 0.0 },
-      u_resolution: { value: new THREE.Vector2(containerRef.current.clientWidth, containerRef.current.clientHeight) },
+      u_resolution: { value: new THREE.Vector2(containerRef.current?.clientWidth || 100, containerRef.current?.clientHeight || 100) },
     };
 
     const material = new THREE.ShaderMaterial({
@@ -127,20 +130,28 @@ const FluidBackground: React.FC = () => {
     };
     animate();
 
-    // 4. Resize Observer
+    // 4. Optimized Resize Observer (Debounced)
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    
     const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        renderer.setSize(width, height);
-        uniforms.u_resolution.value.set(width, height);
-      }
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+          for (const entry of entries) {
+            const { width, height } = entry.contentRect;
+            renderer.setSize(width, height);
+            uniforms.u_resolution.value.set(width, height);
+          }
+      }, 100); // 100ms debounce
     });
 
-    resizeObserver.observe(containerRef.current);
+    if (containerRef.current) {
+        resizeObserver.observe(containerRef.current);
+    }
 
     return () => {
       resizeObserver.disconnect();
       cancelAnimationFrame(animationId);
+      clearTimeout(resizeTimeout);
       if (containerRef.current && renderer.domElement) {
         containerRef.current.removeChild(renderer.domElement);
       }

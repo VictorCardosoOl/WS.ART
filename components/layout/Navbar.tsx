@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, Instagram, Volume2, VolumeX } from 'lucide-react';
+import { Menu, X, Instagram } from 'lucide-react';
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 
 const Navbar: React.FC = () => {
@@ -7,49 +7,6 @@ const Navbar: React.FC = () => {
   const scrollY = useScrollPosition();
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
-  
-  // Audio State
-  const [isMuted, setIsMuted] = useState(false); // Start unmuted logic (audio auto-starts after preloader)
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  // Initialize Audio
-  useEffect(() => {
-    // Note: In a real app, you would host this file. Using a placeholder/data-uri for now implies logic.
-    // Ideally use a very long, subtle drone sound.
-    audioRef.current = new Audio('https://cdn.pixabay.com/audio/2022/08/02/audio_884fe92c21.mp3'); // Placeholder Drone Sound
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.2; // Low volume background
-  }, []);
-
-  const toggleAudio = () => {
-    if (audioRef.current) {
-      if (isMuted) {
-        audioRef.current.play().catch(e => console.log("Audio play blocked", e));
-        setIsMuted(false);
-      } else {
-        audioRef.current.pause();
-        setIsMuted(true);
-      }
-    }
-  };
-
-  // Expose play function globally or via context usually, but for this structure:
-  // We assume App.tsx or Preloader triggers the first play.
-  // Here we just toggle.
-  
-  // Auto-play attempt on mount (often blocked without interaction, but Preloader interaction helps)
-  useEffect(() => {
-      if(audioRef.current && !isMuted) {
-          const playPromise = audioRef.current.play();
-          if (playPromise !== undefined) {
-              playPromise.catch(() => {
-                  // Auto-play was prevented
-                  setIsMuted(true);
-              });
-          }
-      }
-  }, []);
-
 
   // Scroll Direction Logic
   useEffect(() => {
@@ -121,17 +78,6 @@ const Navbar: React.FC = () => {
             {/* Right Actions */}
             <div className="flex items-center gap-6">
               
-              {/* Sound Toggle */}
-              <button 
-                onClick={toggleAudio}
-                className={`hidden md:flex items-center gap-2 text-[9px] uppercase tracking-widest font-bold transition-colors ${isScrolled ? 'text-pantone-sophisticated' : 'text-stone-400 hover:text-stone-900'}`}
-              >
-                 {isMuted ? <VolumeX size={16} strokeWidth={1.5} /> : <Volume2 size={16} strokeWidth={1.5} />}
-                 <span className="w-8">{isMuted ? 'OFF' : 'ON'}</span>
-              </button>
-
-              <div className="w-[1px] h-4 bg-stone-300 hidden md:block"></div>
-
               <a
                 href="https://instagram.com"
                 target="_blank"

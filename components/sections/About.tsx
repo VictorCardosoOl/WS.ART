@@ -62,14 +62,15 @@ const About: React.FC = () => {
             </Reveal>
             
             <Reveal delay={300}>
-                <div className="prose prose-lg text-stone-600 font-light space-y-8 max-w-xl">
-                  <p className="leading-relaxed">
+                {/* IMPROVED CONTRAST: text-stone-700 instead of 600, leading-loose */}
+                <div className="prose prose-lg text-stone-700 font-light space-y-8 max-w-xl">
+                  <p className="leading-loose text-lg">
                     A arte sempre foi minha linguagem. Do design gráfico ao cinema de animação, explorei diversas formas de expressão visual até encontrar na tatuagem o meio definitivo.
                   </p>
-                  <p className="leading-relaxed">
+                  <p className="leading-loose text-lg">
                     O Neotradicional me permite mesclar a solidez do clássico com a vibração do contemporâneo. É vibrante, detalhado e, acima de tudo, conceitual. Busco sempre criar uma conexão intrínseca entre a obra e a pessoa que a carrega.
                   </p>
-                  <div className="pl-8 border-l border-rose-300 italic text-stone-500 my-12 text-xl font-serif">
+                  <div className="pl-8 border-l border-rose-300 italic text-stone-500 my-12 text-xl font-serif leading-relaxed">
                     "Para mim, é extremamente gratificante saber que alguém escolheu carregar um pedaço da minha visão artística pelo resto da vida."
                   </div>
                 </div>

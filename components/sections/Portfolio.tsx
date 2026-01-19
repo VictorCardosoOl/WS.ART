@@ -36,12 +36,25 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
   );
 };
 
-const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
+// Helper function to get organic border radius classes based on index
+const getOrganicRadius = (index: number) => {
+    const shapes = [
+        "rounded-tl-[4rem] rounded-br-[4rem] rounded-tr-sm rounded-bl-sm", // Shape 1
+        "rounded-tr-[5rem] rounded-bl-[5rem] rounded-tl-sm rounded-br-sm", // Shape 2
+        "rounded-t-[8rem] rounded-b-sm", // Shape 3
+        "rounded-l-[4rem] rounded-r-sm", // Shape 4
+    ];
+    return shapes[index % shapes.length];
+};
+
+const PortfolioItem = ({ item, index }: { item: GridGalleryItem, index: number }) => {
+  const organicRadius = getOrganicRadius(index);
+
   return (
     <div className={`group relative w-full flex flex-col ${item.offsetY} cursor-hover`}>
       
-      {/* Container da Imagem com Borda Arredondada e Sombra Suave */}
-      <div className={`relative w-full ${item.height} overflow-hidden bg-stone-100 mb-8 rounded-sm shadow-lg`}>
+      {/* Container da Imagem com Bordas Orgânicas */}
+      <div className={`relative w-full ${item.height} overflow-hidden bg-stone-100 mb-8 shadow-lg transition-all duration-700 ${organicRadius}`}>
         <ParallaxImage src={item.src} alt={item.altText} />
         
         {/* Overlay Hover Minimalista */}
@@ -49,7 +62,7 @@ const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
       </div>
 
       {/* Meta Dados Minimalistas */}
-      <div className="flex items-start justify-between border-b border-stone-100 pb-4 group-hover:border-[#754548] transition-colors duration-1000">
+      <div className="flex items-start justify-between border-b border-stone-100 pb-4 group-hover:border-[#754548] transition-colors duration-1000 pl-2">
          <div className="flex flex-col gap-1">
             <span className="font-serif text-3xl md:text-4xl text-stone-900 leading-none group-hover:italic transition-all duration-700">
               {item.title}
@@ -99,7 +112,7 @@ const Portfolio: React.FC = () => {
               <Reveal delay={index % 2 * 150} width="100%">
                 {/* Margin negativa artificial em itens pares para quebrar o alinhamento perfeito */}
                 <div className={`${index % 2 !== 0 ? 'md:-mt-24' : ''}`}>
-                   <PortfolioItem item={item} />
+                   <PortfolioItem item={item} index={index} />
                 </div>
               </Reveal>
             </div>
