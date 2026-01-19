@@ -11,20 +11,20 @@ export default {
       colors: {
         pantone: {
           skin: '#F2E8E9', 
-          ink: '#1c1917',  // Warm Black
-          accent: '#754548', // Vinho Sophisticated (Substituindo o rosa chiclete)
-          deep: '#4A3B3B'  // Dark Brown/Rose
+          ink: '#1c1917',  
+          accent: '#754548', 
+          deep: '#4A3B3B'  
         },
         rose: {
-          50: '#FAF7F7',   // Background Base
-          100: '#F2E8E9',  // Light Ring
+          50: '#FAF7F7',   
+          100: '#F2E8E9',  
           200: '#E5D0D4',
-          300: '#D9A9B0',  // Dark Ring
+          300: '#D9A9B0',  
           400: '#BC8F8F', 
           500: '#A05F65', 
           600: '#8B4513',
-          800: '#754548',  // Center Dark / Accent Principal
-          900: '#4A3B3B',  // Textos Escuros
+          800: '#754548',  
+          900: '#4A3B3B',  
         },
         stone: {
           850: '#1c1917',
@@ -36,7 +36,8 @@ export default {
         sans: ['"Montserrat"', 'sans-serif'],
       },
       transitionTimingFunction: {
-        'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
+        // Curva mais dramática para hover e reveals
+        'out-expo': 'cubic-bezier(0.22, 1, 0.36, 1)', 
       },
       letterSpacing: {
         'tighter': '-0.05em',

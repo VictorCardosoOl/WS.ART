@@ -11,13 +11,31 @@ import BookingForm from './components/sections/BookingForm';
 import FlashDay from './components/sections/FlashDay';
 import Footer from './components/layout/Footer';
 import CustomCursor from './components/ui/CustomCursor';
+import Lenis from 'lenis';
 
 const App: React.FC = () => {
   useEffect(() => {
-    // Restaura o comportamento padrão de rolagem manual ao atualizar
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+    // Inicialização do Lenis para Scroll Suave "Premium"
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva exponencial suave
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
   }, []);
 
   return (
