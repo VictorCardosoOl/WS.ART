@@ -38,17 +38,17 @@ const Hero: React.FC = () => {
         {/* Intro Text Block - CONTRASTE EXTREMO (Micro Typography) */}
         <div className="flex flex-col md:flex-row justify-end items-start w-full px-4 md:px-6 relative z-30">
             <Reveal delay={200}>
-              <div className="max-w-lg text-right md:text-right mt-8 md:mt-0 pointer-events-auto">
+              <div className="max-w-lg text-right md:text-right mt-8 md:mt-0 pointer-events-auto flex flex-col items-end">
                 <h2 className="font-serif text-4xl md:text-6xl text-[#754548] leading-[0.95] font-light tracking-tight mb-8">
                   A arte na pele como<br/> 
                   <span className="italic font-normal opacity-80">experiência imersiva.</span>
                 </h2>
                 
                 {/* MICRO TYPOGRAPHY */}
-                <div className="flex justify-end items-center gap-6">
-                    <div className="h-[1px] w-8 bg-[#754548]/40"></div>
-                    <p className="font-sans text-[10px] text-stone-500 leading-none tracking-[0.3em] uppercase font-bold">
-                      Anatomia & Narrativa Visual
+                <div className="flex flex-col items-end gap-4">
+                    <div className="h-[1px] w-12 bg-[#754548]/40"></div>
+                    <p className="font-sans text-[10px] text-stone-500 leading-loose tracking-[0.3em] uppercase font-bold text-right max-w-[240px]">
+                      Conectamos história e anatomia em narrativas visuais perenes.
                     </p>
                 </div>
               </div>
