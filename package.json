@@ -14,7 +14,8 @@
     "lucide-react": "^0.263.1",
     "framer-motion": "^11.0.8",
     "three": "^0.160.0",
-    "lenis": "^1.0.42"
+    "lenis": "^1.0.42",
+    "@studio-freight/react-lenis": "^0.0.47"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
