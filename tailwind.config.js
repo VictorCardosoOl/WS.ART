@@ -12,8 +12,7 @@ export default {
         pantone: {
           skin: '#F2E8E9', 
           ink: '#1c1917',  // Warm Black
-          accent: '#754548', // Vinho Original
-          sophisticated: '#593437', // NOVO: Vinho Profundo/Escuro para Navbar
+          accent: '#754548', // Vinho Sophisticated (Substituindo o rosa chiclete)
           deep: '#4A3B3B'  // Dark Brown/Rose
         },
         rose: {
@@ -32,16 +31,12 @@ export default {
           900: '#12100E',
         }
       },
-      fontSize: {
-        'mega': ['16vw', { lineHeight: '0.75', letterSpacing: '-0.05em', fontWeight: '900' }],
-      },
       fontFamily: {
         serif: ['"Cormorant Garamond"', 'serif'],
         sans: ['"Montserrat"', 'sans-serif'],
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
-        'lux': 'cubic-bezier(0.22, 1, 0.36, 1)',
       },
       letterSpacing: {
         'tighter': '-0.05em',
@@ -57,9 +52,6 @@ export default {
       },
       cursor: {
         none: 'none',
-      },
-      animation: {
-        'spin-slow': 'spin 12s linear infinite',
       }
     },
   },

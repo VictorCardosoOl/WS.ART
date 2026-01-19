@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import SectionTitle from '../ui/SectionTitle';
 import { FormData } from '../../types';
-import { CheckCircle, Loader2, ArrowRight } from 'lucide-react';
-import Reveal from '../ui/Reveal';
+import { AlertTriangle, Upload, CheckCircle, Loader2 } from 'lucide-react';
 
 const BookingForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
@@ -16,24 +15,16 @@ const BookingForm: React.FC = () => {
     agreeToDeposit: false,
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error on change
-    if (errors[name as keyof FormData]) {
-        setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, agreeToDeposit: e.target.checked }));
-    if (errors.agreeToDeposit) {
-        setErrors(prev => ({ ...prev, agreeToDeposit: undefined }));
-    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,23 +33,8 @@ const BookingForm: React.FC = () => {
     }
   };
 
-  const validate = () => {
-    const newErrors: Partial<Record<keyof FormData, string>> = {};
-    if (!formData.name) newErrors.name = "Nome é obrigatório";
-    if (!formData.phone) newErrors.phone = "Contato é obrigatório";
-    if (!formData.placement) newErrors.placement = "Local do corpo é obrigatório";
-    if (!formData.sizeCm) newErrors.sizeCm = "Tamanho aproximado é obrigatório";
-    if (!formData.description) newErrors.description = "Descreva sua ideia";
-    if (!formData.agreeToDeposit) newErrors.agreeToDeposit = "É necessário concordar com a política";
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
-
     setIsSubmitting(true);
     
     // Simulate network delay
@@ -70,172 +46,138 @@ const BookingForm: React.FC = () => {
 
   if (submitted) {
     return (
-      <section id="booking" className="py-32 bg-white">
+      <section id="booking" className="py-24 bg-white">
         <div className="container mx-auto px-6 text-center">
-            <Reveal>
-              <div className="flex justify-center mb-8">
-                  <CheckCircle className="w-12 h-12 text-stone-900 stroke-1" />
-              </div>
-              <h3 className="text-4xl md:text-5xl font-serif text-stone-900 mb-6 italic">Solicitação Recebida</h3>
-              <p className="text-stone-500 max-w-md mx-auto text-sm leading-relaxed tracking-wide">
-                  Obrigado pelo interesse. Sua visão está sendo analisada. Entrarei em contato em breve para darmos vida a este projeto.
-              </p>
-              <button 
-                  onClick={() => setSubmitted(false)}
-                  className="mt-12 text-[10px] uppercase tracking-[0.25em] font-bold text-pantone-sophisticated border-b border-pantone-sophisticated pb-1 hover:opacity-70 transition-opacity"
-              >
-                  Iniciar nova consulta
-              </button>
-            </Reveal>
+            <div className="flex justify-center mb-6">
+                <CheckCircle className="w-16 h-16 text-green-500" />
+            </div>
+            <h3 className="text-2xl md:text-3xl font-serif text-stone-800 mb-4">Solicitação Enviada!</h3>
+            <p className="text-stone-600 max-w-md mx-auto text-sm md:text-base">
+                Obrigado pelo interesse. Analisarei sua ideia e entrarei em contato em breve para discutirmos os detalhes e o orçamento.
+            </p>
+            <button 
+                onClick={() => setSubmitted(false)}
+                className="mt-8 text-rose-500 font-medium underline text-sm uppercase tracking-wide"
+            >
+                Enviar nova solicitação
+            </button>
         </div>
       </section>
     )
   }
 
-  // Styles for the giant editorial inputs
-  const inputBaseClasses = "w-full py-4 bg-transparent border-b-2 border-stone-100 focus:border-pantone-sophisticated focus:outline-none transition-all duration-500 font-serif placeholder-stone-300 text-stone-900";
-  const inputSizeLarge = "text-3xl md:text-5xl";
-  const inputSizeMedium = "text-2xl md:text-3xl";
-
   return (
-    <section id="booking" className="py-32 md:py-48 bg-white scroll-mt-20">
+    <section id="booking" className="py-16 md:py-24 bg-white scroll-mt-20">
       <div className="container mx-auto px-6">
-        <div className="max-w-4xl mx-auto mb-20 md:mb-32">
-             <SectionTitle subtitle="Consultoria" title="Inicie seu Projeto" align="left" />
-        </div>
+        <SectionTitle subtitle="Agendamento" title="Solicite um Orçamento" />
         
-        <div className="max-w-4xl mx-auto">
-            <form onSubmit={handleSubmit} noValidate className="space-y-16 md:space-y-24">
-                
-                {/* Section 1: Introduction */}
-                <div>
-                     <Reveal>
-                        <div className="relative">
-                            <input 
-                                type="text" name="name" 
-                                placeholder="Seu Nome Completo"
-                                className={`${inputBaseClasses} ${inputSizeLarge}`}
-                                value={formData.name} onChange={handleInputChange}
-                            />
-                            {errors.name && <p className="mt-2 text-xs text-rose-500 uppercase tracking-widest">{errors.name}</p>}
-                        </div>
-                     </Reveal>
-                </div>
-
-                {/* Section 2: Contact */}
-                <div>
-                    <Reveal delay={100}>
-                        <div className="relative">
-                            <input 
-                                type="tel" name="phone" 
-                                placeholder="WhatsApp ou Telefone"
-                                className={`${inputBaseClasses} ${inputSizeLarge}`}
-                                value={formData.phone} onChange={handleInputChange}
-                            />
-                            {errors.phone && <p className="mt-2 text-xs text-rose-500 uppercase tracking-widest">{errors.phone}</p>}
-                        </div>
-                    </Reveal>
-                </div>
-
-                {/* Section 3: The Project */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
-                    <Reveal delay={200} width="100%">
-                        <div className="relative">
-                            <input 
-                                type="text" name="placement" 
-                                placeholder="Local do Corpo"
-                                className={`${inputBaseClasses} ${inputSizeMedium}`}
-                                value={formData.placement} onChange={handleInputChange}
-                            />
-                            {errors.placement && <p className="mt-2 text-xs text-rose-500 uppercase tracking-widest">{errors.placement}</p>}
-                        </div>
-                    </Reveal>
-                    <Reveal delay={300} width="100%">
-                        <div className="relative">
-                            <input 
-                                type="text" name="sizeCm" 
-                                placeholder="Tamanho (cm)"
-                                className={`${inputBaseClasses} ${inputSizeMedium}`}
-                                value={formData.sizeCm} onChange={handleInputChange}
-                            />
-                             {errors.sizeCm && <p className="mt-2 text-xs text-rose-500 uppercase tracking-widest">{errors.sizeCm}</p>}
-                        </div>
-                    </Reveal>
-                </div>
-
-                {/* Section 4: The Vision */}
-                <div>
-                    <Reveal delay={400}>
-                        <div className="relative">
-                            <textarea 
-                                name="description" rows={1} 
-                                placeholder="Descreva sua ideia, elementos e simbolismos..."
-                                className={`${inputBaseClasses} ${inputSizeLarge} resize-none overflow-hidden min-h-[80px]`}
-                                style={{ height: 'auto' }}
-                                onInput={(e) => {
-                                    e.currentTarget.style.height = 'auto';
-                                    e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
-                                }}
-                                value={formData.description} onChange={handleInputChange}
-                            ></textarea>
-                            {errors.description && <p className="mt-2 text-xs text-rose-500 uppercase tracking-widest">{errors.description}</p>}
-                        </div>
-                    </Reveal>
-                </div>
-
-                {/* Section 5: Reference & Policies */}
-                <Reveal delay={500}>
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-12 pt-8 border-t border-stone-100">
-                        
-                        {/* File Upload - Text Only */}
-                        <label className="cursor-pointer group flex items-center gap-4">
-                             <div className="text-3xl text-stone-300 group-hover:text-pantone-sophisticated transition-colors">+</div>
-                             <div className="flex flex-col">
-                                 <span className="font-serif text-xl text-stone-500 group-hover:text-stone-900 transition-colors italic">
-                                    {formData.referenceFile ? formData.referenceFile.name : "Adicionar Referência"}
-                                 </span>
-                                 <span className="text-[9px] uppercase tracking-widest text-stone-400">Jpg, Png (Max 5mb)</span>
-                             </div>
-                             <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                        </label>
-
-                        {/* Checkbox */}
-                        <div className="flex flex-col items-end gap-2">
-                             <label className="flex items-center gap-3 cursor-pointer group">
-                                <input 
-                                    type="checkbox" name="agreeToDeposit" 
-                                    checked={formData.agreeToDeposit} onChange={handleCheckboxChange}
-                                    className="appearance-none w-5 h-5 border border-stone-300 checked:bg-pantone-sophisticated checked:border-pantone-sophisticated transition-colors cursor-pointer"
-                                />
-                                <span className="text-xs font-bold uppercase tracking-widest text-stone-400 group-hover:text-stone-600 transition-colors">
-                                    Concordo com o Sinal de Reserva
-                                </span>
-                             </label>
-                             {errors.agreeToDeposit && <p className="text-xs text-rose-500 uppercase tracking-widest">{errors.agreeToDeposit}</p>}
-                        </div>
+        <div className="max-w-3xl mx-auto">
+            {/* Warning Box */}
+            <div className="bg-rose-50 border-l-4 border-rose-500 p-6 mb-10 rounded-r-lg">
+                <div className="flex flex-col sm:flex-row items-start gap-4">
+                    <AlertTriangle className="text-rose-500 w-6 h-6 flex-shrink-0 mt-1" />
+                    <div>
+                        <h4 className="font-serif text-lg font-bold text-rose-900 mb-2">Informações Importantes</h4>
+                        <ul className="list-disc list-inside text-sm text-stone-700 space-y-2 leading-relaxed">
+                            <li>Valor mínimo de saída: <strong>R$ 100,00</strong>.</li>
+                            <li>Cobrança feita por desenho/tamanho/detalhe.</li>
+                            <li>O pagamento do <strong>Sinal</strong> é obrigatório para reservar a data.</li>
+                            <li>Não trabalho com Realismo, Lettering ou Mandalas.</li>
+                        </ul>
                     </div>
-                </Reveal>
+                </div>
+            </div>
 
-                {/* Submit */}
-                <Reveal delay={600}>
-                    <button 
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full md:w-auto py-6 px-12 bg-stone-900 text-white hover:bg-pantone-sophisticated transition-colors duration-500 disabled:opacity-50 disabled:cursor-not-allowed mt-12"
-                    >
-                         <div className="flex items-center gap-4">
-                            {isSubmitting ? (
-                                <Loader2 className="animate-spin w-5 h-5" />
-                            ) : (
-                                <>
-                                    <span className="text-xs font-bold uppercase tracking-[0.3em]">Enviar Solicitação</span>
-                                    <ArrowRight className="w-5 h-5" />
-                                </>
-                            )}
-                         </div>
-                    </button>
-                </Reveal>
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label className="block text-sm font-medium text-stone-700 mb-2">Nome Completo</label>
+                        <input 
+                            type="text" name="name" required
+                            className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors text-base"
+                            value={formData.name} onChange={handleInputChange}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-stone-700 mb-2">WhatsApp / Telefone</label>
+                        <input 
+                            type="tel" name="phone" required
+                            className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors text-base"
+                            value={formData.phone} onChange={handleInputChange}
+                        />
+                    </div>
+                </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label className="block text-sm font-medium text-stone-700 mb-2">Local do Corpo</label>
+                        <input 
+                            type="text" name="placement" required placeholder="Ex: Antebraço"
+                            className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors text-base"
+                            value={formData.placement} onChange={handleInputChange}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-stone-700 mb-2">Tamanho Aproximado (em CM)</label>
+                        <input 
+                            type="text" name="sizeCm" required placeholder="Ex: 15cm x 10cm"
+                            className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors text-base"
+                            value={formData.sizeCm} onChange={handleInputChange}
+                        />
+                        <p className="text-xs text-rose-500 mt-1">Essencial para o orçamento.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-stone-700 mb-2">Descrição da Ideia</label>
+                    <textarea 
+                        name="description" rows={4} required
+                        placeholder="Descreva o conceito, elementos principais e estilo desejado..."
+                        className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors text-base"
+                        value={formData.description} onChange={handleInputChange}
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-stone-700 mb-2">Referência Visual</label>
+                    <div className="flex items-center justify-center w-full">
+                        <label className="flex flex-col items-center justify-center w-full h-32 md:h-40 border-2 border-stone-300 border-dashed rounded-lg cursor-pointer bg-stone-50 hover:bg-stone-100 transition-colors">
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                                <Upload className="w-8 h-8 mb-3 text-stone-400" />
+                                <p className="text-sm text-stone-500">
+                                    {formData.referenceFile ? formData.referenceFile.name : "Clique para enviar imagem"}
+                                </p>
+                            </div>
+                            <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                        </label>
+                    </div>
+                </div>
+
+                <div className="flex items-start gap-3 mt-4">
+                    <input 
+                        type="checkbox" id="deposit" name="agreeToDeposit" required
+                        checked={formData.agreeToDeposit} onChange={handleCheckboxChange}
+                        className="mt-1 w-5 h-5 md:w-4 md:h-4 text-rose-600 rounded border-stone-300 focus:ring-rose-500 flex-shrink-0"
+                    />
+                    <label htmlFor="deposit" className="text-sm text-stone-600 leading-tight">
+                        Estou ciente de que o agendamento requer pagamento de <strong>Sinal</strong> (adiantamento) para reserva da data.
+                    </label>
+                </div>
+
+                <button 
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-stone-900 text-white py-4 rounded font-sans uppercase tracking-widest hover:bg-rose-600 transition-all duration-300 shadow-lg mt-6 text-sm md:text-base font-bold disabled:bg-stone-400 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                >
+                    {isSubmitting ? (
+                        <>
+                            <Loader2 className="animate-spin" size={18} />
+                            Enviando...
+                        </>
+                    ) : (
+                        "Enviar Solicitação"
+                    )}
+                </button>
             </form>
         </div>
       </div>

@@ -3,17 +3,16 @@ import { Instagram, ArrowUpRight, MessageCircle, Twitter, Facebook } from 'lucid
 
 const Footer: React.FC = () => {
   return (
-    // FOOTER REVEAL EFFECT: Fixed position at bottom with negative z-index
-    <footer className="fixed bottom-0 left-0 w-full bg-black text-white pt-24 md:pt-32 pb-0 font-sans overflow-hidden z-0 h-[800px] md:h-[600px] flex flex-col justify-end">
+    <footer className="relative bg-black text-white pt-24 md:pt-32 pb-0 font-sans overflow-hidden">
       
-      {/* SEPARATOR: INVERTED CURVE */}
+      {/* SEPARATOR: INVERTED CURVE FROM WHITE (BOOKING SECTION) */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-white">
             <path d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z" className="opacity-100"></path>
          </svg>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10 h-full flex flex-col justify-end pb-8">
+      <div className="container mx-auto px-6 relative z-10">
         
         {/* Top Grid Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-12 md:gap-y-16 border-b border-stone-800 pb-12 md:pb-16">
@@ -112,6 +111,7 @@ const Footer: React.FC = () => {
           
           {/* Massive Brand Name - SIQUEIRA with Q Safe Zone */}
           <div className="w-full text-right relative h-auto overflow-visible pb-2 md:pb-4">
+             {/* Adjusted text size to scale on mobile (~17vw) and desktop to avoid cutoff */}
              <h1 className="text-[17vw] leading-[0.75] font-black text-white tracking-tighter mix-blend-difference select-none pointer-events-none translate-y-[5%]">
                SIQUEIRA
              </h1>

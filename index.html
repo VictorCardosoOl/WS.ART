@@ -6,9 +6,9 @@
     <meta name="theme-color" content="#FAF7F7" />
     
     <!-- SEO & Meta Tags Otimizadas -->
-    <title>William Siqueira | Tatuagem Neotradicional & Estúdio Privado SP</title>
-    <meta name="description" content="William Siqueira: Estúdio privado na Av. Paulista especializado em Tatuagem Neotradicional, Coberturas (Cover-up) e Projetos Autorais. Arte na pele que une anatomia e narrativa. Agende sua sessão." />
-    <meta name="keywords" content="tatuagem neotradicional sp, tatuador avenida paulista, cover-up tatuagem, reforma de tatuagem, william siqueira, tatuagem colorida, estúdio privado, traço fino, tatuagem autoral, flash day sp" />
+    <title>William Siqueira | Tatuagem Neotradicional & Arte Autoral em SP</title>
+    <meta name="description" content="Estúdio privado em São Paulo especializado em Tatuagem Neotradicional, Coberturas (Cover-up) e Projetos Autorais. Conectamos anatomia e narrativa em arte perene na pele. Agende sua sessão exclusiva." />
+    <meta name="keywords" content="tatuagem neotradicional, tattoo sp, william siqueira, cover-up, tatuagem colorida, estúdio privado, tatuador são paulo, arte autoral, flash day, fechamento de corpo, tatuagem cicatrizada, fine art tattoo" />
     <meta name="author" content="William Siqueira" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://williamsiqueira.art" />
@@ -73,9 +73,6 @@
     }
     </script>
 
-    <!-- Lenis Smooth Scroll -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,32 +91,14 @@
       }
     </script>
     <style>
-      html.lenis {
-        height: auto;
+      html {
+        scroll-behavior: smooth;
       }
-      .lenis.lenis-smooth {
-        scroll-behavior: auto;
-      }
-      .lenis.lenis-smooth [data-lenis-prevent] {
-        overscroll-behavior: contain;
-      }
-      .lenis.lenis-stopped {
-        overflow: hidden;
-      }
-      .lenis.lenis-scrolling iframe {
-        pointer-events: none;
-      }
-      
       html, body {
         width: 100%;
         min-height: 100vh;
         overflow-x: hidden;
-        /* Custom Scrollbar hidden for artistic feel */
-        scrollbar-width: none; 
-        -ms-overflow-style: none;
-      }
-      body::-webkit-scrollbar { 
-        display: none; 
+        overflow-y: auto;
       }
       body {
         background-color: #FAF7F7;
@@ -132,6 +111,9 @@
         height: auto;
         display: block;
       }
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #FAF7F7; }
+      ::-webkit-scrollbar-thumb { background: #D48C95; border-radius: 4px; }
     </style>
 <script type="importmap">
 {
@@ -143,9 +125,7 @@
     "vite": "https://esm.sh/vite@^7.3.1",
     "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
     "three": "https://esm.sh/three@^0.182.0",
-    "framer-motion": "https://esm.sh/framer-motion@^12.26.2",
-    "path": "https://esm.sh/path@^0.12.7",
-    "url": "https://esm.sh/url@^0.11.4"
+    "framer-motion": "https://esm.sh/framer-motion@^12.26.2"
   }
 }
 </script>
