@@ -1,37 +1,7 @@
 import React, { useState } from 'react';
 import Reveal from './Reveal';
 import { ArrowRight } from 'lucide-react';
-
-const servicesList = [
-  {
-    id: "01",
-    title: "Projetos Autorais",
-    description: "Criação exclusiva para anatomia.",
-    details: "Desenvolvimento de arte neotradicional única, pensada para fluir com as linhas do seu corpo. Do esboço inicial à aplicação final.",
-    image: "https://picsum.photos/500/300?grayscale&random=10"
-  },
-  {
-    id: "02",
-    title: "Coberturas",
-    description: "Ressignificação estética.",
-    details: "Técnicas de pigmentação sólida para cobrir ou reformar tatuagens antigas, transformando o indesejado em arte nova.",
-    image: "https://picsum.photos/500/300?grayscale&random=11"
-  },
-  {
-    id: "03",
-    title: "Flash Days",
-    description: "Coleções exclusivas.",
-    details: "Eventos sazonais com desenhos prontos. Uma oportunidade de adquirir peças menores com a mesma excelência técnica.",
-    image: "https://picsum.photos/500/300?grayscale&random=12"
-  },
-  {
-    id: "04",
-    title: "Consultoria",
-    description: "Direção artística.",
-    details: "Análise de projetos em andamento e planejamento de fechamentos de corpo inteiro (bodysuits/sleeves).",
-    image: "https://picsum.photos/500/300?grayscale&random=13"
-  }
-];
+import { SERVICES_ITEMS } from '../data/services';
 
 const Services: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -51,7 +21,7 @@ const Services: React.FC = () => {
           
           {/* List Section */}
           <div className="w-full lg:w-2/3 z-20">
-            {servicesList.map((service, index) => (
+            {SERVICES_ITEMS.map((service, index) => (
               <Reveal key={index} delay={index * 100} width="100%">
                 <div 
                   className="group relative border-t border-stone-800 py-10 md:py-16 cursor-pointer transition-colors hover:bg-white/5 px-4 -mx-4"
@@ -85,7 +55,7 @@ const Services: React.FC = () => {
           {/* Floating Image Preview (Desktop Only) */}
           <div className="hidden lg:block w-1/3 relative">
             <div className="sticky top-32 w-full aspect-[3/4] overflow-hidden">
-               {servicesList.map((service, index) => (
+               {SERVICES_ITEMS.map((service, index) => (
                    <img 
                      key={index}
                      src={service.image} 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SectionTitle from './SectionTitle';
 import { FormData } from '../types';
-import { AlertTriangle, Upload, CheckCircle } from 'lucide-react';
+import { AlertTriangle, Upload, CheckCircle, Loader2 } from 'lucide-react';
 
 const BookingForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
@@ -16,6 +16,7 @@ const BookingForm: React.FC = () => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -32,10 +33,15 @@ const BookingForm: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Logic for API submission would go here
+    setIsSubmitting(true);
+    
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
     setSubmitted(true);
+    setIsSubmitting(false);
   };
 
   if (submitted) {
@@ -66,7 +72,7 @@ const BookingForm: React.FC = () => {
         <SectionTitle subtitle="Agendamento" title="Solicite um Orçamento" />
         
         <div className="max-w-3xl mx-auto">
-            {/* Warning Box - Flex-col on mobile, Flex-row on desktop */}
+            {/* Warning Box */}
             <div className="bg-rose-50 border-l-4 border-rose-500 p-6 mb-10 rounded-r-lg">
                 <div className="flex flex-col sm:flex-row items-start gap-4">
                     <AlertTriangle className="text-rose-500 w-6 h-6 flex-shrink-0 mt-1" />
@@ -160,9 +166,17 @@ const BookingForm: React.FC = () => {
 
                 <button 
                     type="submit"
-                    className="w-full bg-stone-900 text-white py-4 rounded font-sans uppercase tracking-widest hover:bg-rose-600 transition-all duration-300 shadow-lg mt-6 text-sm md:text-base font-bold"
+                    disabled={isSubmitting}
+                    className="w-full bg-stone-900 text-white py-4 rounded font-sans uppercase tracking-widest hover:bg-rose-600 transition-all duration-300 shadow-lg mt-6 text-sm md:text-base font-bold disabled:bg-stone-400 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                 >
-                    Enviar Solicitação
+                    {isSubmitting ? (
+                        <>
+                            <Loader2 className="animate-spin" size={18} />
+                            Enviando...
+                        </>
+                    ) : (
+                        "Enviar Solicitação"
+                    )}
                 </button>
             </form>
         </div>

@@ -4,17 +4,31 @@ import { motion } from 'framer-motion';
 const CustomCursor: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Check if the device has a fine pointer (mouse)
+    const mediaQuery = window.matchMedia('(pointer: fine)');
+    setIsVisible(mediaQuery.matches);
+
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      setIsVisible(e.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleMediaChange);
+
+    if (!mediaQuery.matches) return;
+
     const updateMousePosition = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
     const handleMouseOver = (e: MouseEvent) => {
-      if ((e.target as HTMLElement).tagName === 'A' || 
-          (e.target as HTMLElement).tagName === 'BUTTON' ||
-          (e.target as HTMLElement).closest('a') ||
-          (e.target as HTMLElement).closest('button')) {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'A' || 
+          target.tagName === 'BUTTON' ||
+          target.closest('a') ||
+          target.closest('button')) {
         setIsHovering(true);
       } else {
         setIsHovering(false);
@@ -25,15 +39,18 @@ const CustomCursor: React.FC = () => {
     window.addEventListener('mouseover', handleMouseOver);
 
     return () => {
+      mediaQuery.removeEventListener('change', handleMediaChange);
       window.removeEventListener('mousemove', updateMousePosition);
       window.removeEventListener('mouseover', handleMouseOver);
     };
   }, []);
 
+  if (!isVisible) return null;
+
   return (
     <>
         <style>{`
-            @media (min-width: 768px) {
+            @media (pointer: fine) {
                 body { cursor: none; }
                 a, button { cursor: none; }
             }

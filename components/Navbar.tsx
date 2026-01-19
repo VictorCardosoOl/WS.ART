@@ -1,32 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Instagram } from 'lucide-react';
+import { useScrollPosition } from '../hooks/useScrollPosition';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const scrollY = useScrollPosition();
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
 
+  // Scroll Direction Logic
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Ativa o modo "compacto/scrolled" após 50px
-      setIsScrolled(currentScrollY > 50);
+    if (scrollY < lastScrollY.current || scrollY < 50) {
+      setIsVisible(true);
+    } else if (scrollY > 50 && scrollY > lastScrollY.current) {
+      setIsVisible(false);
+    }
+    lastScrollY.current = scrollY;
+  }, [scrollY]);
 
-      // Lógica de esconder/mostrar (Hide on down, Show on up)
-      if (currentScrollY < lastScrollY.current || currentScrollY < 50) {
-        setIsVisible(true);
-      } else if (currentScrollY > 50 && currentScrollY > lastScrollY.current) {
-        setIsVisible(false);
-      }
-      
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Body Scroll Lock Logic
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
 
   const navLinks = [
     { name: 'Galeria', href: '#gallery' },
@@ -34,6 +34,8 @@ const Navbar: React.FC = () => {
     { name: 'Sobre', href: '#about' },
     { name: 'Info', href: '#faq' },
   ];
+
+  const isScrolled = scrollY > 50;
 
   return (
     <>
@@ -113,7 +115,7 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Nav Overlay - Elegant Fullscreen */}
+      {/* Mobile Nav Overlay */}
       <div className={`fixed inset-0 bg-[#FAF7F7] z-40 flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${isOpen ? 'clip-circle-full' : 'clip-circle-0 pointer-events-none'}`}>
         <style>{`.clip-circle-0 { clip-path: circle(0% at 100% 0); } .clip-circle-full { clip-path: circle(140% at 100% 0); }`}</style>
         

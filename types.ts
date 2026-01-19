@@ -7,6 +7,14 @@ export interface GalleryItem {
   title: string;
 }
 
+// Expanded type for grid control with specific SEO alt text
+export interface GridGalleryItem extends GalleryItem {
+  colSpan: string; // Tailwind class like "md:col-span-6"
+  height: string; // Tailwind class like "h-[600px]" or aspect ratio
+  offsetY?: string; // CSS translation for staggered layout
+  altText: string; // Descriptive text for SEO/Accessibility
+}
+
 export interface FormData {
   name: string;
   email: string;
