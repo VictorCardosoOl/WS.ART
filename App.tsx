@@ -39,10 +39,13 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-white">
+    <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-white relative">
+      {/* Global Noise Overlay */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-noise"></div>
+      
       <CustomCursor />
       <Navbar />
-      <main className="flex-grow">
+      <main className="flex-grow relative z-10">
         <Hero />
         <Portfolio />
         <About />

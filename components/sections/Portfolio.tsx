@@ -37,8 +37,8 @@ const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
         data-cursor="VER" // Aciona o cursor magnético
     >
       
-      {/* Imagem */}
-      <div className={`relative w-full ${item.height} overflow-hidden bg-stone-100 mb-8 rounded-sm shadow-sm`}>
+      {/* Imagem - Forced Aspect Ratio [3/4] for Grid Consistency */}
+      <div className={`relative w-full aspect-[3/4] overflow-hidden bg-stone-100 mb-8 rounded-sm shadow-sm`}>
         <ParallaxImage src={item.src} alt={item.altText} />
         
         {/* Overlay Hover Minimalista */}
@@ -110,8 +110,6 @@ const Portfolio: React.FC = () => {
         </div>
 
       </div>
-      
-      {/* Removido SVG Wave para manter o final "Clean/Editorial" */}
     </section>
   );
 };

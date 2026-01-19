@@ -36,7 +36,7 @@ export default {
         sans: ['"Montserrat"', 'sans-serif'],
       },
       transitionTimingFunction: {
-        // Curva mais dramática para hover e reveals
+        // Curva mais dramática e cinematográfica
         'out-expo': 'cubic-bezier(0.22, 1, 0.36, 1)', 
       },
       letterSpacing: {

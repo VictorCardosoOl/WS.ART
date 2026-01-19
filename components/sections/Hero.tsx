@@ -6,8 +6,8 @@ const Hero: React.FC = () => {
   return (
     <section className="relative h-[100dvh] w-full flex flex-col justify-between overflow-hidden bg-[#FAF7F7] px-4 md:px-6">
       
-      {/* LAYER 1: GRAIN OVERLAY */}
-      <div className="absolute inset-0 bg-noise opacity-[0.04] pointer-events-none z-[1]"></div>
+      {/* FRAME BORDER - Elevated Z-Index to sit ON TOP of content */}
+      <div className="absolute inset-4 md:inset-6 border border-[#754548]/30 pointer-events-none z-20 rounded-sm"></div>
 
       {/* DEPTH OF FIELD LAYER */}
       <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[40%] bg-[#754548]/5 blur-[100px] rounded-full pointer-events-none z-[2]"></div>
@@ -16,8 +16,8 @@ const Hero: React.FC = () => {
       {/* TRANSITION GRADIENT BOTTOM */}
       <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-b from-transparent to-[#FAF7F7] z-[2] pointer-events-none"></div>
 
-      {/* ROTATING BADGE - "Authentic Ink" */}
-      <div className="absolute top-32 right-6 md:right-12 z-20 hidden md:block mix-blend-multiply opacity-80">
+      {/* ROTATING BADGE - "Authentic Ink" - Overlapping the border */}
+      <div className="absolute top-28 right-2 md:right-4 z-30 hidden md:block mix-blend-multiply opacity-80">
          <Reveal delay={500}>
             <div className="relative w-24 h-24 animate-spin-slow">
                 <svg viewBox="0 0 100 100" className="w-full h-full">
@@ -39,7 +39,7 @@ const Hero: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-end items-start w-full px-4 md:px-6 relative z-30">
             <Reveal delay={200}>
               <div className="max-w-lg text-right md:text-right mt-8 md:mt-0 pointer-events-auto">
-                <h2 className="font-serif text-4xl md:text-6xl text-[#754548] leading-[0.95] font-light tracking-tight mb-6">
+                <h2 className="font-serif text-4xl md:text-6xl text-[#754548] leading-[0.95] font-light tracking-tight mb-8">
                   A arte na pele como<br/> 
                   <span className="italic font-normal opacity-80">experiência imersiva.</span>
                 </h2>
@@ -74,7 +74,7 @@ const Hero: React.FC = () => {
                </Reveal>
             </div>
 
-            {/* Massive Typography - MACRO */}
+            {/* Massive Typography - BEHIND BORDER (Z-10 < Border Z-20) */}
             <div className="w-full flex justify-center items-end leading-none z-10 mix-blend-darken pointer-events-none">
                 <Reveal delay={300} width="100%">
                     <h1 className="font-sans font-black text-[19vw] md:text-[21vw] text-black tracking-tighter text-center leading-[0.75] opacity-[0.95] select-none w-full transform translate-y-4 md:translate-y-10">

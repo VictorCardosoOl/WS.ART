@@ -77,6 +77,7 @@ const CustomCursor: React.FC = () => {
                 scale: isHovering ? (cursorText ? 4 : 2.5) : 1,
                 width: isHovering && cursorText ? 64 : 16,
                 height: isHovering && cursorText ? 64 : 16,
+                opacity: isHovering && cursorText ? 0.7 : 1, // Translucency effect
             }}
             transition={{
                 type: "spring",
