@@ -13,22 +13,53 @@ import Footer from './components/layout/Footer';
 import CustomCursor from './components/ui/CustomCursor';
 import Preloader from './components/ui/Preloader';
 
+// Declaration for Lenis since we are loading it via CDN
+declare global {
+  interface Window {
+    Lenis: any;
+  }
+}
+
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Restaura o comportamento padrão de rolagem manual ao atualizar
+    // Scroll Restoration manual
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
+
+    // Initialize Lenis Smooth Scroll
+    // This adds that "heavy/luxurious" physics to the scroll
+    let lenis: any;
+    if (window.Lenis) {
+      lenis = new window.Lenis({
+        duration: 1.5, // Slower, heavier feel
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+      });
+
+      function raf(time: number) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+    }
+
+    return () => {
+      if (lenis) lenis.destroy();
+    };
   }, []);
 
   return (
     <>
       {loading && <Preloader onComplete={() => setLoading(false)} />}
       
+      {/* THE LIVING FRAME: Creates a gallery window effect */}
+      <div className="fixed inset-0 border-[12px] md:border-[20px] border-[#FAF7F7] z-[60] pointer-events-none mix-blend-normal"></div>
+      
       {/* GLOBAL NOISE OVERLAY - TEXTURE PILLAR */}
-      <div className="fixed inset-0 w-full h-full bg-noise opacity-[0.04] z-[90] pointer-events-none mix-blend-overlay"></div>
+      <div className="fixed inset-0 w-full h-full bg-noise opacity-[0.06] z-[90] pointer-events-none mix-blend-overlay"></div>
 
       <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-sophisticated selection:text-white w-full overflow-x-hidden bg-black">
         <CustomCursor />

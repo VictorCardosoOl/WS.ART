@@ -28,7 +28,8 @@ const CustomCursor: React.FC = () => {
       if (target.tagName === 'A' || 
           target.tagName === 'BUTTON' ||
           target.closest('a') ||
-          target.closest('button')) {
+          target.closest('button') ||
+          target.closest('.cursor-hover')) {
         setIsHovering(true);
       } else {
         setIsHovering(false);
@@ -55,19 +56,21 @@ const CustomCursor: React.FC = () => {
                 a, button { cursor: none; }
             }
         `}</style>
+        
+        {/* Main Cursor Dot */}
         <motion.div
-        className="fixed top-0 left-0 w-4 h-4 bg-pantone-ink rounded-full pointer-events-none z-[9999] hidden md:block mix-blend-difference"
-        animate={{
-            x: mousePosition.x - 8,
-            y: mousePosition.y - 8,
-            scale: isHovering ? 2.5 : 1,
-        }}
-        transition={{
-            type: "spring",
-            damping: 25,
-            stiffness: 300,
-            mass: 0.5
-        }}
+            className="fixed top-0 left-0 w-4 h-4 bg-white rounded-full pointer-events-none z-[9999] hidden md:block mix-blend-difference"
+            animate={{
+                x: mousePosition.x - 8,
+                y: mousePosition.y - 8,
+                scale: isHovering ? 4 : 1,
+            }}
+            transition={{
+                type: "spring",
+                damping: 30,
+                stiffness: 250,
+                mass: 0.5
+            }}
         />
     </>
   );

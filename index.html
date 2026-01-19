@@ -73,6 +73,9 @@
     }
     </script>
 
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -91,14 +94,32 @@
       }
     </script>
     <style>
-      html {
-        scroll-behavior: smooth;
+      html.lenis {
+        height: auto;
       }
+      .lenis.lenis-smooth {
+        scroll-behavior: auto;
+      }
+      .lenis.lenis-smooth [data-lenis-prevent] {
+        overscroll-behavior: contain;
+      }
+      .lenis.lenis-stopped {
+        overflow: hidden;
+      }
+      .lenis.lenis-scrolling iframe {
+        pointer-events: none;
+      }
+      
       html, body {
         width: 100%;
         min-height: 100vh;
         overflow-x: hidden;
-        overflow-y: auto;
+        /* Custom Scrollbar hidden for artistic feel */
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+      }
+      body::-webkit-scrollbar { 
+        display: none; 
       }
       body {
         background-color: #FAF7F7;
@@ -111,9 +132,6 @@
         height: auto;
         display: block;
       }
-      ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #FAF7F7; }
-      ::-webkit-scrollbar-thumb { background: #D48C95; border-radius: 4px; }
     </style>
 <script type="importmap">
 {

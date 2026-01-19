@@ -6,9 +6,8 @@ const Hero: React.FC = () => {
   return (
     <section className="relative h-[100dvh] w-full flex flex-col justify-between overflow-hidden bg-[#FAF7F7] p-4 md:p-6">
       
-      {/* FRAME BORDER - Lighter, thinner */}
-      <div className="absolute inset-4 md:inset-6 border border-[#754548]/5 pointer-events-none z-0 rounded-[2rem]"></div>
-
+      {/* FRAME GLOBAL JÁ EXISTE NO APP.TSX, REMOVIDO FRAME LOCAL */}
+      
       {/* DEPTH ELEMENT: Blurry Foreground Blob */}
       <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-rose-200/20 rounded-full blur-[100px] pointer-events-none z-[5]"></div>
 

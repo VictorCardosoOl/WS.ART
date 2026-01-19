@@ -4,7 +4,7 @@ import { GridGalleryItem } from '../../types';
 import { PORTFOLIO_ITEMS } from '../../data/portfolio';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-// Componente para Imagem com Parallax Refinado
+// Componente para Imagem com Parallax + Respiração Orgânica
 const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -12,18 +12,23 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
     offset: ["start end", "end start"]
   });
   
-  // Parallax mais lento e pesado para sensação de elegância (Physics Pillar)
-  const y = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.1]); // Manter escala sutil, foco no movimento vertical
-
+  // Parallax lento e pesado
+  const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+  
   return (
     <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
-      <motion.div style={{ y, scale }} className="w-full h-full">
+      <motion.div 
+        style={{ y }} 
+        className="w-full h-full"
+        // Efeito "Breathing" contínuo: Zoom in/out muito lento e sutil
+        animate={{ scale: [1.05, 1.1, 1.05] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      >
         <img 
           src={src} 
           alt={alt} 
           title={alt}
-          className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-out"
+          className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-[1500ms] ease-out"
           loading="lazy"
         />
       </motion.div>
@@ -33,24 +38,24 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
 
 const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
   return (
-    <div className={`group relative w-full flex flex-col ${item.offsetY}`}>
+    <div className={`group relative w-full flex flex-col ${item.offsetY} cursor-hover`}>
       
-      {/* Container da Imagem com Borda Arredondada */}
-      <div className={`relative w-full ${item.height} overflow-hidden bg-stone-100 mb-8 rounded-sm shadow-sm`}>
+      {/* Container da Imagem com Borda Arredondada e Sombra Suave */}
+      <div className={`relative w-full ${item.height} overflow-hidden bg-stone-100 mb-8 rounded-sm shadow-lg`}>
         <ParallaxImage src={item.src} alt={item.altText} />
         
-        {/* Overlay Hover */}
-        <div className="absolute inset-0 bg-[#754548]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 mix-blend-multiply pointer-events-none"></div>
+        {/* Overlay Hover Minimalista */}
+        <div className="absolute inset-0 bg-[#754548]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 mix-blend-multiply pointer-events-none"></div>
       </div>
 
       {/* Meta Dados Minimalistas */}
-      <div className="flex items-start justify-between border-b border-stone-100 pb-4 group-hover:border-[#754548] transition-colors duration-700">
+      <div className="flex items-start justify-between border-b border-stone-100 pb-4 group-hover:border-[#754548] transition-colors duration-1000">
          <div className="flex flex-col gap-1">
-            <span className="font-serif text-3xl md:text-4xl text-stone-900 leading-none group-hover:italic transition-all duration-500">
+            <span className="font-serif text-3xl md:text-4xl text-stone-900 leading-none group-hover:italic transition-all duration-700">
               {item.title}
             </span>
          </div>
-         <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400 group-hover:text-[#754548] mt-1">
+         <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400 group-hover:text-[#754548] mt-1 transition-colors duration-700">
             {item.category}
          </span>
       </div>
@@ -84,7 +89,7 @@ const Portfolio: React.FC = () => {
           </Reveal>
         </div>
 
-        {/* Grid Assimétrico */}
+        {/* Grid Assimétrico e Quebrado */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-x-12 gap-y-32">
           {PORTFOLIO_ITEMS.map((item, index) => (
             <div 
@@ -92,19 +97,22 @@ const Portfolio: React.FC = () => {
               className={`${item.colSpan}`}
             >
               <Reveal delay={index % 2 * 150} width="100%">
-                <PortfolioItem item={item} />
+                {/* Margin negativa artificial em itens pares para quebrar o alinhamento perfeito */}
+                <div className={`${index % 2 !== 0 ? 'md:-mt-24' : ''}`}>
+                   <PortfolioItem item={item} />
+                </div>
               </Reveal>
             </div>
           ))}
         </div>
         
         {/* Footer Link Minimalista */}
-        <div className="mt-48 text-center">
+        <div className="mt-48 text-center cursor-hover">
            <Reveal>
              <a href="https://instagram.com" className="group inline-flex items-center gap-6">
-               <span className="w-16 h-[1px] bg-stone-200 group-hover:w-32 group-hover:bg-[#754548] transition-all duration-700"></span>
-               <span className="font-serif italic text-3xl text-stone-400 group-hover:text-stone-900 transition-colors">Explorar arquivo completo</span>
-               <span className="w-16 h-[1px] bg-stone-200 group-hover:w-32 group-hover:bg-[#754548] transition-all duration-700"></span>
+               <span className="w-16 h-[1px] bg-stone-200 group-hover:w-32 group-hover:bg-[#754548] transition-all duration-1000"></span>
+               <span className="font-serif italic text-3xl text-stone-400 group-hover:text-stone-900 transition-colors duration-700">Explorar arquivo completo</span>
+               <span className="w-16 h-[1px] bg-stone-200 group-hover:w-32 group-hover:bg-[#754548] transition-all duration-1000"></span>
              </a>
            </Reveal>
         </div>

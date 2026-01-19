@@ -32,12 +32,16 @@ export default {
           900: '#12100E',
         }
       },
+      fontSize: {
+        'mega': ['16vw', { lineHeight: '0.75', letterSpacing: '-0.05em', fontWeight: '900' }],
+      },
       fontFamily: {
         serif: ['"Cormorant Garamond"', 'serif'],
         sans: ['"Montserrat"', 'sans-serif'],
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
+        'lux': 'cubic-bezier(0.22, 1, 0.36, 1)',
       },
       letterSpacing: {
         'tighter': '-0.05em',
