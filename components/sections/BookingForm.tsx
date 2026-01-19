@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import SectionTitle from '../ui/SectionTitle';
 import { FormData } from '../../types';
-import { AlertTriangle, Upload, CheckCircle, Loader2 } from 'lucide-react';
+import { AlertTriangle, Upload, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
+import Reveal from '../ui/Reveal';
 
 const BookingForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
@@ -17,6 +18,7 @@ const BookingForm: React.FC = () => {
 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -36,148 +38,167 @@ const BookingForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
     setSubmitted(true);
     setIsSubmitting(false);
   };
 
   if (submitted) {
     return (
-      <section id="booking" className="py-24 bg-white">
+      <section id="booking" className="py-40 bg-white">
         <div className="container mx-auto px-6 text-center">
-            <div className="flex justify-center mb-6">
-                <CheckCircle className="w-16 h-16 text-green-500" />
-            </div>
-            <h3 className="text-2xl md:text-3xl font-serif text-stone-800 mb-4">Solicitação Enviada!</h3>
-            <p className="text-stone-600 max-w-md mx-auto text-sm md:text-base">
-                Obrigado pelo interesse. Analisarei sua ideia e entrarei em contato em breve para discutirmos os detalhes e o orçamento.
-            </p>
-            <button 
-                onClick={() => setSubmitted(false)}
-                className="mt-8 text-rose-500 font-medium underline text-sm uppercase tracking-wide"
-            >
-                Enviar nova solicitação
-            </button>
+            <Reveal>
+                <div className="flex justify-center mb-8">
+                    <CheckCircle className="w-20 h-20 text-stone-900 stroke-[0.5]" />
+                </div>
+                <h3 className="text-4xl md:text-5xl font-serif text-stone-900 mb-6">Solicitação Enviada.</h3>
+                <p className="text-stone-500 max-w-md mx-auto text-lg font-light leading-relaxed">
+                    Agradeço o contato. Analisarei sua ideia pessoalmente e retornarei em breve para darmos vida a este projeto.
+                </p>
+                <button 
+                    onClick={() => setSubmitted(false)}
+                    className="mt-12 text-[#754548] font-bold text-[10px] uppercase tracking-[0.25em] border-b border-[#754548] pb-1 hover:opacity-70 transition-opacity"
+                >
+                    Enviar nova solicitação
+                </button>
+            </Reveal>
         </div>
       </section>
     )
   }
 
+  // Estilo comum para inputs minimalistas (Line Style)
+  const inputClasses = (fieldName: string) => `
+    w-full py-4 bg-transparent border-b transition-all duration-500 ease-out text-lg text-stone-900 font-serif placeholder:text-stone-300 focus:outline-none rounded-none
+    ${focusedField === fieldName ? 'border-[#754548] pl-2' : 'border-stone-200'}
+  `;
+
+  const labelClasses = "block text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500 mb-1";
+
   return (
-    <section id="booking" className="py-16 md:py-24 bg-white scroll-mt-20">
+    <section id="booking" className="py-32 md:py-48 bg-white scroll-mt-20">
       <div className="container mx-auto px-6">
-        <SectionTitle subtitle="Agendamento" title="Solicite um Orçamento" />
+        <SectionTitle subtitle="Agendamento" title="Inicie sua Jornada" />
         
-        <div className="max-w-3xl mx-auto">
-            {/* Warning Box */}
-            <div className="bg-rose-50 border-l-4 border-rose-500 p-6 mb-10 rounded-r-lg">
-                <div className="flex flex-col sm:flex-row items-start gap-4">
-                    <AlertTriangle className="text-rose-500 w-6 h-6 flex-shrink-0 mt-1" />
-                    <div>
-                        <h4 className="font-serif text-lg font-bold text-rose-900 mb-2">Informações Importantes</h4>
-                        <ul className="list-disc list-inside text-sm text-stone-700 space-y-2 leading-relaxed">
-                            <li>Valor mínimo de saída: <strong>R$ 100,00</strong>.</li>
-                            <li>Cobrança feita por desenho/tamanho/detalhe.</li>
-                            <li>O pagamento do <strong>Sinal</strong> é obrigatório para reservar a data.</li>
-                            <li>Não trabalho com Realismo, Lettering ou Mandalas.</li>
-                        </ul>
-                    </div>
+        <div className="max-w-4xl mx-auto mt-20">
+            
+            {/* Contexto - Texto Editorial */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
+                <div className="md:col-span-4">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#754548] mb-4">
+                        Informações Essenciais
+                    </p>
+                </div>
+                <div className="md:col-span-8">
+                    <p className="font-serif text-xl md:text-2xl text-stone-600 font-light leading-relaxed">
+                        Cada projeto é único. Para garantir a qualidade técnica e artística, trabalho apenas com designs autorais. 
+                        O sinal de reserva é obrigatório para bloqueio da agenda.
+                        <br/><br/>
+                        <span className="text-sm font-sans text-stone-400 uppercase tracking-wider">Valor mínimo de saída: R$ 100,00</span>
+                    </p>
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label className="block text-sm font-medium text-stone-700 mb-2">Nome Completo</label>
+            <form onSubmit={handleSubmit} className="space-y-16">
+                
+                {/* Grupo 1: Contato */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+                    <div className="relative group">
+                        <label className={labelClasses}>Nome Completo</label>
                         <input 
-                            type="text" name="name" required
-                            className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors text-base"
+                            type="text" name="name" required placeholder="Como prefere ser chamado"
+                            className={inputClasses('name')}
+                            onFocus={() => setFocusedField('name')} onBlur={() => setFocusedField(null)}
                             value={formData.name} onChange={handleInputChange}
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-stone-700 mb-2">WhatsApp / Telefone</label>
+                    <div className="relative group">
+                        <label className={labelClasses}>WhatsApp / Contato</label>
                         <input 
-                            type="tel" name="phone" required
-                            className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors text-base"
+                            type="tel" name="phone" required placeholder="(00) 00000-0000"
+                            className={inputClasses('phone')}
+                            onFocus={() => setFocusedField('phone')} onBlur={() => setFocusedField(null)}
                             value={formData.phone} onChange={handleInputChange}
                         />
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Grupo 2: Projeto */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
                     <div>
-                        <label className="block text-sm font-medium text-stone-700 mb-2">Local do Corpo</label>
+                        <label className={labelClasses}>Local do Corpo</label>
                         <input 
-                            type="text" name="placement" required placeholder="Ex: Antebraço"
-                            className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors text-base"
+                            type="text" name="placement" required placeholder="Ex: Antebraço interno"
+                            className={inputClasses('placement')}
+                            onFocus={() => setFocusedField('placement')} onBlur={() => setFocusedField(null)}
                             value={formData.placement} onChange={handleInputChange}
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-stone-700 mb-2">Tamanho Aproximado (em CM)</label>
+                        <label className={labelClasses}>Tamanho Estimado (cm)</label>
                         <input 
                             type="text" name="sizeCm" required placeholder="Ex: 15cm x 10cm"
-                            className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors text-base"
+                            className={inputClasses('sizeCm')}
+                            onFocus={() => setFocusedField('sizeCm')} onBlur={() => setFocusedField(null)}
                             value={formData.sizeCm} onChange={handleInputChange}
                         />
-                        <p className="text-xs text-rose-500 mt-1">Essencial para o orçamento.</p>
                     </div>
                 </div>
 
+                {/* Descrição - Full Width */}
                 <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-2">Descrição da Ideia</label>
+                    <label className={labelClasses}>Conceito da Obra</label>
                     <textarea 
-                        name="description" rows={4} required
-                        placeholder="Descreva o conceito, elementos principais e estilo desejado..."
-                        className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-colors text-base"
+                        name="description" rows={1} required
+                        placeholder="Descreva a história, elementos e sentimentos que deseja representar..."
+                        className={`${inputClasses('description')} resize-none overflow-hidden min-h-[50px]`}
+                        onFocus={(e) => { setFocusedField('description'); e.target.rows = 4; }} 
+                        onBlur={(e) => { setFocusedField(null); if(!formData.description) e.target.rows = 1; }}
                         value={formData.description} onChange={handleInputChange}
                     ></textarea>
                 </div>
 
+                {/* Upload Minimalista */}
                 <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-2">Referência Visual</label>
-                    <div className="flex items-center justify-center w-full">
-                        <label className="flex flex-col items-center justify-center w-full h-32 md:h-40 border-2 border-stone-300 border-dashed rounded-lg cursor-pointer bg-stone-50 hover:bg-stone-100 transition-colors">
-                            <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
-                                <Upload className="w-8 h-8 mb-3 text-stone-400" />
-                                <p className="text-sm text-stone-500">
-                                    {formData.referenceFile ? formData.referenceFile.name : "Clique para enviar imagem"}
-                                </p>
-                            </div>
-                            <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                     <label className={labelClasses}>Referência Visual (Opcional)</label>
+                     <label className="flex items-center gap-4 cursor-pointer mt-4 group w-fit">
+                        <div className="w-12 h-12 border border-stone-300 rounded-full flex items-center justify-center group-hover:border-[#754548] group-hover:bg-[#754548] group-hover:text-white transition-all duration-300">
+                            <Upload size={18} strokeWidth={1.5} />
+                        </div>
+                        <span className="text-sm text-stone-500 group-hover:text-stone-900 transition-colors border-b border-transparent group-hover:border-stone-900 pb-px">
+                            {formData.referenceFile ? formData.referenceFile.name : "Selecionar arquivo de referência"}
+                        </span>
+                        <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                     </label>
+                </div>
+
+                {/* Termos & Submit */}
+                <div className="pt-12 border-t border-stone-100 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="flex items-start gap-3 max-w-sm">
+                        <input 
+                            type="checkbox" id="deposit" name="agreeToDeposit" required
+                            checked={formData.agreeToDeposit} onChange={handleCheckboxChange}
+                            className="mt-1 w-4 h-4 text-[#754548] border-stone-300 focus:ring-[#754548]"
+                        />
+                        <label htmlFor="deposit" className="text-xs text-stone-500 leading-relaxed">
+                            Concordo que o pagamento de <strong>Sinal</strong> é necessário para reserva da data e início da criação.
                         </label>
                     </div>
-                </div>
 
-                <div className="flex items-start gap-3 mt-4">
-                    <input 
-                        type="checkbox" id="deposit" name="agreeToDeposit" required
-                        checked={formData.agreeToDeposit} onChange={handleCheckboxChange}
-                        className="mt-1 w-5 h-5 md:w-4 md:h-4 text-rose-600 rounded border-stone-300 focus:ring-rose-500 flex-shrink-0"
-                    />
-                    <label htmlFor="deposit" className="text-sm text-stone-600 leading-tight">
-                        Estou ciente de que o agendamento requer pagamento de <strong>Sinal</strong> (adiantamento) para reserva da data.
-                    </label>
+                    <button 
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="group relative px-12 py-5 bg-stone-900 text-white overflow-hidden rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <div className="absolute inset-0 w-0 bg-[#754548] transition-all duration-[600ms] ease-out group-hover:w-full"></div>
+                        <div className="relative flex items-center gap-4">
+                            <span className="font-sans text-[10px] font-bold uppercase tracking-[0.25em]">
+                                {isSubmitting ? "Processando..." : "Enviar Solicitação"}
+                            </span>
+                            {!isSubmitting && <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />}
+                        </div>
+                    </button>
                 </div>
-
-                <button 
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-stone-900 text-white py-4 rounded font-sans uppercase tracking-widest hover:bg-rose-600 transition-all duration-300 shadow-lg mt-6 text-sm md:text-base font-bold disabled:bg-stone-400 disabled:cursor-not-allowed flex justify-center items-center gap-2"
-                >
-                    {isSubmitting ? (
-                        <>
-                            <Loader2 className="animate-spin" size={18} />
-                            Enviando...
-                        </>
-                    ) : (
-                        "Enviar Solicitação"
-                    )}
-                </button>
             </form>
         </div>
       </div>
