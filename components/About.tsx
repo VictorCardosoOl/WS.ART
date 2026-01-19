@@ -17,10 +17,10 @@ const About: React.FC = () => {
              </Reveal>
           </div>
 
-          {/* Image Block */}
+          {/* Image Block - Arredondada */}
           <div className="lg:col-span-5 relative z-10">
              <Reveal>
-                <div className="relative aspect-[4/5] overflow-hidden">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-xl">
                     <img 
                       src="https://picsum.photos/600/800?grayscale&random=20" 
                       alt="Portrait" 
@@ -28,7 +28,7 @@ const About: React.FC = () => {
                     />
                     <div className="absolute inset-0 bg-stone-900/10 mix-blend-multiply"></div>
                 </div>
-                <div className="flex gap-4 mt-6">
+                <div className="flex gap-4 mt-6 pl-2">
                     <span className="text-xs font-bold uppercase tracking-widest text-stone-900 border-b border-stone-900 pb-1">Manifesto</span>
                     <span className="text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-stone-900 cursor-pointer transition-colors">Processo</span>
                 </div>
@@ -58,8 +58,13 @@ const About: React.FC = () => {
                 </div>
             </Reveal>
 
+            {/* Assinatura com mix-blend-multiply para fundir com o fundo rosa */}
             <Reveal delay={400}>
-                <img src="https://signature.freefire-name.com/img.php?f=7&t=William" alt="Assinatura" className="h-16 mt-12 opacity-80" />
+                <img 
+                    src="https://signature.freefire-name.com/img.php?f=7&t=William" 
+                    alt="Assinatura" 
+                    className="h-16 mt-12 opacity-80 mix-blend-multiply" 
+                />
             </Reveal>
           </div>
 

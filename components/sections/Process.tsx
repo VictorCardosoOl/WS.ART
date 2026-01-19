@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Reveal from './Reveal';
+import Reveal from '../ui/Reveal';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const steps = [

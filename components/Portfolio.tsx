@@ -35,15 +35,15 @@ const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
   return (
     <div className={`group relative w-full flex flex-col ${item.offsetY}`}>
       
-      {/* Container da Imagem */}
-      <div className={`relative w-full ${item.height} overflow-hidden bg-stone-200 mb-6`}>
+      {/* Container da Imagem com Borda Arredondada */}
+      <div className={`relative w-full ${item.height} overflow-hidden bg-stone-200 mb-6 rounded-2xl shadow-sm`}>
         <ParallaxImage src={item.src} alt={item.altText} />
         
         {/* Overlay Hover */}
         <div className="absolute inset-0 bg-[#754548]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply pointer-events-none"></div>
 
         {/* Floating Tag */}
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 rounded-full">
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">Ver Projeto</span>
         </div>
       </div>

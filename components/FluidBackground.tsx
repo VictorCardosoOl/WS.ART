@@ -12,8 +12,7 @@ const FluidBackground: React.FC = () => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     
-    // Resize é gerenciado pelo Observer
-    renderer.setSize(0, 0);
+    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
 
@@ -32,6 +31,18 @@ const FluidBackground: React.FC = () => {
           return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
       }
 
+      // Função de ruído simples para movimento orgânico
+      float noise(vec2 st) {
+          vec2 i = floor(st);
+          vec2 f = fract(st);
+          float a = random(i);
+          float b = random(i + vec2(1.0, 0.0));
+          float c = random(i + vec2(0.0, 1.0));
+          float d = random(i + vec2(1.0, 1.0));
+          vec2 u = f * f * (3.0 - 2.0 * f);
+          return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+      }
+
       void main() {
           vec2 uv = gl_FragCoord.xy / u_resolution.xy;
           float aspect = u_resolution.x / u_resolution.y;
@@ -39,38 +50,45 @@ const FluidBackground: React.FC = () => {
           vec2 coord = uv;
           coord.x *= aspect;
 
-          // --- POSICIONAMENTO ---
-          // Center: x = 0.35 * aspect (Ligeiramente a esquerda)
-          // Center: y = 0.65 (Acima do centro vertical)
-          vec2 center = vec2(0.35 * aspect, 0.65);
+          // --- POSICIONAMENTO AJUSTADO ---
+          // Centro ligeiramente à esquerda e abaixo, como solicitado
+          // x = 0.35 * aspect (Esquerda)
+          // y = 0.65 (Abaixo do topo visualmente no shader, coordenadas GL invertidas as vezes, ajustando para 'abaixo')
+          // Ajuste fino para "atrás do título Emotion"
+          vec2 center = vec2(0.35 * aspect, 0.45); 
           
-          // Animação sutil de "respiração" da posição
-          center.x += sin(u_time * 0.2) * 0.03;
-          center.y += cos(u_time * 0.15) * 0.02;
+          // Animação "Lava Lamp" lenta e orgânica
+          float n = noise(coord * 2.0 + u_time * 0.1);
+          center.x += sin(u_time * 0.15) * 0.1;
+          center.y += cos(u_time * 0.1) * 0.08;
           
           float dist = distance(coord, center);
+
+          // Distorção da borda para não ser um círculo perfeito
+          dist += n * 0.15;
 
           // --- GRADIENTE RADIAL SUAVE ---
           vec3 color = C_BG;
 
-          // Camada 1: Núcleo (Vinho -> Rosa Médio)
-          // Smoothstep controla a difusão
-          float step1 = smoothstep(0.0, 0.55, dist);
+          // Smoothsteps controlam a expansão e difusão das cores
+          
+          // Núcleo (Vinho)
+          float step1 = smoothstep(0.0, 0.4, dist);
           vec3 layer1 = mix(C_CENTER_DARK, C_RING_DARK, step1);
 
-          // Camada 2: Halo (Rosa Médio -> Rosa Claro)
-          float step2 = smoothstep(0.4, 0.9, dist);
+          // Anel Médio (Rosa Médio -> Rosa Claro)
+          float step2 = smoothstep(0.35, 0.8, dist);
           vec3 layer2 = mix(layer1, C_RING_LIGHT, step2);
 
-          // Camada 3: Fusão com Fundo (#FAF7F7)
-          // O limite 1.3 garante que o gradiente se espalhe bem antes de sumir
-          float step3 = smoothstep(0.65, 1.3, dist);
+          // Fusão com Fundo (#FAF7F7)
+          // Expansão ampla para cobrir a área
+          float step3 = smoothstep(0.7, 1.5, dist);
           color = mix(layer2, C_BG, step3);
 
           // --- TEXTURA (FILM GRAIN) ---
-          // Adiciona ruído apenas nas áreas coloridas para evitar banding
-          float grain = random(uv * 3.0 + u_time * 1.0);
-          float grainStrength = 0.04 * (1.0 - step3); 
+          float grain = random(uv * 3.0 + u_time * 2.0);
+          // Grão mais forte nas áreas escuras
+          float grainStrength = 0.06 * (1.0 - step3); 
           color -= grain * grainStrength;
 
           gl_FragColor = vec4(color, 1.0);
@@ -85,7 +103,7 @@ const FluidBackground: React.FC = () => {
 
     const uniforms = {
       u_time: { value: 0.0 },
-      u_resolution: { value: new THREE.Vector2(1, 1) },
+      u_resolution: { value: new THREE.Vector2(containerRef.current.clientWidth, containerRef.current.clientHeight) },
     };
 
     const material = new THREE.ShaderMaterial({
@@ -109,7 +127,7 @@ const FluidBackground: React.FC = () => {
     };
     animate();
 
-    // 4. Resize Observer para garantir preenchimento correto
+    // 4. Resize Observer
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
@@ -133,10 +151,7 @@ const FluidBackground: React.FC = () => {
   }, []);
 
   return (
-    <div 
-      ref={containerRef} 
-      className="w-full h-full"
-    />
+    <div ref={containerRef} className="w-full h-full" />
   );
 };
 

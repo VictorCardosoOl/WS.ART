@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Reveal from './Reveal';
+import Reveal from '../ui/Reveal';
 import { ArrowRight } from 'lucide-react';
-import { SERVICES_ITEMS } from '../data/services';
+import { SERVICES_ITEMS } from '../../data/services';
 
 const Services: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);

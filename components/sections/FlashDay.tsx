@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import Reveal from './Reveal';
+import Reveal from '../ui/Reveal';
 
 const FlashDay: React.FC = () => {
   return (

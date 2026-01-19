@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import Reveal from './Reveal';
+import Reveal from '../ui/Reveal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote } from 'lucide-react';
+import FluidBackground from '../FluidBackground';
 
 const testimonials = [
   {
@@ -35,26 +36,39 @@ const Testimonials: React.FC = () => {
 
   return (
     <section className="relative w-full py-32 md:py-48 bg-[#FAF7F7] overflow-hidden" id="testimonials">
-      <div className="container mx-auto px-6">
+      
+      {/* FLUID BACKGROUND LAYER */}
+      {/* Posicionado absolutamente para cobrir a área do título e criar o efeito de meio círculo */}
+      <div className="absolute top-0 left-0 w-full h-[120%] -mt-20 z-0 opacity-60 pointer-events-none">
+         <FluidBackground />
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
         
-        {/* Header Minimalista */}
-        <div className="mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8">
+        {/* Header Redesenhado com Efeito Visual */}
+        <div className="mb-32 md:mb-40 relative">
             <Reveal>
-                <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tight">
-                    Narrativas<span className="text-[#754548]">.</span>
-                </h2>
+                <div className="relative">
+                    {/* Título Gigante sobre o Fundo Fluido */}
+                    <h2 className="text-[15vw] font-black font-sans text-stone-900/90 leading-[0.8] tracking-tighter mix-blend-multiply select-none">
+                        EMOÇÃO
+                    </h2>
+                    <div className="absolute -bottom-6 left-2 md:left-4">
+                        <p className="text-stone-500 uppercase tracking-widest text-xs font-bold bg-[#FAF7F7]/80 backdrop-blur-sm px-2 py-1">
+                            Narrativas & Experiências Reais
+                        </p>
+                    </div>
+                </div>
             </Reveal>
-            <Reveal delay={200}>
-                <p className="text-stone-500 uppercase tracking-widest text-xs mt-4 md:mt-0 font-bold">
-                    Experiências Reais
-                </p>
-            </Reveal>
+            
+            {/* Linha de Corte Visual "Seco" abaixo do título */}
+            <div className="w-full h-[1px] bg-stone-900/10 mt-12"></div>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
             
             {/* COLUNA ESQUERDA: LISTA INTERATIVA */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20">
+            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-16 relative z-20 pt-8">
                 {testimonials.map((item, index) => (
                     <div 
                         key={item.id}
@@ -62,22 +76,19 @@ const Testimonials: React.FC = () => {
                         onMouseEnter={() => setActiveIndex(index)}
                     >
                         <Reveal delay={index * 100} width="100%">
-                            <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
-                                <div className="mb-4">
+                            <div className={`transition-all duration-500 pl-4 border-l-2 ${activeIndex === index ? 'opacity-100 border-[#754548] translate-x-2' : 'opacity-40 border-transparent hover:opacity-70'}`}>
+                                <div className="mb-6">
                                     <Quote 
                                         size={24} 
                                         className={`mb-4 transition-colors duration-500 ${activeIndex === index ? 'text-[#754548] fill-[#754548]/10' : 'text-stone-300'}`} 
                                     />
-                                    <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-900 italic">
+                                    <p className="font-serif text-2xl md:text-3xl leading-snug text-stone-800 italic font-light">
                                         "{item.text}"
                                     </p>
                                 </div>
-                                <div className="flex items-center gap-4">
-                                    <div className={`h-[1px] w-8 transition-all duration-500 ${activeIndex === index ? 'bg-[#754548] w-16' : 'bg-stone-300'}`}></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-bold uppercase tracking-widest text-stone-900">{item.client}</span>
-                                        <span className="text-[10px] uppercase tracking-wider text-stone-500">{item.role}</span>
-                                    </div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-bold uppercase tracking-widest text-stone-900">{item.client}</span>
+                                    <span className="text-[10px] uppercase tracking-wider text-stone-500">{item.role}</span>
                                 </div>
                             </div>
                         </Reveal>
@@ -88,7 +99,7 @@ const Testimonials: React.FC = () => {
             {/* COLUNA DIREITA: IMAGEM STICKY / REVEAL - Arredondada */}
             <div className="hidden lg:block w-1/2 relative h-[80vh]">
                 <div className="sticky top-32 w-full h-full">
-                    <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl">
+                    <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl bg-white">
                         {/* Frame Border Decorativo */}
                         <div className="absolute inset-4 border border-white/20 z-20 pointer-events-none rounded-2xl"></div>
                         
@@ -133,7 +144,7 @@ const Testimonials: React.FC = () => {
             </div>
 
             {/* MOBILE ONLY: IMAGEM ESTATICA (Apenas a ativa) */}
-            <div className="block lg:hidden w-full aspect-[4/5] mt-8 relative rounded-2xl overflow-hidden">
+            <div className="block lg:hidden w-full aspect-[4/5] mt-12 relative rounded-2xl overflow-hidden shadow-lg">
                  <img 
                     src={testimonials[activeIndex].image} 
                     alt="Tattoo"

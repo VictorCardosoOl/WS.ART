@@ -12,7 +12,8 @@ export default {
         pantone: {
           skin: '#F2E8E9', 
           ink: '#1c1917',  // Warm Black
-          accent: '#754548', // Vinho Sophisticated (Substituindo o rosa chiclete)
+          accent: '#754548', // Vinho Original
+          sophisticated: '#593437', // NOVO: Vinho Profundo/Escuro para Navbar
           deep: '#4A3B3B'  // Dark Brown/Rose
         },
         rose: {
@@ -52,6 +53,9 @@ export default {
       },
       cursor: {
         none: 'none',
+      },
+      animation: {
+        'spin-slow': 'spin 12s linear infinite',
       }
     },
   },
