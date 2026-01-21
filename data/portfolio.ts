@@ -7,7 +7,7 @@ export const PORTFOLIO_ITEMS: GridGalleryItem[] = [
     category: "Neotraditional", 
     title: "Lady Face & Peonies", 
     colSpan: "md:col-span-6 md:row-span-2", // Item Alto à Esquerda (Vertical)
-    height: "h-[500px] md:h-full", 
+    height: "h-full", // Usar h-full para o grid controlar a altura
     offsetY: "",
     altText: "Tatuagem neotradicional de rosto feminino com peônias",
     enableOverlay: true
@@ -18,7 +18,7 @@ export const PORTFOLIO_ITEMS: GridGalleryItem[] = [
     category: "Architecture", 
     title: "Gothic Arch", 
     colSpan: "md:col-span-6 md:row-span-1", // Retângulo Horizontal Topo Direita
-    height: "h-[300px] md:h-full",
+    height: "h-full",
     offsetY: "", 
     altText: "Detalhe arquitetônico gótico em preto e cinza",
     enableOverlay: true
@@ -29,7 +29,7 @@ export const PORTFOLIO_ITEMS: GridGalleryItem[] = [
     category: "Study", 
     title: "Koi Movement", 
     colSpan: "md:col-span-3 md:row-span-1", // Quadrado Pequeno
-    height: "h-[300px] md:h-full",
+    height: "h-full",
     offsetY: "", 
     altText: "Estudo de movimento de carpas",
     enableOverlay: true 
@@ -40,7 +40,7 @@ export const PORTFOLIO_ITEMS: GridGalleryItem[] = [
     category: "Flora", 
     title: "Dark Rose", 
     colSpan: "md:col-span-3 md:row-span-1", // Quadrado Pequeno
-    height: "h-[300px] md:h-full",
+    height: "h-full",
     offsetY: "",
     altText: "Rosa escura estilo neotradicional",
     enableOverlay: true
@@ -51,7 +51,7 @@ export const PORTFOLIO_ITEMS: GridGalleryItem[] = [
     category: "Surrealism", 
     title: "The Vision", 
     colSpan: "md:col-span-12 md:row-span-1", // Full Width Panorâmico
-    height: "h-[400px] md:aspect-[3/1]",
+    height: "h-full",
     offsetY: "mt-0 md:mt-0", 
     altText: "Conceito surrealista expandido",
     enableOverlay: true

@@ -15,14 +15,14 @@ import Lenis from 'lenis';
 
 const App: React.FC = () => {
   useEffect(() => {
-    // Inicialização do Lenis para Scroll Suave "Premium"
+    // Configuração Premium do Lenis
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.8, // Duração maior para sensação de "peso" e luxo
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva exponencial suave
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 0.9, // Controle fino da velocidade
       touchMultiplier: 2,
     });
 
