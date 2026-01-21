@@ -14,12 +14,12 @@ const Hero: React.FC = () => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
 
-      // Initial States (Set before animation to avoid FOUC)
+      // 1. Initial States
       gsap.set(textRef.current, { y: "100%", opacity: 0, filter: "blur(10px)" });
-      gsap.set(".hero-line", { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(".hero-line", { scaleX: 0, transformOrigin: "right center" }); // Origin right for right-aligned layout
       gsap.set(".hero-reveal", { y: 20, opacity: 0 });
 
-      // Entrance Sequence
+      // 2. Entrance Sequence
       tl.to(textRef.current, { 
         y: "4%", 
         opacity: 1, 
@@ -32,10 +32,10 @@ const Hero: React.FC = () => {
         y: 0, 
         opacity: 1, 
         duration: 1.2, 
-        stagger: 0.1 
+        stagger: 0.15 // Slightly increased stagger for elegance
       }, "-=1.0");
 
-      // Breathing Animation (Text Only - Performance Optimized)
+      // 3. Breathing Animation (Text Only)
       gsap.to(textRef.current, {
         scale: 1.02,
         duration: 5,
@@ -44,7 +44,7 @@ const Hero: React.FC = () => {
         ease: "sine.inOut"
       });
 
-      // Scroll Interactions (Parallax/Fade)
+      // 4. Scroll Interaction (Fade Out)
       if (introRef.current) {
         gsap.to(introRef.current, {
           scrollTrigger: {
@@ -86,30 +86,30 @@ const Hero: React.FC = () => {
       <div ref={introRef} className="container mx-auto px-6 h-full relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none">
           
           <div className="flex justify-between items-start w-full">
-              {/* Location Data */}
+              {/* Left Column: Metadata */}
               <div className="hidden md:flex flex-col gap-2 hero-reveal pointer-events-auto">
                  <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-[#754548] rounded-full animate-pulse"></div>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">São Paulo, BR</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">São Paulo, BR</span>
                  </div>
-                 <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-stone-300 pl-4">Est. 2018</span>
+                 <span className="text-[10px] font-medium uppercase tracking-widest text-stone-300 pl-4">Est. 2018</span>
               </div>
 
-              {/* Editorial Text */}
-              <div className="flex flex-col items-end text-right max-w-lg pointer-events-auto">
-                  <h2 className="hero-reveal font-serif text-fluid-h2 text-[#1c1917] leading-[0.9] font-light tracking-tight mix-blend-darken">
+              {/* Right Column: Editorial Content */}
+              <div className="flex flex-col items-end text-right max-w-lg pointer-events-auto w-full md:w-auto ml-auto">
+                  <h2 className="hero-reveal font-serif text-fluid-h2 text-[#1c1917] leading-tight-editorial font-light tracking-tight mix-blend-darken">
                       A pele como<br/>
                       <span className="italic font-normal text-[#754548]">tela eterna.</span>
                   </h2>
                   
                   <div className="hero-line w-24 h-[1px] bg-[#754548] my-6 opacity-60"></div>
 
-                  <p className="hero-reveal font-sans text-[11px] text-stone-500 leading-loose tracking-[0.2em] uppercase font-semibold max-w-xs">
+                  <p className="hero-reveal font-sans text-[10px] text-stone-500 leading-relaxed tracking-[0.3em] uppercase font-semibold text-right max-w-xs">
                       Conectamos narrativa pessoal e anatomia em obras neotradicionais.
                   </p>
 
                   <div className="hero-reveal mt-8">
-                      <a href="#gallery" className="group flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548] hover:text-stone-900 transition-colors">
+                      <a href="#gallery" className="group flex items-center justify-end gap-3 text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548] hover:text-stone-900 transition-colors">
                           Explorar Acervo
                           <MoveRight size={14} className="group-hover:translate-x-2 transition-transform duration-300" />
                       </a>
@@ -121,7 +121,7 @@ const Hero: React.FC = () => {
       {/* Footer Anchors */}
       <div className="absolute bottom-12 w-full flex justify-center z-20 pointer-events-none">
            <div className="flex flex-col items-center gap-2 opacity-40 mix-blend-multiply animate-bounce duration-[3000ms]">
-               <span className="text-[9px] uppercase tracking-[0.2em] text-[#754548]">Scroll</span>
+               <span className="text-[9px] uppercase tracking-widest text-[#754548]">Scroll</span>
                <ArrowDown size={14} className="text-[#754548]" />
            </div>
       </div>

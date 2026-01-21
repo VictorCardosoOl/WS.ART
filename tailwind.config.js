@@ -36,17 +36,20 @@ export default {
         sans: ['"Montserrat"', 'sans-serif'],
       },
       transitionTimingFunction: {
-        // Curva mais dramática e cinematográfica
         'out-expo': 'cubic-bezier(0.22, 1, 0.36, 1)', 
       },
       letterSpacing: {
-        'tighter': '-0.05em',
-        'tight': '-0.025em',
-        'normal': '0em',
-        'wide': '0.025em',
-        'wider': '0.05em',
-        'widest': '0.25em',
-        'ultra': '0.35em',
+        tighter: '-0.05em',
+        tight: '-0.03em',
+        normal: '0em',
+        wide: '0.025em',
+        wider: '0.05em',
+        widest: '0.25em', // Standardized for secondary texts/captions
+        ultra: '0.35em',
+      },
+      lineHeight: {
+        'tight-editorial': '0.9',
+        'snug-editorial': '1.05',
       },
       backgroundImage: {
         'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.05\"/%3E%3C/svg%3E')",
