@@ -17,7 +17,7 @@ const FAQ: React.FC = () => {
       <div className="container mx-auto px-6">
         <SectionTitle subtitle="Dúvidas" title="Perguntas Frequentes" />
         
-        <div className="mt-16 flex flex-col border-t border-stone-200">
+        <div className="mt-12 md:mt-16 flex flex-col border-t border-stone-200">
             {FAQ_ITEMS.map((item, idx) => {
               const isOpen = activeIndex === idx;
               
@@ -26,7 +26,7 @@ const FAQ: React.FC = () => {
                     <Reveal delay={idx * 50} width="100%">
                         <button
                             onClick={() => toggleAccordion(idx)}
-                            className="w-full py-5 md:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 text-left group outline-none"
+                            className="w-full py-4 md:py-5 flex flex-col md:flex-row md:items-center justify-between gap-4 text-left group outline-none transition-colors hover:bg-stone-50/50"
                         >
                             {/* Coluna Esquerda: Número e Linha */}
                             <div className="flex items-center gap-6 md:w-1/4">
@@ -38,7 +38,7 @@ const FAQ: React.FC = () => {
 
                             {/* Coluna Central: Pergunta */}
                             <div className="md:w-2/3 pr-4">
-                                <h3 className={`text-lg md:text-2xl font-serif transition-colors duration-300 leading-tight ${isOpen ? 'text-stone-900 italic' : 'text-stone-600 group-hover:text-stone-900'}`}>
+                                <h3 className={`text-lg md:text-xl font-serif transition-colors duration-300 leading-tight ${isOpen ? 'text-stone-900 italic' : 'text-stone-600 group-hover:text-stone-900'}`}>
                                     {item.q}
                                 </h3>
                             </div>
@@ -46,13 +46,13 @@ const FAQ: React.FC = () => {
                             {/* Coluna Direita: Ícone */}
                             <div className="md:w-[10%] flex justify-end">
                                 <div className={`
-                                    w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-500
+                                    w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-500
                                     ${isOpen 
                                         ? 'border-[#754548] bg-[#754548] text-white rotate-180' 
                                         : 'border-stone-200 text-stone-300 group-hover:border-[#754548] group-hover:text-[#754548]'
                                     }
                                 `}>
-                                    <ArrowDown size={16} strokeWidth={1} />
+                                    <ArrowDown size={14} strokeWidth={1} />
                                 </div>
                             </div>
                         </button>
@@ -67,7 +67,7 @@ const FAQ: React.FC = () => {
                                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                                     className="overflow-hidden"
                                 >
-                                    <div className="pb-6 pl-0 md:pl-[25%] pr-4 md:pr-24">
+                                    <div className="pb-5 pl-0 md:pl-[25%] pr-4 md:pr-24">
                                         <p className="text-stone-500 text-sm md:text-base font-light leading-relaxed font-sans max-w-2xl">
                                             {item.a}
                                         </p>
