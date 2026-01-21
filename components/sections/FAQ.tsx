@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
 
 const FAQ: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(0); // Primeiro item aberto por padrão para convite
+  const [activeIndex, setActiveIndex] = useState<number | null>(null); // Nenhuma pergunta aberta por padrão
 
   const toggleAccordion = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
@@ -14,7 +14,8 @@ const FAQ: React.FC = () => {
 
   return (
     <section id="faq" className="py-24 md:py-32 bg-white relative z-10">
-      <div className="container mx-auto px-6 max-w-5xl">
+      {/* Removido max-w-5xl para ocupar a largura correta do container, igual às outras seções */}
+      <div className="container mx-auto px-6">
         <SectionTitle subtitle="Dúvidas" title="Perguntas Frequentes" />
         
         <div className="mt-20 flex flex-col border-t border-stone-200">
