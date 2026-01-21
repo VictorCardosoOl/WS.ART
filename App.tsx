@@ -18,19 +18,18 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Configuração Premium do Lenis para sensação "Studio Freight"
+    // Configuração Otimizada: Menos "peso", mais fluidez
     const lenis = new Lenis({
-      duration: 1.5,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing
+      duration: 1.2, // Reduzido de 1.5 para sensação mais ágil
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.8, // Scroll um pouco mais pesado/controlado
-      touchMultiplier: 1.5,
+      wheelMultiplier: 1.0, // Aumentado para scroll mais natural (menos arrastado)
+      touchMultiplier: 2,
       infinite: false,
     });
 
-    // Desativa scroll durante carregamento
     if (loading) {
         lenis.stop();
         document.body.style.overflow = 'hidden';
@@ -56,27 +55,26 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-[#FAF7F7] relative">
+    <div className="min-h-screen font-sans text-stone-900 selection:bg-[#754548] selection:text-white w-full overflow-x-hidden bg-[#FAF7F7] relative">
       <Preloader onComplete={handlePreloaderComplete} />
       
-      {/* Global Noise Overlay - Textura de papel/filme em todo o site */}
-      <div className="fixed inset-0 z-[9999] pointer-events-none opacity-[0.04] bg-noise mix-blend-overlay"></div>
+      {/* Global Noise Overlay - Textura de papel Fine Art */}
+      <div className="fixed inset-0 z-[9999] pointer-events-none opacity-[0.06] bg-noise mix-blend-multiply"></div>
       
-      {/* Global Gradient Overlay sutil para atmosfera rosa */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-br from-[#FAF7F7] via-transparent to-[#F2E8E9] opacity-60"></div>
+      {/* Vignette Sutil para foco central */}
+      <div className="fixed inset-0 z-[9998] pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.03)_100%)]"></div>
 
       <CustomCursor />
       <Navbar />
       <main className="flex-grow relative z-10">
         <Hero />
         <Portfolio />
-        <About />
-        {/* Nova Ordem Solicitada */}
-        <Process />    {/* Pilares / Processo de Tatuagem */}
-        <PreCare />    {/* Preparação (Invertido com FlashDay) */}
-        <FlashDay />   {/* FlashDay */}
+        <About /> 
+        <Process />
+        <PreCare />
+        <FlashDay />
         <Testimonials />
-        <BookingForm /> {/* Refatorado: "Inicie sua Jornada" */}
+        <BookingForm />
         <FAQ />
       </main>
       <Footer />
