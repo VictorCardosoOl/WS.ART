@@ -1,24 +1,84 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SectionTitle from '../ui/SectionTitle';
 import Reveal from '../ui/Reveal';
 import { FAQ_ITEMS } from '../../data/faq';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowDown } from 'lucide-react';
 
 const FAQ: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState<number | null>(0); // Primeiro item aberto por padrão para convite
+
+  const toggleAccordion = (index: number) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+
   return (
-    // Slightly stronger pink background for harmony
-    <section id="faq" className="py-16 md:py-24 bg-[#ffe4e9]/30">
-      <div className="container mx-auto px-6 max-w-4xl">
+    <section id="faq" className="py-24 md:py-32 bg-white relative z-10">
+      <div className="container mx-auto px-6 max-w-5xl">
         <SectionTitle subtitle="Dúvidas" title="Perguntas Frequentes" />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-8 md:mt-10">
-            {FAQ_ITEMS.map((item, idx) => (
-              <Reveal key={idx} delay={idx * 100}>
-                <div className="bg-white p-6 rounded-sm shadow-[0_2px_10px_rgba(251,113,154,0.05)] border border-rose-100 hover:border-rose-300 transition-colors">
-                    <h4 className="font-serif text-lg md:text-xl text-stone-900 mb-2 md:mb-3">{item.q}</h4>
-                    <p className="text-stone-600 text-sm md:text-base leading-relaxed">{item.a}</p>
+        <div className="mt-20 flex flex-col border-t border-stone-200">
+            {FAQ_ITEMS.map((item, idx) => {
+              const isOpen = activeIndex === idx;
+              
+              return (
+                <div key={idx} className="border-b border-stone-200">
+                    <Reveal delay={idx * 50} width="100%">
+                        <button
+                            onClick={() => toggleAccordion(idx)}
+                            className="w-full py-8 md:py-10 flex flex-col md:flex-row md:items-center justify-between gap-6 text-left group outline-none"
+                        >
+                            {/* Coluna Esquerda: Número e Linha */}
+                            <div className="flex items-center gap-6 md:w-1/4">
+                                <span className={`text-xs font-bold font-sans tracking-widest transition-colors duration-300 ${isOpen ? 'text-[#754548]' : 'text-stone-300'}`}>
+                                    0{idx + 1}
+                                </span>
+                                <div className={`h-[1px] transition-all duration-500 ease-out ${isOpen ? 'w-16 bg-[#754548]' : 'w-8 bg-stone-200 group-hover:w-12 group-hover:bg-[#754548]/50'}`}></div>
+                            </div>
+
+                            {/* Coluna Central: Pergunta */}
+                            <div className="md:w-2/3 pr-4">
+                                <h3 className={`text-xl md:text-3xl font-serif transition-colors duration-300 leading-tight ${isOpen ? 'text-stone-900 italic' : 'text-stone-600 group-hover:text-stone-900'}`}>
+                                    {item.q}
+                                </h3>
+                            </div>
+
+                            {/* Coluna Direita: Ícone */}
+                            <div className="md:w-[10%] flex justify-end">
+                                <div className={`
+                                    w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-500
+                                    ${isOpen 
+                                        ? 'border-[#754548] bg-[#754548] text-white rotate-180' 
+                                        : 'border-stone-200 text-stone-300 group-hover:border-[#754548] group-hover:text-[#754548]'
+                                    }
+                                `}>
+                                    <ArrowDown size={18} strokeWidth={1} />
+                                </div>
+                            </div>
+                        </button>
+
+                        {/* Conteúdo Expansível */}
+                        <AnimatePresence>
+                            {isOpen && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.5, ease: [0.04, 0.62, 0.23, 0.98] }}
+                                    className="overflow-hidden"
+                                >
+                                    <div className="pb-10 pl-0 md:pl-[25%] pr-4 md:pr-24">
+                                        <p className="text-stone-500 text-base md:text-lg font-light leading-relaxed font-sans">
+                                            {item.a}
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </Reveal>
                 </div>
-              </Reveal>
-            ))}
+              );
+            })}
         </div>
       </div>
     </section>
