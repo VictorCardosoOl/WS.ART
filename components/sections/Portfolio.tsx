@@ -5,7 +5,7 @@ import { PORTFOLIO_ITEMS } from '../../data/portfolio';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
-// Componente de Imagem com Parallax Suave
+// Componente de Imagem com Parallax Suave e Efeitos de Hover
 const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -13,18 +13,26 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
     offset: ["start end", "end start"]
   });
   
-  // Movimento sutil para sensação de profundidade premium
+  // Parallax Vertical: Sutil para não desorientar
   const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.15]); // Zoom in suave constante
+  
+  // Parallax de Escala: Mantém a imagem levemente maior que o container para evitar bordas brancas no movimento
+  const scaleBase = useTransform(scrollYProgress, [0, 1], [1.1, 1.1]); 
 
   return (
     <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
-      <motion.div style={{ y, scale }} className="w-full h-full">
+      <motion.div style={{ y, scale: scaleBase }} className="w-full h-full">
         <img 
           src={src} 
           alt={alt} 
           title={alt}
-          className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out-expo group-hover:scale-105"
+          className="
+            w-full h-full object-cover 
+            grayscale group-hover:grayscale-0 
+            transition-all duration-[1000ms] 
+            ease-[cubic-bezier(0.22,1,0.36,1)] 
+            group-hover:scale-105
+          "
           loading="lazy"
         />
       </motion.div>
@@ -42,13 +50,13 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
         <ParallaxImage src={item.src} alt={item.altText} />
         
         {/* Gradiente Cinematográfico (Bottom Only) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-700 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-[1000ms] z-10"></div>
 
         {/* Overlay de Texto Elegante */}
-        <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-20 flex flex-col justify-end translate-y-4 group-hover:translate-y-0 transition-transform duration-700 ease-out-expo">
+        <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-20 flex flex-col justify-end translate-y-4 group-hover:translate-y-0 transition-transform duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
             
             {/* Top Line & Category */}
-            <div className="flex items-center gap-3 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+            <div className="flex items-center gap-3 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
                 <span className="h-[1px] w-6 bg-rose-400"></span>
                 <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-rose-200">
                     {item.category}
@@ -64,7 +72,7 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
                 {/* Arrow Icon Reveal */}
                 <div className="overflow-hidden w-8 h-8 flex items-center justify-center">
                     <ArrowUpRight 
-                        className="text-white transform translate-y-full -translate-x-full group-hover:translate-y-0 group-hover:translate-x-0 transition-transform duration-500 ease-out-expo" 
+                        className="text-white transform translate-y-full -translate-x-full group-hover:translate-y-0 group-hover:translate-x-0 transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]" 
                         size={28} 
                         strokeWidth={1}
                     />
