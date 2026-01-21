@@ -3,6 +3,7 @@ import Reveal from '../ui/Reveal';
 import SectionTitle from '../ui/SectionTitle';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Droplets, Moon, Ban, Shirt, ArrowRight } from 'lucide-react';
+import { GraphiteScribble } from '../ui/ArtisticDecorations';
 
 const careSteps = [
   {
@@ -39,7 +40,12 @@ const PreCare: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
 
   return (
+    // Continued flow from Process (White/Light Gradient)
     <section className="relative py-32 md:py-48 bg-white overflow-hidden" id="precare">
+      
+      {/* Background Decor */}
+      <GraphiteScribble className="top-10 left-[-50px] w-[400px] h-[400px] text-stone-900 rotate-90 opacity-[0.03]" />
+
       <div className="container mx-auto px-6 relative z-10">
         
         <div className="mb-24">
@@ -60,14 +66,16 @@ const PreCare: React.FC = () => {
 
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start h-auto lg:h-[600px]">
           
-          {/* LEFT: INTERACTIVE LIST (Navigation) */}
+          {/* LEFT: INTERACTIVE LIST */}
           <div className="w-full lg:w-5/12 flex flex-col justify-between h-full">
              <div className="flex flex-col gap-2">
                {careSteps.map((step, index) => (
-                 <div 
+                 <motion.div 
                     key={step.id}
                     className={`group py-6 cursor-pointer relative transition-all duration-500 border-b border-stone-100 hover:border-stone-200`}
                     onMouseEnter={() => setActiveStep(index)}
+                    whileHover={{ x: 10 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                  >
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-6">
@@ -78,17 +86,14 @@ const PreCare: React.FC = () => {
                                 {step.title}
                             </h3>
                         </div>
-                        
-                        {/* Indicador de Seta Ativa */}
                         <div className={`transition-all duration-500 ${activeStep === index ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}>
                             <ArrowRight size={18} className="text-[#754548]" />
                         </div>
                     </div>
-                 </div>
+                 </motion.div>
                ))}
              </div>
              
-             {/* Note bottom left */}
              <div className="mt-8 lg:mt-0 hidden lg:block">
                  <p className="text-[10px] uppercase tracking-widest text-stone-400">
                      * Seguir estas etapas é obrigatório para a garantia do retoque.
@@ -96,57 +101,67 @@ const PreCare: React.FC = () => {
              </div>
           </div>
 
-          {/* RIGHT: DETAILS DISPLAY (Rich Editorial Card) */}
-          <div className="w-full lg:w-7/12 h-full min-h-[500px] relative">
+          {/* RIGHT: DETAILS DISPLAY */}
+          <div className="w-full lg:w-7/12 h-full min-h-[500px] relative perspective-1000">
                <AnimatePresence mode='wait'>
                    <motion.div 
                      key={activeStep}
-                     initial={{ opacity: 0, x: 20 }}
-                     animate={{ opacity: 1, x: 0 }}
-                     exit={{ opacity: 0, x: -20 }}
+                     initial={{ opacity: 0, x: 50, rotateY: 5 }}
+                     animate={{ opacity: 1, x: 0, rotateY: 0 }}
+                     exit={{ opacity: 0, x: -50, rotateY: -5 }}
                      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                     className="relative w-full h-full bg-[#FAF7F7] border border-[#754548]/10 rounded-sm p-8 md:p-16 flex flex-col justify-between overflow-hidden shadow-sm"
+                     className="relative w-full h-full bg-[#FAF7F7] border border-[#754548]/10 rounded-sm p-8 md:p-16 flex flex-col justify-between overflow-hidden shadow-sm origin-left"
                    >
                      {/* Background Giant Number */}
                      <div className="absolute -bottom-16 -right-10 text-[18rem] leading-none font-serif text-white mix-blend-multiply opacity-80 select-none pointer-events-none z-0">
                          {careSteps[activeStep].id}
                      </div>
                      
-                     {/* Content Layer */}
                      <div className="relative z-10">
-                        {/* Header: Icon & Category */}
                         <div className="flex items-center gap-4 mb-10">
-                            <div className="w-12 h-12 rounded-full bg-white border border-[#754548]/20 flex items-center justify-center text-[#754548] shadow-sm">
+                            <motion.div 
+                                key={`icon-${activeStep}`}
+                                initial={{ scale: 0, rotate: -45 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                                transition={{ type: 'spring', delay: 0.2 }}
+                                className="w-12 h-12 rounded-full bg-white border border-[#754548]/20 flex items-center justify-center text-[#754548] shadow-sm"
+                            >
                                 {careSteps[activeStep].icon}
-                            </div>
+                            </motion.div>
                             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#754548]">
                                 Etapa Obrigatória
                             </span>
                         </div>
 
-                        {/* Main Title */}
                         <h2 className="font-serif text-4xl md:text-5xl text-stone-900 mb-8 leading-[1.1]">
                             {careSteps[activeStep].title}
                         </h2>
                         
-                        {/* Divider */}
-                        <div className="w-16 h-[1px] bg-stone-300 mb-8"></div>
+                        <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: 64 }}
+                            transition={{ delay: 0.4, duration: 0.8 }}
+                            className="h-[1px] bg-stone-300 mb-8"
+                        />
 
-                        {/* Rich Description */}
                         <p className="text-lg font-light text-stone-600 leading-relaxed font-serif max-w-md">
                            {careSteps[activeStep].fullDesc}
                         </p>
                      </div>
 
-                     {/* Bottom Insight Card */}
-                     <div className="relative z-10 mt-12 bg-white/60 backdrop-blur-sm border-l-2 border-[#754548] p-4 max-w-sm shadow-sm">
+                     <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="relative z-10 mt-12 bg-white/60 backdrop-blur-sm border-l-2 border-[#754548] p-4 max-w-sm shadow-sm"
+                     >
                          <span className="text-[9px] font-bold uppercase tracking-widest text-stone-400 block mb-1">
                              Insight do Artista
                          </span>
                          <p className="text-stone-800 font-medium italic text-sm">
                              "{careSteps[activeStep].shortDesc}"
                          </p>
-                     </div>
+                     </motion.div>
 
                    </motion.div>
                </AnimatePresence>

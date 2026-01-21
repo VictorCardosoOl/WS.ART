@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Reveal from '../ui/Reveal';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Quote } from 'lucide-react';
+import { InkSplatter } from '../ui/ArtisticDecorations';
 
 const testimonials = [
   {
@@ -32,12 +33,24 @@ const testimonials = [
 
 const Testimonials: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const yImage = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
   return (
-    <section className="relative w-full py-32 md:py-48 bg-[#FAF7F7] overflow-hidden" id="testimonials">
-      <div className="container mx-auto px-6">
+    // Fluid Gradient Background
+    <section ref={containerRef} className="relative w-full py-32 md:py-48 bg-gradient-to-b from-[#FAF7F7] to-white overflow-hidden" id="testimonials">
+      
+      {/* Ink Splatter Decoration */}
+      <InkSplatter className="bottom-20 left-10 w-48 h-48 text-[#754548]" />
+
+      <div className="container mx-auto px-6 relative z-10">
         
-        {/* Header Minimalista */}
         <div className="mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8">
             <Reveal>
                 <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tight">
@@ -53,7 +66,6 @@ const Testimonials: React.FC = () => {
 
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
             
-            {/* COLUNA ESQUERDA: LISTA INTERATIVA */}
             <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20">
                 {testimonials.map((item, index) => (
                     <div 
@@ -62,7 +74,7 @@ const Testimonials: React.FC = () => {
                         onMouseEnter={() => setActiveIndex(index)}
                     >
                         <Reveal delay={index * 100} width="100%">
-                            <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
+                            <div className={`transition-all duration-700 ease-out-expo ${activeIndex === index ? 'opacity-100 translate-x-4 blur-0 scale-100' : 'opacity-30 hover:opacity-60 blur-[2px] scale-95'}`}>
                                 <div className="mb-4">
                                     <Quote 
                                         size={24} 
@@ -85,20 +97,21 @@ const Testimonials: React.FC = () => {
                 ))}
             </div>
 
-            {/* COLUNA DIREITA: IMAGEM STICKY / REVEAL - Arredondada */}
             <div className="hidden lg:block w-1/2 relative h-[80vh]">
                 <div className="sticky top-32 w-full h-full">
-                    <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl">
-                        {/* Frame Border Decorativo */}
+                    <motion.div 
+                        style={{ y: yImage }} 
+                        className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl"
+                    >
                         <div className="absolute inset-4 border border-white/20 z-20 pointer-events-none rounded-2xl"></div>
                         
                         <AnimatePresence mode='wait'>
                             <motion.div
                                 key={activeIndex}
-                                initial={{ opacity: 0, scale: 1.1 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} // Ease-out-expo
+                                initial={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
+                                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                                exit={{ opacity: 0, filter: "blur(5px)" }}
+                                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                                 className="absolute inset-0 w-full h-full"
                             >
                                 <img 
@@ -106,12 +119,10 @@ const Testimonials: React.FC = () => {
                                     alt={testimonials[activeIndex].client}
                                     className="w-full h-full object-cover grayscale contrast-[1.1]"
                                 />
-                                {/* Overlay Gradiente Sutil */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#754548]/40 to-transparent mix-blend-multiply opacity-60"></div>
                             </motion.div>
                         </AnimatePresence>
 
-                        {/* Tag Flutuante */}
                         <div className="absolute bottom-8 left-8 z-30">
                             <AnimatePresence mode='wait'>
                                 <motion.div
@@ -128,11 +139,10 @@ const Testimonials: React.FC = () => {
                                 </motion.div>
                             </AnimatePresence>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
 
-            {/* MOBILE ONLY: IMAGEM ESTATICA (Apenas a ativa) */}
             <div className="block lg:hidden w-full aspect-[4/5] mt-8 relative rounded-2xl overflow-hidden">
                  <img 
                     src={testimonials[activeIndex].image} 

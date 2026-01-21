@@ -4,6 +4,7 @@ import { GridGalleryItem } from '../../types';
 import { PORTFOLIO_ITEMS } from '../../data/portfolio';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import { GraphiteScribble } from '../ui/ArtisticDecorations';
 
 // Componente de Imagem com Parallax Suave e Hover Cinematográfico
 const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
@@ -13,7 +14,7 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
     offset: ["start end", "end start"]
   });
   
-  // Movimento de parallax: imagem se move levemente contra o scroll
+  // Movimento de parallax
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
   const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.15]); 
 
@@ -45,15 +46,15 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
         className={`group relative w-full h-full overflow-hidden bg-stone-100 cursor-pointer shadow-md hover:shadow-xl transition-all duration-500`}
         data-cursor="VER OBRA"
     >
-        {/* MASKING TAPE EFFECT (CSS GENERATED) */}
+        {/* MASKING TAPE EFFECT */}
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-[#fdfbf7] opacity-60 z-30 transform -rotate-1 shadow-sm backdrop-blur-sm pointer-events-none mix-blend-lighten border-l border-r border-white/20"></div>
 
         <ParallaxImage src={item.src} alt={item.altText} />
         
-        {/* Gradiente Overlay no Hover - Ink Bleed feel */}
+        {/* Gradiente Overlay no Hover */}
         <div className="absolute inset-0 bg-[#754548] mix-blend-color opacity-0 group-hover:opacity-30 transition-opacity duration-[800ms] ease-out z-10"></div>
         
-        {/* Texto/Info Overlay - Aparece no Hover */}
+        {/* Texto/Info Overlay */}
         <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
              <div className="flex justify-between items-start translate-y-4 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white border border-white/30 px-2 py-1 rounded-full backdrop-blur-sm">
@@ -75,13 +76,18 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="relative pt-32 pb-40 bg-[#FAF7F7]">
+    // Removida cor de fundo dura, agora flui do Hero (#FAF7F7)
+    <section id="gallery" className="relative pt-32 pb-48">
+      
+      {/* Decoração de fundo Artística */}
+      <GraphiteScribble className="top-20 right-0 w-[500px] h-[500px] text-stone-900 rotate-12" />
+      <GraphiteScribble className="bottom-0 left-[-100px] w-[600px] h-[600px] text-stone-900 -rotate-45 opacity-[0.02]" />
+
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         
         {/* Header Compacto & Elegante */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-[#754548]/10 pb-6 relative">
           
-          {/* Handwritten Annotation */}
           <span className="absolute -top-8 left-10 font-hand text-2xl text-[#754548] rotate-[-5deg] opacity-60 hidden md:block">
               ( estudo de composição )
           </span>
@@ -106,11 +112,7 @@ const Portfolio: React.FC = () => {
           </Reveal>
         </div>
 
-        {/* 
-            BENTO GRID LAYOUT 
-            Grid de 12 colunas para flexibilidade máxima.
-            Usa classes md:col-span-X do Tailwind para assimetria.
-        */}
+        {/* BENTO GRID LAYOUT */}
         <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[300px] md:auto-rows-[400px] gap-6 md:gap-8 px-2 md:px-0">
             {PORTFOLIO_ITEMS.map((item, index) => (
                 <div 
@@ -126,7 +128,6 @@ const Portfolio: React.FC = () => {
             ))}
         </div>
         
-        {/* Footer Link */}
         <div className="mt-24 text-center" data-cursor="EXPLORAR">
            <Reveal>
              <a href="https://instagram.com" className="group inline-flex flex-col items-center gap-3">

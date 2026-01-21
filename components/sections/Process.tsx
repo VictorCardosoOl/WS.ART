@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Reveal from '../ui/Reveal';
 import SectionTitle from '../ui/SectionTitle';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { BrushStrokeTransition, InkSplatter } from '../ui/ArtisticDecorations';
 
 const pillars = [
   {
@@ -24,14 +26,32 @@ const pillars = [
 ];
 
 const Process: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   return (
-    <section className="relative py-32 md:py-48 bg-[#F5E6E8]/20 overflow-hidden" id="process">
+    // Gradient Background starts here and flows into next section
+    <section ref={containerRef} className="relative pt-48 pb-32 overflow-hidden bg-gradient-to-b from-[#FAF7F7] via-[#F5E6E8]/40 to-white" id="process">
       
+      {/* DECORATION: Ink Splatter */}
+      <InkSplatter className="top-20 right-[10%] w-64 h-64 text-[#754548]" />
+
       {/* Hand Drawn Organic Line Decoration (Desktop) */}
-      <div className="absolute left-1/2 top-0 bottom-0 w-24 -translate-x-1/2 hidden md:block opacity-20 pointer-events-none h-full">
-         <svg height="100%" width="100%" preserveAspectRatio="none">
-             <path d="M50,0 Q60,200 40,400 T50,800 T60,1200" fill="none" stroke="#754548" strokeWidth="2" vectorEffect="non-scaling-stroke" />
-         </svg>
+      <div className="absolute left-1/2 top-40 bottom-20 w-[2px] -translate-x-1/2 hidden md:block bg-[#754548]/10">
+         <motion.div 
+            style={{ scaleY, originY: 0 }}
+            className="w-full h-full bg-[#754548]"
+         />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -50,11 +70,17 @@ const Process: React.FC = () => {
                     <div key={pillar.id} className={`flex flex-col md:flex-row items-center justify-between md:gap-20 relative ${isEven ? '' : 'md:flex-row-reverse'}`}>
                         
                         {/* Ink Blot / Organic Dot on Line */}
-                        <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                             <div className="w-4 h-4 bg-[#754548] rounded-full border-4 border-[#FAF7F7] shadow-sm transform scale-110"></div>
-                        </div>
+                        <motion.div 
+                             initial={{ scale: 0, opacity: 0 }}
+                             whileInView={{ scale: 1, opacity: 1 }}
+                             transition={{ duration: 0.5, delay: 0.2 }}
+                             viewport={{ once: true, margin: "-100px" }}
+                             className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 items-center justify-center"
+                        >
+                             <div className="w-4 h-4 bg-[#754548] rounded-full border-4 border-[#FAF7F7] shadow-sm relative z-10"></div>
+                             <div className="absolute inset-0 bg-[#754548] rounded-full animate-ping opacity-20"></div>
+                        </motion.div>
 
-                        {/* Text Content */}
                         <div className={`w-full md:w-5/12 ${isEven ? 'text-left md:text-right' : 'text-left'}`}>
                             <Reveal width="100%" delay={index * 100}>
                                 <div className={`flex flex-col gap-2 relative ${isEven ? 'items-end' : 'items-start'}`}>
@@ -64,12 +90,20 @@ const Process: React.FC = () => {
                                     <h3 className="font-serif text-4xl md:text-5xl text-stone-900 mb-4">
                                         {pillar.title}
                                     </h3>
-                                    <h4 className="font-sans text-xs font-bold uppercase tracking-widest text-stone-400 mb-6 relative">
+                                    <h4 className="font-sans text-xs font-bold uppercase tracking-widest text-stone-400 mb-6 relative inline-block">
                                         {pillar.subtitle}
                                         {/* Underline Scribble */}
-                                        <svg className="absolute top-full left-0 w-full h-2 text-[#754548]/30" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                            <path d="M0,5 Q50,10 100,5" fill="none" stroke="currentColor" strokeWidth="2" />
-                                        </svg>
+                                        <motion.svg 
+                                            initial={{ pathLength: 0 }}
+                                            whileInView={{ pathLength: 1 }}
+                                            transition={{ duration: 1, delay: 0.5 }}
+                                            viewport={{ once: true }}
+                                            className="absolute top-full left-0 w-full h-2 text-[#754548]/30" 
+                                            viewBox="0 0 100 10" 
+                                            preserveAspectRatio="none"
+                                        >
+                                            <motion.path d="M0,5 Q50,10 100,5" fill="none" stroke="currentColor" strokeWidth="2" />
+                                        </motion.svg>
                                     </h4>
                                     <p className={`font-sans text-stone-600 font-light leading-relaxed text-sm md:text-base max-w-md ${isEven ? 'text-right' : 'text-left'}`}>
                                         {pillar.desc}
@@ -77,10 +111,7 @@ const Process: React.FC = () => {
                                 </div>
                             </Reveal>
                         </div>
-
-                        {/* Spacer for the other side (Desktop only) */}
                         <div className="w-full md:w-5/12 hidden md:block"></div>
-                        
                     </div>
                 );
             })}
