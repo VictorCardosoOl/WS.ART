@@ -1,23 +1,13 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Instagram, ArrowUpRight, MessageCircle, Twitter, Facebook } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
 
 const Footer: React.FC = () => {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end end"]
-  });
-
-  // Parallax Effect for the big text: Moves slightly faster/slower than scroll
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-15%"]);
-
   return (
-    <footer ref={containerRef} className="relative bg-[#1c1917] text-white pt-24 md:pt-32 pb-0 font-sans overflow-hidden">
+    <footer className="relative bg-black text-white pt-24 md:pt-32 pb-0 font-sans overflow-hidden">
       
-      {/* SEPARATOR: INVERTED CURVE */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
-         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-[#FAF7F7]">
+      {/* SEPARATOR: INVERTED CURVE FROM WHITE (BOOKING SECTION) */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
+         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-white">
             <path d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z" className="opacity-100"></path>
          </svg>
       </div>
@@ -119,15 +109,12 @@ const Footer: React.FC = () => {
              <a href="#" className="hover:text-white transition-colors">Garantia</a>
           </div>
           
-          {/* Massive Brand Name - SIQUEIRA with Parallax */}
-          <div className="w-full text-right relative h-auto overflow-visible pb-2 md:pb-4 overflow-hidden">
+          {/* Massive Brand Name - SIQUEIRA with Q Safe Zone */}
+          <div className="w-full text-right relative h-auto overflow-visible pb-2 md:pb-4">
              {/* Adjusted text size to scale on mobile (~17vw) and desktop to avoid cutoff */}
-             <motion.h1 
-                style={{ x }}
-                className="text-[17vw] leading-[0.75] font-black text-white tracking-tighter mix-blend-difference select-none pointer-events-none whitespace-nowrap"
-             >
+             <h1 className="text-[17vw] leading-[0.75] font-black text-white tracking-tighter mix-blend-difference select-none pointer-events-none translate-y-[5%]">
                SIQUEIRA
-             </motion.h1>
+             </h1>
              <div className="absolute bottom-6 md:bottom-12 left-0 md:left-auto md:right-0 w-full md:w-auto text-center md:text-right z-20">
                 <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-stone-600">© 2024 William Siqueira Art Ltd.</p>
              </div>

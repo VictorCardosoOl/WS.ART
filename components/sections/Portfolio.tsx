@@ -4,9 +4,8 @@ import { GridGalleryItem } from '../../types';
 import { PORTFOLIO_ITEMS } from '../../data/portfolio';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { GraphiteScribble } from '../ui/ArtisticDecorations';
 
-// Componente de Imagem com Parallax Suave e Hover Cinematográfico
+// Componente de Imagem com Parallax Sutil e Efeitos de Hover Refinados
 const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -14,13 +13,15 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
     offset: ["start end", "end start"]
   });
   
-  // Movimento de parallax
-  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.15]); 
+  // Parallax Vertical: Sutil (-5% a 5%) para profundidade elegante
+  const y = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
+  
+  // Scale Base: 1.1 para permitir o movimento parallax sem cortes
+  const scaleBase = useTransform(scrollYProgress, [0, 1], [1.1, 1.1]); 
 
   return (
     <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
-      <motion.div style={{ y, scale }} className="w-full h-full will-change-transform">
+      <motion.div style={{ y, scale: scaleBase }} className="w-full h-full">
         <img 
           src={src} 
           alt={alt} 
@@ -28,9 +29,9 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
           className="
             w-full h-full object-cover 
             grayscale group-hover:grayscale-0 
-            transition-all duration-[1200ms] 
-            ease-[cubic-bezier(0.22,1,0.36,1)]
-            will-change-transform
+            transition-all duration-[800ms] 
+            ease-[cubic-bezier(0.22,1,0.36,1)] 
+            group-hover:scale-105
           "
           loading="lazy"
         />
@@ -39,36 +40,44 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
   );
 };
 
-// Item do Card Bento
+// Item do Card Bento (Estilo Cinematográfico)
 const BentoCard = ({ item }: { item: GridGalleryItem }) => {
   return (
     <div 
-        className={`group relative w-full h-full overflow-hidden bg-stone-100 cursor-pointer shadow-md hover:shadow-xl transition-all duration-500`}
-        data-cursor="VER OBRA"
+        className={`group relative w-full h-full overflow-hidden rounded-sm bg-stone-100 cursor-pointer`}
+        data-cursor="VER PROJETO"
     >
-        {/* MASKING TAPE EFFECT */}
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-[#fdfbf7] opacity-60 z-30 transform -rotate-1 shadow-sm backdrop-blur-sm pointer-events-none mix-blend-lighten border-l border-r border-white/20"></div>
-
         <ParallaxImage src={item.src} alt={item.altText} />
         
-        {/* Gradiente Overlay no Hover */}
-        <div className="absolute inset-0 bg-[#754548] mix-blend-color opacity-0 group-hover:opacity-30 transition-opacity duration-[800ms] ease-out z-10"></div>
-        
-        {/* Texto/Info Overlay */}
-        <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-             <div className="flex justify-between items-start translate-y-4 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white border border-white/30 px-2 py-1 rounded-full backdrop-blur-sm">
+        {/* Gradiente Cinematográfico (Sempre visível no fundo, intensifica no hover) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-[800ms] z-10"></div>
+
+        {/* Overlay de Texto Elegante */}
+        <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-20 flex flex-col justify-end translate-y-4 group-hover:translate-y-0 transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
+            
+            {/* Top Line & Category */}
+            <div className="flex items-center gap-3 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                <span className="h-[1px] w-6 bg-rose-400"></span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-rose-200">
                     {item.category}
                 </span>
-                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white">
-                    <ArrowUpRight size={14} />
-                </div>
-             </div>
-             <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-100 ease-[cubic-bezier(0.22,1,0.36,1)]">
-                <h3 className="font-serif text-3xl md:text-4xl text-white italic leading-none">
+            </div>
+
+            {/* Title & Icon Row */}
+            <div className="flex justify-between items-end">
+                <h3 className="font-serif text-3xl md:text-4xl text-white leading-[0.95] italic font-light tracking-tight group-hover:text-rose-50 transition-colors duration-500">
                     {item.title}
                 </h3>
-             </div>
+                
+                {/* Arrow Icon Reveal */}
+                <div className="overflow-hidden w-8 h-8 flex items-center justify-center">
+                    <ArrowUpRight 
+                        className="text-white transform translate-y-full -translate-x-full group-hover:translate-y-0 group-hover:translate-x-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]" 
+                        size={24} 
+                        strokeWidth={1.5}
+                    />
+                </div>
+            </div>
         </div>
     </div>
   );
@@ -76,51 +85,39 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
 
 const Portfolio: React.FC = () => {
   return (
-    // Removida cor de fundo dura, agora flui do Hero (#FAF7F7)
-    <section id="gallery" className="relative pt-32 pb-48">
-      
-      {/* Decoração de fundo Artística */}
-      <GraphiteScribble className="top-20 right-0 w-[500px] h-[500px] text-stone-900 rotate-12" />
-      <GraphiteScribble className="bottom-0 left-[-100px] w-[600px] h-[600px] text-stone-900 -rotate-45 opacity-[0.02]" />
-
+    <section id="gallery" className="relative pt-32 pb-40 bg-white">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         
         {/* Header Compacto & Elegante */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-[#754548]/10 pb-6 relative">
-          
-          <span className="absolute -top-8 left-10 font-hand text-2xl text-[#754548] rotate-[-5deg] opacity-60 hidden md:block">
-              ( estudo de composição )
-          </span>
-
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-stone-100 pb-6">
           <Reveal>
-             <div className="flex flex-col gap-2">
-                 <span className="font-sans text-[10px] font-bold tracking-[0.2em] text-stone-500 block opacity-60">
-                    ( 01 )
-                 </span>
-                 <h2 className="text-6xl md:text-8xl font-serif text-stone-900 leading-[0.8] tracking-tighter">
-                   Acervo<span className="text-[#754548] text-4xl">.</span>
-                 </h2>
-             </div>
+             <h2 className="text-6xl md:text-8xl font-serif text-stone-900 leading-[0.8] tracking-tighter">
+               Acervo<span className="text-[#754548] text-4xl">.</span>
+             </h2>
           </Reveal>
           
           <Reveal delay={200}>
             <div className="mt-8 md:mt-0 text-right">
               <p className="text-stone-400 font-serif text-lg italic">
-                Seleção curada 2023 — 2024
+                Obras selecionadas 2023 — 2024
               </p>
             </div>
           </Reveal>
         </div>
 
-        {/* BENTO GRID LAYOUT */}
-        <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[300px] md:auto-rows-[400px] gap-6 md:gap-8 px-2 md:px-0">
+        {/* 
+            BENTO GRID CSS LAYOUT 
+            Utiliza CSS Grid para criar o layout Bento.
+            auto-rows define a altura base, e os colSpan/rowSpan nos dados definem a geometria.
+        */}
+        <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[300px] md:auto-rows-[380px] gap-4 md:gap-6">
             {PORTFOLIO_ITEMS.map((item, index) => (
                 <div 
                     key={item.id} 
                     className={`${item.colSpan} relative w-full h-full min-h-[300px] md:min-h-auto`}
                 >
-                    <Reveal delay={index * 100} width="100%">
-                        <div className={`w-full h-full shadow-sm hover:shadow-2xl transition-shadow duration-700`}>
+                    <Reveal delay={index * 50} width="100%">
+                        <div className={`w-full h-full`}>
                              <BentoCard item={item} />
                         </div>
                     </Reveal>
@@ -128,13 +125,14 @@ const Portfolio: React.FC = () => {
             ))}
         </div>
         
+        {/* Footer Link */}
         <div className="mt-24 text-center" data-cursor="EXPLORAR">
            <Reveal>
              <a href="https://instagram.com" className="group inline-flex flex-col items-center gap-3">
-               <span className="font-serif italic text-2xl text-stone-400 group-hover:text-[#754548] transition-colors duration-500">
-                 Explorar arquivo completo
+               <span className="font-serif italic text-2xl text-stone-400 group-hover:text-stone-900 transition-colors duration-500">
+                 Ver coleção completa
                </span>
-               <div className="relative w-[1px] h-12 bg-stone-300 overflow-hidden">
+               <div className="relative w-[1px] h-12 bg-stone-200 overflow-hidden">
                   <div className="absolute top-0 left-0 w-full h-full bg-[#754548] -translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                </div>
              </a>

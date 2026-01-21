@@ -15,9 +15,9 @@ const FAQ: React.FC = () => {
   return (
     <section id="faq" className="py-24 md:py-32 bg-white relative z-10">
       <div className="container mx-auto px-6">
-        <SectionTitle number="06" subtitle="Info" title="Dúvidas" />
+        <SectionTitle subtitle="Dúvidas" title="Perguntas Frequentes" />
         
-        <div className="mt-12 md:mt-16 flex flex-col border-t border-stone-200">
+        <div className="mt-16 flex flex-col border-t border-stone-200">
             {FAQ_ITEMS.map((item, idx) => {
               const isOpen = activeIndex === idx;
               
@@ -26,7 +26,7 @@ const FAQ: React.FC = () => {
                     <Reveal delay={idx * 50} width="100%">
                         <button
                             onClick={() => toggleAccordion(idx)}
-                            className="w-full py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 text-left group outline-none transition-colors hover:bg-stone-50/50"
+                            className="w-full py-5 md:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 text-left group outline-none"
                         >
                             {/* Coluna Esquerda: Número e Linha */}
                             <div className="flex items-center gap-6 md:w-1/4">
@@ -38,7 +38,7 @@ const FAQ: React.FC = () => {
 
                             {/* Coluna Central: Pergunta */}
                             <div className="md:w-2/3 pr-4">
-                                <h3 className={`text-xl md:text-2xl font-serif transition-colors duration-300 leading-tight ${isOpen ? 'text-stone-900 italic' : 'text-stone-600 group-hover:text-stone-900'}`}>
+                                <h3 className={`text-lg md:text-2xl font-serif transition-colors duration-300 leading-tight ${isOpen ? 'text-stone-900 italic' : 'text-stone-600 group-hover:text-stone-900'}`}>
                                     {item.q}
                                 </h3>
                             </div>
@@ -67,8 +67,8 @@ const FAQ: React.FC = () => {
                                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                                     className="overflow-hidden"
                                 >
-                                    <div className="pb-8 pl-0 md:pl-[25%] pr-4 md:pr-24">
-                                        <p className="text-stone-500 text-base md:text-lg font-light leading-relaxed font-sans max-w-2xl">
+                                    <div className="pb-6 pl-0 md:pl-[25%] pr-4 md:pr-24">
+                                        <p className="text-stone-500 text-sm md:text-base font-light leading-relaxed font-sans max-w-2xl">
                                             {item.a}
                                         </p>
                                     </div>
