@@ -40,15 +40,19 @@ const Hero: React.FC = () => {
                 </Reveal>
                 
                 {/* MICRO TYPOGRAPHY EDITORIAL */}
-                <div className="flex flex-col items-end gap-4">
+                <div className="flex flex-col items-end gap-3">
                     <Reveal delay={400}>
                         <div className="h-[1px] w-12 bg-[#754548]/40"></div>
                     </Reveal>
-                    <Reveal delay={600}>
-                        <p className="font-sans text-[10px] text-stone-500 leading-loose tracking-[0.3em] uppercase font-bold text-right max-w-[240px]">
-                          Conectamos história e anatomia em narrativas visuais perenes.
-                        </p>
-                    </Reveal>
+                    
+                    {/* Texto com fade-in e estilo editorial ajustado */}
+                    <div className="overflow-hidden">
+                        <Reveal delay={800}>
+                            <p className="font-sans text-[10px] text-stone-500 leading-loose tracking-[0.3em] uppercase font-bold text-right max-w-[260px]">
+                              Conectamos história e anatomia em narrativas visuais perenes.
+                            </p>
+                        </Reveal>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,18 +78,10 @@ const Hero: React.FC = () => {
 
 
       {/* --- LAYER 2: BORDER FRAME (Middle) --- */}
-      {/* 
-          Z-20 garante que a borda fique ACIMA do texto gigante ("WILLIAM"), 
-          mas ABAIXO do conteúdo interativo (Botões, Links, Badge).
-      */}
       <div className="absolute inset-4 md:inset-6 border border-[#754548]/30 pointer-events-none z-20 rounded-sm"></div>
 
 
       {/* --- LAYER 1: MASSIVE TYPOGRAPHY (Background-ish) --- */}
-      {/* 
-          Z-10 (ou Z-0 dependendo do contexto) para ficar atrás da borda.
-          Usamos translate-y para ajustar o posicionamento vertical visualmente.
-      */}
       <div className="absolute bottom-0 left-0 w-full flex justify-center items-end leading-none z-10 mix-blend-darken pointer-events-none overflow-hidden">
           <Reveal delay={300} width="100%">
               <h1 className="font-sans font-black text-[19vw] md:text-[21vw] text-black tracking-tighter text-center leading-[0.75] opacity-[0.95] select-none w-full transform translate-y-[8%] md:translate-y-[10%]">
