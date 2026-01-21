@@ -58,7 +58,7 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
             {/* Top Line & Category */}
             <div className="flex items-center gap-3 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                 <span className="h-[1px] w-6 bg-rose-400"></span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-rose-200">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-200">
                     {item.category}
                 </span>
             </div>
@@ -98,7 +98,7 @@ const Portfolio: React.FC = () => {
           
           <Reveal delay={200}>
             <div className="mt-8 md:mt-0 text-right">
-              <p className="text-stone-400 font-serif text-lg italic">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400">
                 Obras selecionadas 2023 — 2024
               </p>
             </div>
