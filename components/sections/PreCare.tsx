@@ -1,75 +1,82 @@
 import React from 'react';
 import Reveal from '../ui/Reveal';
-import SectionTitle from '../ui/SectionTitle';
-import { Droplets, Moon, Ban, Shirt } from 'lucide-react';
 
 const careItems = [
   {
-    icon: <Droplets size={32} strokeWidth={1} />,
-    title: "Hidratação Profunda",
-    content: "Comece a hidratar a região da tatuagem 7 dias antes. Uma pele hidratada recebe melhor a tinta, reduz o trauma e facilita drasticamente a cicatrização."
+    id: "1",
+    title: "Hidratação",
+    subtitle: "Preparação da tela",
+    content: "Comece a hidratar a região da tatuagem 7 dias antes. Uma pele hidratada recebe melhor a tinta, reduz o trauma da agulha e facilita drasticamente a cicatrização posterior."
   },
   {
-    icon: <Moon size={32} strokeWidth={1} />,
-    title: "Descanso Pleno",
-    content: "Durma bem na noite anterior (8h+). O corpo precisa de energia para lidar com a sessão. Faça uma refeição reforçada antes de vir ao estúdio."
+    id: "2",
+    title: "Descanso",
+    subtitle: "Energia vital",
+    content: "Durma bem na noite anterior (8h+). O corpo precisa de energia para lidar com a sessão. Faça uma refeição reforçada antes de vir ao estúdio para evitar quedas de pressão."
   },
   {
-    icon: <Ban size={32} strokeWidth={1} />,
+    id: "3",
     title: "Zero Álcool",
-    content: "Não consuma bebidas alcoólicas 24h antes. O álcool afina o sangue, aumentando o sangramento, o que expulsa o pigmento e dificulta o trabalho."
+    subtitle: "Coagulação sanguínea",
+    content: "Não consuma bebidas alcoólicas 24h antes. O álcool afina o sangue, aumentando o sangramento durante o processo, o que expulsa o pigmento e dificulta o trabalho."
   },
   {
-    icon: <Shirt size={32} strokeWidth={1} />,
+    id: "4",
     title: "Vestimenta",
-    content: "Venha com roupas confortáveis, pretas ou escuras (tinta pode respingar). Garanta fácil acesso à área a ser tatuada sem comprimir o local."
+    subtitle: "Conforto e acesso",
+    content: "Venha com roupas confortáveis, pretas ou escuras (tinta pode respingar). Garanta fácil acesso à área a ser tatuada sem comprimir o local e permitindo a circulação."
   }
 ];
 
 const PreCare: React.FC = () => {
   return (
-    <section className="py-24 md:py-32 bg-white">
-      <div className="container mx-auto px-6">
+    <section className="py-32 md:py-40 bg-[#F5F5F5] text-[#1a1a1a]" id="precare">
+      <div className="container mx-auto px-6 md:px-12">
         
-        {/* Header Aligned Left as requested */}
-        <div className="max-w-4xl mb-16 md:mb-24">
-            <SectionTitle 
-                subtitle="Cuidados Pré-Sessão" 
-                title="Preparação" 
-                align="left" 
-            />
-            <Reveal delay={200}>
-                <p className="text-stone-500 max-w-lg mt-[-30px] leading-relaxed">
-                    A qualidade da sua tatuagem depende 50% do artista e 50% da sua pele. Siga este guia para garantir o melhor resultado possível.
-                </p>
+        {/* Header no estilo "As regras (nós tocamos)" */}
+        <div className="mb-24 md:mb-32 relative">
+            <Reveal>
+                <h2 className="text-7xl md:text-9xl font-serif font-medium tracking-tighter text-[#1a1a1a] leading-none">
+                    Os Cuidados
+                </h2>
+                <span className="block md:absolute md:top-[80%] md:left-[35rem] font-serif italic text-3xl md:text-4xl text-[#1a1a1a] mt-2 md:mt-0 opacity-80">
+                    (pré-sessão)
+                </span>
             </Reveal>
         </div>
 
-        {/* Grid Layout Redesign */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        {/* Grid inspirado na referência: Número -> Título -> Subtítulo -> Linha -> Texto */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
            {careItems.map((item, index) => (
              <Reveal key={index} delay={index * 100} width="100%">
-               <div className="group h-full bg-[#FAF7F7] p-8 md:p-10 rounded-3xl border border-transparent hover:border-pantone-accent/30 transition-all duration-500 hover:shadow-lg hover:bg-white">
-                 <div className="flex justify-between items-start mb-6">
-                    <div className="p-3 bg-white rounded-2xl text-pantone-ink group-hover:text-pantone-accent group-hover:bg-pantone-skin transition-colors duration-500 shadow-sm">
-                        {item.icon}
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-300 group-hover:text-pantone-accent transition-colors">
-                        0{index + 1}
-                    </span>
+               <div className="flex flex-col h-full">
+                 
+                 {/* Top Block */}
+                 <div className="mb-6">
+                     <span className="block text-sm font-bold font-sans mb-1 text-[#1a1a1a]">
+                        {item.id}
+                     </span>
+                     <h3 className="font-serif text-4xl md:text-5xl text-[#1a1a1a] font-medium leading-tight mb-1">
+                        {item.title}
+                     </h3>
+                     <span className="block font-sans text-xs uppercase tracking-wide text-stone-500">
+                        {item.subtitle}
+                     </span>
                  </div>
-                 
-                 <h3 className="font-serif text-2xl md:text-3xl text-pantone-ink mb-4 group-hover:italic transition-all">
-                    {item.title}
-                 </h3>
-                 
-                 <p className="text-stone-600 font-sans leading-relaxed text-sm md:text-base font-light">
+
+                 {/* Divider Line exata da referência */}
+                 <div className="w-full h-[1px] bg-[#1a1a1a]/20 mb-6"></div>
+
+                 {/* Body Text */}
+                 <p className="text-sm md:text-base leading-relaxed text-[#1a1a1a] font-light max-w-xs">
                     {item.content}
                  </p>
+
                </div>
              </Reveal>
            ))}
         </div>
+
       </div>
     </section>
   );
