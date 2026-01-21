@@ -1,26 +1,24 @@
 import React from 'react';
 import Reveal from '../ui/Reveal';
 
-const steps = [
+const pillars = [
   {
-    id: "01",
-    title: "VOCÊ ESTENDE A MÃO",
-    desc: "Envie uma mensagem manifestando seu interesse. Eu respondo pessoalmente (geralmente no mesmo dia) com os horários disponíveis para consulta e uma breve análise da sua ideia inicial."
+    id: "1",
+    title: "Conexão",
+    subtitle: "Antes da Agulha",
+    desc: "Não tatuamos estranhos. Dedicamos tempo para entender sua história, suas motivações e o simbolismo por trás da ideia. Cada projeto começa com uma conversa, garantindo que a arte final seja uma extensão autêntica da sua personalidade."
   },
   {
-    id: "02",
-    title: "PREPARAÇÃO PRÉ-CONSULTA",
-    desc: "Após o agendamento, enviarei algumas perguntas breves para reflexão — nada administrativo, mas questões importantes para esclarecer o que é mais relevante para nós. Suas ideias nos ajudarão a aproveitar ao máximo nosso tempo juntos."
+    id: "2",
+    title: "Anatomia",
+    subtitle: "Fluxo & Movimento",
+    desc: "O corpo não é uma tela plana. Nossos desenhos são projetados digitalmente sobre fotos da sua musculatura, respeitando curvas e movimentos naturais. A arte deve fluir com você, não contra você, criando uma harmonia visual perfeita."
   },
   {
-    id: "03",
-    title: "A CONSULTA",
-    desc: "Conversa estratégica de duas horas no estúdio ou via Zoom. Sem pressão de vendas. Visão real. Avaliação honesta da adequação ao perfil desejado e estudo anatômico digital preliminar."
-  },
-  {
-    id: "04",
-    title: "VOCÊ DECIDE",
-    desc: "Se estivermos alinhados, enviarei uma proposta personalizada em até 24 horas. Você terá tempo para analisar o orçamento e o conceito antes de oficializarmos a reserva da sessão."
+    id: "3",
+    title: "Verdade",
+    subtitle: "Execução Técnica",
+    desc: "Transparência total no processo. Utilizamos pigmentos de alta qualidade e equipamentos de ponta em um ambiente estéril e privado. Nosso compromisso é com a longevidade da obra: uma tatuagem que envelheça tão bem quanto a memória que ela carrega."
   }
 ];
 
@@ -29,57 +27,53 @@ const Process: React.FC = () => {
     <section className="relative py-32 md:py-48 bg-[#F5F5F5]" id="process">
       <div className="container mx-auto px-6">
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            
-            {/* COLUNA ESQUERDA: Label Fixo (Estilo do print '• O Processo') */}
-            <div className="lg:col-span-3 relative">
-                <div className="lg:sticky lg:top-32">
-                    <Reveal>
-                        <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-black"></div>
-                            <span className="font-sans text-sm font-medium uppercase tracking-widest text-stone-900">
-                                O Processo
-                            </span>
-                        </div>
+        {/* Header - Layout similar à referência 'As regras' */}
+        <div className="mb-20 md:mb-32">
+            <Reveal>
+                <h2 className="font-serif text-6xl md:text-8xl text-stone-900 leading-[0.9] tracking-tighter">
+                    Nossos<br/>
+                    <span className="italic font-light opacity-60">(pilares)</span>
+                </h2>
+            </Reveal>
+        </div>
+
+        {/* Grid de 3 Colunas */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20 border-t border-stone-300 pt-16">
+            {pillars.map((pillar, index) => (
+                <div key={index} className="flex flex-col relative group">
+                    <Reveal delay={index * 150}>
+                        {/* Número */}
+                        <span className="font-sans text-xs font-bold text-stone-400 mb-6 block">
+                            {pillar.id}
+                        </span>
+
+                        {/* Título */}
+                        <h3 className="font-serif text-4xl text-stone-900 mb-2 group-hover:text-[#754548] transition-colors duration-300">
+                            {pillar.title}
+                        </h3>
+                        
+                        {/* Subtítulo */}
+                        <span className="font-sans text-[10px] uppercase tracking-widest text-[#754548] mb-6 block opacity-80">
+                            {pillar.subtitle}
+                        </span>
+
+                        {/* Descrição */}
+                        <p className="font-sans text-stone-600 font-light leading-relaxed text-sm md:text-base border-l border-stone-200 pl-4 group-hover:border-[#754548]/30 transition-colors duration-500">
+                            {pillar.desc}
+                        </p>
                     </Reveal>
                 </div>
-            </div>
+            ))}
+        </div>
 
-            {/* COLUNA DIREITA: Lista Editorial */}
-            <div className="lg:col-span-9">
-                <div className="flex flex-col">
-                    {/* Linha inicial superior */}
-                    <div className="w-full h-[1px] bg-stone-300 mb-0"></div>
-
-                    {steps.map((step, index) => (
-                        <div key={index} className="group relative border-b border-stone-300 py-16 md:py-24 overflow-hidden">
-                            <Reveal width="100%">
-                                <div className="flex flex-col md:flex-row md:items-start justify-between relative z-10">
-                                    
-                                    {/* Número Gigante (Watermark Style) */}
-                                    <div className="absolute -top-6 -left-4 md:-left-8 z-0 pointer-events-none select-none mix-blend-multiply opacity-30">
-                                        <span className="font-serif text-[8rem] md:text-[10rem] leading-none text-[#CFCFCF]">
-                                            {step.id}
-                                        </span>
-                                    </div>
-
-                                    {/* Espaçamento para o conteúdo não sobrepor totalmente o número */}
-                                    <div className="md:ml-32 lg:ml-40 relative z-10 w-full">
-                                        <h3 className="font-sans font-bold text-3xl md:text-4xl text-black uppercase mb-6 tracking-tight group-hover:text-[#754548] transition-colors duration-500">
-                                            {step.title}
-                                        </h3>
-                                        <p className="font-sans text-stone-600 text-base md:text-lg leading-relaxed max-w-2xl font-light">
-                                            {step.desc}
-                                        </p>
-                                    </div>
-                                </div>
-                            </Reveal>
-                        </div>
-                    ))}
+        {/* Footer Decorativo */}
+        <Reveal delay={600}>
+            <div className="flex justify-end mt-24">
+                <div className="w-12 h-12 rounded-full border border-stone-300 flex items-center justify-center text-stone-400 group cursor-pointer hover:border-[#754548] hover:text-[#754548] transition-all">
+                    <span className="text-xl">↓</span>
                 </div>
             </div>
-
-        </div>
+        </Reveal>
 
       </div>
     </section>
