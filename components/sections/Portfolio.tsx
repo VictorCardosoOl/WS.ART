@@ -13,11 +13,11 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
     offset: ["start end", "end start"]
   });
   
-  // Parallax Vertical: Otimizado para suavidade e profundidade (-8% a 8%)
+  // Parallax Vertical: Movimento oposto ao scroll para profundidade
   const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
   
-  // Scale Base: Leve zoom inicial (1.15) para permitir movimento parallax sem bordas vazias
-  const scaleBase = useTransform(scrollYProgress, [0, 1], [1.15, 1.15]); 
+  // Scale on Scroll: Zoom lento e contínuo durante o scroll para sensação cinematográfica
+  const scaleBase = useTransform(scrollYProgress, [0, 1], [1.15, 1.25]); 
 
   return (
     <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
