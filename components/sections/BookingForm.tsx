@@ -12,19 +12,16 @@ const BookingForm: React.FC = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         
-        <div className="flex flex-col items-center text-center mb-20">
-            <Reveal>
-                <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-[#754548] mb-6 block">
-                    Contato
-                </span>
-                <h2 className="font-serif text-6xl md:text-8xl text-stone-900 leading-[0.9] tracking-tighter mb-8">
-                    Inicie sua<br/>
-                    <span className="italic font-light text-[#754548]">Jornada.</span>
-                </h2>
-            </Reveal>
-            
-            <Reveal delay={200}>
-                <p className="font-sans text-stone-500 font-light leading-relaxed max-w-2xl text-sm md:text-base tracking-wide">
+        <SectionTitle 
+            number="05"
+            subtitle="Contato"
+            title="Sua Jornada"
+            align="center"
+        />
+
+        <div className="max-w-3xl mx-auto text-center mt-[-60px] mb-20">
+             <Reveal delay={200}>
+                <p className="font-sans text-stone-500 font-light leading-relaxed text-sm md:text-base tracking-wide">
                     Para garantir a exclusividade de cada projeto, realizamos todo o processo de curadoria e agendamento através de nossos canais diretos.
                 </p>
             </Reveal>

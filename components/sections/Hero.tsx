@@ -33,7 +33,7 @@ const Hero: React.FC = () => {
                 </Reveal>
                 
                 <Reveal delay={800}>
-                    <p className="font-sans text-[10px] text-stone-500 leading-loose tracking-[0.3em] uppercase font-bold text-right animate-pulse">
+                    <p className="font-sans text-[10px] text-stone-500 leading-loose tracking-[0.3em] uppercase font-bold text-right">
                       Conectamos história e anatomia<br/> em narrativas visuais perenes.
                     </p>
                 </Reveal>

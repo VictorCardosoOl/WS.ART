@@ -5,7 +5,7 @@ import { PORTFOLIO_ITEMS } from '../../data/portfolio';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
-// Componente de Imagem com Parallax Suave
+// Componente de Imagem com Parallax Suave e Hover Cinematográfico
 const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -15,7 +15,7 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
   
   // Movimento de parallax: imagem se move levemente contra o scroll
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.2]); // Zoom suave
+  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.15]); 
 
   return (
     <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
@@ -28,7 +28,8 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
             w-full h-full object-cover 
             grayscale group-hover:grayscale-0 
             transition-all duration-[1200ms] 
-            ease-[cubic-bezier(0.16,1,0.3,1)]
+            ease-[cubic-bezier(0.22,1,0.36,1)]
+            will-change-transform
           "
           loading="lazy"
         />
@@ -47,11 +48,11 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
         <ParallaxImage src={item.src} alt={item.altText} />
         
         {/* Gradiente Overlay no Hover */}
-        <div className="absolute inset-0 bg-[#754548]/20 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10"></div>
+        <div className="absolute inset-0 bg-[#754548]/20 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity duration-[800ms] ease-out z-10"></div>
         
-        {/* Texto/Info Overlay */}
-        <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-             <div className="flex justify-between items-start">
+        {/* Texto/Info Overlay - Aparece no Hover */}
+        <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+             <div className="flex justify-between items-start translate-y-4 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white border border-white/30 px-2 py-1 rounded-full backdrop-blur-sm">
                     {item.category}
                 </span>
@@ -59,7 +60,7 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
                     <ArrowUpRight size={14} />
                 </div>
              </div>
-             <div>
+             <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-100 ease-[cubic-bezier(0.22,1,0.36,1)]">
                 <h3 className="font-serif text-3xl md:text-4xl text-white italic leading-none">
                     {item.title}
                 </h3>
@@ -77,9 +78,14 @@ const Portfolio: React.FC = () => {
         {/* Header Compacto & Elegante */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-[#754548]/10 pb-6">
           <Reveal>
-             <h2 className="text-6xl md:text-8xl font-serif text-stone-900 leading-[0.8] tracking-tighter">
-               Acervo<span className="text-[#754548] text-4xl">.</span>
-             </h2>
+             <div className="flex flex-col gap-2">
+                 <span className="font-sans text-[10px] font-bold tracking-[0.2em] text-stone-500 block opacity-60">
+                    ( 01 )
+                 </span>
+                 <h2 className="text-6xl md:text-8xl font-serif text-stone-900 leading-[0.8] tracking-tighter">
+                   Acervo<span className="text-[#754548] text-4xl">.</span>
+                 </h2>
+             </div>
           </Reveal>
           
           <Reveal delay={200}>
@@ -94,6 +100,7 @@ const Portfolio: React.FC = () => {
         {/* 
             BENTO GRID LAYOUT 
             Grid de 12 colunas para flexibilidade máxima.
+            Usa classes md:col-span-X do Tailwind para assimetria.
         */}
         <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[300px] md:auto-rows-[400px] gap-4">
             {PORTFOLIO_ITEMS.map((item, index) => (
@@ -102,7 +109,7 @@ const Portfolio: React.FC = () => {
                     className={`${item.colSpan} relative w-full h-full min-h-[300px] md:min-h-auto`}
                 >
                     <Reveal delay={index * 100} width="100%">
-                        <div className={`w-full h-full shadow-sm hover:shadow-xl transition-shadow duration-700`}>
+                        <div className={`w-full h-full shadow-sm hover:shadow-2xl transition-shadow duration-700`}>
                              <BentoCard item={item} />
                         </div>
                     </Reveal>

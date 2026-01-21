@@ -3,103 +3,96 @@ import Reveal from '../ui/Reveal';
 
 const About: React.FC = () => {
   return (
-    <section id="about" className="relative py-32 md:py-48 bg-[#FDFBF7] overflow-hidden">
+    <section id="about" className="relative py-32 md:py-48 bg-[#1a1919] text-[#FAF7F7] overflow-hidden">
       
-      {/* Background Decorativo Sutil */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-[#FAF7F7] -z-0 hidden lg:block"></div>
-
+      {/* Texture Overlay */}
+      <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none mix-blend-overlay"></div>
+      
       <div className="container mx-auto px-6 relative z-10">
         
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24">
+        {/* LAYOUT EDITORIAL ASSIMÉTRICO */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-y-16 md:gap-x-12 items-start">
           
-          {/* COLUNA ESQUERDA: IMAGEM STICKY (O Retrato acompanha a leitura) */}
-          <div className="w-full lg:w-5/12 relative">
-             <div className="lg:sticky lg:top-32">
-                <Reveal width="100%">
-                    <div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm shadow-xl">
-                        <img 
-                          src="https://picsum.photos/800/1000?grayscale&random=50" 
-                          alt="William Siqueira Portrait" 
-                          className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)] scale-105 hover:scale-100"
-                        />
-                        {/* Assinatura ou Selo sobre a imagem */}
-                        <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2">
-                             <span className="font-serif italic text-stone-900 text-lg">William Siqueira</span>
-                        </div>
-                    </div>
-                </Reveal>
-                
-                {/* Citação Destacada */}
-                <Reveal delay={200}>
-                    <div className="mt-8 border-l-2 border-[#754548] pl-6 py-2 hidden lg:block">
-                        <p className="font-serif text-xl italic text-stone-500 leading-relaxed">
-                            "A anatomia não é um limite, é o guia. A tatuagem deve parecer que nasceu com você."
-                        </p>
-                    </div>
-                </Reveal>
-             </div>
-          </div>
-
-          {/* COLUNA DIREITA: MANIFESTO (Texto Rolável) */}
-          <div className="w-full lg:w-7/12 pt-8 lg:pt-0">
+          {/* COLUNA ESQUERDA: Rótulo Sticky */}
+          <div className="md:col-span-3 md:sticky md:top-32 self-start">
              <Reveal>
-                <div className="flex items-center gap-4 mb-10">
-                    <span className="h-[1px] w-12 bg-[#754548]"></span>
-                    <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-[#754548]">
+                <div className="flex flex-col gap-2">
+                    <span className="font-sans text-[10px] font-bold tracking-[0.2em] text-stone-500 block">
+                        ( 02 )
+                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548] block">
                         Manifesto
-                    </h2>
+                    </span>
+                    <div className="h-[1px] w-8 bg-[#754548]/50 mt-4"></div>
                 </div>
              </Reveal>
+          </div>
 
-             <Reveal delay={150}>
-                <h3 className="text-4xl md:text-6xl font-serif text-stone-900 leading-[1.1] mb-12 tracking-tight">
-                    Não tatuamos apenas pele.<br/>
-                    <span className="italic text-stone-400">Eternizamos memórias.</span>
-                </h3>
-             </Reveal>
+          {/* COLUNA DIREITA: Conteúdo Editorial */}
+          <div className="md:col-span-8 md:col-start-5">
              
-             <div className="space-y-10 text-stone-600 font-light text-lg leading-loose md:pr-12">
+             {/* Título Principal */}
+             <Reveal delay={100}>
+                <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-light leading-[0.9] tracking-tight mb-16">
+                  A pele não é<br/>
+                  apenas suporte.<br/>
+                  <span className="italic text-[#754548] opacity-90">É território.</span>
+                </h2>
+             </Reveal>
+
+             {/* Corpo de Texto com Drop Cap */}
+             <div className="space-y-8 text-lg md:text-xl font-serif font-light leading-relaxed text-[#FAF7F7]/80 max-w-2xl">
                 <Reveal delay={200}>
                     <p>
-                        <span className="text-4xl float-left mr-3 mt-[-6px] font-serif text-[#754548]">A</span>
-                        arte sempre foi minha linguagem primária. Do design gráfico clássico ao cinema de animação, explorei diversas formas de expressão visual até encontrar na tatuagem o meio definitivo de conexão humana.
+                      <span className="text-[#754548] text-4xl md:text-5xl float-left mr-3 mt-[-8px] font-serif">A</span>
+                      creditamos que a tatuagem transcende a estética. É um rito de passagem, uma demarcação de memória, um diálogo silencioso entre quem fomos e quem desejamos ser. Rejeitamos o industrial em favor do anatômico.
                     </p>
                 </Reveal>
-                
-                <Reveal delay={250}>
-                    <p>
-                        Acredito que uma tatuagem não é um adesivo colocado sobre o corpo, mas uma intervenção que deve respeitar a fluidez muscular e a curvatura natural da anatomia.
-                    </p>
-                </Reveal>
-
                 <Reveal delay={300}>
-                    <div className="bg-white p-8 border border-stone-100 shadow-sm rounded-sm my-8">
-                        <h4 className="font-serif text-2xl text-stone-900 mb-4">O Estilo Neotradicional</h4>
-                        <p className="text-base text-stone-500 mb-0">
-                            Me permite mesclar a solidez do traço clássico com a vibração e a liberdade do contemporâneo. É vibrante, detalhado e, acima de tudo, conceitual. Cada peça é desenhada exclusivamente para o cliente, sem cópias, sem repetições.
-                        </p>
-                    </div>
-                </Reveal>
-
-                <Reveal delay={350}>
                     <p>
-                        Meu estúdio privado foi concebido para ser um santuário de criatividade e conforto, longe do caos das lojas de rua tradicionais. Aqui, o foco é 100% na sua história e na nossa arte.
+                      Cada linha traçada no estúdio é projetada para a curvatura específica do portador. Não existem dois corpos iguais; portanto, a repetição é a antítese da nossa arte. Unimos a solidez técnica do clássico com a liberdade poética do contemporâneo.
                     </p>
                 </Reveal>
              </div>
-             
-             {/* Assinatura Visual */}
-             <Reveal delay={400}>
-                 <div className="mt-20 opacity-60 mix-blend-multiply">
-                    <img 
-                        src="https://signature.freefire-name.com/img.php?f=7&t=William%20Siqueira" 
-                        alt="Signature" 
-                        className="h-24 w-auto"
-                    />
+
+             {/* Lista de Credenciais / Background */}
+             <div className="border-t border-stone-800 mt-20 pt-10">
+                <Reveal delay={400}>
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-stone-500 block mb-8">
+                        Background
+                    </span>
+                    <ul className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        {[
+                        "Neotradicional",
+                        "Fine Art",
+                        "Estúdio Privado",
+                        "São Paulo, BR"
+                        ].map((item, i) => (
+                        <li key={i} className="flex flex-col gap-3 group cursor-default">
+                            <span className="text-[10px] font-bold text-[#754548] opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+                                0{i+1}
+                            </span>
+                            <span className="font-serif text-xl text-[#FAF7F7] italic opacity-80 group-hover:opacity-100 transition-opacity">
+                                {item}
+                            </span>
+                        </li>
+                        ))}
+                    </ul>
+                </Reveal>
+             </div>
+
+             {/* Imagem de Assinatura Visual */}
+             <Reveal delay={500} width="100%">
+                 <div className="mt-20 relative aspect-[16/9] md:aspect-[21/9] overflow-hidden rounded-sm opacity-60 grayscale hover:grayscale-0 transition-all duration-1000">
+                     <img 
+                        src="https://picsum.photos/1200/600?grayscale&random=99" 
+                        alt="Atelier" 
+                        className="w-full h-full object-cover"
+                     />
                  </div>
              </Reveal>
-          </div>
 
+          </div>
         </div>
       </div>
     </section>

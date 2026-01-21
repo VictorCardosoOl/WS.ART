@@ -15,7 +15,7 @@ const FAQ: React.FC = () => {
   return (
     <section id="faq" className="py-24 md:py-32 bg-white relative z-10">
       <div className="container mx-auto px-6">
-        <SectionTitle subtitle="Info" title="Dúvidas Frequentes" />
+        <SectionTitle number="06" subtitle="Info" title="Dúvidas" />
         
         <div className="mt-12 md:mt-16 flex flex-col border-t border-stone-200">
             {FAQ_ITEMS.map((item, idx) => {

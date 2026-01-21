@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './components/layout/Navbar';
 import Hero from './components/sections/Hero';
 import About from './components/sections/About';
@@ -11,9 +11,12 @@ import BookingForm from './components/sections/BookingForm';
 import FlashDay from './components/sections/FlashDay';
 import Footer from './components/layout/Footer';
 import CustomCursor from './components/ui/CustomCursor';
+import Preloader from './components/ui/Preloader';
 import Lenis from 'lenis';
 
 const App: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     // Configuração Premium do Lenis para sensação "Studio Freight"
     const lenis = new Lenis({
@@ -27,6 +30,15 @@ const App: React.FC = () => {
       infinite: false,
     });
 
+    // Desativa scroll durante carregamento
+    if (loading) {
+        lenis.stop();
+        document.body.style.overflow = 'hidden';
+    } else {
+        lenis.start();
+        document.body.style.overflow = 'auto';
+    }
+
     function raf(time: number) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -37,10 +49,16 @@ const App: React.FC = () => {
     return () => {
       lenis.destroy();
     };
-  }, []);
+  }, [loading]);
+
+  const handlePreloaderComplete = () => {
+      setLoading(false);
+  };
 
   return (
     <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-[#FAF7F7] relative">
+      <Preloader onComplete={handlePreloaderComplete} />
+      
       {/* Global Noise Overlay - Textura de papel/filme em todo o site */}
       <div className="fixed inset-0 z-[9999] pointer-events-none opacity-[0.04] bg-noise mix-blend-overlay"></div>
       
