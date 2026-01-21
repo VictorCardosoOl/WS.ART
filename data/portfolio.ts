@@ -3,59 +3,57 @@ import { GridGalleryItem } from '../types';
 export const PORTFOLIO_ITEMS: GridGalleryItem[] = [
   { 
     id: 1, 
-    src: "https://picsum.photos/800/1200?random=1", 
+    src: "https://picsum.photos/800/1200?random=10", 
     category: "Neotraditional", 
     title: "Lady Face & Peonies", 
-    // Coluna da esquerda ocupando 2 "linhas" visuais do grid da direita
-    colSpan: "md:col-span-6 md:row-span-2", 
-    height: "h-full min-h-[600px]",
-    offsetY: "0px",
-    altText: "Tatuagem neotradicional de rosto feminino (Lady Face) com ornamentos detalhados.",
+    colSpan: "", // Handled by layout structure
+    height: "h-full",
+    offsetY: "",
+    altText: "Tatuagem neotradicional de rosto feminino",
     enableOverlay: true
   },
   { 
     id: 2, 
-    src: "https://picsum.photos/600/600?random=2", 
-    category: "Detail", 
-    title: "Ornamental Arch", 
-    colSpan: "md:col-span-3", 
+    src: "https://picsum.photos/600/600?random=22", 
+    category: "Architecture", 
+    title: "Gothic Arch", 
+    colSpan: "", 
     height: "aspect-square",
-    offsetY: "0px", 
-    altText: "Detalhe de arquitetura ornamental tatuada.",
-    enableOverlay: false
+    offsetY: "", 
+    altText: "Detalhe arquitetônico gótico",
+    enableOverlay: true
   },
   { 
     id: 3, 
-    src: "https://picsum.photos/600/600?random=3", 
-    category: "Color Study", 
-    title: "Koi Fish Pond", 
-    colSpan: "md:col-span-3", 
+    src: "https://picsum.photos/600/600?random=33", 
+    category: "Study", 
+    title: "Koi Movement", 
+    colSpan: "", 
     height: "aspect-square",
-    offsetY: "0px", 
-    altText: "Tatuagem colorida de carpas (Koi Fish) em movimento.",
-    enableOverlay: true // Texto sobre a imagem como na referência
+    offsetY: "", 
+    altText: "Estudo de movimento de carpas",
+    enableOverlay: true 
   },
   { 
     id: 4, 
-    src: "https://picsum.photos/1200/600?random=4", 
-    category: "Composition", 
-    title: "Floral Sleeve", 
-    colSpan: "md:col-span-6", 
+    src: "https://picsum.photos/1200/600?random=44", 
+    category: "Full Sleeve", 
+    title: "Floral Composition", 
+    colSpan: "", 
     height: "aspect-[2/1]",
-    offsetY: "0px",
-    altText: "Fechamento de braço com tema floral.",
+    offsetY: "",
+    altText: "Composição floral para fechamento de braço",
     enableOverlay: true
   },
-  // Item extra para fechar o layout se necessário ou manter como destaque final
   { 
     id: 5, 
-    src: "https://picsum.photos/1200/800?random=5", 
+    src: "https://picsum.photos/1600/900?random=55", 
     category: "Surrealism", 
-    title: "The Eye Concept", 
-    colSpan: "md:col-span-12", 
+    title: "The Vision", 
+    colSpan: "col-span-12", 
     height: "aspect-[21/9]",
-    offsetY: "mt-6", // Pequeno espaço antes do último item wide
-    altText: "Conceito surrealista de olho.",
+    offsetY: "", 
+    altText: "Conceito surrealista expandido",
     enableOverlay: true
   },
 ];
