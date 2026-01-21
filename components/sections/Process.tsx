@@ -3,62 +3,65 @@ import Reveal from '../ui/Reveal';
 
 const pillars = [
   {
-    id: "1",
-    title: "Conexão",
-    subtitle: "Antes da Agulha",
-    desc: "Não tatuamos estranhos. Dedicamos tempo para entender sua história, suas motivações e o simbolismo por trás da ideia. Cada projeto começa com uma conversa, garantindo que a arte final seja uma extensão autêntica da sua personalidade."
+    id: "01",
+    title: "Sondagem",
+    subtitle: "A Conexão Inicial",
+    desc: "Antes de qualquer traço, existe a escuta. Dedicamos tempo para entender não apenas o que você quer tatuar, mas porquê. Investigamos referências, memórias e o simbolismo oculto para criar uma narrativa visual que seja verdadeiramente sua."
   },
   {
-    id: "2",
+    id: "02",
     title: "Anatomia",
-    subtitle: "Fluxo & Movimento",
-    desc: "O corpo não é uma tela plana. Nossos desenhos são projetados digitalmente sobre fotos da sua musculatura, respeitando curvas e movimentos naturais. A arte deve fluir com você, não contra você, criando uma harmonia visual perfeita."
+    subtitle: "O Corpo como Mapa",
+    desc: "A pele não é um papel plano. Projetamos a arte digitalmente sobre fotos da sua musculatura, estudando curvas, torções e movimento. O desenho deve fluir organicamente com o corpo, não apenas residir sobre ele."
   },
   {
-    id: "3",
-    title: "Verdade",
-    subtitle: "Execução Técnica",
-    desc: "Transparência total no processo. Utilizamos pigmentos de alta qualidade e equipamentos de ponta em um ambiente estéril e privado. Nosso compromisso é com a longevidade da obra: uma tatuagem que envelheça tão bem quanto a memória que ela carrega."
+    id: "03",
+    title: "A Sessão",
+    subtitle: "O Ritual",
+    desc: "O momento da materialização. Em um ambiente privado e acusticamente controlado, transformamos o projeto em realidade. Utilizamos equipamentos de ponta e técnicas de trauma reduzido para garantir que a experiência seja tão memorável quanto o resultado."
   }
 ];
 
 const Process: React.FC = () => {
   return (
-    <section className="relative py-32 md:py-48 bg-[#F5F5F5]" id="process">
+    <section className="relative py-32 md:py-48 bg-[#F5E6E8]/30" id="process">
       <div className="container mx-auto px-6">
         
-        {/* Header - Layout similar à referência 'As regras' */}
+        {/* Header Style 'As regras' */}
         <div className="mb-20 md:mb-32">
             <Reveal>
                 <h2 className="font-serif text-6xl md:text-8xl text-stone-900 leading-[0.9] tracking-tighter">
                     Nossos<br/>
-                    <span className="italic font-light opacity-60">(pilares)</span>
+                    <span className="italic font-light opacity-60 text-[#754548]">(pilares)</span>
                 </h2>
             </Reveal>
         </div>
 
-        {/* Grid de 3 Colunas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20 border-t border-stone-300 pt-16">
+        {/* Grid de 3 Colunas Refinado */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20 border-t border-[#754548]/20 pt-16">
             {pillars.map((pillar, index) => (
                 <div key={index} className="flex flex-col relative group">
                     <Reveal delay={index * 150}>
                         {/* Número */}
-                        <span className="font-sans text-xs font-bold text-stone-400 mb-6 block">
-                            {pillar.id}
-                        </span>
+                        <div className="flex items-center gap-3 mb-6">
+                             <span className="font-sans text-xs font-bold text-[#754548]">
+                                {pillar.id}
+                            </span>
+                            <div className="h-[1px] w-8 bg-[#754548]/30"></div>
+                        </div>
 
                         {/* Título */}
-                        <h3 className="font-serif text-4xl text-stone-900 mb-2 group-hover:text-[#754548] transition-colors duration-300">
+                        <h3 className="font-serif text-4xl text-stone-900 mb-2 group-hover:text-[#754548] transition-colors duration-500">
                             {pillar.title}
                         </h3>
                         
                         {/* Subtítulo */}
-                        <span className="font-sans text-[10px] uppercase tracking-widest text-[#754548] mb-6 block opacity-80">
+                        <span className="font-sans text-[10px] uppercase tracking-widest text-stone-400 mb-6 block">
                             {pillar.subtitle}
                         </span>
 
                         {/* Descrição */}
-                        <p className="font-sans text-stone-600 font-light leading-relaxed text-sm md:text-base border-l border-stone-200 pl-4 group-hover:border-[#754548]/30 transition-colors duration-500">
+                        <p className="font-sans text-stone-600 font-light leading-relaxed text-sm md:text-base pl-4 border-l border-stone-200 group-hover:border-[#754548]/40 transition-colors duration-500">
                             {pillar.desc}
                         </p>
                     </Reveal>
@@ -66,16 +69,7 @@ const Process: React.FC = () => {
             ))}
         </div>
 
-        {/* Footer Decorativo */}
-        <Reveal delay={600}>
-            <div className="flex justify-end mt-24">
-                <div className="w-12 h-12 rounded-full border border-stone-300 flex items-center justify-center text-stone-400 group cursor-pointer hover:border-[#754548] hover:text-[#754548] transition-all">
-                    <span className="text-xl">↓</span>
-                </div>
-            </div>
-        </Reveal>
-
-      </div>
+    </div>
     </section>
   );
 };

@@ -7,31 +7,31 @@ import { Droplets, Moon, Ban, Shirt } from 'lucide-react';
 const careSteps = [
   {
     id: "01",
-    title: "Hidratação Profunda",
-    shortDesc: "Prepare a pele para receber a tinta.",
-    fullDesc: "Comece a hidratar a região da tatuagem 7 dias antes. Uma pele hidratada é mais elástica, recebe melhor o pigmento, reduz o trauma da agulha e facilita drasticamente a cicatrização posterior.",
-    icon: <Droplets size={64} strokeWidth={0.8} />
+    title: "Hidratação",
+    shortDesc: "Pele preparada recebe melhor a tinta.",
+    fullDesc: "Comece a hidratar a região da tatuagem 7 dias antes. Uma pele hidratada é mais elástica, reduz o trauma da agulha e facilita drasticamente a cicatrização posterior.",
+    icon: <Droplets size={48} strokeWidth={0.8} />
   },
   {
     id: "02",
-    title: "Descanso Pleno",
-    shortDesc: "Energia para suportar a sessão.",
-    fullDesc: "Durma bem na noite anterior (mínimo 8h). O corpo precisa de energia para lidar com a dor e a inflamação controlada. Faça uma refeição reforçada antes de vir ao estúdio para evitar quedas de pressão.",
-    icon: <Moon size={64} strokeWidth={0.8} />
+    title: "Descanso",
+    shortDesc: "Energia vital para a sessão.",
+    fullDesc: "Durma bem na noite anterior (mínimo 8h). O corpo precisa de energia para lidar com a dor e a inflamação controlada. Faça uma refeição reforçada antes de vir.",
+    icon: <Moon size={48} strokeWidth={0.8} />
   },
   {
     id: "03",
     title: "Zero Álcool",
     shortDesc: "Evite sangramento excessivo.",
-    fullDesc: "Não consuma bebidas alcoólicas 24h antes do procedimento. O álcool afina o sangue, aumentando o sangramento durante a sessão, o que expulsa o pigmento e dificulta o trabalho do artista.",
-    icon: <Ban size={64} strokeWidth={0.8} />
+    fullDesc: "Não consuma bebidas alcoólicas 24h antes. O álcool afina o sangue, aumentando o sangramento, o que expulsa o pigmento e dificulta o trabalho do artista.",
+    icon: <Ban size={48} strokeWidth={0.8} />
   },
   {
     id: "04",
     title: "Vestimenta",
     shortDesc: "Conforto e acessibilidade.",
-    fullDesc: "Venha com roupas confortáveis, preferencialmente pretas ou escuras (tinta pode respingar). Garanta fácil acesso à área a ser tatuada sem comprimir o local, permitindo circulação sanguínea adequada.",
-    icon: <Shirt size={64} strokeWidth={0.8} />
+    fullDesc: "Venha com roupas confortáveis e escuras. Garanta fácil acesso à área a ser tatuada sem comprimir o local, permitindo circulação adequada.",
+    icon: <Shirt size={48} strokeWidth={0.8} />
   }
 ];
 
@@ -39,10 +39,10 @@ const PreCare: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
 
   return (
+    // Fundo branco limpo para contraste com as seções adjacentes rosa
     <section className="relative py-32 md:py-48 bg-white overflow-hidden" id="precare">
       <div className="container mx-auto px-6 relative z-10">
         
-        {/* Header Alignment matching Process Section Style */}
         <div className="mb-24">
              <SectionTitle 
                 subtitle="Cuidados Pré-Sessão" 
@@ -53,31 +53,24 @@ const PreCare: React.FC = () => {
 
         <div className="flex flex-col lg:flex-row gap-20 items-start">
           
-          {/* LEFT COLUMN: INTERACTIVE LIST */}
+          {/* LEFT: LIST */}
           <div className="w-full lg:w-1/2">
-             <Reveal>
-               <span className="text-xs font-bold uppercase tracking-ultra text-stone-400 mb-12 block">
-                 Guia do Cliente
-               </span>
-             </Reveal>
-
              <div className="flex flex-col">
                {careSteps.map((step, index) => (
                  <div 
                     key={index}
-                    className={`group border-b border-stone-200 py-10 cursor-pointer relative transition-all duration-500 ${activeStep === index ? 'pl-8 border-[#754548]' : 'hover:pl-4'}`}
+                    className={`group border-b border-stone-100 py-8 cursor-pointer relative transition-all duration-500 ${activeStep === index ? 'pl-8 border-[#754548]' : 'hover:pl-4'}`}
                     onMouseEnter={() => setActiveStep(index)}
                  >
-                    {/* Active Indicator Line */}
                     {activeStep === index && (
                         <motion.div 
                             layoutId="activeIndicatorCare"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-[#754548] rounded-full"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-12 bg-[#754548]"
                         />
                     )}
 
                     <div className="flex items-baseline justify-between mb-2">
-                        <h3 className={`text-3xl md:text-4xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-[#754548] italic' : 'text-stone-900'}`}>
+                        <h3 className={`text-2xl md:text-3xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-[#754548] italic' : 'text-stone-900'}`}>
                             {step.title}
                         </h3>
                         <span className={`text-xs font-bold transition-colors ${activeStep === index ? 'text-[#754548]' : 'text-stone-300'}`}>
@@ -92,38 +85,30 @@ const PreCare: React.FC = () => {
              </div>
           </div>
 
-          {/* RIGHT COLUMN: STICKY DETAILS REVEAL */}
-          <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
-            <div className="w-full lg:sticky lg:top-32 lg:pl-16 border-l border-[#754548]/10">
+          {/* RIGHT: DETAILS */}
+          <div className="w-full lg:w-1/2 relative lg:h-[400px] flex items-center justify-center bg-[#FAF7F7] rounded-sm p-12">
                <AnimatePresence mode='wait'>
                    <motion.div 
                      key={activeStep}
-                     initial={{ opacity: 0, x: 20 }}
-                     animate={{ opacity: 1, x: 0 }}
-                     exit={{ opacity: 0, x: -20 }}
-                     transition={{ duration: 0.4, ease: "easeOut" }}
-                     className="relative"
+                     initial={{ opacity: 0, scale: 0.95 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     exit={{ opacity: 0, scale: 1.05 }}
+                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                     className="relative text-center"
                    >
-                     {/* Icon Display */}
-                     <div className="mb-8 text-[#754548] opacity-80">
+                     <div className="mb-6 text-[#754548] flex justify-center">
                         {careSteps[activeStep].icon}
                      </div>
 
-                     <h4 className="font-serif text-4xl md:text-5xl text-stone-900 mb-8 leading-tight">
+                     <h4 className="font-serif text-3xl text-stone-900 mb-6 italic">
                         {careSteps[activeStep].title}
                      </h4>
                      
-                     <p className="text-lg md:text-xl font-light text-stone-600 leading-relaxed font-serif">
+                     <p className="text-base font-light text-stone-600 leading-relaxed font-sans max-w-sm mx-auto">
                        {careSteps[activeStep].fullDesc}
                      </p>
-
-                     {/* Decorative number in background */}
-                     <span className="absolute -top-20 -right-10 text-[12rem] font-serif leading-none text-stone-100 -z-10 select-none pointer-events-none">
-                        {careSteps[activeStep].id}
-                     </span>
                    </motion.div>
                </AnimatePresence>
-            </div>
           </div>
 
         </div>
