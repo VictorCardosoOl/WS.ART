@@ -3,52 +3,59 @@ import { GridGalleryItem } from '../types';
 export const PORTFOLIO_ITEMS: GridGalleryItem[] = [
   { 
     id: 1, 
-    src: "https://picsum.photos/900/1200?random=1", 
+    src: "https://picsum.photos/800/1200?random=1", 
     category: "Neotraditional", 
-    title: "Lady Face", 
-    colSpan: "md:col-span-5", 
-    height: "aspect-[3/4]",
+    title: "Lady Face & Peonies", 
+    // Coluna da esquerda ocupando 2 "linhas" visuais do grid da direita
+    colSpan: "md:col-span-6 md:row-span-2", 
+    height: "h-full min-h-[600px]",
     offsetY: "0px",
-    altText: "Tatuagem neotradicional de rosto feminino (Lady Face) com ornamentos detalhados em preto e cinza e linhas finas."
+    altText: "Tatuagem neotradicional de rosto feminino (Lady Face) com ornamentos detalhados.",
+    enableOverlay: true
   },
   { 
     id: 2, 
-    src: "https://picsum.photos/1000/800?random=2", 
-    category: "Color Study", 
-    title: "Floral Piece", 
-    colSpan: "md:col-span-7", 
-    height: "aspect-[4/3]",
-    offsetY: "md:mt-32", 
-    altText: "Tatuagem floral colorida com estudo de profundidade e contraste, cobrindo ombro e braço com peônias vibrantes."
+    src: "https://picsum.photos/600/600?random=2", 
+    category: "Detail", 
+    title: "Ornamental Arch", 
+    colSpan: "md:col-span-3", 
+    height: "aspect-square",
+    offsetY: "0px", 
+    altText: "Detalhe de arquitetura ornamental tatuada.",
+    enableOverlay: false
   },
   { 
     id: 3, 
-    src: "https://picsum.photos/700/1000?random=3", 
-    category: "Backpiece", 
-    title: "Tiger & Snake", 
-    colSpan: "md:col-span-4", 
-    height: "aspect-[3/5]",
-    offsetY: "md:-mt-24", 
-    altText: "Fechamento de costas (Backpiece) neotradicional apresentando um tigre e uma serpente em batalha, composição dinâmica."
+    src: "https://picsum.photos/600/600?random=3", 
+    category: "Color Study", 
+    title: "Koi Fish Pond", 
+    colSpan: "md:col-span-3", 
+    height: "aspect-square",
+    offsetY: "0px", 
+    altText: "Tatuagem colorida de carpas (Koi Fish) em movimento.",
+    enableOverlay: true // Texto sobre a imagem como na referência
   },
   { 
     id: 4, 
-    src: "https://picsum.photos/700/700?random=4", 
-    category: "Detail", 
-    title: "Dagger", 
-    colSpan: "md:col-span-4", 
-    height: "aspect-square",
-    offsetY: "md:mt-12",
-    altText: "Detalhe macro de tatuagem de adaga perfurando uma rosa, com sombreamento pontilhista (whipshading) e traços sólidos."
+    src: "https://picsum.photos/1200/600?random=4", 
+    category: "Composition", 
+    title: "Floral Sleeve", 
+    colSpan: "md:col-span-6", 
+    height: "aspect-[2/1]",
+    offsetY: "0px",
+    altText: "Fechamento de braço com tema floral.",
+    enableOverlay: true
   },
+  // Item extra para fechar o layout se necessário ou manter como destaque final
   { 
     id: 5, 
-    src: "https://picsum.photos/700/1000?random=5", 
+    src: "https://picsum.photos/1200/800?random=5", 
     category: "Surrealism", 
-    title: "Eye Concept", 
-    colSpan: "md:col-span-4", 
-    height: "aspect-[3/4]",
-    offsetY: "0px",
-    altText: "Conceito surrealista de olho com elementos orgânicos e lágrimas, estilo neotradicional blackwork."
+    title: "The Eye Concept", 
+    colSpan: "md:col-span-12", 
+    height: "aspect-[21/9]",
+    offsetY: "mt-6", // Pequeno espaço antes do último item wide
+    altText: "Conceito surrealista de olho.",
+    enableOverlay: true
   },
 ];

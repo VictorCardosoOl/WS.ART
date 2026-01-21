@@ -13,6 +13,7 @@ export interface GridGalleryItem extends GalleryItem {
   height: string; // Tailwind class like "h-[600px]" or aspect ratio
   offsetY?: string; // CSS translation for staggered layout
   altText: string; // Descriptive text for SEO/Accessibility
+  enableOverlay?: boolean; // Se true, o texto aparece sobre a imagem
 }
 
 export interface FormData {
