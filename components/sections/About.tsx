@@ -29,11 +29,21 @@ const About: React.FC = () => {
           </div>
 
           {/* COLUNA DIREITA: Conteúdo Editorial */}
-          <div className="md:col-span-8 md:col-start-5">
+          <div className="md:col-span-8 md:col-start-5 relative">
              
+             {/* Handwritten Margin Note */}
+             <div className="absolute -left-20 top-10 w-32 hidden lg:block pointer-events-none">
+                 <span className="font-hand text-xl text-stone-400 rotate-[-15deg] block text-center leading-tight">
+                    "não há<br/>suporte plano"
+                 </span>
+                 <svg className="w-full h-10 text-stone-500/50 mt-2" viewBox="0 0 50 20">
+                     <path d="M10,10 Q25,20 40,5" fill="none" stroke="currentColor" strokeWidth="1" />
+                 </svg>
+             </div>
+
              {/* Título Principal */}
              <Reveal delay={100}>
-                <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-light leading-[0.9] tracking-tight mb-16">
+                <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-light leading-[0.9] tracking-tight mb-16 relative">
                   A pele não é<br/>
                   apenas suporte.<br/>
                   <span className="italic text-[#754548] opacity-90">É território.</span>
@@ -41,7 +51,7 @@ const About: React.FC = () => {
              </Reveal>
 
              {/* Corpo de Texto com Drop Cap */}
-             <div className="space-y-8 text-lg md:text-xl font-serif font-light leading-relaxed text-[#FAF7F7]/80 max-w-2xl">
+             <div className="space-y-8 text-lg md:text-xl font-serif font-light leading-relaxed text-[#FAF7F7]/80 max-w-2xl relative">
                 <Reveal delay={200}>
                     <p>
                       <span className="text-[#754548] text-4xl md:text-5xl float-left mr-3 mt-[-8px] font-serif">A</span>
@@ -53,6 +63,16 @@ const About: React.FC = () => {
                       Cada linha traçada no estúdio é projetada para a curvatura específica do portador. Não existem dois corpos iguais; portanto, a repetição é a antítese da nossa arte. Unimos a solidez técnica do clássico com a liberdade poética do contemporâneo.
                     </p>
                 </Reveal>
+
+                 {/* Handwritten Correction/Note */}
+                 <div className="absolute -right-16 bottom-10 hidden lg:block">
+                     <span className="font-hand text-2xl text-[#754548] rotate-[5deg] block">
+                        ( único )
+                     </span>
+                     <svg className="w-16 h-16 absolute -top-4 -left-2 text-[#754548]/30" viewBox="0 0 100 100">
+                         <ellipse cx="50" cy="50" rx="40" ry="20" fill="none" stroke="currentColor" strokeWidth="2" transform="rotate(-10 50 50)" />
+                     </svg>
+                 </div>
              </div>
 
              {/* Lista de Credenciais / Background */}
@@ -89,6 +109,7 @@ const About: React.FC = () => {
                         alt="Atelier" 
                         className="w-full h-full object-cover"
                      />
+                     <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
                  </div>
              </Reveal>
 

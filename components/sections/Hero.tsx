@@ -1,13 +1,14 @@
 import React from 'react';
 import Reveal from '../ui/Reveal';
 import { ArrowDown } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Hero: React.FC = () => {
   return (
     <section className="relative h-[100dvh] w-full flex flex-col justify-between overflow-hidden bg-[#FAF7F7] p-4 md:p-6">
       
-      {/* FRAME BORDER - Arredondada e Z-Index ajustado */}
-      <div className="absolute inset-4 md:inset-6 border border-[#754548]/10 pointer-events-none z-0 rounded-3xl"></div>
+      {/* FRAME BORDER - Sketchbook Style */}
+      <div className="absolute inset-4 md:inset-6 border border-[#754548]/10 pointer-events-none z-0 rounded-sm"></div>
 
       {/* LAYER 1: GRAIN OVERLAY (Local, reforçando o global) */}
       <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none z-[1]"></div>
@@ -22,10 +23,21 @@ const Hero: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-end items-start w-full px-6 relative z-30">
             <div className="max-w-md text-right md:text-right mt-8 md:mt-0 pointer-events-auto flex flex-col items-end">
                 <Reveal delay={200}>
-                    <h2 className="font-serif text-3xl md:text-5xl text-[#754548] leading-[1.05] font-light tracking-tight">
-                      A arte na pele como<br/> 
-                      <span className="italic font-normal opacity-70">experiência imersiva.</span>
-                    </h2>
+                    <div className="relative">
+                        <h2 className="font-serif text-3xl md:text-5xl text-[#754548] leading-[1.05] font-light tracking-tight">
+                        A arte na pele como<br/> 
+                        <span className="italic font-normal opacity-70">experiência imersiva.</span>
+                        </h2>
+                        {/* Handwritten Note */}
+                        <motion.span 
+                            initial={{ opacity: 0, rotate: -5 }}
+                            animate={{ opacity: 1, rotate: -10 }}
+                            transition={{ delay: 1, duration: 1 }}
+                            className="absolute -top-6 -right-4 font-hand text-2xl text-stone-400 rotate-[-10deg] hidden md:block"
+                        >
+                            ( memória & corpo )
+                        </motion.span>
+                    </div>
                 </Reveal>
                 
                 <Reveal delay={400}>
@@ -58,12 +70,23 @@ const Hero: React.FC = () => {
                </Reveal>
             </div>
 
-            {/* Massive Typography - Z-Index 10 */}
+            {/* Massive Breathing Typography - Z-Index 10 */}
             <div className="w-full flex justify-center items-end leading-none z-10 mix-blend-darken pointer-events-none">
                 <Reveal delay={300} width="100%">
-                    <h1 className="font-sans font-black text-[18vw] text-black tracking-tighter text-center leading-[0.8] opacity-[1] select-none w-full transform translate-y-4 lg:translate-y-6">
+                    <motion.h1 
+                        className="font-sans font-black text-[18vw] text-black tracking-tighter text-center leading-[0.8] opacity-[1] select-none w-full transform translate-y-4 lg:translate-y-6"
+                        animate={{ 
+                            scale: [1, 1.02, 1],
+                            letterSpacing: ["-0.05em", "-0.04em", "-0.05em"]
+                        }}
+                        transition={{ 
+                            duration: 8, 
+                            repeat: Infinity, 
+                            ease: "easeInOut" 
+                        }}
+                    >
                         WILLIAM
-                    </h1>
+                    </motion.h1>
                 </Reveal>
             </div>
         </div>

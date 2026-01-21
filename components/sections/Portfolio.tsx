@@ -42,13 +42,16 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
 const BentoCard = ({ item }: { item: GridGalleryItem }) => {
   return (
     <div 
-        className={`group relative w-full h-full overflow-hidden rounded-md bg-stone-100 cursor-pointer`}
+        className={`group relative w-full h-full overflow-hidden bg-stone-100 cursor-pointer shadow-md hover:shadow-xl transition-all duration-500`}
         data-cursor="VER OBRA"
     >
+        {/* MASKING TAPE EFFECT (CSS GENERATED) */}
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-[#fdfbf7] opacity-60 z-30 transform -rotate-1 shadow-sm backdrop-blur-sm pointer-events-none mix-blend-lighten border-l border-r border-white/20"></div>
+
         <ParallaxImage src={item.src} alt={item.altText} />
         
-        {/* Gradiente Overlay no Hover */}
-        <div className="absolute inset-0 bg-[#754548]/20 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity duration-[800ms] ease-out z-10"></div>
+        {/* Gradiente Overlay no Hover - Ink Bleed feel */}
+        <div className="absolute inset-0 bg-[#754548] mix-blend-color opacity-0 group-hover:opacity-30 transition-opacity duration-[800ms] ease-out z-10"></div>
         
         {/* Texto/Info Overlay - Aparece no Hover */}
         <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
@@ -76,7 +79,13 @@ const Portfolio: React.FC = () => {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         
         {/* Header Compacto & Elegante */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-[#754548]/10 pb-6">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-[#754548]/10 pb-6 relative">
+          
+          {/* Handwritten Annotation */}
+          <span className="absolute -top-8 left-10 font-hand text-2xl text-[#754548] rotate-[-5deg] opacity-60 hidden md:block">
+              ( estudo de composição )
+          </span>
+
           <Reveal>
              <div className="flex flex-col gap-2">
                  <span className="font-sans text-[10px] font-bold tracking-[0.2em] text-stone-500 block opacity-60">
@@ -102,7 +111,7 @@ const Portfolio: React.FC = () => {
             Grid de 12 colunas para flexibilidade máxima.
             Usa classes md:col-span-X do Tailwind para assimetria.
         */}
-        <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[300px] md:auto-rows-[400px] gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[300px] md:auto-rows-[400px] gap-6 md:gap-8 px-2 md:px-0">
             {PORTFOLIO_ITEMS.map((item, index) => (
                 <div 
                     key={item.id} 
