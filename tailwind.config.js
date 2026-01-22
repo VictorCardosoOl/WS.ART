@@ -36,7 +36,7 @@ export default {
         sans: ['"Montserrat"', 'sans-serif'],
       },
       transitionTimingFunction: {
-        'out-expo': 'cubic-bezier(0.22, 1, 0.36, 1)', 
+        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)', 
       },
       letterSpacing: {
         tighter: '-0.05em',
@@ -44,8 +44,12 @@ export default {
         normal: '0em',
         wide: '0.025em',
         wider: '0.05em',
-        widest: '0.25em', // Standardized for secondary texts/captions
-        ultra: '0.35em',
+        widest: '0.25em', 
+        ultra: '0.3em', // Specific request for 0.3em
+      },
+      fontSize: {
+        'editorial-sm': ['10px', { lineHeight: '1.6', letterSpacing: '0.3em' }],
+        'fluid-h2': 'clamp(2.5rem, 5vw, 4.5rem)',
       },
       lineHeight: {
         'tight-editorial': '0.9',
