@@ -1,15 +1,14 @@
 import React from 'react';
 import Reveal from '../ui/Reveal';
-import { ArrowDown } from 'lucide-react';
 
 const About: React.FC = () => {
   return (
     <section id="about" className="relative py-32 md:py-40 bg-white overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
         
-        {/* PARTE 1: TEXTO EDITORIAL (Referência Imagem 1) */}
+        {/* PARTE 1: TEXTO EDITORIAL */}
         <div className="grid grid-cols-1 lg:grid-cols-2 mb-24 md:mb-32">
-            {/* Coluna Esquerda Vazia (Espaço Negativo) */}
+            {/* Coluna Esquerda Vazia */}
             <div className="hidden lg:block"></div>
 
             {/* Coluna Direita: Conteúdo */}
@@ -25,18 +24,14 @@ const About: React.FC = () => {
                         <p className="font-serif text-xl md:text-2xl text-stone-600 leading-relaxed max-w-md">
                             Especialista em Neotradicional. Transformo narrativas pessoais em anatomia e arte perene.
                         </p>
-                        
-                        {/* Botão Circular Seta */}
-                        <a href="#portfolio" className="group relative flex items-center justify-center w-16 h-16 rounded-full border border-stone-200 hover:border-[#754548] hover:bg-[#754548] transition-all duration-500 shrink-0">
-                            <ArrowDown className="text-stone-900 group-hover:text-white transition-colors duration-500" size={24} strokeWidth={1.5} />
-                        </a>
+                        {/* Botão removido conforme solicitado */}
                     </div>
                 </Reveal>
             </div>
         </div>
 
-        {/* PARTE 2: GRID DE 3 IMAGENS (Referência Imagem 2) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        {/* PARTE 2: GRID DE 3 IMAGENS (Niveladas) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 items-start">
             
             {/* Imagem 01 */}
             <Reveal delay={100} width="100%">
@@ -49,9 +44,9 @@ const About: React.FC = () => {
                 </div>
             </Reveal>
 
-            {/* Imagem 02 */}
+            {/* Imagem 02 - Margem removida para alinhar */}
             <Reveal delay={200} width="100%">
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100 mt-0 md:mt-12">
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
                     <img 
                         src="https://picsum.photos/800/1066?grayscale&random=102" 
                         alt="Retrato William Siqueira" 
@@ -60,9 +55,9 @@ const About: React.FC = () => {
                 </div>
             </Reveal>
 
-            {/* Imagem 03 */}
+            {/* Imagem 03 - Margem removida para alinhar */}
             <Reveal delay={300} width="100%">
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100 mt-0 md:mt-24">
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
                     <img 
                         src="https://picsum.photos/800/1066?grayscale&random=103" 
                         alt="Detalhe Estúdio" 

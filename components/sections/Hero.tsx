@@ -1,45 +1,34 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import { ArrowDown, MoveRight } from 'lucide-react';
+import { MoveRight } from 'lucide-react';
 import gsap from 'gsap';
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
-  const contentWrapperRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "out-expo" } });
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      // 0. Initial States (Anti-FOUC)
-      gsap.set(textRef.current, { y: "100%", opacity: 0 });
+      // Otimização: set initial state com autoAlpha para evitar FOUC
+      gsap.set(".hero-reveal", { y: 20, autoAlpha: 0 });
+      gsap.set(textRef.current, { y: "15%", autoAlpha: 0 });
       gsap.set(".hero-line", { scaleX: 0, transformOrigin: "right center" });
-      gsap.set(".hero-reveal", { y: 30, opacity: 0 });
-      gsap.set(".editorial-desc", { opacity: 0, x: 10 });
 
-      // 1. Kinetic Entrance Sequence
+      // Sequência mais rápida e fluida
       tl.to(textRef.current, { 
-        y: "4%", 
-        opacity: 1, 
-        duration: 2.4, 
+        y: "0%", 
+        autoAlpha: 1, 
+        duration: 1.8, 
         ease: "power4.out" 
       })
-      .to(".hero-line", { scaleX: 1, duration: 1.8, ease: "power3.inOut" }, "-=1.8")
+      .to(".hero-line", { scaleX: 1, duration: 1.2 }, "-=1.4")
       .to(".hero-reveal", { 
         y: 0, 
-        opacity: 1, 
-        duration: 1.5, 
-        stagger: 0.1,
-        ease: "power3.out"
-      }, "-=1.2")
-      .to(".editorial-desc", {
-        opacity: 1,
-        x: 0,
-        duration: 2,
-        ease: "power2.out"
+        autoAlpha: 1, 
+        duration: 1, 
+        stagger: 0.05
       }, "-=1.0");
-
-      // ScrollTrigger animations removed as requested to prevent overlap feel
 
     }, containerRef);
 
@@ -47,16 +36,17 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden bg-[#FAF7F7] z-10">
+    <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden bg-[#FAF7F7] z-10 flex flex-col justify-between">
       
-      {/* --- ATMOSPHERE (Subtle Grain & Gradient) --- */}
+      {/* --- ATMOSPHERE --- */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-          <div className="absolute inset-0 bg-noise opacity-[0.04] mix-blend-overlay"></div>
-          <div className="absolute bottom-0 left-0 w-full h-[40vh] bg-gradient-to-t from-white via-transparent to-transparent opacity-60"></div>
+          <div className="absolute inset-0 bg-noise opacity-[0.03] mix-blend-overlay"></div>
+          {/* Gradiente Radial Rosa no Centro (Solicitado) */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-rose-200/40 via-[#FAF7F7]/50 to-[#FAF7F7] opacity-60"></div>
       </div>
 
       {/* --- CONTENT LAYER --- */}
-      <div ref={contentWrapperRef} className="container mx-auto px-6 h-full relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none">
+      <div className="container mx-auto px-6 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow">
           
           <div className="flex flex-col md:flex-row justify-between items-start w-full">
               {/* Left: Minimal Meta Data */}
@@ -77,8 +67,7 @@ const Hero: React.FC = () => {
                   
                   <div className="hero-line w-32 h-[1px] bg-[#754548] my-8 opacity-60"></div>
 
-                  {/* Requested Editorial Text Style */}
-                  <p className="editorial-desc font-sans text-[10px] text-stone-500 leading-relaxed tracking-[0.3em] uppercase font-semibold text-right max-w-[280px]">
+                  <p className="hero-reveal font-sans text-[10px] text-stone-500 leading-relaxed tracking-[0.3em] uppercase font-semibold text-right max-w-[280px]">
                       Conectamos narrativa pessoal e anatomia em obras neotradicionais.
                   </p>
 
@@ -95,19 +84,11 @@ const Hero: React.FC = () => {
           </div>
       </div>
 
-      {/* --- FOOTER ANCHORS --- */}
-      <div className="absolute bottom-12 w-full flex justify-center z-20 pointer-events-none">
-           <div className="flex flex-col items-center gap-3 opacity-40 mix-blend-multiply animate-bounce duration-[3000ms]">
-               <span className="text-[9px] uppercase tracking-[0.25em] text-[#754548]">Scroll</span>
-               <ArrowDown size={14} className="text-[#754548]" />
-           </div>
-      </div>
-
       {/* --- THE ANCHOR (Massive Typography) --- */}
-      <div className="absolute bottom-0 left-0 w-full flex justify-center items-end leading-none z-0 mix-blend-darken pointer-events-none select-none h-full">
+      <div className="relative w-full flex justify-center items-end leading-none z-0 mix-blend-darken pointer-events-none select-none pb-0">
           <h1 
             ref={textRef} 
-            className="font-sans font-black text-[22vw] text-[#12100E] tracking-tighter text-center leading-[0.7] w-full pb-0 will-change-transform opacity-95"
+            className="font-sans font-black text-[22vw] text-[#12100E] tracking-tighter text-center leading-[0.75] w-full opacity-90 will-change-transform translate-y-[20%]"
           >
               WILLIAM
           </h1>

@@ -5,7 +5,6 @@ import { PORTFOLIO_ITEMS } from '../../data/portfolio';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
-// Componente de Imagem com Parallax Bidimensional (Vertical + Horizontal)
 const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -13,14 +12,8 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
     offset: ["start end", "end start"]
   });
   
-  // Parallax Vertical: Sutil (-5% a 5%)
   const y = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
-  
-  // NOVO: Parallax Horizontal Sutil (Cria uma sensação de "pan" cinematográfico ao rolar)
-  // Move a imagem levemente da esquerda para a direita (ou vice-versa) durante o scroll vertical
   const x = useTransform(scrollYProgress, [0, 1], ["-2%", "2%"]);
-  
-  // Scale Base: 1.15 para garantir que não haja bordas brancas durante o movimento X/Y
   const scaleBase = useTransform(scrollYProgress, [0, 1], [1.15, 1.15]); 
 
   return (
@@ -45,7 +38,6 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
   );
 };
 
-// Item do Card Bento (Estilo Cinematográfico)
 const BentoCard = ({ item }: { item: GridGalleryItem }) => {
   return (
     <div 
@@ -53,14 +45,9 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
         data-cursor="VER PROJETO"
     >
         <ParallaxImage src={item.src} alt={item.altText} />
-        
-        {/* Gradiente Cinematográfico (Sempre visível no fundo, intensifica no hover) */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-95 transition-opacity duration-[800ms] z-10"></div>
 
-        {/* Overlay de Texto Elegante */}
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-20 flex flex-col justify-end translate-y-2 group-hover:translate-y-0 transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
-            
-            {/* Top Line & Category */}
             <div className="flex items-center gap-3 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                 <span className="h-[1px] w-6 bg-rose-400"></span>
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-200">
@@ -68,14 +55,12 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
                 </span>
             </div>
 
-            {/* Title & Icon Row */}
             <div className="flex justify-between items-end">
                 <div className="flex flex-col gap-3 max-w-[85%]">
                     <h3 className="font-serif text-3xl md:text-4xl text-white leading-[0.95] italic font-light tracking-tight group-hover:text-rose-50 transition-colors duration-500">
                         {item.title}
                     </h3>
                     
-                    {/* NOVA DESCRIÇÃO EDITORIAL */}
                     {item.description && (
                         <p className="text-xs font-sans text-stone-300 font-light leading-relaxed tracking-wide opacity-0 group-hover:opacity-100 transition-all duration-700 delay-200 transform translate-y-4 group-hover:translate-y-0 border-l border-white/20 pl-3">
                             {item.description}
@@ -83,7 +68,6 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
                     )}
                 </div>
                 
-                {/* Arrow Icon Reveal */}
                 <div className="overflow-hidden w-8 h-8 flex items-center justify-center flex-shrink-0">
                     <ArrowUpRight 
                         className="text-white transform translate-y-full -translate-x-full group-hover:translate-y-0 group-hover:translate-x-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]" 
@@ -99,10 +83,13 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="relative pt-32 pb-40 bg-white">
+    <section id="gallery" className="relative pt-32 pb-40 bg-white overflow-hidden">
+      
+      {/* GRADIENTE RADIAL (Escuro no centro, claro nas bordas) */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#E5D0D4]/30 via-white to-white pointer-events-none z-0"></div>
+
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         
-        {/* Header Compacto & Elegante */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-stone-100 pb-6">
           <Reveal>
              <h2 className="text-6xl md:text-8xl font-serif text-stone-900 leading-[0.8] tracking-tighter">
@@ -119,11 +106,6 @@ const Portfolio: React.FC = () => {
           </Reveal>
         </div>
 
-        {/* 
-            BENTO GRID CSS LAYOUT 
-            Utiliza CSS Grid para criar o layout Bento.
-            auto-rows define a altura base, e os colSpan/rowSpan nos dados definem a geometria.
-        */}
         <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[300px] md:auto-rows-[380px] gap-4 md:gap-6">
             {PORTFOLIO_ITEMS.map((item, index) => (
                 <div 
@@ -139,7 +121,6 @@ const Portfolio: React.FC = () => {
             ))}
         </div>
         
-        {/* Footer Link */}
         <div className="mt-24 text-center" data-cursor="EXPLORAR">
            <Reveal>
              <a href="https://instagram.com" className="group inline-flex flex-col items-center gap-3">
@@ -152,6 +133,13 @@ const Portfolio: React.FC = () => {
              </a>
            </Reveal>
         </div>
+      </div>
+
+      {/* SEPARATOR: ORGANIC CURVE TO WHITE (About Section) */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[80px] md:h-[120px] fill-white">
+            <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z"></path>
+        </svg>
       </div>
     </section>
   );
