@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Instagram } from 'lucide-react';
 import { useScrollPosition } from '../hooks/useScrollPosition';
+import Magnetic from './ui/Magnetic';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -90,17 +91,19 @@ const Navbar: React.FC = () => {
                 <Instagram size={18} strokeWidth={1.5} />
               </a>
               
-              <a
-                href="#booking"
-                className={`
-                    relative px-5 py-2 overflow-hidden rounded-sm text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-500 border group
-                    ${isScrolled 
-                        ? 'border-[#754548] text-[#754548] hover:bg-[#754548] hover:text-white' 
-                        : 'border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white'}
-                `}
-              >
-                <span className="relative z-10 transition-colors">Agendar</span>
-              </a>
+              <Magnetic strength={0.3}>
+                <a
+                    href="#booking"
+                    className={`
+                        relative px-5 py-2 overflow-hidden rounded-sm text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-500 border group inline-block
+                        ${isScrolled 
+                            ? 'border-[#754548] text-[#754548] hover:bg-[#754548] hover:text-white' 
+                            : 'border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white'}
+                    `}
+                >
+                    <span className="relative z-10 transition-colors">Agendar</span>
+                </a>
+              </Magnetic>
 
               {/* Mobile Menu Trigger */}
               <button

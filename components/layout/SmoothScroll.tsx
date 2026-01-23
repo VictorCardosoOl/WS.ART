@@ -13,40 +13,44 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   const lenisRef = useRef<Lenis | null>(null);
 
   useLayoutEffect(() => {
+    // Awwwards-tier configurations
     const lenis = new Lenis({
-      duration: 1.5, // Aumentado levemente para suavidade
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.2, // The sweet spot for "weight"
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential decay for smoothness
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.8, // Reduzido para evitar scroll muito agressivo
-      touchMultiplier: 1.5,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
     });
 
     lenisRef.current = lenis;
 
-    const onScroll = (e: any) => {
-      ScrollTrigger.update();
-    };
+    // Sync Lenis scroll with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
 
-    lenis.on('scroll', onScroll);
-
+    // Integate into GSAP's Ticker for high-performance rendering (60-120fps)
     const update = (time: number) => {
       lenis.raf(time * 1000);
     };
 
     gsap.ticker.add(update);
+    
+    // Crucial: Disconnect lag smoothing to prevent GSAP from "jumping" during heavy load
     gsap.ticker.lagSmoothing(0);
 
     return () => {
       gsap.ticker.remove(update);
-      lenis.off('scroll', onScroll);
       lenis.destroy();
       lenisRef.current = null;
     };
   }, []);
 
-  return <div id="smooth-wrapper" className="w-full h-full">{children}</div>;
+  return (
+    <div id="smooth-wrapper" className="w-full min-h-screen">
+      {children}
+    </div>
+  );
 };
 
 export default SmoothScroll;
