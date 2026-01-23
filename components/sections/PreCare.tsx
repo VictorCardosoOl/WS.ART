@@ -1,6 +1,5 @@
 import React from 'react';
 import Reveal from '../ui/Reveal';
-import { ArrowUp } from 'lucide-react';
 
 const careItems = [
   {
@@ -76,15 +75,6 @@ const PreCare: React.FC = () => {
                </div>
              </Reveal>
            ))}
-        </div>
-
-        {/* Botão Flutuante (Canto Inferior Direito da Referência) */}
-        <div className="absolute bottom-12 right-6 md:right-12">
-            <Reveal delay={500}>
-                <a href="#booking" className="flex items-center justify-center w-16 h-16 bg-stone-900 rounded-full text-white hover:bg-[#754548] hover:scale-110 transition-all duration-300 shadow-xl cursor-pointer">
-                    <ArrowUp size={24} strokeWidth={1.5} />
-                </a>
-            </Reveal>
         </div>
 
       </div>
