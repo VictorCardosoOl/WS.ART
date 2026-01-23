@@ -49,14 +49,14 @@ const Hero: React.FC = () => {
       });
 
       // Massive Text moves faster (Foreground Parallax)
+      // FIX: Removido opacity: 0 para que o texto não suma, apenas suba em parallax
       gsap.to(titleRef.current, {
-        yPercent: -15, // Moves up faster
-        opacity: 0,
+        yPercent: -25, // Aumentei ligeiramente a velocidade para efeito dramático
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "bottom 40%",
+          end: "bottom top",
           scrub: true
         }
       });
