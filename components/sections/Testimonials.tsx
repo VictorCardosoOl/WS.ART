@@ -65,12 +65,23 @@ const Testimonials: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
             
             {/* COLUNA ESQUERDA: LISTA INTERATIVA */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20">
+            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20" role="list">
                 {testimonials.map((item, index) => (
                     <div 
                         key={item.id}
-                        className="group cursor-pointer"
+                        role="button"
+                        tabIndex={0}
+                        aria-pressed={activeIndex === index}
+                        aria-label={`Ver depoimento de ${item.client}`}
+                        className="group cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#754548] focus-visible:ring-offset-4 rounded-lg"
                         onMouseEnter={() => setActiveIndex(index)}
+                        onClick={() => setActiveIndex(index)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setActiveIndex(index);
+                          }
+                        }}
                     >
                         <Reveal delay={index * 100} width="100%">
                             <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
@@ -97,7 +108,7 @@ const Testimonials: React.FC = () => {
             </div>
 
             {/* COLUNA DIREITA: IMAGEM STICKY / REVEAL */}
-            <div className="hidden lg:block w-1/2 relative h-[80vh]">
+            <div className="hidden lg:block w-1/2 relative h-[80vh]" aria-hidden="true">
                 <div className="sticky top-32 w-full h-full">
                     <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl">
                         <div className="absolute inset-4 border border-white/20 z-20 pointer-events-none rounded-2xl"></div>
@@ -141,7 +152,7 @@ const Testimonials: React.FC = () => {
             </div>
 
             {/* MOBILE ONLY */}
-            <div className="block lg:hidden w-full aspect-[4/5] mt-8 relative rounded-2xl overflow-hidden">
+            <div className="block lg:hidden w-full aspect-[4/5] mt-8 relative rounded-2xl overflow-hidden" aria-hidden="true">
                  <img 
                     src={testimonials[activeIndex].image} 
                     alt="Tattoo"

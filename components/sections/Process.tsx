@@ -44,12 +44,24 @@ const Process: React.FC = () => {
                <span className="text-xs font-bold uppercase tracking-ultra text-pantone-accent mb-12 block">O Processo Criativo</span>
              </Reveal>
 
-             <div className="flex flex-col">
+             <div className="flex flex-col" role="tablist" aria-orientation="vertical">
                {steps.map((step, index) => (
                  <div 
                     key={index}
-                    className={`group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4'}`}
+                    role="tab"
+                    id={`process-tab-${index}`}
+                    aria-selected={activeStep === index}
+                    aria-controls="process-panel"
+                    tabIndex={0}
+                    className={`group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4'}`}
                     onMouseEnter={() => setActiveStep(index)}
+                    onClick={() => setActiveStep(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveStep(index);
+                      }
+                    }}
                  >
                     {/* Active Indicator Line */}
                     {activeStep === index && (
@@ -81,13 +93,16 @@ const Process: React.FC = () => {
                <AnimatePresence mode='wait'>
                    <motion.div 
                      key={activeStep}
+                     id="process-panel"
+                     role="tabpanel"
+                     aria-labelledby={`process-tab-${activeStep}`}
                      initial={{ opacity: 0, x: 20 }}
                      animate={{ opacity: 1, x: 0 }}
                      exit={{ opacity: 0, x: -20 }}
                      transition={{ duration: 0.4, ease: "easeOut" }}
                      className="relative"
                    >
-                     <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10">
+                     <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10" aria-hidden="true">
                         {steps[activeStep].id}
                      </h4>
                      <h3 className="text-2xl font-serif text-pantone-ink mb-6">

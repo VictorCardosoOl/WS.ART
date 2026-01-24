@@ -26,7 +26,10 @@ const FAQ: React.FC = () => {
                     <Reveal delay={idx * 50} width="100%">
                         <button
                             onClick={() => toggleAccordion(idx)}
-                            className="w-full py-5 md:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 text-left group outline-none"
+                            aria-expanded={isOpen}
+                            aria-controls={`faq-answer-${idx}`}
+                            id={`faq-question-${idx}`}
+                            className="w-full py-5 md:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 text-left group outline-none focus-visible:bg-stone-50 rounded-sm transition-colors"
                         >
                             {/* Coluna Esquerda: Número e Linha */}
                             <div className="flex items-center gap-6 md:w-1/4">
@@ -61,6 +64,9 @@ const FAQ: React.FC = () => {
                         <AnimatePresence>
                             {isOpen && (
                                 <motion.div
+                                    id={`faq-answer-${idx}`}
+                                    role="region"
+                                    aria-labelledby={`faq-question-${idx}`}
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: "auto", opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
