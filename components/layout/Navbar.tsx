@@ -1,162 +1,41 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, Instagram } from 'lucide-react';
-import { useScrollPosition } from '../../hooks/useScrollPosition';
+import React from 'react';
+import StaggeredMenu from '../ui/StaggeredMenu';
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const scrollY = useScrollPosition();
-  const [isVisible, setIsVisible] = useState(true);
-  const lastScrollY = useRef(0);
-
-  // Scroll Direction Logic
-  useEffect(() => {
-    if (scrollY < lastScrollY.current || scrollY < 50) {
-      setIsVisible(true);
-    } else if (scrollY > 50 && scrollY > lastScrollY.current) {
-      setIsVisible(false);
-    }
-    lastScrollY.current = scrollY;
-  }, [scrollY]);
-
-  // Body Scroll Lock Logic
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [isOpen]);
-
-  const navLinks = [
-    { name: 'Galeria', href: '#gallery' },
-    { name: 'Processo', href: '#process' },
-    { name: 'Sobre', href: '#about' },
-    { name: 'Info', href: '#faq' },
+  const menuItems = [
+    { label: 'Galeria', ariaLabel: 'Ver portfólio', link: '#gallery' },
+    { label: 'Processo', ariaLabel: 'Conheça o método', link: '#process' },
+    { label: 'O Artista', ariaLabel: 'Sobre William Siqueira', link: '#about' },
+    { label: 'Dúvidas', ariaLabel: 'Perguntas frequentes', link: '#faq' },
+    { label: 'Contato', ariaLabel: 'Agendar sessão', link: '#booking' }
   ];
 
-  const isScrolled = scrollY > 50;
+  const socialItems = [
+    { label: 'Instagram', link: 'https://instagram.com/williamsiqueira' },
+    { label: 'WhatsApp', link: 'https://wa.me/5511999999999' },
+    { label: 'Email', link: 'mailto:contato@wsart.com' }
+  ];
 
   return (
     <>
-      <nav 
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] 
-        ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-        `}
-        aria-label="Navegação Principal"
-      >
-        <div className={`
-            w-full transition-all duration-500
-            ${isScrolled 
-                ? 'bg-[#FAF7F7]/80 backdrop-blur-md border-b border-[#754548]/10 py-3 shadow-sm' 
-                : 'bg-transparent py-8'}
-        `}>
-          <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex justify-between items-center">
-            
-            {/* Brand Logo - Minimalist */}
-            <a href="#" className="group flex items-center z-50 relative" aria-label="William Siqueira - Início">
-              <span className={`font-serif text-2xl tracking-tighter transition-colors duration-500 ${isScrolled ? 'text-[#754548]' : 'text-stone-900'}`}>
-                W<span className="text-[#754548]">.</span>S
-              </span>
-            </a>
-
-            {/* Desktop Nav - Centered & Floating */}
-            <div className="hidden md:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className={`
-                    flex items-center gap-10 px-8 py-3 rounded-full transition-all duration-500
-                    ${isScrolled ? 'bg-white/0' : 'bg-white/0'}
-                `}>
-                    {navLinks.map((link) => (
-                        <a
-                        key={link.name}
-                        href={link.href}
-                        className="relative text-[11px] font-medium uppercase tracking-[0.15em] text-stone-600 hover:text-[#754548] transition-colors py-1 group focus-visible:outline-none focus-visible:text-[#754548]"
-                        >
-                        {link.name}
-                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#754548] transition-all duration-300 group-hover:w-full opacity-80"></span>
-                        </a>
-                    ))}
-                </div>
-            </div>
-
-            {/* Right Actions */}
-            <div className="flex items-center gap-6">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hidden md:block text-stone-500 hover:text-[#754548] transition-colors hover:scale-110 duration-300 focus-visible:outline-none focus-visible:text-[#754548]"
-                aria-label="Instagram"
-              >
-                <Instagram size={18} strokeWidth={1.5} />
-              </a>
-              
-              <a
-                href="#booking"
-                className={`
-                    relative px-5 py-2 overflow-hidden rounded-sm text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-500 border group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-[#754548]
-                    ${isScrolled 
-                        ? 'border-[#754548] text-[#754548] hover:bg-[#754548] hover:text-white' 
-                        : 'border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white'}
-                `}
-              >
-                <span className="relative z-10 transition-colors">Agendar</span>
-              </a>
-
-              {/* Mobile Menu Trigger */}
-              <button
-                className="md:hidden z-50 p-1 hover:text-[#754548] transition-colors text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#754548] rounded"
-                onClick={() => setIsOpen(!isOpen)}
-                aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
-                aria-expanded={isOpen}
-                aria-controls="mobile-navigation"
-              >
-                {isOpen ? <X size={24} strokeWidth={1} /> : <Menu size={24} strokeWidth={1} />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Nav Overlay */}
-      <div 
-        id="mobile-navigation"
-        role="dialog"
-        aria-modal="true"
-        aria-hidden={!isOpen}
-        className={`fixed inset-0 bg-[#FAF7F7] z-40 flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${isOpen ? 'clip-circle-full' : 'clip-circle-0 pointer-events-none'}`}
-      >
-        <style>{`.clip-circle-0 { clip-path: circle(0% at 100% 0); } .clip-circle-full { clip-path: circle(140% at 100% 0); }`}</style>
+      <StaggeredMenu
+        position="right"
+        items={menuItems}
+        socialItems={socialItems}
+        displaySocials={true}
+        displayItemNumbering={true}
         
-        {/* Background Texture for Overlay */}
-        <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none"></div>
-
-        <nav className="flex flex-col items-center space-y-10 relative z-10">
-          {navLinks.map((link, index) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className="font-serif text-5xl font-light text-stone-900 hover:text-[#754548] hover:italic transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:text-[#754548] focus-visible:italic"
-              style={{ transitionDelay: `${index * 100}ms` }}
-            >
-              {link.name}
-            </a>
-          ))}
-          
-          <div className="w-12 h-[1px] bg-[#754548]/30 my-8"></div>
-          
-          <a
-            href="https://wa.me/5511999999999"
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => setIsOpen(false)}
-            className="text-xs font-sans uppercase tracking-[0.2em] font-bold text-[#754548] border-b border-[#754548]/30 pb-1 hover:border-[#754548] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[#754548]"
-          >
-            WhatsApp
-          </a>
-        </nav>
-      </div>
+        // Colors aligned with Rose/Stone palette
+        // Pre-layers: Light Rose, Dark Rose, Off-white (Background)
+        colors={['#E5D0D4', '#D9A9B0', '#FAF7F7']}
+        
+        // Button Colors (Using white for mix-blend-mode: difference effect)
+        menuButtonColor="#ffffff" 
+        openMenuButtonColor="#754548" // Rose 800 for active state
+        
+        accentColor="#754548"
+        changeMenuColorOnOpen={true}
+      />
     </>
   );
 };

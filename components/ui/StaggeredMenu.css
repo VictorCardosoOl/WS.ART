@@ -1,0 +1,326 @@
+.staggered-menu-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0; /* Height 0 para não bloquear cliques na página, o header interno controla isso */
+  z-index: 50;
+}
+
+.staggered-menu-wrapper.fixed-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Header Container */
+.staggered-menu-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 3rem;
+  background: transparent;
+  pointer-events: none;
+  z-index: 51;
+  transition: padding 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .staggered-menu-header {
+    padding: 1.5rem;
+  }
+}
+
+.staggered-menu-header > * {
+  pointer-events: auto;
+}
+
+/* Logo Styles */
+.sm-logo {
+  display: flex;
+  align-items: center;
+  user-select: none;
+  mix-blend-mode: difference; /* Garante visibilidade sobre fundos claros/escuros */
+  z-index: 52;
+}
+
+/* Toggle Button */
+.sm-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #1c1917; /* Default Stone-900 */
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  line-height: 1;
+  overflow: visible;
+  z-index: 52;
+  mix-blend-mode: difference;
+  color: white; /* Diferença com fundo branco = preto */
+}
+
+.sm-toggle:focus-visible {
+  outline: 1px solid #754548;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.sm-toggle-textWrap {
+  position: relative;
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 40px; /* Largura fixa para evitar pulos entre MENU/CLOSE */
+  text-align: right;
+}
+
+.sm-toggle-textInner {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.sm-toggle-line {
+  display: block;
+  height: 1em;
+  line-height: 1;
+}
+
+/* Icon (Plus / X) */
+.sm-icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+
+.sm-icon-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+/* Panel Styles */
+.staggered-menu-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: clamp(300px, 45vw, 600px);
+  height: 100vh;
+  background: #FAF7F7; /* Rose-50 */
+  display: flex;
+  flex-direction: column;
+  padding: 8rem 4rem 4rem 4rem;
+  overflow-y: auto;
+  z-index: 40;
+  pointer-events: auto;
+  border-left: 1px solid rgba(117, 69, 72, 0.1); /* Borda sutil */
+}
+
+[data-position='left'] .staggered-menu-panel {
+  right: auto;
+  left: 0;
+  border-left: none;
+  border-right: 1px solid rgba(117, 69, 72, 0.1);
+}
+
+/* Pre-layers (Background animations) */
+.sm-prelayers {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: clamp(300px, 45vw, 600px);
+  pointer-events: none;
+  z-index: 35;
+  height: 100vh;
+}
+
+[data-position='left'] .sm-prelayers {
+  right: auto;
+  left: 0;
+}
+
+.sm-prelayer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  transform: translateX(0);
+}
+
+/* Content Inside Panel */
+.sm-panel-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.sm-panel-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sm-panel-itemWrap {
+  position: relative;
+  overflow: hidden;
+  line-height: 1;
+}
+
+.sm-panel-item {
+  position: relative;
+  color: #1c1917; /* Stone 900 */
+  font-family: 'Nippo', serif; /* Fonte do Projeto */
+  font-weight: 500;
+  font-size: 3rem;
+  cursor: pointer;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  display: inline-block;
+  text-decoration: none;
+  padding-right: 0;
+}
+
+@media (max-width: 768px) {
+  .sm-panel-item {
+    font-size: 2.5rem;
+  }
+  .staggered-menu-panel {
+    width: 100vw;
+    padding: 6rem 2rem 2rem 2rem;
+  }
+  .sm-prelayers {
+    width: 100vw;
+  }
+}
+
+.sm-panel-item:hover {
+  color: #754548; /* Pantone Accent */
+  font-style: italic;
+}
+
+.sm-panel-itemLabel {
+  display: inline-block;
+  will-change: transform;
+  transform-origin: 50% 100%;
+}
+
+/* Numbering */
+.sm-panel-list[data-numbering] {
+  counter-reset: smItem;
+}
+
+.sm-panel-list[data-numbering] .sm-panel-item::before {
+  counter-increment: smItem;
+  content: "0" counter(smItem);
+  position: absolute;
+  top: 50%;
+  left: -2.5rem;
+  transform: translateY(-50%);
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #754548;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+  user-select: none;
+  opacity: var(--sm-num-opacity, 0);
+  transition: opacity 0.3s;
+}
+
+/* Socials */
+.sm-socials {
+  margin-top: auto;
+  padding-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-top: 1px solid rgba(28, 25, 23, 0.1);
+}
+
+.sm-socials-title {
+  margin: 0;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #BC8F8F; /* Rose 400 */
+}
+
+.sm-socials-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.sm-socials-link {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #754548;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.sm-socials-link:hover {
+  color: #1c1917;
+}
+
+.sm-socials-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #1c1917;
+  transition: width 0.3s ease;
+}
+
+.sm-socials-link:hover::after {
+  width: 100%;
+}
