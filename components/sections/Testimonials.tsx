@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import Reveal from '../ui/Reveal';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, useLayoutEffect } from 'react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import { Quote } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const testimonials = [
   {
@@ -32,9 +34,62 @@ const testimonials = [
 
 const Testimonials: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const tagRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // Entrance Animation
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+       // Header
+       gsap.from(".testimonial-header", {
+         y: 30,
+         opacity: 0,
+         duration: 1,
+         ease: "power3.out",
+         scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 75%"
+         }
+       });
+
+       // List Items stagger
+       const items = gsap.utils.toArray(".testimonial-item");
+       gsap.from(items, {
+         x: -30,
+         opacity: 0,
+         duration: 0.8,
+         stagger: 0.1,
+         ease: "power2.out",
+         scrollTrigger: {
+            trigger: listRef.current,
+            start: "top 80%"
+         }
+       });
+       
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  // Image Transition Animation
+  useLayoutEffect(() => {
+    if (imageRef.current) {
+        gsap.fromTo(imageRef.current, 
+            { opacity: 0, scale: 1.05 },
+            { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out", overwrite: true }
+        );
+    }
+    if (tagRef.current) {
+        gsap.fromTo(tagRef.current,
+            { y: 15, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, delay: 0.1, ease: "back.out(1.7)", overwrite: true }
+        );
+    }
+  }, [activeIndex]);
 
   return (
-    <section className="relative w-full py-32 md:py-48 bg-[#FAF7F7] overflow-hidden" id="testimonials">
+    <section ref={sectionRef} className="relative w-full py-32 md:py-48 bg-[#FAF7F7] overflow-hidden" id="testimonials">
       
       {/* SEPARATOR: WAVE TOP */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
@@ -43,128 +98,98 @@ const Testimonials: React.FC = () => {
          </svg>
       </div>
 
-      {/* GRADIENTE RADIAL */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rose-200/30 via-[#FAF7F7] to-[#FAF7F7] pointer-events-none z-0"></div>
 
       <div className="container mx-auto px-6 relative z-10">
         
-        {/* Header Minimalista */}
-        <div className="mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8 mt-12">
-            <Reveal>
-                <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tight">
-                    Narrativas<span className="text-[#754548]">.</span>
-                </h2>
-            </Reveal>
-            <Reveal delay={200}>
-                <p className="text-stone-500 uppercase tracking-widest text-xs mt-4 md:mt-0 font-bold">
-                    Experiências Reais
-                </p>
-            </Reveal>
+        <div className="testimonial-header mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8 mt-12">
+            <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tight">
+                Narrativas<span className="text-[#754548]">.</span>
+            </h2>
+            <p className="text-stone-500 uppercase tracking-widest text-xs mt-4 md:mt-0 font-bold">
+                Experiências Reais
+            </p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
             
-            {/* COLUNA ESQUERDA: LISTA INTERATIVA */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20" role="list">
+            {/* LISTA INTERATIVA */}
+            <div ref={listRef} className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20" role="list">
                 {testimonials.map((item, index) => (
                     <div 
                         key={item.id}
                         role="button"
                         tabIndex={0}
                         aria-pressed={activeIndex === index}
-                        aria-label={`Ver depoimento de ${item.client}`}
-                        className="group cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#754548] focus-visible:ring-offset-4 rounded-lg"
+                        className="testimonial-item group cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#754548] focus-visible:ring-offset-4 rounded-lg"
                         onMouseEnter={() => setActiveIndex(index)}
                         onClick={() => setActiveIndex(index)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            setActiveIndex(index);
-                          }
-                        }}
                     >
-                        <Reveal delay={index * 100} width="100%">
-                            <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
-                                <div className="mb-4">
-                                    <Quote 
-                                        size={24} 
-                                        className={`mb-4 transition-colors duration-500 ${activeIndex === index ? 'text-[#754548] fill-[#754548]/10' : 'text-stone-300'}`} 
-                                    />
-                                    <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-900 italic">
-                                        "{item.text}"
-                                    </p>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <div className={`h-[1px] w-8 transition-all duration-500 ${activeIndex === index ? 'bg-[#754548] w-16' : 'bg-stone-300'}`}></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-bold uppercase tracking-widest text-stone-900">{item.client}</span>
-                                        <span className="text-[10px] uppercase tracking-wider text-stone-500">{item.role}</span>
-                                    </div>
+                        <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
+                            <div className="mb-4">
+                                <Quote 
+                                    size={24} 
+                                    className={`mb-4 transition-colors duration-500 ${activeIndex === index ? 'text-[#754548] fill-[#754548]/10' : 'text-stone-300'}`} 
+                                />
+                                <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-900 italic">
+                                    "{item.text}"
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className={`h-[1px] w-8 transition-all duration-500 ${activeIndex === index ? 'bg-[#754548] w-16' : 'bg-stone-300'}`}></div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-bold uppercase tracking-widest text-stone-900">{item.client}</span>
+                                    <span className="text-[10px] uppercase tracking-wider text-stone-500">{item.role}</span>
                                 </div>
                             </div>
-                        </Reveal>
+                        </div>
                     </div>
                 ))}
             </div>
 
-            {/* COLUNA DIREITA: IMAGEM STICKY / REVEAL */}
+            {/* IMAGEM STICKY */}
             <div className="hidden lg:block w-1/2 relative h-[80vh]" aria-hidden="true">
                 <div className="sticky top-32 w-full h-full">
-                    <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl">
+                    <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl bg-stone-200">
                         <div className="absolute inset-4 border border-white/20 z-20 pointer-events-none rounded-2xl"></div>
                         
-                        <AnimatePresence mode='wait'>
-                            <motion.div
-                                key={activeIndex}
-                                initial={{ opacity: 0, scale: 1.1 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                                className="absolute inset-0 w-full h-full"
-                            >
-                                <img 
-                                    src={testimonials[activeIndex].image} 
-                                    alt={testimonials[activeIndex].client}
-                                    className="w-full h-full object-cover grayscale contrast-[1.1]"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#754548]/40 to-transparent mix-blend-multiply opacity-60"></div>
-                            </motion.div>
-                        </AnimatePresence>
+                        <div className="absolute inset-0 w-full h-full">
+                            <img 
+                                ref={imageRef}
+                                src={testimonials[activeIndex].image} 
+                                alt={testimonials[activeIndex].client}
+                                className="w-full h-full object-cover grayscale contrast-[1.1] will-change-transform"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#754548]/40 to-transparent mix-blend-multiply opacity-60"></div>
+                        </div>
 
                         <div className="absolute bottom-8 left-8 z-30">
-                            <AnimatePresence mode='wait'>
-                                <motion.div
-                                    key={activeIndex}
-                                    initial={{ y: 20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: -20, opacity: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="bg-white/90 backdrop-blur px-4 py-2 rounded-full"
-                                >
-                                    <span className="text-xs font-bold uppercase tracking-widest text-[#754548]">
-                                        {testimonials[activeIndex].tag}
-                                    </span>
-                                </motion.div>
-                            </AnimatePresence>
+                             <div 
+                                ref={tagRef}
+                                className="bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-lg"
+                             >
+                                <span className="text-xs font-bold uppercase tracking-widest text-[#754548]">
+                                    {testimonials[activeIndex].tag}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+            
             {/* MOBILE ONLY */}
-            <div className="block lg:hidden w-full aspect-[4/5] mt-8 relative rounded-2xl overflow-hidden" aria-hidden="true">
+            <div className="block lg:hidden w-full aspect-[4/5] mt-8 relative rounded-2xl overflow-hidden shadow-lg" aria-hidden="true">
                  <img 
                     src={testimonials[activeIndex].image} 
                     alt="Tattoo"
                     className="w-full h-full object-cover grayscale"
                  />
-                 <div className="absolute bottom-4 left-4 bg-white px-3 py-1 rounded-full">
+                 <div className="absolute bottom-4 left-4 bg-white px-3 py-1 rounded-full shadow-md">
                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">
                         {testimonials[activeIndex].tag}
                     </span>
                  </div>
             </div>
-
         </div>
       </div>
     </section>
