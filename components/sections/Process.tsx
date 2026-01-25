@@ -1,8 +1,6 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import React, { useState } from 'react';
+import Reveal from '../ui/Reveal';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const steps = [
   {
@@ -33,63 +31,18 @@ const steps = [
 
 const Process: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
-  const containerRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-
-  // Entrance Animation
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animate Section Title
-      gsap.from(".process-title", {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 75%",
-        }
-      });
-
-      // Stagger List Items
-      const items = gsap.utils.toArray(".process-item");
-      gsap.from(items, {
-        x: -30,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: listRef.current,
-          start: "top 80%",
-        }
-      });
-      
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
-
-  // Content Transition Animation
-  useLayoutEffect(() => {
-    if (contentRef.current) {
-      // Simple fade out/in for content refresh
-      gsap.fromTo(contentRef.current,
-        { opacity: 0, x: 20 },
-        { opacity: 1, x: 0, duration: 0.5, ease: "power2.out", overwrite: true }
-      );
-    }
-  }, [activeStep]);
 
   return (
-    <section ref={containerRef} className="relative py-32 md:py-48 bg-pantone-skin overflow-hidden" id="process">
+    <section className="relative py-32 md:py-48 bg-pantone-skin overflow-hidden" id="process">
       <div className="container mx-auto px-6 relative z-10 pb-24">
         
         <div className="flex flex-col lg:flex-row gap-20 items-start">
           
           {/* List Content */}
-          <div ref={listRef} className="w-full lg:w-1/2">
-             <span className="process-title text-xs font-bold uppercase tracking-ultra text-pantone-accent mb-12 block">O Processo Criativo</span>
+          <div className="w-full lg:w-1/2">
+             <Reveal>
+               <span className="text-xs font-bold uppercase tracking-ultra text-pantone-accent mb-12 block">O Processo Criativo</span>
+             </Reveal>
 
              <div className="flex flex-col" role="tablist" aria-orientation="vertical">
                {steps.map((step, index) => (
@@ -100,7 +53,7 @@ const Process: React.FC = () => {
                     aria-selected={activeStep === index}
                     aria-controls="process-panel"
                     tabIndex={0}
-                    className={`process-item group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4'}`}
+                    className={`group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4'}`}
                     onMouseEnter={() => setActiveStep(index)}
                     onClick={() => setActiveStep(index)}
                     onKeyDown={(e) => {
@@ -111,9 +64,12 @@ const Process: React.FC = () => {
                     }}
                  >
                     {/* Active Indicator Line */}
-                    <div 
-                        className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-pantone-accent rounded-full transition-all duration-300 ease-out-expo ${activeStep === index ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}
-                    />
+                    {activeStep === index && (
+                        <motion.div 
+                            layoutId="activeIndicator"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-pantone-accent rounded-full"
+                        />
+                    )}
 
                     <div className="flex items-baseline justify-between mb-2">
                         <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-pantone-accent italic' : 'text-pantone-ink'}`}>
@@ -134,23 +90,29 @@ const Process: React.FC = () => {
           {/* Text Description Reveal (Desktop & Mobile) */}
           <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
             <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-pantone-accent/20">
-               <div 
-                 ref={contentRef}
-                 id="process-panel"
-                 role="tabpanel"
-                 aria-labelledby={`process-tab-${activeStep}`}
-                 className="relative"
-               >
-                 <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10 select-none" aria-hidden="true">
-                    {steps[activeStep].id}
-                 </h4>
-                 <h3 className="text-2xl font-serif text-pantone-ink mb-6">
-                    Detalhes da Etapa
-                 </h3>
-                 <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif">
-                   {steps[activeStep].fullDesc}
-                 </p>
-               </div>
+               <AnimatePresence mode='wait'>
+                   <motion.div 
+                     key={activeStep}
+                     id="process-panel"
+                     role="tabpanel"
+                     aria-labelledby={`process-tab-${activeStep}`}
+                     initial={{ opacity: 0, x: 20 }}
+                     animate={{ opacity: 1, x: 0 }}
+                     exit={{ opacity: 0, x: -20 }}
+                     transition={{ duration: 0.4, ease: "easeOut" }}
+                     className="relative"
+                   >
+                     <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10" aria-hidden="true">
+                        {steps[activeStep].id}
+                     </h4>
+                     <h3 className="text-2xl font-serif text-pantone-ink mb-6">
+                        Detalhes da Etapa
+                     </h3>
+                     <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif">
+                       {steps[activeStep].fullDesc}
+                     </p>
+                   </motion.div>
+               </AnimatePresence>
             </div>
           </div>
 
