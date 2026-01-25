@@ -3,22 +3,26 @@ import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 const About: React.FC = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
+  const imagesRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      
-      // 1. Text Animation (Reveal lines)
-      gsap.fromTo(".about-line",
-        { y: 80, opacity: 0 },
+      // Configuração de animação
+      const revealEase = "power3.out";
+      const revealDuration = 1.2;
+
+      // 1. Text Reveal (Máscara deslizante)
+      // Seleciona linhas de texto dentro de containers overflow-hidden
+      const lines = gsap.utils.toArray('.about-reveal-line');
+      gsap.fromTo(lines, 
+        { y: "105%" },
         {
-          y: 0,
-          opacity: 1,
-          duration: 1.2,
+          y: "0%",
+          duration: revealDuration,
           stagger: 0.1,
-          ease: "power3.out",
+          ease: revealEase,
           scrollTrigger: {
             trigger: textRef.current,
             start: "top 75%",
@@ -26,100 +30,103 @@ const About: React.FC = () => {
         }
       );
 
-      // 2. Image Grid Animation (Stagger Up)
-      gsap.fromTo(".about-image",
-        { y: 100, opacity: 0 },
+      // 2. Grid de Imagens (Entrada escalonada)
+      const imgs = gsap.utils.toArray('.about-image-wrapper');
+      gsap.fromTo(imgs,
+        { y: 60, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 1.4,
+          duration: 1.5,
           stagger: 0.2,
-          ease: "power3.out",
+          ease: "power2.out",
           scrollTrigger: {
-            trigger: gridRef.current,
-            start: "top 75%",
+            trigger: imagesRef.current,
+            start: "top 80%",
           }
         }
       );
 
-      // 3. Parallax Effect on Images (Inner scaling)
-      gsap.utils.toArray<HTMLElement>(".about-parallax-img").forEach((img) => {
+      // 3. Micro-Parallax interno nas imagens
+      gsap.utils.toArray('.about-inner-img').forEach((img: any) => {
         gsap.to(img, {
-            scale: 1.15,
-            ease: "none",
-            scrollTrigger: {
-                trigger: img.parentElement,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            }
+          scale: 1.15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: img.parentElement,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true
+          }
         });
       });
 
-    }, sectionRef);
+    }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} id="about" className="relative py-32 md:py-48 bg-white overflow-hidden">
+    <section ref={containerRef} id="about" className="relative py-32 md:py-48 bg-white overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         
-        {/* Header Content - Aligned Right based on reference */}
-        <div ref={textRef} className="flex justify-end mb-32">
-            <div className="max-w-2xl w-full text-left">
-                {/* Headline */}
-                <h2 className="font-sans font-bold text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] tracking-tighter text-stone-900 mb-8 uppercase">
-                    <div className="overflow-hidden"><span className="about-line block">Eu sou William</span></div>
-                    <div className="overflow-hidden"><span className="about-line block">Siqueira, e eu</span></div>
-                    <div className="overflow-hidden"><span className="about-line block text-stone-300">Materializo</span></div>
-                    <div className="overflow-hidden"><span className="about-line block">Histórias.</span></div>
-                </h2>
-                
-                {/* Subtitle / Paragraph */}
-                <div className="overflow-hidden pl-1 mt-6">
-                    <div className="about-line">
-                        <p className="font-serif text-lg md:text-xl text-stone-500 max-w-md leading-relaxed">
-                            Especialista em Neotradicional. Transformo narrativas pessoais em anatomia e arte perene.
-                        </p>
-                    </div>
-                </div>
+        {/* ROW 1: Typography Block (Aligned Right structure, Left aligned text) */}
+        <div ref={textRef} className="flex flex-col lg:flex-row justify-end mb-24 md:mb-32">
+          <div className="lg:w-1/2 flex flex-col items-start text-left">
+            
+            {/* Headline com hierarquia visual forte */}
+            <h2 className="font-sans font-bold text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] tracking-tighter text-stone-900 mb-8 uppercase">
+              <div className="overflow-hidden"><span className="about-reveal-line block">Eu sou William</span></div>
+              <div className="overflow-hidden"><span className="about-reveal-line block">Siqueira, e eu</span></div>
+              <div className="overflow-hidden"><span className="about-reveal-line block text-stone-300">Materializo</span></div>
+              <div className="overflow-hidden"><span className="about-reveal-line block">Histórias.</span></div>
+            </h2>
+
+            {/* Subtexto Descritivo */}
+            <div className="overflow-hidden mt-2">
+               <div className="about-reveal-line">
+                  <p className="font-serif text-lg md:text-xl text-stone-500 max-w-sm leading-relaxed">
+                    Especialista em Neotradicional. Transformo narrativas pessoais em anatomia e arte perene.
+                  </p>
+               </div>
             </div>
+
+          </div>
         </div>
 
-        {/* Images Grid - 3 Columns */}
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-            
-            {/* Decorative Dot from print */}
-            <div className="hidden md:block absolute -left-8 top-0 text-black text-4xl leading-none">•</div>
+        {/* ROW 2: Image Grid (3 Columns) */}
+        <div ref={imagesRef} className="relative">
+           {/* Decorative Element (Dot) from reference */}
+           <div className="hidden lg:block absolute -left-8 top-0 text-4xl leading-none text-stone-900">•</div>
 
-            {/* Image 1 */}
-            <div className="about-image relative aspect-[3/4] overflow-hidden bg-stone-100">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              {/* Image 1 */}
+              <div className="about-image-wrapper relative aspect-[3/4] overflow-hidden bg-stone-100">
                 <img 
-                    src="https://picsum.photos/800/1000?grayscale&random=201" 
-                    alt="Industrial Texture" 
-                    className="about-parallax-img w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-110"
+                  src="https://picsum.photos/800/1066?grayscale&random=201" 
+                  alt="Studio Atmosphere" 
+                  className="about-inner-img w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                 />
-            </div>
-            
-            {/* Image 2 */}
-            <div className="about-image relative aspect-[3/4] overflow-hidden bg-stone-100">
+              </div>
+              
+              {/* Image 2 */}
+              <div className="about-image-wrapper relative aspect-[3/4] overflow-hidden bg-stone-100">
                 <img 
-                    src="https://picsum.photos/800/1000?grayscale&random=202" 
-                    alt="Urban Architecture" 
-                    className="about-parallax-img w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-110"
+                  src="https://picsum.photos/800/1066?grayscale&random=202" 
+                  alt="Urban Context" 
+                  className="about-inner-img w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                 />
-            </div>
+              </div>
 
-            {/* Image 3 */}
-            <div className="about-image relative aspect-[3/4] overflow-hidden bg-stone-100">
+              {/* Image 3 */}
+              <div className="about-image-wrapper relative aspect-[3/4] overflow-hidden bg-stone-100">
                 <img 
-                    src="https://picsum.photos/800/1000?grayscale&random=203" 
-                    alt="Organic Nature" 
-                    className="about-parallax-img w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-110"
+                  src="https://picsum.photos/800/1066?grayscale&random=203" 
+                  alt="Nature Reference" 
+                  className="about-inner-img w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                 />
-            </div>
-
+              </div>
+           </div>
         </div>
 
       </div>
