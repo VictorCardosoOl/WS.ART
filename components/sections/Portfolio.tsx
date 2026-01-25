@@ -108,9 +108,9 @@ const Portfolio: React.FC = () => {
         </div>
 
         {/* 
-            GRID LAYOUT:
-            - auto-rows-auto para mobile
-            - auto-rows-[380px] para desktop para garantir altura consistente nas células Bento
+            GRID LAYOUT FIXES:
+            - Adicionado h-full no Reveal para garantir que o componente ocupe toda a célula do grid
+            - Estrutura Bento Grid mantida
         */}
         <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-auto md:auto-rows-[380px] gap-4 md:gap-6">
             {PORTFOLIO_ITEMS.map((item, index) => (
@@ -118,7 +118,7 @@ const Portfolio: React.FC = () => {
                     key={item.id} 
                     className={`${item.colSpan} relative w-full h-[350px] md:h-full`}
                 >
-                    <Reveal delay={index * 50} width="100%">
+                    <Reveal delay={index * 50} width="100%" className="h-full">
                         <div className={`w-full h-full absolute inset-0 md:relative`}>
                              <BentoCard item={item} />
                         </div>
