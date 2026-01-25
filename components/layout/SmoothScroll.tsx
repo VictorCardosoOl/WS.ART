@@ -14,12 +14,12 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
 
   useLayoutEffect(() => {
     const lenis = new Lenis({
-      duration: 1.8, // Aumentado de 1.2 para 1.8 para mais suavidade
+      duration: 1.8, // Aumentado para sensação de peso/luxo
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva exponencial suave
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.8, // Reduzido levemente para dar sensação de peso
+      wheelMultiplier: 0.8, // Reduzido levemente para controle preciso
       touchMultiplier: 2,
     });
 

@@ -17,7 +17,7 @@ const Reveal: React.FC<RevealProps> = ({
   width = 'fit-content', 
   delay = 0,
   duration = 1.4,
-  yOffset = 60
+  yOffset = 50
 }) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
@@ -29,9 +29,9 @@ const Reveal: React.FC<RevealProps> = ({
         {
           y: yOffset,
           opacity: 0,
-          scale: 0.98,
-          filter: "blur(8px)",
-          rotationX: 5, // Leve rotação 3D para dar profundidade na entrada
+          scale: 0.96,
+          filter: "blur(6px)",
+          rotationX: 3, // Leve inclinação 3D
           transformOrigin: "center top"
         },
         {
@@ -41,12 +41,12 @@ const Reveal: React.FC<RevealProps> = ({
           filter: "blur(0px)",
           rotationX: 0,
           duration: duration,
-          ease: "power3.out", // Easing fluido clássico
+          ease: "power3.out",
           delay: delay / 1000,
           scrollTrigger: {
             trigger: elementRef.current,
-            start: "top 95%", // Inicia um pouco antes
-            toggleActions: "play none none reverse" // Permite reverter suavemente se o usuário subir rápido
+            start: "top 92%", // Aciona um pouco antes de entrar totalmente
+            toggleActions: "play none none reverse"
           }
         }
       );
@@ -56,7 +56,7 @@ const Reveal: React.FC<RevealProps> = ({
   }, [delay, duration, yOffset]);
 
   return (
-    <div style={{ width, overflow: 'visible' }}>
+    <div style={{ width, overflow: 'visible', perspective: '1000px' }}>
       <div ref={elementRef} className="will-change-transform opacity-0">
         {children}
       </div>
