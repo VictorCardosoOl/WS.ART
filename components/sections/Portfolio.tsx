@@ -8,68 +8,56 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
+// Parallax Image usando apenas GSAP
+const ParallaxImage = ({ src, alt }: { src: string, alt: string }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-        // Clip Path Reveal Animation on Scroll
-        gsap.fromTo(containerRef.current, 
-            { clipPath: 'inset(15% 15% 15% 15%)' },
+        // Efeito Parallax Suave
+        gsap.fromTo(imgRef.current, 
+            { yPercent: -10, scale: 1.1 },
             { 
-                clipPath: 'inset(0% 0% 0% 0%)', 
-                duration: 1.4, 
-                ease: "power4.out",
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: "top 85%",
-                    toggleActions: "play none none reverse"
-                }
-            }
-        );
-
-        // Scale Image Animation
-        gsap.fromTo(imgRef.current,
-            { scale: 1.3 },
-            {
+                yPercent: 10,
                 scale: 1,
-                duration: 1.4,
-                ease: "power4.out",
+                ease: "none",
                 scrollTrigger: {
                     trigger: containerRef.current,
-                    start: "top 85%",
-                    toggleActions: "play none none reverse"
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
                 }
             }
         );
     }, containerRef);
-
     return () => ctx.revert();
   }, []);
 
   return (
+    <div ref={containerRef} className="relative w-full h-full overflow-hidden">
+        <img 
+            ref={imgRef}
+            src={src} 
+            alt={alt} 
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-out will-change-transform"
+        />
+    </div>
+  );
+};
+
+const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
+  return (
     <div className={`group flex flex-col gap-6 ${item.offsetY}`}>
-      {/* Container da Imagem com Efeito Clip + Zoom */}
-      <div 
-        ref={containerRef}
-        className={`relative w-full ${item.height} overflow-hidden bg-[#E5D0D4]/20`}
-        style={{ clipPath: 'inset(15% 15% 15% 15%)' }} // Initial state for CSS fallback
-      >
-        <div className="w-full h-full relative overflow-hidden">
-            <img 
-                ref={imgRef}
-                src={item.src} 
-                alt={item.altText} 
-                className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0"
-                loading="lazy"
-            />
-            
-            <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none mix-blend-overlay"></div>
-        </div>
+      {/* Container da Imagem */}
+      <div className={`relative w-full ${item.height} overflow-hidden bg-[#E5D0D4]/20 rounded-lg`}>
+        <ParallaxImage src={item.src} alt={item.altText} />
+        <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none mix-blend-overlay"></div>
       </div>
 
-      {/* Legenda Estilo Editorial */}
+      {/* Legenda */}
       <div className="flex flex-col border-t border-stone-200 pt-4 group-hover:border-[#754548] transition-colors duration-700">
          <div className="flex justify-between items-baseline">
              <h3 className="font-serif text-3xl md:text-4xl text-stone-900 leading-none tracking-tight group-hover:italic transition-all duration-500">
@@ -108,7 +96,7 @@ const StudioScroller = () => {
                         trigger: sectionRef.current,
                         start: "top bottom",
                         end: "bottom top",
-                        scrub: true
+                        scrub: 0.5 // Scrub mais suave
                     }
                 });
             }
@@ -129,10 +117,10 @@ const StudioScroller = () => {
             <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 mb-12">
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548]">Bastidores & Atmosfera</span>
             </div>
-            <div ref={sliderRef} className="flex gap-8 px-6 w-max">
+            <div ref={sliderRef} className="flex gap-8 px-6 w-max will-change-transform">
                 {studioImages.map((src, i) => (
                     <div key={i} className="w-[300px] md:w-[500px] aspect-[4/3] relative overflow-hidden bg-stone-200">
-                        <img src={src} alt="Studio Atmosphere" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                        <img src={src} alt="Studio Atmosphere" loading="lazy" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                     </div>
                 ))}
             </div>
@@ -174,8 +162,7 @@ const Portfolio: React.FC = () => {
                     key={item.id} 
                     className={`${item.colSpan}`}
                 >
-                    {/* Delay staggered para entrada suave */}
-                    <Reveal delay={index % 2 * 150} width="100%">
+                    <Reveal delay={index % 2 * 100} width="100%">
                          <PortfolioItem item={item} />
                     </Reveal>
                 </div>

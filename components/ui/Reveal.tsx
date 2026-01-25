@@ -1,4 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface RevealProps {
   children: React.ReactNode;
@@ -8,39 +12,42 @@ interface RevealProps {
 
 const Reveal: React.FC<RevealProps> = ({ children, width = 'fit-content', delay = 0 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      if (!contentRef.current) return;
+
+      gsap.fromTo(contentRef.current, 
+        { 
+          y: 40, 
+          opacity: 0, 
+          filter: "blur(10px)",
+          scale: 0.98
+        },
+        {
+          y: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          scale: 1,
+          duration: 1.2,
+          ease: "power3.out",
+          delay: delay / 1000,
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top 90%", // Inicia quando o topo do elemento atinge 90% da viewport
+            toggleActions: "play none none reverse"
+          }
         }
-      },
-      { 
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px" // Slightly offset trigger for better timing
-      } 
-    );
+      );
+    }, ref);
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+    return () => ctx.revert();
+  }, [delay]);
 
   return (
     <div ref={ref} style={{ width, position: 'relative', overflow: 'visible' }}>
-      <div
-        className={`transform transition-all duration-[1200ms] ease-out-expo ${
-          isVisible 
-            ? 'opacity-100 translate-y-0 blur-0 scale-100' 
-            : 'opacity-0 translate-y-12 blur-[10px] scale-[0.98]'
-        }`}
-        style={{ transitionDelay: `${delay}ms` }}
-      >
+      <div ref={contentRef} className="will-change-transform opacity-0">
         {children}
       </div>
     </div>

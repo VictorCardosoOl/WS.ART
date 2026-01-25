@@ -35,19 +35,23 @@ const Testimonials: React.FC = () => {
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const tagRef = useRef<HTMLDivElement>(null);
 
+  // Animação de troca de slide com GSAP (muito mais leve que AnimatePresence)
   useEffect(() => {
-    if (imageContainerRef.current) {
-        gsap.fromTo(imageContainerRef.current,
-            { opacity: 0, scale: 1.1 },
-            { opacity: 1, scale: 1, duration: 0.7, ease: "power4.out" }
-        );
-    }
-    if (tagRef.current) {
-        gsap.fromTo(tagRef.current,
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5, delay: 0.2, ease: "power2.out" }
-        );
-    }
+    const ctx = gsap.context(() => {
+        if (imageContainerRef.current) {
+            gsap.fromTo(imageContainerRef.current,
+                { opacity: 0.5, scale: 1.05 },
+                { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
+            );
+        }
+        if (tagRef.current) {
+            gsap.fromTo(tagRef.current,
+                { y: 10, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.4, delay: 0.1, ease: "power2.out" }
+            );
+        }
+    });
+    return () => ctx.revert();
   }, [activeIndex]);
 
   return (
@@ -129,14 +133,14 @@ const Testimonials: React.FC = () => {
             <div className="hidden lg:block w-1/2 relative h-[80vh]" aria-hidden="true">
                 <div className="sticky top-32 w-full h-full">
                     <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl bg-white">
-                        {/* Frame Border Decorativo com cantos "imperfeitos" visualmente */}
+                        {/* Frame Border Decorativo */}
                         <div className="absolute inset-2 border border-stone-200 z-20 pointer-events-none rounded-2xl opacity-50"></div>
                         
-                        <div ref={imageContainerRef} className="absolute inset-0 w-full h-full">
+                        <div ref={imageContainerRef} className="absolute inset-0 w-full h-full will-change-transform">
                             <img 
                                 src={testimonials[activeIndex].image} 
                                 alt={testimonials[activeIndex].client}
-                                className="w-full h-full object-cover grayscale contrast-[1.1] hover:grayscale-0 transition-all duration-1000"
+                                className="w-full h-full object-cover grayscale contrast-[1.1]"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#754548]/40 to-transparent mix-blend-multiply opacity-60"></div>
                         </div>

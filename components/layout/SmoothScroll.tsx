@@ -13,10 +13,9 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   const lenisRef = useRef<Lenis | null>(null);
 
   useLayoutEffect(() => {
-    // Awwwards-tier configurations
     const lenis = new Lenis({
-      duration: 1.2, // The sweet spot for "weight"
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential decay for smoothness
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
@@ -26,21 +25,20 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
 
     lenisRef.current = lenis;
 
-    // Sync Lenis scroll with GSAP ScrollTrigger
+    // Sincroniza Lenis com ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Integate into GSAP's Ticker for high-performance rendering (60-120fps)
-    const update = (time: number) => {
+    // Adiciona ao ticker do GSAP para garantir que rodem no mesmo frame
+    // Isso evita o "jitter" (tremor) quando se usa parallax
+    gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(update);
+    });
     
-    // Crucial: Disconnect lag smoothing to prevent GSAP from "jumping" during heavy load
+    // Desativa o lag smoothing do GSAP para evitar saltos durante carregamento pesado
     gsap.ticker.lagSmoothing(0);
 
     return () => {
-      gsap.ticker.remove(update);
+      gsap.ticker.remove((time) => lenis.raf(time * 1000)); // Limpeza correta
       lenis.destroy();
       lenisRef.current = null;
     };

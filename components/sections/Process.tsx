@@ -33,12 +33,12 @@ const Process: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Animação de troca de conteúdo com GSAP
   useEffect(() => {
     if (contentRef.current) {
+        // Animação leve de fade e slide
         gsap.fromTo(contentRef.current, 
             { opacity: 0, x: 20 }, 
-            { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }
+            { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }
         );
     }
   }, [activeStep]);
@@ -109,7 +109,7 @@ const Process: React.FC = () => {
           {/* Text Description Reveal */}
           <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
             <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-pantone-accent/20">
-               <div ref={contentRef} className="relative">
+               <div ref={contentRef} className="relative will-change-transform">
                      {/* Background Number Watermark */}
                      <span className="absolute -top-20 -left-10 text-[12rem] font-serif text-[#754548] opacity-[0.03] select-none pointer-events-none font-italic leading-none">
                         {steps[activeStep].id}

@@ -33,19 +33,8 @@ const Hero: React.FC = () => {
         autoAlpha: 1,
         duration: 1.2,
         stagger: 0.1
-      }, "-=1.0")
-      // Adicionando Flutuação Orgânica Contínua
-      .to(".char-reveal", {
-        yPercent: -10, // Flutua levemente para cima (negativo para não cortar no overflow inferior)
-        duration: 3,   // Ciclo lento para ser elegante
-        ease: "sine.inOut", // Movimento de onda suave
-        yoyo: true,    // Vai e volta
-        repeat: -1,    // Infinito
-        stagger: {
-          each: 0.15,  // Tempo entre cada letra
-          from: "random" // Início aleatório para parecer orgânico/independente
-        }
-      }, "-=0.5");
+      }, "-=1.0");
+      // REMOVIDO: Animação yoyo/repeat de flutuação
 
       // 2. SCROLL PARALLAX ANIMATION
       gsap.to(bgRef.current, {
