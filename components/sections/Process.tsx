@@ -119,10 +119,10 @@ const Process: React.FC = () => {
         </div>
       </div>
 
-      {/* SEPARATOR: REVERSE CURVE TO WHITE (FLASH DAY) */}
+      {/* SEPARATOR: JAGGED EDGE TO WHITE */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
-         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-white">
-            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
+         <svg viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-[30px] md:h-[40px] fill-white">
+            <path d="M0,40 L0,0 L20,8 L40,0 L60,6 L80,0 L100,5 L120,0 L140,8 L160,0 L180,6 L200,0 L220,5 L240,0 L260,8 L280,0 L300,6 L320,0 L340,5 L360,0 L380,8 L400,0 L420,6 L440,0 L460,5 L480,0 L500,8 L520,0 L540,6 L560,0 L580,5 L600,0 L620,8 L640,0 L660,6 L680,0 L700,5 L720,0 L740,8 L760,0 L780,6 L800,0 L820,5 L840,0 L860,8 L880,0 L900,6 L920,0 L940,5 L960,0 L980,8 L1000,0 L1020,6 L1040,0 L1060,5 L1080,0 L1100,8 L1120,0 L1140,6 L1160,0 L1180,5 L1200,0 L1200,40 Z"></path>
          </svg>
       </div>
     </section>

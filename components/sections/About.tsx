@@ -130,6 +130,13 @@ const About: React.FC = () => {
         </div>
 
       </div>
+
+      {/* SEPARATOR: TORN PAPER EDGE (Transition to Pantone Skin) */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10 rotate-180">
+        <svg viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-[30px] md:h-[40px] fill-pantone-skin">
+             <path d="M0,0 L1200,0 L1200,40 L1180,35 L1160,38 L1140,32 L1120,36 L1100,30 L1080,35 L1060,31 L1040,36 L1020,32 L1000,38 L980,30 L960,35 L940,31 L920,36 L900,32 L880,38 L860,30 L840,35 L820,31 L800,36 L780,32 L760,38 L740,30 L720,35 L700,31 L680,36 L660,32 L640,38 L620,30 L600,35 L580,31 L560,36 L540,32 L520,38 L500,30 L480,35 L460,31 L440,36 L420,32 L400,38 L380,30 L360,35 L340,31 L320,36 L300,32 L280,38 L260,30 L240,35 L220,31 L200,36 L180,32 L160,38 L140,30 L120,35 L100,31 L80,36 L60,32 L40,38 L20,30 L0,40 Z"></path>
+        </svg>
+      </div>
     </section>
   );
 };

@@ -36,13 +36,6 @@ const Testimonials: React.FC = () => {
   return (
     <section className="relative w-full py-32 md:py-48 bg-[#FAF7F7] overflow-hidden" id="testimonials">
       
-      {/* SEPARATOR: WAVE TOP */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
-         <svg viewBox="0 0 1440 320" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-[#F5F5F5]">
-             <path fillOpacity="1" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,208C1248,192,1344,192,1392,192L1440,192V0H1392C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0H0Z"></path>
-         </svg>
-      </div>
-
       {/* GRADIENTE RADIAL */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rose-200/30 via-[#FAF7F7] to-[#FAF7F7] pointer-events-none z-0"></div>
 
@@ -167,6 +160,9 @@ const Testimonials: React.FC = () => {
 
         </div>
       </div>
+
+      {/* SEPARATOR: SOFT FADE TO WHITE */}
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-white pointer-events-none z-10"></div>
     </section>
   );
 };

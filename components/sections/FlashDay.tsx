@@ -98,6 +98,9 @@ const FlashDay: React.FC = () => {
 
         </div>
       </div>
+      
+      {/* SEPARATOR: Graphite/Noise Gradient to PreCare */}
+      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-b from-transparent to-[#F5F5F5] opacity-50 z-10 pointer-events-none"></div>
     </section>
   );
 };

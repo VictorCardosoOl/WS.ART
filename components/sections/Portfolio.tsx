@@ -83,7 +83,7 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="relative pt-32 pb-40 bg-white overflow-hidden">
+    <section id="gallery" className="relative pt-32 pb-32 bg-white overflow-hidden">
       
       {/* GRADIENTE RADIAL (Escuro no centro, claro nas bordas) */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#E5D0D4]/30 via-white to-white pointer-events-none z-0"></div>
@@ -135,10 +135,10 @@ const Portfolio: React.FC = () => {
         </div>
       </div>
 
-      {/* SEPARATOR: ORGANIC CURVE TO WHITE (About Section) */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
-        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[80px] md:h-[120px] fill-white">
-            <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z"></path>
+      {/* SEPARATOR: HAND-DRAWN LINE (FINE LINE STYLE) */}
+      <div className="absolute bottom-0 left-0 w-full flex justify-center overflow-hidden z-10 text-stone-200">
+        <svg width="100%" height="20" viewBox="0 0 1200 20" preserveAspectRatio="none" className="w-full h-[20px] stroke-current fill-none">
+            <path d="M0,10 Q300,15 600,10 T1200,10" strokeWidth="1" vectorEffect="non-scaling-stroke" strokeDasharray="4 4" className="opacity-50"/>
         </svg>
       </div>
     </section>

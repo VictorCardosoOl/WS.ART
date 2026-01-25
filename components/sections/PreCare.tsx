@@ -32,13 +32,6 @@ const PreCare: React.FC = () => {
   return (
     <section className="py-32 md:py-40 bg-[#F5F5F5] text-stone-900 relative overflow-hidden" id="precare">
       
-      {/* SEPARATOR: TOP CURVE FROM WHITE */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10 rotate-180">
-         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[80px] fill-white">
-             <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V56.44Z"></path>
-         </svg>
-      </div>
-
       {/* GRADIENTE RADIAL */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#E5D0D4]/40 via-[#F5F5F5] to-[#F5F5F5] pointer-events-none z-0"></div>
 
@@ -83,6 +76,9 @@ const PreCare: React.FC = () => {
         </div>
 
       </div>
+
+      {/* SEPARATOR: SOFT WASH TO TESTIMONIALS (Rose-50) */}
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#FAF7F7] pointer-events-none z-10"></div>
     </section>
   );
 };

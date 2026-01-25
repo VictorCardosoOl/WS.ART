@@ -49,9 +49,8 @@ const Hero: React.FC = () => {
       });
 
       // Massive Text moves faster (Foreground Parallax)
-      // FIX: Removido opacity: 0 para que o texto não suma, apenas suba em parallax
       gsap.to(titleRef.current, {
-        yPercent: -25, // Aumentei ligeiramente a velocidade para efeito dramático
+        yPercent: -25, 
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
@@ -137,6 +136,9 @@ const Hero: React.FC = () => {
                </SplitText>
           </h1>
       </div>
+
+      {/* SEPARATOR: Smooth Fade to White */}
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-white z-20 pointer-events-none"></div>
 
     </section>
   );
