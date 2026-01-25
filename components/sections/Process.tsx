@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import Reveal from '../ui/Reveal';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 const steps = [
   {
@@ -31,18 +32,82 @@ const steps = [
 
 const Process: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // Animação do Título
+      gsap.fromTo(".process-title", 
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%"
+          }
+        }
+      );
+
+      // Animação da Lista (Cascata)
+      const listItems = gsap.utils.toArray('.process-item');
+      gsap.fromTo(listItems,
+        { x: -50, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 1,
+          stagger: 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: listRef.current,
+            start: "top 80%"
+          }
+        }
+      );
+
+      // Animação do Painel Direito
+      gsap.fromTo(".process-panel-container",
+        { opacity: 0, scale: 0.95 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 1.5,
+          ease: "power3.out",
+          delay: 0.2,
+          scrollTrigger: {
+            trigger: listRef.current,
+            start: "top 80%"
+          }
+        }
+      );
+
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="relative py-32 md:py-48 bg-pantone-skin overflow-hidden" id="process">
+    <section ref={containerRef} className="relative py-32 md:py-48 overflow-hidden" id="process">
+      
+      {/* --- BACKGROUND WITH TEXTURE & GRADIENT --- */}
+      <div className="absolute inset-0 bg-pantone-skin z-0">
+          <div className="absolute inset-0 bg-noise opacity-[0.05]"></div>
+          {/* Organic gradient blob */}
+          <div className="absolute -top-[20%] right-0 w-[600px] h-[600px] bg-rose-200/40 blur-[80px] rounded-full mix-blend-multiply"></div>
+      </div>
+
       <div className="container mx-auto px-6 relative z-10 pb-24">
         
         <div className="flex flex-col lg:flex-row gap-20 items-start">
           
           {/* List Content */}
-          <div className="w-full lg:w-1/2">
-             <Reveal>
-               <span className="text-xs font-bold uppercase tracking-ultra text-pantone-accent mb-12 block">O Processo Criativo</span>
-             </Reveal>
+          <div className="w-full lg:w-1/2" ref={listRef}>
+             <div className="process-title">
+               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-pantone-accent mb-12 block font-sans">O Processo Criativo</span>
+             </div>
 
              <div className="flex flex-col" role="tablist" aria-orientation="vertical">
                {steps.map((step, index) => (
@@ -53,7 +118,7 @@ const Process: React.FC = () => {
                     aria-selected={activeStep === index}
                     aria-controls="process-panel"
                     tabIndex={0}
-                    className={`group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4'}`}
+                    className={`process-item group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4'}`}
                     onMouseEnter={() => setActiveStep(index)}
                     onClick={() => setActiveStep(index)}
                     onKeyDown={(e) => {
@@ -72,10 +137,10 @@ const Process: React.FC = () => {
                     )}
 
                     <div className="flex items-baseline justify-between mb-2">
-                        <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-pantone-accent italic' : 'text-pantone-ink'}`}>
+                        <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight uppercase ${activeStep === index ? 'text-pantone-accent' : 'text-pantone-ink'}`}>
                             {step.title}
                         </h3>
-                        <span className={`text-xs font-bold transition-colors ${activeStep === index ? 'text-pantone-accent' : 'text-stone-400'}`}>
+                        <span className={`text-[10px] font-bold transition-colors font-sans ${activeStep === index ? 'text-pantone-accent' : 'text-stone-400'}`}>
                             {step.id}
                         </span>
                     </div>
@@ -87,9 +152,9 @@ const Process: React.FC = () => {
              </div>
           </div>
 
-          {/* Text Description Reveal (Desktop & Mobile) */}
-          <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
-            <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-pantone-accent/20">
+          {/* Text Description Reveal */}
+          <div className="process-panel-container w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
+            <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-pantone-accent/20 pl-8">
                <AnimatePresence mode='wait'>
                    <motion.div 
                      key={activeStep}
@@ -102,13 +167,13 @@ const Process: React.FC = () => {
                      transition={{ duration: 0.4, ease: "easeOut" }}
                      className="relative"
                    >
-                     <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10" aria-hidden="true">
+                     <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10 select-none" aria-hidden="true">
                         {steps[activeStep].id}
                      </h4>
-                     <h3 className="text-2xl font-serif text-pantone-ink mb-6">
+                     <h3 className="text-2xl font-serif text-pantone-ink mb-6 uppercase tracking-tight">
                         Detalhes da Etapa
                      </h3>
-                     <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif">
+                     <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-sans tracking-wide">
                        {steps[activeStep].fullDesc}
                      </p>
                    </motion.div>
@@ -119,10 +184,10 @@ const Process: React.FC = () => {
         </div>
       </div>
 
-      {/* SEPARATOR: REVERSE CURVE TO WHITE (FLASH DAY) */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
-         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-white">
-            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
+      {/* SEPARATOR: INK BLEED EDGE (Transition to Light Gray) */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10 text-[#F5F5F5] pointer-events-none">
+         <svg viewBox="0 0 1200 60" preserveAspectRatio="none" className="w-full h-[50px] md:h-[60px] fill-current">
+            <path d="M0,60 L1200,60 L1200,10 C1150,30 1100,5 1050,20 C1000,50 950,10 900,30 C850,5 800,40 750,15 C700,50 650,20 600,40 C550,10 500,45 450,25 C400,50 350,10 300,35 C250,5 200,40 150,20 C100,50 50,10 0,60 Z"></path>
          </svg>
       </div>
     </section>
