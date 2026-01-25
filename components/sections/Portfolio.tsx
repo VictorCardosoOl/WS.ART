@@ -23,13 +23,7 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
           src={src} 
           alt={alt} 
           title={alt}
-          className="
-            w-full h-full object-cover 
-            grayscale group-hover:grayscale-0 
-            transition-all duration-[800ms] 
-            ease-[cubic-bezier(0.22,1,0.36,1)] 
-            group-hover:scale-105
-          "
+          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
           loading="lazy"
           decoding="async"
         />
@@ -50,19 +44,19 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-20 flex flex-col justify-end translate-y-2 group-hover:translate-y-0 transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
             <div className="flex items-center gap-3 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                 <span className="h-[1px] w-6 bg-rose-400"></span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-200 font-sans">
+                <span className="font-sans text-meta font-bold text-rose-200">
                     {item.category}
                 </span>
             </div>
 
             <div className="flex justify-between items-end">
                 <div className="flex flex-col gap-3 max-w-[85%]">
-                    <h3 className="font-serif text-3xl md:text-4xl text-white leading-[0.95] font-light tracking-tight group-hover:text-rose-50 transition-colors duration-500 uppercase">
+                    <h3 className="font-serif text-3xl md:text-fluid-h3 text-white leading-tight-editorial font-semibold tracking-tighter group-hover:text-rose-50 transition-colors duration-500 uppercase">
                         {item.title}
                     </h3>
                     
                     {item.description && (
-                        <p className="text-xs font-sans text-stone-300 font-light leading-relaxed tracking-wide opacity-0 group-hover:opacity-100 transition-all duration-700 delay-200 transform translate-y-4 group-hover:translate-y-0 border-l border-white/20 pl-3">
+                        <p className="font-sans text-[10px] text-stone-300 leading-relaxed tracking-wide opacity-0 group-hover:opacity-100 transition-all duration-700 delay-200 transform translate-y-4 group-hover:translate-y-0 border-l border-white/20 pl-3">
                             {item.description}
                         </p>
                     )}
@@ -85,21 +79,20 @@ const Portfolio: React.FC = () => {
   return (
     <section id="gallery" className="relative pt-32 pb-32 bg-white overflow-hidden">
       
-      {/* GRADIENTE RADIAL (Escuro no centro, claro nas bordas) */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#E5D0D4]/30 via-white to-white pointer-events-none z-0"></div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-stone-100 pb-6">
           <Reveal>
-             <h2 className="text-6xl md:text-8xl font-serif text-stone-900 leading-[0.8] tracking-tighter uppercase">
+             <h2 className="font-serif text-fluid-h1 text-stone-900 leading-tight-editorial tracking-tighter uppercase">
                Acervo<span className="text-[#754548] text-4xl">.</span>
              </h2>
           </Reveal>
           
           <Reveal delay={200}>
             <div className="mt-8 md:mt-0 text-right">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 font-sans">
+              <p className="font-sans text-meta font-bold text-stone-400">
                 Obras selecionadas 2023 — 2024
               </p>
             </div>
@@ -135,7 +128,6 @@ const Portfolio: React.FC = () => {
         </div>
       </div>
 
-      {/* SEPARATOR: HAND-DRAWN LINE (FINE LINE STYLE) */}
       <div className="absolute bottom-0 left-0 w-full flex justify-center overflow-hidden z-10 text-stone-200">
         <svg width="100%" height="40" viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-[40px] stroke-current fill-none opacity-60">
             <path d="M0,20 Q150,25 300,18 T600,22 T900,18 T1200,20" strokeWidth="1" vectorEffect="non-scaling-stroke" />

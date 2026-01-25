@@ -41,7 +41,7 @@ const FAQ: React.FC = () => {
 
                             {/* Coluna Central: Pergunta */}
                             <div className="md:w-2/3 pr-4">
-                                <h3 className={`text-lg md:text-2xl font-serif transition-colors duration-300 leading-tight ${isOpen ? 'text-stone-900 italic' : 'text-stone-600 group-hover:text-stone-900'}`}>
+                                <h3 className={`text-lg md:text-2xl font-serif font-semibold tracking-tighter uppercase transition-colors duration-300 leading-tight ${isOpen ? 'text-stone-900 italic' : 'text-stone-600 group-hover:text-stone-900'}`}>
                                     {item.q}
                                 </h3>
                             </div>
@@ -74,7 +74,7 @@ const FAQ: React.FC = () => {
                                     className="overflow-hidden"
                                 >
                                     <div className="pb-6 pl-0 md:pl-[25%] pr-4 md:pr-24">
-                                        <p className="text-stone-500 text-sm md:text-base font-light leading-relaxed font-sans max-w-2xl">
+                                        <p className="text-stone-500 text-sm md:text-base font-light leading-relaxed font-sans tracking-wide max-w-2xl">
                                             {item.a}
                                         </p>
                                     </div>

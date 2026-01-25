@@ -201,11 +201,11 @@
 .sm-panel-item {
   position: relative;
   color: #1c1917; /* Stone 900 */
-  font-family: 'Nippo', serif; /* Fonte do Projeto */
-  font-weight: 500;
+  font-family: 'Panchang', sans-serif; /* FONTE ATUALIZADA */
+  font-weight: 600;
   font-size: 3rem;
   cursor: pointer;
-  line-height: 1.1;
+  line-height: 0.9;
   letter-spacing: -0.03em;
   text-transform: uppercase;
   transition: color 0.3s ease;
@@ -229,7 +229,7 @@
 
 .sm-panel-item:hover {
   color: #754548; /* Pantone Accent */
-  font-style: italic;
+  font-style: normal; /* Panchang looks better normal */
 }
 
 .sm-panel-itemLabel {

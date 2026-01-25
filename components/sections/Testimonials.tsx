@@ -97,7 +97,6 @@ const Testimonials: React.FC = () => {
       {/* --- BACKGROUND GRADIENT --- */}
       <div className="absolute inset-0 pointer-events-none z-0">
           <div className="absolute inset-0 bg-[#FAF7F7]"></div>
-          {/* Subtle Warm Glow from Bottom Left */}
           <div className="absolute bottom-0 left-0 w-[70%] h-[70%] bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-rose-200/20 via-transparent to-transparent opacity-60 blur-3xl"></div>
       </div>
 
@@ -106,7 +105,7 @@ const Testimonials: React.FC = () => {
         {/* Header Minimalista */}
         <div className="testimonials-header mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8 mt-12">
             <div>
-                <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tight">
+                <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tighter uppercase font-semibold">
                     Narrativas<span className="text-[#754548]">.</span>
                 </h2>
             </div>
@@ -160,7 +159,7 @@ const Testimonials: React.FC = () => {
                 ))}
             </div>
 
-            {/* COLUNA DIREITA: IMAGEM STICKY / REVEAL */}
+            {/* COLUNA DIREITA: IMAGEM STICKY */}
             <div ref={imageContainerRef} className="hidden lg:block w-1/2 relative h-[80vh] will-change-transform" aria-hidden="true">
                 <div className="sticky top-32 w-full h-full">
                     <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl">
@@ -221,7 +220,6 @@ const Testimonials: React.FC = () => {
         </div>
       </div>
 
-      {/* SEPARATOR: FADE TO WHITE */}
       <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-white pointer-events-none z-10"></div>
     </section>
   );
