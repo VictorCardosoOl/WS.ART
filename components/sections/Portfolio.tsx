@@ -13,23 +13,15 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
   });
   
   const y = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
-  const x = useTransform(scrollYProgress, [0, 1], ["-2%", "2%"]);
-  const scaleBase = useTransform(scrollYProgress, [0, 1], [1.15, 1.15]); 
+  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.1]); 
 
   return (
     <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
-      <motion.div style={{ y, x, scale: scaleBase }} className="w-full h-full">
+      <motion.div style={{ y, scale }} className="w-full h-full">
         <img 
           src={src} 
           alt={alt} 
-          title={alt}
-          className="
-            w-full h-full object-cover 
-            grayscale group-hover:grayscale-0 
-            transition-all duration-[800ms] 
-            ease-[cubic-bezier(0.22,1,0.36,1)] 
-            group-hover:scale-105
-          "
+          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[800ms] ease-out-expo"
           loading="lazy"
           decoding="async"
         />
@@ -40,44 +32,47 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
 
 const BentoCard = ({ item }: { item: GridGalleryItem }) => {
   return (
-    <div 
-        className={`group relative w-full h-full overflow-hidden rounded-sm bg-stone-100 cursor-pointer`}
+    <article 
+        className={`group relative w-full h-full overflow-hidden bg-stone-100 cursor-pointer`}
         data-cursor="VER PROJETO"
     >
         <ParallaxImage src={item.src} alt={item.altText} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-95 transition-opacity duration-[800ms] z-10"></div>
+        
+        {/* Overlay com Gradiente para legibilidade */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-700 z-10"></div>
 
-        <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-20 flex flex-col justify-end translate-y-2 group-hover:translate-y-0 transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
-            <div className="flex items-center gap-3 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+        {/* Conteúdo */}
+        <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-20 flex flex-col justify-end">
+            <div className="flex items-center gap-3 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 transform translate-y-2 group-hover:translate-y-0">
                 <span className="h-[1px] w-6 bg-rose-400"></span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-200 font-sans">
+                <span className="font-sans text-meta font-bold text-rose-200">
                     {item.category}
                 </span>
             </div>
 
             <div className="flex justify-between items-end">
-                <div className="flex flex-col gap-3 max-w-[85%]">
-                    <h3 className="font-serif text-3xl md:text-4xl text-white leading-[0.95] font-light tracking-tight group-hover:text-rose-50 transition-colors duration-500 uppercase">
+                <div className="flex flex-col gap-2 max-w-[85%]">
+                    <h3 className="font-serif text-3xl md:text-4xl text-white leading-[0.9] tracking-tighter group-hover:text-rose-50 transition-colors duration-500 uppercase">
                         {item.title}
                     </h3>
                     
                     {item.description && (
-                        <p className="text-xs font-sans text-stone-300 font-light leading-relaxed tracking-wide opacity-0 group-hover:opacity-100 transition-all duration-700 delay-200 transform translate-y-4 group-hover:translate-y-0 border-l border-white/20 pl-3">
+                        <p className="font-sans text-[10px] text-stone-300 leading-relaxed tracking-wide opacity-0 group-hover:opacity-100 transition-all duration-700 delay-150 transform translate-y-4 group-hover:translate-y-0 pl-3 border-l border-white/20 mt-2">
                             {item.description}
                         </p>
                     )}
                 </div>
                 
-                <div className="overflow-hidden w-8 h-8 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 flex items-center justify-center">
                     <ArrowUpRight 
-                        className="text-white transform translate-y-full -translate-x-full group-hover:translate-y-0 group-hover:translate-x-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]" 
+                        className="text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out-expo" 
                         size={24} 
                         strokeWidth={1.5}
                     />
                 </div>
             </div>
         </div>
-    </div>
+    </article>
   );
 };
 
@@ -85,35 +80,34 @@ const Portfolio: React.FC = () => {
   return (
     <section id="gallery" className="relative pt-32 pb-32 bg-white overflow-hidden">
       
-      {/* GRADIENTE RADIAL (Escuro no centro, claro nas bordas) */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#E5D0D4]/30 via-white to-white pointer-events-none z-0"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rose-100/30 via-white to-white pointer-events-none z-0"></div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-stone-100 pb-6">
+        <header className="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-stone-100 pb-8">
           <Reveal>
-             <h2 className="text-6xl md:text-8xl font-serif text-stone-900 leading-[0.8] tracking-tighter uppercase">
-               Acervo<span className="text-[#754548] text-4xl">.</span>
+             <h2 className="font-serif text-fluid-h1 text-stone-900 leading-[0.8] tracking-tighter uppercase">
+               Acervo<span className="text-pantone-accent">.</span>
              </h2>
           </Reveal>
           
           <Reveal delay={200}>
             <div className="mt-8 md:mt-0 text-right">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 font-sans">
+              <p className="font-sans text-meta font-bold text-stone-400">
                 Obras selecionadas 2023 — 2024
               </p>
             </div>
           </Reveal>
-        </div>
+        </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[300px] md:auto-rows-[380px] gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[300px] md:auto-rows-[420px] gap-4">
             {PORTFOLIO_ITEMS.map((item, index) => (
                 <div 
                     key={item.id} 
-                    className={`${item.colSpan} relative w-full h-full min-h-[300px] md:min-h-auto`}
+                    className={`${item.colSpan} relative w-full h-full`}
                 >
                     <Reveal delay={index * 50} width="100%">
-                        <div className={`w-full h-full`}>
+                        <div className={`w-full h-full min-h-[300px]`}>
                              <BentoCard item={item} />
                         </div>
                     </Reveal>
@@ -127,15 +121,15 @@ const Portfolio: React.FC = () => {
                <span className="font-serif text-2xl text-stone-400 group-hover:text-stone-900 transition-colors duration-500 uppercase tracking-tight">
                  Ver arquivo completo
                </span>
-               <div className="relative w-[1px] h-12 md:h-16 bg-stone-200 overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-full bg-[#754548] -translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out-expo"></div>
+               <div className="relative w-[1px] h-16 bg-stone-200 overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-full bg-pantone-accent -translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out-expo"></div>
                </div>
              </a>
            </Reveal>
         </div>
       </div>
 
-      {/* SEPARATOR: HAND-DRAWN LINE (FINE LINE STYLE) */}
+      {/* Separator */}
       <div className="absolute bottom-0 left-0 w-full flex justify-center overflow-hidden z-10 text-stone-200">
         <svg width="100%" height="40" viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-[40px] stroke-current fill-none opacity-60">
             <path d="M0,20 Q150,25 300,18 T600,22 T900,18 T1200,20" strokeWidth="1" vectorEffect="non-scaling-stroke" />
