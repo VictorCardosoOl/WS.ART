@@ -15,12 +15,13 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   useLayoutEffect(() => {
     // Awwwards-tier configurations
     const lenis = new Lenis({
-      lerp: 0.07, // The "weight" - lower is heavier/luxurious. 0.05-0.1 range.
+      duration: 1.2, // The sweet spot for "weight"
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential decay for smoothness
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.9, // Slightly de-tuned for control
-      touchMultiplier: 1.5,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
     });
 
     lenisRef.current = lenis;
@@ -29,15 +30,13 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
     lenis.on('scroll', ScrollTrigger.update);
 
     // Integate into GSAP's Ticker for high-performance rendering (60-120fps)
-    // We use the exact time provided by GSAP to ensure perfect sync
-    const update = (time: number, deltaTime: number, frame: number) => {
+    const update = (time: number) => {
       lenis.raf(time * 1000);
     };
 
     gsap.ticker.add(update);
-
+    
     // Crucial: Disconnect lag smoothing to prevent GSAP from "jumping" during heavy load
-    // This maintains the physics flow even if the main thread hits a snag
     gsap.ticker.lagSmoothing(0);
 
     return () => {

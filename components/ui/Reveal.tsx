@@ -1,29 +1,48 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface RevealProps {
   children: React.ReactNode;
   width?: 'fit-content' | '100%';
   delay?: number;
-  className?: string;
 }
 
-const Reveal: React.FC<RevealProps> = ({ children, width = 'fit-content', delay = 0, className = "" }) => {
+const Reveal: React.FC<RevealProps> = ({ children, width = 'fit-content', delay = 0 }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { 
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px" // Slightly offset trigger for better timing
+      } 
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div style={{ width }} className={`relative overflow-visible ${className}`}>
-      <motion.div
-        initial={{ opacity: 0, y: 30, scale: 0.98, filter: 'blur(10px)' }}
-        whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-        viewport={{ once: true, margin: "0px 0px -50px 0px" }}
-        transition={{ 
-            duration: 0.8, 
-            delay: delay / 1000, 
-            ease: [0.16, 1, 0.3, 1] // Out-Expo easing
-        }}
-        className="h-full"
+    <div ref={ref} style={{ width, position: 'relative', overflow: 'visible' }}>
+      <div
+        className={`transform transition-all duration-[1200ms] ease-out-expo ${
+          isVisible 
+            ? 'opacity-100 translate-y-0 blur-0 scale-100' 
+            : 'opacity-0 translate-y-12 blur-[10px] scale-[0.98]'
+        }`}
+        style={{ transitionDelay: `${delay}ms` }}
       >
         {children}
-      </motion.div>
+      </div>
     </div>
   );
 };

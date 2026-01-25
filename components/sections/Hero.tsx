@@ -1,173 +1,141 @@
 import React, { useLayoutEffect, useRef } from 'react';
+import { MoveRight, ArrowDown } from 'lucide-react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import Splitting from 'splitting';
-import 'splitting/dist/splitting.css';
-import 'splitting/dist/splitting-cells.css';
+import SplitText from '../ui/SplitText';
+import Magnetic from '../ui/Magnetic';
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
 
   useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      // 1. INTRO ANIMATION (Load)
+      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-      // 0. Split Text for "Word/Char" animation
-      if (titleRef.current) {
-        const results = Splitting({ target: titleRef.current, by: 'chars' });
-        // Splitting adds .char classes
-      }
+      // Initial States
+      gsap.set(".char-reveal", { yPercent: 120 }); // Letters start below baseline
+      gsap.set(".hero-fade", { y: 20, autoAlpha: 0 });
+      gsap.set(".hero-line", { scaleX: 0, transformOrigin: "left center" });
 
-      // 1. Background Parallax (Physics: Depth Layer)
-      // Moves slower than scroll (yPercent: 30)
-      if (bgRef.current) {
-        gsap.to(bgRef.current, {
-          yPercent: 30,
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true
-          }
-        });
-      }
-
-      // 2. Title Entrance (Staggered Characters)
-      // Physics: Inertia - start separated, come together
-      const chars = titleRef.current?.querySelectorAll('.char');
-      if (chars && chars.length > 0) {
-        tl.from(chars, {
-          y: 120,
-          rotateY: 10,
-          autoAlpha: 0,
-          stagger: 0.04, // Law of Rhythm
-          duration: 1.2,
-          ease: "back.out(1.2)" // Slight overshoot for "heavy" feel
-        }, 0.2);
-      } else {
-        // Fallback if Splitting fails
-        tl.from(titleRef.current, {
-          y: 100,
-          autoAlpha: 0,
-          duration: 1.2
-        }, 0.2);
-      }
-
-      // 3. Title Parallax (Physics: Foreground Layer)
-      // Moves faster than background but slower than scroll for depth
-      if (titleRef.current) {
-        gsap.to(titleRef.current, {
-          yPercent: -15, // Opposing motion
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true
-          }
-        });
-      }
-
-      // 4. Bottom Strip Entrance (Heavy Lifting)
-      tl.from(".hero-strip", {
-        yPercent: 101, // Start fully hidden
-        duration: 1.4,
-        ease: "expo.out" // Standard Awwwards easing for panels
+      // Sequence
+      tl.to(".char-reveal", {
+        yPercent: 0,
+        duration: 1.8,
+        stagger: 0.03, // Wave effect on letters
+        ease: "power3.out"
+      })
+      .to(".hero-line", { scaleX: 1, duration: 1.5, ease: "expo.out" }, "-=1.2")
+      .to(".hero-fade", {
+        y: 0,
+        autoAlpha: 1,
+        duration: 1.2,
+        stagger: 0.1
       }, "-=1.0");
 
-      // 5. Image Reveal inside Strip
-      if (imageRef.current) {
-        tl.from(imageRef.current, {
-          scale: 1.2, // Subtle zoom out
-          duration: 1.8,
-          ease: "out"
-        }, "-=1.4");
-      }
+      // 2. SCROLL PARALLAX ANIMATION
+      // Background moves slower than foreground
+      gsap.to(bgRef.current, {
+        yPercent: 30,
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true
+        }
+      });
 
-      // 6. Details Stagger (Law of Rhythm)
-      tl.from(".hero-fade", {
-        y: 30,
-        autoAlpha: 0,
-        duration: 0.8,
-        stagger: 0.08
-      }, "-=0.8");
+      // Massive Text moves faster (Foreground Parallax)
+      // FIX: Removido opacity: 0 para que o texto não suma, apenas suba em parallax
+      gsap.to(titleRef.current, {
+        yPercent: -25, // Aumentei ligeiramente a velocidade para efeito dramático
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true
+        }
+      });
 
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = "https://images.unsplash.com/photo-1598371624833-255d65427c3c?q=80&w=1920&auto=format&fit=crop";
-  };
-
   return (
-    <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden bg-[#FAF7F7] z-10 flex flex-col">
-
-      {/* Background Grain/Noise (Subtle) */}
-      <div ref={bgRef} className="absolute inset-0 pointer-events-none z-0 opacity-20 transform-gpu will-change-transform">
-        <div className="w-full h-full bg-stone-200 opacity-20 mix-blend-multiply"></div>
+    <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden bg-[#FAF7F7] z-10 flex flex-col justify-between">
+      
+      {/* --- ATMOSPHERE (Parallax Layer) --- */}
+      <div ref={bgRef} className="absolute inset-0 z-0 pointer-events-none will-change-transform">
+          <div className="absolute inset-0 bg-noise opacity-[0.04] mix-blend-overlay"></div>
+          {/* Subtle Radial Gradient */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_var(--tw-gradient-stops))] from-rose-200/40 via-transparent to-transparent opacity-70"></div>
       </div>
 
-      {/* TOP BAR: Brand & Location */}
-      <div className="absolute top-0 left-0 w-full px-6 py-8 z-30 flex justify-between items-start pointer-events-none mix-blend-difference text-stone-400">
-        <div className="hero-fade flex flex-col gap-1">
-          <span className="text-[10px] uppercase font-bold tracking-widest text-[#2A2425]">William Siqueira</span>
-          <span className="text-[10px] uppercase tracking-widest">Tattoo Artist // Brasil</span>
-        </div>
-      </div>
+      {/* --- CONTENT LAYER --- */}
+      <div className="container mx-auto px-6 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
+          
+          {/* Top Section */}
+          <div className="flex flex-col md:flex-row justify-between items-start w-full">
+              {/* Meta Data */}
+              <div className="hidden md:flex flex-col gap-2 hero-fade pointer-events-auto">
+                 <div className="flex items-center gap-3">
+                    <div className="w-1.5 h-1.5 bg-[#754548] rounded-full animate-pulse"></div>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">São Paulo, BR</span>
+                 </div>
+                 <span className="text-[10px] font-medium uppercase tracking-widest text-stone-300 pl-4.5">Est. 2018</span>
+              </div>
 
-      {/* CENTER: MASSIVE TITLE */}
-      <div className="flex-grow flex items-center justify-center relative z-20 overflow-hidden perspective-[1000px]">
-        {/* 
-                   Used Splitting.js (via useEffect) to target this h1. 
-                   Removed 'text-transparent' and gradient temporarily to ensure splitting works visibly, 
-                   or re-apply class to chars. 
-                   For Awwwards style, solid heavy ink or deep accent often looks better than gradient for splitting.
-                   Let's stick to the Tone requested: #8F5E62 but applying to text.
-                */}
-        <h1
-          ref={titleRef}
-          className="font-sans font-black text-[22vw] leading-none tracking-tighter text-[#8F5E62] select-none opacity-100 will-change-transform"
-          data-splitting
-          style={{ visibility: 'visible' }}
-        >
-          WILLIAM
-        </h1>
-      </div>
+              {/* Editorial Statement */}
+              <div className="flex flex-col items-end text-right pointer-events-auto ml-auto max-w-xl">
+                  <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-[#1c1917] leading-tight-editorial font-light tracking-tight mix-blend-darken overflow-hidden">
+                      <SplitText charClass="char-reveal" wordClass="overflow-hidden pb-2">
+                        A pele como tela eterna.
+                      </SplitText>
+                  </h2>
+                  
+                  <div className="hero-line w-full md:w-32 h-[1px] bg-[#754548] my-8 opacity-60"></div>
 
-      {/* BOTTOM STRIP: Image & Tagline */}
-      <div className="hero-strip relative h-[35vh] w-full min-h-[250px] z-20 bg-[#8F5E62] overflow-hidden flex items-end">
-        {/* Image Background */}
-        <div className="absolute inset-0 z-0">
-          <img
-            ref={imageRef}
-            src="/src/assets/portfolio_01.png"
-            alt="Background Texture"
-            onError={handleImageError}
-            className="w-full h-full object-cover opacity-60 filter grayscale contrast-125 mix-blend-multiply will-change-transform"
-          />
-          {/* Gradient Overlay for Text Readability - Harmonious Rose Tone */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#8F5E62]/90 via-[#8F5E62]/50 to-transparent"></div>
-        </div>
+                  <p className="hero-fade font-sans text-[10px] text-stone-500 leading-relaxed tracking-[0.3em] uppercase font-semibold text-right max-w-[280px]">
+                      Conectamos narrativa pessoal e anatomia em obras neotradicionais.
+                  </p>
 
-        {/* Content */}
-        <div className="relative z-10 p-6 md:p-12 w-full max-w-[1920px] mx-auto flex flex-col md:flex-row justify-between items-end gap-6">
-          <div className="max-w-xl">
-            <span className="hero-fade block text-[10px] font-bold uppercase tracking-widest text-[#D48C95] mb-4">
-              São Paulo • Est. 2018
-            </span>
-            <h2 className="hero-fade font-serif text-3xl md:text-5xl text-white font-light leading-tight">
-              Arte autoral, anatomia e <br />
-              <span className="italic text-stone-300">narrativa neotradicional.</span>
-            </h2>
+                  <div className="hero-fade mt-10">
+                      <Magnetic strength={0.5}>
+                        <a href="#gallery" className="group inline-flex items-center justify-end gap-4 text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548] hover:text-stone-900 transition-colors p-4 -mr-4">
+                            Explorar Acervo
+                            <div className="relative overflow-hidden w-4 h-4 flex items-center justify-center">
+                              <MoveRight size={14} className="absolute transition-transform duration-500 group-hover:translate-x-full" />
+                              <MoveRight size={14} className="absolute -translate-x-full transition-transform duration-500 group-hover:translate-x-0" />
+                            </div>
+                        </a>
+                      </Magnetic>
+                  </div>
+              </div>
           </div>
-        </div>
+
+          {/* Bottom Section */}
+          <div className="w-full relative pb-12 flex flex-col items-center">
+             <div className="hero-fade animate-bounce duration-[3000ms] mb-8 opacity-50">
+                <ArrowDown size={18} className="text-[#754548]" />
+             </div>
+          </div>
+      </div>
+
+      {/* --- THE ANCHOR (Massive Typography) --- */}
+      <div 
+        ref={titleRef}
+        className="absolute bottom-0 left-0 w-full flex justify-center items-end leading-none z-10 mix-blend-darken pointer-events-none select-none pb-0 will-change-transform"
+      >
+          <h1 className="font-sans font-black text-[21vw] text-[#12100E] tracking-tighter text-center leading-[0.75] w-full opacity-90 overflow-hidden">
+               <SplitText charClass="char-reveal" wordClass="overflow-hidden pb-[1vw]">
+                WILLIAM
+               </SplitText>
+          </h1>
       </div>
 
     </section>
