@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
     <>
       {/* Desktop Navigation (Visible > 1024px) */}
       <nav 
-        className={`fixed top-0 left-0 w-full z-40 hidden lg:flex items-center justify-between px-12 py-6 transition-all duration-500 ${isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-stone-100 py-4' : 'bg-transparent'}`}
+        className={`fixed top-0 left-0 w-full z-40 hidden lg:flex items-center justify-between px-5 md:px-10 2xl:px-20 py-6 transition-all duration-500 ${isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-stone-100 py-4' : 'bg-transparent'}`}
       >
         {/* Brand */}
         <a href="#" className="group flex items-center relative z-50">
