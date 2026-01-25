@@ -86,22 +86,22 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="relative pt-32 pb-40 bg-white overflow-hidden">
-
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#E5D0D4]/30 via-white to-white pointer-events-none z-0"></div>
+    <section id="gallery" className="relative pt-32 pb-40 bg-[#FAF7F7] overflow-hidden">
+      {/* Updated background to lighter harmonious rose noise */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#D9A9B0]/20 via-[#FAF7F7] to-[#FAF7F7] pointer-events-none z-0"></div>
 
       <div className="w-full max-w-[1920px] mx-auto px-5 md:px-10 2xl:px-20 relative z-10">
 
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-stone-100 pb-6">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-[#D48C95]/30 pb-6">
           <Reveal>
-            <h2 className="font-serif text-fluid-h1 text-stone-900 leading-tight-editorial tracking-tighter uppercase">
-              Acervo<span className="text-[#754548] text-4xl">.</span>
+            <h2 className="font-serif text-fluid-h1 text-[#4A3B3B] leading-tight-editorial tracking-tighter uppercase">
+              Acervo<span className="text-[#8F5E62] text-4xl">.</span>
             </h2>
           </Reveal>
 
           <Reveal delay={200}>
             <div className="mt-8 md:mt-0 text-right">
-              <p className="font-sans text-meta font-bold text-stone-400">
+              <p className="font-sans text-meta font-bold text-[#8F5E62]">
                 Obras selecionadas 2023 — 2024
               </p>
             </div>
@@ -131,8 +131,8 @@ const Portfolio: React.FC = () => {
 
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full flex justify-center overflow-hidden z-10 text-stone-200">
-        <svg width="100%" height="40" viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-[30px] md:h-[40px] stroke-current fill-none opacity-60">
+      <div className="absolute bottom-0 left-0 w-full flex justify-center overflow-hidden z-10 text-[#8F5E62]">
+        <svg width="100%" height="40" viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-[30px] md:h-[40px] stroke-current fill-none opacity-40">
           <path d="M0,20 Q150,25 300,18 T600,22 T900,18 T1200,20" strokeWidth="1" vectorEffect="non-scaling-stroke" />
           <path d="M50,22 Q200,28 350,16 T650,24 T950,16 T1150,22" strokeWidth="0.5" vectorEffect="non-scaling-stroke" strokeOpacity="0.5" />
         </svg>

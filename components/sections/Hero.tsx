@@ -100,7 +100,7 @@ const Hero: React.FC = () => {
                 */}
         <h1
           ref={titleRef}
-          className="font-sans font-black text-[22vw] leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#E5D0D4] to-[#754548] select-none opacity-100 will-change-transform"
+          className="font-sans font-black text-[22vw] leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#E5D0D4] to-[#8F5E62] select-none opacity-100 will-change-transform"
           style={{ visibility: 'visible' }} // Force visibility
         >
           WILLIAM
@@ -108,7 +108,7 @@ const Hero: React.FC = () => {
       </div>
 
       {/* BOTTOM STRIP: Image & Tagline */}
-      <div className="hero-strip relative h-[35vh] w-full min-h-[250px] z-20 bg-[#754548] overflow-hidden flex items-end">
+      <div className="hero-strip relative h-[35vh] w-full min-h-[250px] z-20 bg-[#8F5E62] overflow-hidden flex items-end">
         {/* Image Background */}
         <div className="absolute inset-0 z-0">
           <img
@@ -119,7 +119,7 @@ const Hero: React.FC = () => {
             className="w-full h-full object-cover opacity-60 filter grayscale contrast-125 mix-blend-multiply"
           />
           {/* Gradient Overlay for Text Readability - Harmonious Rose Tone */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#754548]/90 via-[#754548]/50 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#8F5E62]/90 via-[#8F5E62]/50 to-transparent"></div>
         </div>
 
         {/* Content */}

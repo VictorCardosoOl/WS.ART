@@ -50,14 +50,14 @@ const About: React.FC = () => {
                     {/* Coluna Direita: Conteúdo */}
                     <div className="flex flex-col justify-center items-start lg:pl-12">
                         <Reveal>
-                            <h2 className="font-sans font-medium text-5xl md:text-6xl lg:text-[5rem] leading-[0.9] tracking-tighter text-stone-900 uppercase mb-8">
-                                Eu sou William Siqueira, e eu <span className="text-stone-400">materializo</span> histórias.
+                            <h2 className="font-sans font-medium text-5xl md:text-6xl lg:text-[5rem] leading-[0.9] tracking-tighter text-[#4A3B3B] uppercase mb-8">
+                                Eu sou William Siqueira, e eu <span className="text-[#8F5E62]">materializo</span> histórias.
                             </h2>
                         </Reveal>
 
                         <Reveal delay={200}>
                             <div className="flex flex-col md:flex-row items-end md:items-start justify-between w-full gap-8 mt-4">
-                                <p className="font-serif text-xl md:text-2xl text-stone-600 leading-relaxed max-w-md">
+                                <p className="font-serif text-xl md:text-2xl text-[#2A2425] leading-relaxed max-w-md">
                                     Especialista em Neotradicional. Transformo narrativas pessoais em anatomia e arte perene.
                                 </p>
                             </div>

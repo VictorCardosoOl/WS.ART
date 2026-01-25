@@ -46,11 +46,11 @@ const App: React.FC = () => {
             socialItems={socialItems}
             displaySocials={true}
             displayItemNumbering={true}
-            menuButtonColor="#754548" // Rose accent for visibility
+            menuButtonColor="#8F5E62" // Rose accent for visibility
             openMenuButtonColor="#fff"
             changeMenuColorOnOpen={true}
             colors={['#F2E8E9', '#D48C95']} // Skin / Rose 300 - Harmonious light pink palette
-            accentColor="#754548"
+            accentColor="#8F5E62"
             logoUrl="" // Pass empty string or path to logo if desired, handled conditionally in component
           />
         </div>

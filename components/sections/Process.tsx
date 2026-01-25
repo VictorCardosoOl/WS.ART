@@ -123,11 +123,11 @@ const Process: React.FC = () => {
                   {steps[activeStep].id}
                 </motion.div>
 
-                <h4 className="font-serif text-2xl text-stone-900 mb-6 relative z-10" aria-hidden="true">
+                <h4 className="font-serif text-2xl text-[#8F5E62] mb-6 relative z-10" aria-hidden="true">
                   Detalhes da Etapa
                 </h4>
 
-                <p className="text-xl md:text-2xl font-light text-stone-600 leading-relaxed font-serif relative z-10 max-w-xl">
+                <p className="text-xl md:text-2xl font-light text-[#4A3B3B] leading-relaxed font-serif relative z-10 max-w-xl">
                   {steps[activeStep].fullDesc}
                 </p>
               </motion.div>

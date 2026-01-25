@@ -24,25 +24,34 @@ export default {
     extend: {
       colors: {
         pantone: {
-          skin: '#F2E8E9', 
-          ink: '#1c1917',  
-          accent: '#754548', 
-          deep: '#4A3B3B'  
+          skin: '#F2E8E9',
+          ink: '#2A2425',   // Soft Black / Deep Brownish Charcoal
+          accent: '#8F5E62', // Lighter Dark Rose
+          deep: '#4A3B3B'   // Deep Rose/Brown
         },
         rose: {
-          50: '#FAF7F7',   
-          100: '#F2E8E9',  
+          50: '#FAF7F7',
+          100: '#F2E8E9',
           200: '#E5D0D4',
-          300: '#D9A9B0',  
-          400: '#BC8F8F', 
-          500: '#A05F65', 
-          600: '#8B4513',
-          800: '#754548',  
-          900: '#4A3B3B',  
+          300: '#D9A9B0',
+          400: '#BC8F8F',
+          500: '#A05F65',
+          600: '#8F5E62', // Matching accent
+          800: '#754548',
+          900: '#4A3B3B',
         },
         stone: {
-          850: '#1c1917',
-          900: '#12100E',
+          50: '#FAF7F7',  // Rose 50
+          100: '#F5F5F5',
+          200: '#E5D0D4', // Rose 200
+          300: '#D9A9B0', // Rose 300
+          400: '#BC8F8F', // Rose 400
+          500: '#8F5E62', // Accent
+          600: '#8F5E62', // Accent
+          700: '#5c5253',
+          800: '#2A2425', // Ink
+          900: '#4A3B3B', // Deep Rose (Replaces Black)
+          950: '#2A2425', // Ink
         }
       },
       fontFamily: {
@@ -50,7 +59,7 @@ export default {
         sans: ['"Montserrat"', 'sans-serif'],
       },
       transitionTimingFunction: {
-        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)', 
+        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
       letterSpacing: {
         tighter: '-0.05em',
@@ -58,7 +67,7 @@ export default {
         normal: '0em',
         wide: '0.025em',
         wider: '0.05em',
-        widest: '0.25em', 
+        widest: '0.25em',
         ultra: '0.3em',
       },
       fontSize: {

@@ -30,7 +30,7 @@ const careItems = [
 
 const PreCare: React.FC = () => {
   return (
-    <section className="py-32 md:py-40 bg-[#F5F5F5] text-stone-900 relative overflow-hidden" id="precare">
+    <section className="py-32 md:py-40 bg-[#F5F5F5] text-[#4A3B3B] relative overflow-hidden" id="precare">
 
       {/* SEPARATOR: TOP CURVE FROM WHITE */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10 rotate-180">
@@ -47,9 +47,9 @@ const PreCare: React.FC = () => {
         {/* Header Gigante Editorial */}
         <div className="mb-32 md:mb-48 mt-12">
           <Reveal>
-            <h2 className="font-sans font-medium text-7xl md:text-9xl tracking-tighter text-stone-900 leading-[0.8]">
+            <h2 className="font-sans font-medium text-7xl md:text-9xl tracking-tighter text-[#4A3B3B] leading-[0.8]">
               O Preparo
-              <span className="block font-serif text-2xl md:text-4xl italic font-normal text-stone-500 mt-2 tracking-normal">
+              <span className="block font-serif text-2xl md:text-4xl italic font-normal text-[#8F5E62] mt-2 tracking-normal">
                 (guia essencial)
               </span>
             </h2>
@@ -64,16 +64,16 @@ const PreCare: React.FC = () => {
 
                 <span className="text-xs font-bold font-sans mb-4 block">{item.id}</span>
 
-                <h3 className="font-sans text-3xl md:text-4xl font-medium tracking-tight text-stone-900 mb-1 leading-none">
+                <h3 className="font-sans text-3xl md:text-4xl font-medium tracking-tight text-[#4A3B3B] mb-1 leading-none">
                   {item.title}
                 </h3>
-                <span className="text-sm text-stone-500 font-light mb-6 block">
+                <span className="text-sm text-[#8F5E62] font-light mb-6 block">
                   {item.subtitle}
                 </span>
 
-                <div className="w-full h-[1px] bg-stone-300 mb-6 group-hover:bg-[#754548] transition-colors duration-500"></div>
+                <div className="w-full h-[1px] bg-[#D9A9B0] mb-6 group-hover:bg-[#8F5E62] transition-colors duration-500"></div>
 
-                <p className="text-sm leading-relaxed text-stone-600 font-sans max-w-xs">
+                <p className="text-sm leading-relaxed text-[#2A2425] font-sans max-w-xs">
                   {item.content}
                 </p>
 
