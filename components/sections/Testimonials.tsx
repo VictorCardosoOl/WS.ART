@@ -9,7 +9,7 @@ const testimonials = [
     client: "Ana Clara",
     role: "Arquiteta",
     text: "Mais que tinta, William traduziu um momento de luto em beleza pura. O processo foi uma terapia, e o resultado é uma parte de mim.",
-    image: "https://picsum.photos/800/1000?grayscale&random=99",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop",
     tag: "Cobertura / Floral"
   },
   {
@@ -17,7 +17,7 @@ const testimonials = [
     client: "Marcos V.",
     role: "Designer",
     text: "A precisão anatômica é assustadora. Ele desenhou diretamente no meu braço para garantir que o fluxo seguisse minha musculatura.",
-    image: "https://picsum.photos/800/1000?grayscale&random=98",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop",
     tag: "Fechamento / Neotrad"
   },
   {
@@ -25,7 +25,7 @@ const testimonials = [
     client: "Juliana S.",
     role: "Chef",
     text: "Eu nunca imaginei que uma tatuagem pudesse ser uma experiência tão tranquila. O estúdio privado faz toda a diferença.",
-    image: "https://picsum.photos/800/1000?grayscale&random=97",
+    image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=80&w=1000&auto=format&fit=crop",
     tag: "Projeto Autoral"
   }
 ];
