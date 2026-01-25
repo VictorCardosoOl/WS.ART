@@ -4,7 +4,21 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
-    "./App.tsx"
+    "./App.tsx",
+    "./data/**/*.{js,ts,tsx}" // Garante que o Tailwind leia a pasta data
+  ],
+  // Safelist força o Tailwind a gerar essas classes mesmo que ele não as detecte explicitamente
+  safelist: [
+    {
+      pattern: /col-span-(1|2|3|4|5|6|7|8|9|10|11|12)/,
+      variants: ['md', 'lg'],
+    },
+    {
+      pattern: /row-span-(1|2|3|4|5|6)/,
+      variants: ['md', 'lg'],
+    },
+    'h-full',
+    'w-full'
   ],
   theme: {
     extend: {
@@ -45,11 +59,14 @@ export default {
         wide: '0.025em',
         wider: '0.05em',
         widest: '0.25em', 
-        ultra: '0.3em', // Specific request for 0.3em
+        ultra: '0.3em',
       },
       fontSize: {
         'editorial-sm': ['10px', { lineHeight: '1.6', letterSpacing: '0.3em' }],
+        'fluid-h1': 'clamp(3rem, 8vw, 6rem)',
         'fluid-h2': 'clamp(2.5rem, 5vw, 4.5rem)',
+        'fluid-h3': 'clamp(1.5rem, 3vw, 3rem)',
+        'meta': ['10px', { lineHeight: '1.5', letterSpacing: '0.2em', fontWeight: '700' }],
       },
       lineHeight: {
         'tight-editorial': '0.9',

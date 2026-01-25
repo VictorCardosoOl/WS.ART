@@ -12,10 +12,9 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
     offset: ["start end", "end start"]
   });
   
-  // Refined Parallax: slightly deeper movement for cinematic depth
+  // Parallax refinado: movimento suave e consistente
   const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
-  // Constant base scale to ensure no edges are visible during parallax movement
-  const scaleBase = useTransform(scrollYProgress, [0, 1], [1.15, 1.15]); 
+  const scaleBase = useTransform(scrollYProgress, [0, 1], [1.1, 1.1]); 
 
   return (
     <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
@@ -29,7 +28,6 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
             grayscale group-hover:grayscale-0 
             transition-all duration-[1000ms] 
             ease-[cubic-bezier(0.22,1,0.36,1)] 
-            group-hover:scale-105
             will-change-transform
           "
           loading="lazy"
@@ -87,7 +85,7 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="relative pt-section-sm pb-section-md bg-white overflow-hidden">
+    <section id="gallery" className="relative pt-32 pb-40 bg-white overflow-hidden">
       
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#E5D0D4]/30 via-white to-white pointer-events-none z-0"></div>
 
@@ -109,11 +107,16 @@ const Portfolio: React.FC = () => {
           </Reveal>
         </div>
 
+        {/* 
+            GRID LAYOUT:
+            - auto-rows-auto para mobile
+            - auto-rows-[380px] para desktop para garantir altura consistente nas células Bento
+        */}
         <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-auto md:auto-rows-[380px] gap-4 md:gap-6">
             {PORTFOLIO_ITEMS.map((item, index) => (
                 <div 
                     key={item.id} 
-                    className={`${item.colSpan} relative w-full h-[350px] md:h-auto`}
+                    className={`${item.colSpan} relative w-full h-[350px] md:h-full`}
                 >
                     <Reveal delay={index * 50} width="100%">
                         <div className={`w-full h-full absolute inset-0 md:relative`}>
