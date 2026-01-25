@@ -1,8 +1,6 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-// Removing SplitText import for now to guarantee visibility of the main text. 
-// We can re-add it later once the structure is stable.
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,7 +15,6 @@ const Hero: React.FC = () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       // 1. Title Entrance (Scale + Fade UP)
-      // Using autoAlpha ensures it's hidden (opacity: 0, visibility: hidden) until animation starts
       tl.from(titleRef.current, {
         y: 100,
         autoAlpha: 0,
@@ -76,7 +73,7 @@ const Hero: React.FC = () => {
 
   // Placeholder image logic
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = "https://images.unsplash.com/photo-1598371624833-255d65427c3c?q=80&w=1920&auto=format&fit=crop"; // Reliable fallback
+    e.currentTarget.src = "https://images.unsplash.com/photo-1598371624833-255d65427c3c?q=80&w=1920&auto=format&fit=crop";
   };
 
   return (
@@ -99,11 +96,11 @@ const Hero: React.FC = () => {
       <div className="flex-grow flex items-center justify-center relative z-20 overflow-hidden">
         {/* 
                    Using standard h1 without SplitText to ensure raw visibility. 
-                   Gradient text for style.
+                   Gradient text for style. Updated to harmonious Rose palette.
                 */}
         <h1
           ref={titleRef}
-          className="font-sans font-black text-[28vw] leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-stone-400 to-stone-900 select-none opacity-90 will-change-transform"
+          className="font-sans font-black text-[22vw] leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#E5D0D4] to-[#754548] select-none opacity-100 will-change-transform"
           style={{ visibility: 'visible' }} // Force visibility
         >
           WILLIAM
@@ -111,7 +108,7 @@ const Hero: React.FC = () => {
       </div>
 
       {/* BOTTOM STRIP: Image & Tagline */}
-      <div className="hero-strip relative h-[35vh] w-full min-h-[250px] z-20 bg-stone-900 overflow-hidden flex items-end">
+      <div className="hero-strip relative h-[35vh] w-full min-h-[250px] z-20 bg-[#754548] overflow-hidden flex items-end">
         {/* Image Background */}
         <div className="absolute inset-0 z-0">
           <img
@@ -119,10 +116,10 @@ const Hero: React.FC = () => {
             src="/src/assets/portfolio_01.png"
             alt="Background Texture"
             onError={handleImageError}
-            className="w-full h-full object-cover opacity-60 filter grayscale contrast-125"
+            className="w-full h-full object-cover opacity-60 filter grayscale contrast-125 mix-blend-multiply"
           />
-          {/* Gradient Overlay for Text Readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent"></div>
+          {/* Gradient Overlay for Text Readability - Harmonious Rose Tone */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#754548]/90 via-[#754548]/50 to-transparent"></div>
         </div>
 
         {/* Content */}
@@ -133,7 +130,7 @@ const Hero: React.FC = () => {
             </span>
             <h2 className="hero-fade font-serif text-3xl md:text-5xl text-white font-light leading-tight">
               Arte autoral, anatomia e <br />
-              <span className="italic text-stone-400">narrativa neotradicional.</span>
+              <span className="italic text-stone-300">narrativa neotradicional.</span>
             </h2>
           </div>
         </div>
