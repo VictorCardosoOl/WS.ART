@@ -6,25 +6,25 @@ const steps = [
   {
     id: "01",
     title: "Briefing & Conexão",
-    shortDesc: "A raiz da ideia.",
+    shortDesc: "Entendemos sua história.",
     fullDesc: "A sondagem da tatuagem. Nesta etapa inicial, realizamos uma conversa profunda para entender as motivações, símbolos e memórias que devem compor a obra. Não é apenas sobre o desenho, é sobre o significado.",
   },
   {
     id: "02",
     title: "Estudo Anatômico",
-    shortDesc: "Moldando no corpo.",
+    shortDesc: "Projeção digital no corpo.",
     fullDesc: "Utilizamos fotografia e edição digital (Photoshop) para projetar o desenho diretamente sobre a foto do seu corpo. Isso garante que a arte respeite sua musculatura, curvaturas e fluxo natural, criando uma peça orgânica e fluida.",
   },
   {
     id: "03",
     title: "Sketching",
-    shortDesc: "O traço ganha vida.",
+    shortDesc: "O desenho ganha vida.",
     fullDesc: "Desenvolvimento dos rascunhos e arte final antes da tatuagem acontecer. Aqui definimos contraste, pesos de linha e paleta de cores. O desenho é refinado até atingir a excelência estética e técnica necessária.",
   },
   {
     id: "04",
     title: "A Sessão",
-    shortDesc: "Materialização.",
+    shortDesc: "Execução técnica.",
     fullDesc: "O momento da materialização. Em um ambiente privado e estéril, a arte é transferida para a pele. Utilizamos técnicas modernas para garantir a durabilidade do pigmento e o conforto durante o procedimento.",
   }
 ];
@@ -36,119 +36,113 @@ const Process: React.FC = () => {
   useEffect(() => {
     if (contentRef.current) {
         gsap.fromTo(contentRef.current, 
-            { opacity: 0, x: 20, filter: "blur(5px)" }, 
-            { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.6, ease: "cinema" }
+            { opacity: 0, x: 20 }, 
+            { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }
         );
     }
   }, [activeStep]);
 
   return (
-    <section className="relative py-32 md:py-48 overflow-hidden bg-[#FAF7F7]" id="process">
+    <section className="relative py-32 md:py-48 overflow-hidden" id="process">
       
-      {/* --- ARTISTIC BACKGROUND ELEMENTS --- */}
-      {/* Mancha de grafite suave */}
-      <div className="absolute top-0 right-0 w-[60vw] h-[60vw] bg-[radial-gradient(circle,_rgba(28,25,23,0.03)_0%,_transparent_70%)] blur-[80px] pointer-events-none z-0 mix-blend-multiply"></div>
+      {/* --- BACKGROUND ARTISTRY (Ink Wash Paper) --- */}
+      <div className="absolute inset-0 bg-[#F2E8E9] z-0"></div>
       
-      {/* Textura de papel sutil global */}
-      <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none z-0"></div>
+      {/* Top Gradient Fade */}
+      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FAF7F7] to-transparent z-1"></div>
+
+      {/* Abstract Ink Blot 1 */}
+      <div className="absolute top-20 right-[-10%] w-[800px] h-[800px] bg-[radial-gradient(circle,_rgba(117,69,72,0.08)_0%,_transparent_60%)] blur-[100px] pointer-events-none z-0"></div>
+      
+      {/* Abstract Ink Blot 2 */}
+      <div className="absolute bottom-20 left-[-10%] w-[600px] h-[600px] bg-[radial-gradient(circle,_rgba(28,25,23,0.04)_0%,_transparent_60%)] blur-[80px] pointer-events-none z-0"></div>
+
+      {/* Hand Drawn Decorative Line */}
+      <div className="absolute top-0 right-[20%] w-[2px] h-full opacity-10 hidden lg:block z-0 overflow-hidden">
+         <svg height="100%" width="20" preserveAspectRatio="none">
+            <path d="M10,0 Q 20,400 0,1000" stroke="#754548" strokeWidth="2" fill="none" style={{ filter: 'url(#pencil-process)' }} />
+            <defs>
+                <filter id="pencil-process">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise"/>
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+                </filter>
+            </defs>
+         </svg>
+      </div>
 
       <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pb-24">
         
         <div className="flex flex-col lg:flex-row gap-20 items-start">
           
-          {/* Left Column: Navigation List */}
-          <div className="w-full lg:w-5/12 relative">
+          {/* List Content */}
+          <div className="w-full lg:w-1/2">
              <Reveal>
-               <div className="mb-16 pl-6 relative">
-                   {/* Decorative Scribble */}
-                   <svg className="absolute -left-2 top-1 w-6 h-6 overflow-visible" viewBox="0 0 20 20">
-                        <path d="M0,10 Q5,0 10,10 T20,10" fill="none" stroke="#754548" strokeWidth="1.5" />
-                   </svg>
+               <div className="flex items-center gap-4 mb-12">
+                   {/* Artistic Bullet */}
+                   <div className="w-3 h-3 rounded-full border border-[#754548] bg-transparent"></div>
                    <span className="text-xs font-bold uppercase tracking-ultra text-[#754548]">O Processo Criativo</span>
                </div>
              </Reveal>
 
-             {/* Organic Vertical Line Container */}
-             <div className="relative pl-6">
-                {/* A linha orgânica contínua de fundo */}
-                <div className="absolute left-[3px] top-0 h-full w-[2px] opacity-20 overflow-hidden">
-                    <svg height="100%" width="10" preserveAspectRatio="none">
-                        <path d="M1,0 Q 4,200 1,500 T 2,1000" stroke="#1c1917" strokeWidth="1" fill="none" vectorEffect="non-scaling-stroke" style={{ filter: 'url(#pencil-process)' }} />
-                    </svg>
-                </div>
-
-                <div className="flex flex-col gap-12" role="tablist">
-                {steps.map((step, index) => (
+             <div className="flex flex-col" role="tablist" aria-orientation="vertical">
+               {steps.map((step, index) => (
+                 <div 
+                    key={index}
+                    role="tab"
+                    id={`process-tab-${index}`}
+                    aria-selected={activeStep === index}
+                    aria-controls="process-panel"
+                    tabIndex={0}
+                    className={`group border-b border-[#1c1917]/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-[#754548]' : 'hover:pl-4'}`}
+                    onMouseEnter={() => setActiveStep(index)}
+                    onClick={() => setActiveStep(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveStep(index);
+                      }
+                    }}
+                 >
+                    {/* Active Indicator Line (Sketch Style) */}
                     <div 
-                        key={index}
-                        role="tab"
-                        onClick={() => setActiveStep(index)}
-                        onMouseEnter={() => setActiveStep(index)}
-                        className={`group relative cursor-pointer transition-all duration-500 outline-none`}
-                    >
-                        {/* Active Indicator: Organic Circle */}
-                        <div className={`absolute -left-[26px] top-2 transition-all duration-500 ${activeStep === index ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
-                             <svg width="14" height="14" viewBox="0 0 20 20" className="text-[#754548] fill-current">
-                                <circle cx="10" cy="10" r="4" style={{ filter: 'url(#pencil-dot)' }} />
-                             </svg>
-                        </div>
+                        className={`absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-12 bg-[#754548] transition-all duration-300 ${activeStep === index ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}
+                        style={{ maskImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 3 50\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1.5,0 Q0,25 3,50\' stroke=\'black\' stroke-width=\'3\' fill=\'none\'/%3E%3C/svg%3E")' }}
+                    />
 
-                        {/* Inactive Dot */}
-                        <div className={`absolute -left-[23px] top-[14px] w-1.5 h-1.5 rounded-full bg-stone-300 transition-opacity duration-300 ${activeStep === index ? 'opacity-0' : 'opacity-100'}`}></div>
-
-                        <div className="flex flex-col">
-                            <h3 className={`font-serif text-3xl md:text-4xl transition-all duration-500 origin-left ${activeStep === index ? 'text-[#1c1917] italic translate-x-2' : 'text-stone-400'}`}>
-                                {step.title}
-                            </h3>
-                            <p className={`text-stone-500 font-sans text-xs tracking-widest uppercase mt-2 transition-all duration-500 ${activeStep === index ? 'opacity-100 translate-x-2' : 'opacity-0 -translate-y-2 h-0 overflow-hidden'}`}>
-                                {step.shortDesc}
-                            </p>
-                        </div>
+                    <div className="flex items-baseline justify-between mb-2">
+                        <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-[#754548] italic' : 'text-[#1c1917]'}`}>
+                            {step.title}
+                        </h3>
+                        <span className={`text-xs font-bold transition-colors ${activeStep === index ? 'text-[#754548]' : 'text-stone-400'}`}>
+                            {step.id}
+                        </span>
                     </div>
-                ))}
-                </div>
+                    <p className={`text-stone-500 font-sans text-sm tracking-wide transition-opacity duration-500 ${activeStep === index ? 'opacity-100' : 'opacity-60'}`}>
+                        {step.shortDesc}
+                    </p>
+                 </div>
+               ))}
              </div>
           </div>
 
-          {/* Right Column: Detailed Content */}
-          <div className="w-full lg:w-7/12 relative lg:h-[600px] flex items-center">
-            {/* Visual Divider: Sketchy Line */}
-            <div className="hidden lg:block absolute left-0 top-10 bottom-10 w-[1px] opacity-10">
-                <svg height="100%" width="10" preserveAspectRatio="none">
-                    <path d="M0,0 Q 5,300 0,800" stroke="#1c1917" strokeWidth="1" fill="none" vectorEffect="non-scaling-stroke" style={{ filter: 'url(#pencil-process)' }} />
-                </svg>
-            </div>
-
-            <div className="w-full lg:pl-16">
+          {/* Text Description Reveal */}
+          <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
+            <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-[#754548]/20">
                <div ref={contentRef} className="relative will-change-transform">
-                     {/* Background Number Watermark - Organic positioning */}
-                     <span className="absolute -top-32 -left-20 text-[16rem] font-serif text-[#754548] opacity-[0.03] select-none pointer-events-none font-italic leading-none mix-blend-multiply blur-[2px]">
+                     {/* Background Number Watermark */}
+                     <span className="absolute -top-24 -left-16 text-[14rem] font-serif text-[#754548] opacity-[0.05] select-none pointer-events-none font-italic leading-none mix-blend-multiply">
                         {steps[activeStep].id}
                      </span>
 
-                     <div className="relative z-10">
-                         <div className="mb-8 flex items-end gap-4">
-                            <span className="font-serif text-6xl text-[#754548] leading-none opacity-80">
-                                {steps[activeStep].id}
-                            </span>
-                            <div className="h-[1px] w-20 bg-[#754548] mb-4 opacity-30"></div>
-                         </div>
-                         
-                         <h3 className="text-3xl font-serif text-[#1c1917] mb-8 italic">
-                            {steps[activeStep].title}
-                         </h3>
-                         
-                         <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif max-w-xl">
-                           {steps[activeStep].fullDesc}
-                         </p>
-
-                         {/* Decorative Signature/Stamp */}
-                         <div className="mt-12 opacity-40 mix-blend-multiply">
-                            <svg width="100" height="40" viewBox="0 0 100 40">
-                                <path d="M10,20 Q30,5 50,20 T90,20" fill="none" stroke="#754548" strokeWidth="1" />
-                            </svg>
-                         </div>
-                     </div>
+                     <h4 className="font-serif text-4xl md:text-6xl text-[#1c1917] mb-6 leading-none opacity-10 relative z-10" aria-hidden="true">
+                        {steps[activeStep].id}
+                     </h4>
+                     <h3 className="text-2xl font-serif text-[#1c1917] mb-6 relative z-10">
+                        Detalhes da Etapa
+                     </h3>
+                     <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif relative z-10">
+                       {steps[activeStep].fullDesc}
+                     </p>
                </div>
             </div>
           </div>
@@ -156,19 +150,8 @@ const Process: React.FC = () => {
         </div>
       </div>
       
-      {/* SVG Filters Definitions */}
-      <svg className="absolute w-0 h-0">
-        <defs>
-            <filter id="pencil-process">
-                <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" result="noise"/>
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
-            </filter>
-            <filter id="pencil-dot">
-                <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise"/>
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
-            </filter>
-        </defs>
-      </svg>
+      {/* Bottom transition to white */}
+      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent"></div>
     </section>
   );
 };
