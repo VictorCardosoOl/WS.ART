@@ -32,26 +32,24 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['"Panchang"', 'sans-serif'],
-        sans: ['"Satoshi"', 'sans-serif'],
+        serif: ['"Cormorant Garamond"', 'serif'],
+        sans: ['"Montserrat"', 'sans-serif'],
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)', 
       },
       letterSpacing: {
-        tighter: '-0.06em', // Panchang Negative Kerning
+        tighter: '-0.05em',
         tight: '-0.03em',
         normal: '0em',
-        wide: '0.05em',
-        wider: '0.1em',
-        widest: '0.2em', // Satoshi Meta Text
-        ultra: '0.3em', 
+        wide: '0.025em',
+        wider: '0.05em',
+        widest: '0.25em', 
+        ultra: '0.3em', // Specific request for 0.3em
       },
       fontSize: {
-        'meta': ['10px', { lineHeight: '1.6', letterSpacing: '0.2em' }], // Padrão Editorial
-        'fluid-h1': 'clamp(3.5rem, 10vw, 9rem)', // Panchang Hero
-        'fluid-h2': 'clamp(2.5rem, 6vw, 6rem)',  // Section Titles
-        'fluid-h3': 'clamp(1.5rem, 4vw, 3.5rem)', // Card Titles
+        'editorial-sm': ['10px', { lineHeight: '1.6', letterSpacing: '0.3em' }],
+        'fluid-h2': 'clamp(2.5rem, 5vw, 4.5rem)',
       },
       lineHeight: {
         'tight-editorial': '0.9',

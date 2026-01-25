@@ -72,27 +72,28 @@ const Testimonials: React.FC = () => {
       );
 
       // Image Container Entrance
-      gsap.fromTo(imageContainerRef.current,
-        { scale: 0.9, opacity: 0, y: 50 },
-        {
-          scale: 1,
-          opacity: 1,
-          y: 0,
-          duration: 1.5,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: imageContainerRef.current,
-            start: "top 80%"
-          }
-        }
-      );
-
+      if (window.innerWidth >= 1024) {
+          gsap.fromTo(imageContainerRef.current,
+            { scale: 0.9, opacity: 0, y: 50 },
+            {
+              scale: 1,
+              opacity: 1,
+              y: 0,
+              duration: 1.5,
+              ease: "expo.out",
+              scrollTrigger: {
+                trigger: imageContainerRef.current,
+                start: "top 80%"
+              }
+            }
+          );
+      }
     }, containerRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full py-32 md:py-48 overflow-hidden bg-[#FAF7F7]" id="testimonials">
+    <section ref={containerRef} className="relative w-full py-section-sm md:py-section-lg overflow-hidden bg-[#FAF7F7]" id="testimonials">
       
       {/* --- BACKGROUND GRADIENT --- */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -103,7 +104,7 @@ const Testimonials: React.FC = () => {
       <div className="container mx-auto px-6 relative z-10">
         
         {/* Header Minimalista */}
-        <div className="testimonials-header mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8 mt-12">
+        <div className="testimonials-header mb-16 md:mb-24 flex flex-col md:flex-row justify-between items-start md:items-end border-b border-[#754548]/20 pb-8 mt-12">
             <div>
                 <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tighter uppercase font-semibold">
                     Narrativas<span className="text-[#754548]">.</span>
@@ -128,7 +129,7 @@ const Testimonials: React.FC = () => {
                         aria-pressed={activeIndex === index}
                         aria-label={`Ver depoimento de ${item.client}`}
                         className="testimonial-item group cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#754548] focus-visible:ring-offset-4 rounded-lg will-change-transform"
-                        onMouseEnter={() => setActiveIndex(index)}
+                        onMouseEnter={() => window.innerWidth >= 1024 && setActiveIndex(index)}
                         onClick={() => setActiveIndex(index)}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter' || e.key === ' ') {
@@ -137,13 +138,13 @@ const Testimonials: React.FC = () => {
                           }
                         }}
                     >
-                        <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
+                        <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 lg:translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
                             <div className="mb-4">
                                 <Quote 
                                     size={24} 
                                     className={`mb-4 transition-colors duration-500 ${activeIndex === index ? 'text-[#754548] fill-[#754548]/10' : 'text-stone-300'}`} 
                                 />
-                                <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-900 italic tracking-tight">
+                                <p className="font-serif text-xl md:text-3xl lg:text-4xl leading-snug text-stone-900 italic tracking-tight">
                                     "{item.text}"
                                 </p>
                             </div>
@@ -159,7 +160,7 @@ const Testimonials: React.FC = () => {
                 ))}
             </div>
 
-            {/* COLUNA DIREITA: IMAGEM STICKY */}
+            {/* COLUNA DIREITA: IMAGEM STICKY (Desktop) */}
             <div ref={imageContainerRef} className="hidden lg:block w-1/2 relative h-[80vh] will-change-transform" aria-hidden="true">
                 <div className="sticky top-32 w-full h-full">
                     <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl">
@@ -203,13 +204,24 @@ const Testimonials: React.FC = () => {
                 </div>
             </div>
 
-            {/* MOBILE ONLY */}
-            <div className="block lg:hidden w-full aspect-[4/5] mt-8 relative rounded-2xl overflow-hidden" aria-hidden="true">
-                 <img 
-                    src={testimonials[activeIndex].image} 
-                    alt="Tattoo"
-                    className="w-full h-full object-cover grayscale"
-                 />
+            {/* MOBILE ONLY: IMAGEM ESTATICA (Apenas a ativa) */}
+            <div className="block lg:hidden w-full aspect-[4/5] mt-8 relative rounded-2xl overflow-hidden shadow-lg" aria-hidden="true">
+                 <AnimatePresence mode='wait'>
+                    <motion.div 
+                        key={activeIndex}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="absolute inset-0 w-full h-full"
+                    >
+                        <img 
+                            src={testimonials[activeIndex].image} 
+                            alt="Tattoo"
+                            className="w-full h-full object-cover grayscale"
+                        />
+                    </motion.div>
+                 </AnimatePresence>
                  <div className="absolute bottom-4 left-4 bg-white px-3 py-1 rounded-full">
                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548] font-sans">
                         {testimonials[activeIndex].tag}

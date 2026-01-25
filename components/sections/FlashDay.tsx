@@ -15,7 +15,7 @@ const FlashDay: React.FC = () => {
                 align="left" 
             />
             <Reveal delay={200}>
-                <p className="font-sans text-xs text-stone-500 max-w-xs text-right leading-relaxed tracking-wide md:mb-8">
+                <p className="font-sans text-xs text-stone-500 max-w-xs text-right leading-relaxed tracking-wide md:mb-8 mt-4 md:mt-0">
                     Sessões especiais com desenhos autorais prontos. Atendimento por ordem de chegada.
                 </p>
             </Reveal>
@@ -72,7 +72,7 @@ const FlashDay: React.FC = () => {
             {/* Info */}
             <div className="relative h-full flex flex-col justify-center">
                 <Reveal delay={300}>
-                    <h3 className="font-serif text-4xl text-stone-900 mb-6 leading-tight tracking-tight uppercase font-semibold">
+                    <h3 className="font-serif text-3xl md:text-4xl text-stone-900 mb-6 leading-tight tracking-tight uppercase font-semibold">
                         Arte acessível,<br/> 
                         <span className="text-rose-500">qualidade inegociável.</span>
                     </h3>

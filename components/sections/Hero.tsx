@@ -36,6 +36,7 @@ const Hero: React.FC = () => {
       }, "-=1.0");
 
       // 2. SCROLL PARALLAX ANIMATION
+      // Background moves slower than foreground
       gsap.to(bgRef.current, {
         yPercent: 30,
         ease: "none",
@@ -47,8 +48,10 @@ const Hero: React.FC = () => {
         }
       });
 
+      // Massive Text moves faster (Foreground Parallax)
+      // FIX: Removido opacity: 0 para que o texto não suma, apenas suba em parallax
       gsap.to(titleRef.current, {
-        yPercent: -25,
+        yPercent: -25, // Aumentei ligeiramente a velocidade para efeito dramático
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
@@ -82,14 +85,14 @@ const Hero: React.FC = () => {
               <div className="hidden md:flex flex-col gap-2 hero-fade pointer-events-auto">
                  <div className="flex items-center gap-3">
                     <div className="w-1.5 h-1.5 bg-[#754548] rounded-full animate-pulse"></div>
-                    <span className="font-sans text-meta uppercase font-bold text-stone-400">São Paulo, BR</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">São Paulo, BR</span>
                  </div>
-                 <span className="font-sans text-meta uppercase font-medium text-stone-300 pl-4.5">Est. 2018</span>
+                 <span className="text-[10px] font-medium uppercase tracking-widest text-stone-300 pl-4.5">Est. 2018</span>
               </div>
 
               {/* Editorial Statement */}
               <div className="flex flex-col items-end text-right pointer-events-auto ml-auto max-w-xl">
-                  <h2 className="font-serif text-fluid-h2 text-[#1c1917] leading-tight-editorial font-semibold tracking-tighter mix-blend-darken overflow-hidden uppercase">
+                  <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-[#1c1917] leading-tight-editorial font-light tracking-tight mix-blend-darken overflow-hidden">
                       <SplitText charClass="char-reveal" wordClass="overflow-hidden pb-2">
                         A pele como tela eterna.
                       </SplitText>
@@ -97,13 +100,13 @@ const Hero: React.FC = () => {
                   
                   <div className="hero-line w-full md:w-32 h-[1px] bg-[#754548] my-8 opacity-60"></div>
 
-                  <p className="hero-fade font-sans text-meta text-stone-500 leading-relaxed uppercase font-semibold text-right max-w-[280px]">
+                  <p className="hero-fade font-sans text-[10px] text-stone-500 leading-relaxed tracking-[0.3em] uppercase font-semibold text-right max-w-[280px]">
                       Conectamos narrativa pessoal e anatomia em obras neotradicionais.
                   </p>
 
                   <div className="hero-fade mt-10">
                       <Magnetic strength={0.5}>
-                        <a href="#gallery" className="group inline-flex items-center justify-end gap-4 font-sans text-meta font-bold uppercase text-[#754548] hover:text-stone-900 transition-colors p-4 -mr-4">
+                        <a href="#gallery" className="group inline-flex items-center justify-end gap-4 text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548] hover:text-stone-900 transition-colors p-4 -mr-4">
                             Explorar Acervo
                             <div className="relative overflow-hidden w-4 h-4 flex items-center justify-center">
                               <MoveRight size={14} className="absolute transition-transform duration-500 group-hover:translate-x-full" />
@@ -128,7 +131,7 @@ const Hero: React.FC = () => {
         ref={titleRef}
         className="absolute bottom-0 left-0 w-full flex justify-center items-end leading-none z-10 mix-blend-darken pointer-events-none select-none pb-0 will-change-transform"
       >
-          <h1 className="font-serif font-black text-[18vw] text-[#12100E] tracking-tighter text-center leading-[0.75] w-full opacity-90 overflow-hidden">
+          <h1 className="font-sans font-black text-[21vw] text-[#12100E] tracking-tighter text-center leading-[0.75] w-full opacity-90 overflow-hidden">
                <SplitText charClass="char-reveal" wordClass="overflow-hidden pb-[1vw]">
                 WILLIAM
                </SplitText>

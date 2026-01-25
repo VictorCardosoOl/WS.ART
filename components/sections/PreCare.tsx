@@ -73,7 +73,7 @@ const PreCare: React.FC = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-32 md:py-40 relative overflow-hidden bg-[#F5F5F5]" id="precare">
+    <section ref={containerRef} className="py-section-sm md:py-section-lg relative overflow-hidden bg-[#F5F5F5]" id="precare">
       
       {/* --- BACKGROUND ACCENTS --- */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -83,7 +83,7 @@ const PreCare: React.FC = () => {
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         
         {/* Header Gigante Editorial */}
-        <div className="precare-header mb-32 md:mb-48 mt-12">
+        <div className="precare-header mb-24 md:mb-48 mt-12">
              <h2 className="font-sans font-medium text-fluid-h1 tracking-tighter text-stone-900 leading-[0.8]">
                 O Preparo
                 <span className="block font-serif text-3xl md:text-5xl italic font-normal text-stone-500 mt-4 tracking-normal">
@@ -93,7 +93,7 @@ const PreCare: React.FC = () => {
         </div>
 
         {/* Grid de Colunas */}
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-20">
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 md:gap-y-20">
            {careItems.map((item, index) => (
                <div key={index} className="precare-card flex flex-col h-full group will-change-transform perspective-1000">
                  

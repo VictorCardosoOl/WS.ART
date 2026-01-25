@@ -29,7 +29,7 @@ const About: React.FC = () => {
         }
       );
 
-      // 2. Parágrafo Fade In
+      // 2. Paragraph Fade In
       gsap.fromTo(".about-text-fade",
         { y: 20, opacity: 0 },
         {
@@ -44,7 +44,7 @@ const About: React.FC = () => {
         }
       );
 
-      // 3. Grid de Imagens
+      // 3. Image Grid
       const wrappers = gsap.utils.toArray('.about-image-wrapper');
       gsap.fromTo(wrappers,
         { y: 100, opacity: 0 },
@@ -85,7 +85,7 @@ const About: React.FC = () => {
   }, []);
 
   return (
-    <section ref={containerRef} id="about" className="relative py-32 md:py-48 overflow-hidden">
+    <section ref={containerRef} id="about" className="relative py-section-sm md:py-section-lg overflow-hidden">
       
       {/* --- BACKGROUND --- */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -98,11 +98,11 @@ const About: React.FC = () => {
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         
         {/* ROW 1: Typography Block */}
-        <div ref={textRef} className="flex flex-col lg:flex-row justify-end mb-24 md:mb-32">
+        <div ref={textRef} className="flex flex-col lg:flex-row justify-end mb-16 md:mb-32">
           <div className="lg:w-2/3 flex flex-col items-start text-left">
             
             {/* Headline com Panchang */}
-            <h2 className="font-serif font-bold text-fluid-h2 leading-tight-editorial tracking-tighter text-stone-900 mb-10 uppercase">
+            <h2 className="font-serif font-bold text-fluid-h2 leading-tight-editorial tracking-tighter text-stone-900 mb-8 md:mb-10 uppercase">
               <div className="overflow-hidden"><span className="about-reveal-line block will-change-transform">Eu sou William</span></div>
               <div className="overflow-hidden"><span className="about-reveal-line block will-change-transform">Siqueira, e eu</span></div>
               <div className="overflow-hidden"><span className="about-reveal-line block text-stone-300 will-change-transform">Materializo</span></div>
@@ -121,7 +121,7 @@ const About: React.FC = () => {
 
         {/* ROW 2: Image Grid */}
         <div ref={imagesRef} className="relative">
-           <div className="hidden lg:block absolute -left-12 top-0 font-serif text-6xl leading-none text-pantone-accent/20 about-text-fade">*</div>
+           <div className="hidden lg:block absolute -left-12 top-0 font-serif text-6xl leading-none text-pantone-accent/20 about-text-fade select-none">*</div>
 
            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {[201, 202, 203].map((id, idx) => (
@@ -140,7 +140,7 @@ const About: React.FC = () => {
 
       {/* SEPARATOR */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10 rotate-180 pointer-events-none">
-        <svg viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-[30px] md:h-[40px] fill-pantone-skin">
+        <svg viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-[20px] md:h-[40px] fill-pantone-skin">
              <path d="M0,0 L1200,0 L1200,40 L1180,35 L1160,38 L1140,32 L1120,36 L1100,30 L1080,35 L1060,31 L1040,36 L1020,32 L1000,38 L980,30 L960,35 L940,31 L920,36 L900,32 L880,38 L860,30 L840,35 L820,31 L800,36 L780,32 L760,38 L740,30 L720,35 L700,31 L680,36 L660,32 L640,38 L620,30 L600,35 L580,31 L560,36 L540,32 L520,38 L500,30 L480,35 L460,31 L440,36 L420,32 L400,38 L380,30 L360,35 L340,31 L320,36 L300,32 L280,38 L260,30 L240,35 L220,31 L200,36 L180,32 L160,38 L140,30 L120,35 L100,31 L80,36 L60,32 L40,38 L20,30 L0,40 Z"></path>
         </svg>
       </div>

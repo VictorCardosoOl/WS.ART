@@ -74,9 +74,9 @@
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Fontshare API: Panchang (Titles) & Satoshi (Body) -->
-    <link href="https://api.fontshare.com/v2/css?f[]=panchang@300,400,500,600,700,800&f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <script>
        /* Basic tailwind config for instant loading, full config in tailwind.config.js */
@@ -85,10 +85,6 @@
           extend: {
             colors: {
                pantone: { skin: '#F2E8E9', ink: '#1A1A1A', accent: '#D48C95' }
-            },
-            fontFamily: {
-              serif: ['"Panchang"', 'sans-serif'],
-              sans: ['"Satoshi"', 'sans-serif'],
             }
           }
         }
@@ -104,7 +100,6 @@
       }
       body {
         background-color: #FAF7F7;
-        font-family: 'Satoshi', sans-serif; /* Default Body Font */
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;

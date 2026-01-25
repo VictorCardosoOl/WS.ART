@@ -53,19 +53,22 @@ const Process: React.FC = () => {
         }
       );
 
-      gsap.fromTo(".process-panel-container",
-        { opacity: 0, scale: 0.98 },
-        {
-          opacity: 1, scale: 1, duration: 1.5, ease: "power3.out", delay: 0.2,
-          scrollTrigger: { trigger: listRef.current, start: "top 80%" }
-        }
-      );
+      // Only animate panel entrance on large screens where it's visible side-by-side
+      if (window.innerWidth >= 1024) {
+          gsap.fromTo(".process-panel-container",
+            { opacity: 0, scale: 0.98 },
+            {
+              opacity: 1, scale: 1, duration: 1.5, ease: "power3.out", delay: 0.2,
+              scrollTrigger: { trigger: listRef.current, start: "top 80%" }
+            }
+          );
+      }
     }, containerRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={containerRef} className="relative py-32 md:py-48 overflow-hidden" id="process">
+    <section ref={containerRef} className="relative py-section-sm md:py-section-lg overflow-hidden" id="process">
       
       {/* --- BACKGROUND --- */}
       <div className="absolute inset-0 bg-pantone-skin z-0">
@@ -75,7 +78,7 @@ const Process: React.FC = () => {
 
       <div className="container mx-auto px-6 relative z-10 pb-24">
         
-        <div className="flex flex-col lg:flex-row gap-20 items-start">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
           
           {/* List Content */}
           <div className="w-full lg:w-1/2" ref={listRef}>
@@ -85,53 +88,73 @@ const Process: React.FC = () => {
 
              <div className="flex flex-col" role="tablist" aria-orientation="vertical">
                {steps.map((step, index) => (
-                 <div 
-                    key={index}
-                    role="tab"
-                    id={`process-tab-${index}`}
-                    aria-selected={activeStep === index}
-                    aria-controls="process-panel"
-                    tabIndex={0}
-                    className={`process-item group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4 opacity-50 hover:opacity-100'}`}
-                    onMouseEnter={() => setActiveStep(index)}
-                    onClick={() => setActiveStep(index)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setActiveStep(index);
-                      }
-                    }}
-                 >
-                    {activeStep === index && (
-                        <motion.div 
-                            layoutId="activeIndicator"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-pantone-accent rounded-full"
-                        />
-                    )}
+                 <div key={index} className="flex flex-col">
+                     {/* Tab/Header */}
+                     <div 
+                        role="tab"
+                        id={`process-tab-${index}`}
+                        aria-selected={activeStep === index}
+                        aria-controls={`process-panel-${index}`}
+                        tabIndex={0}
+                        className={`process-item group border-b border-pantone-ink/10 py-8 md:py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm 
+                            ${activeStep === index ? 'pl-4 md:pl-8 border-pantone-accent' : 'hover:pl-4 opacity-50 hover:opacity-100'}
+                        `}
+                        onMouseEnter={() => window.innerWidth >= 1024 && setActiveStep(index)}
+                        onClick={() => setActiveStep(index)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setActiveStep(index);
+                          }
+                        }}
+                     >
+                        {activeStep === index && (
+                            <motion.div 
+                                layoutId="activeIndicator"
+                                className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-pantone-accent rounded-full hidden md:block"
+                            />
+                        )}
 
-                    <div className="flex items-baseline justify-between mb-2">
-                        <h3 className={`font-serif text-3xl md:text-5xl transition-colors duration-500 tracking-tighter uppercase font-semibold ${activeStep === index ? 'text-pantone-ink' : 'text-stone-500'}`}>
-                            {step.title}
-                        </h3>
-                        <span className="font-sans text-meta font-bold text-stone-400">
-                            {step.id}
-                        </span>
-                    </div>
-                    <p className="font-sans text-[10px] uppercase tracking-widest text-stone-500">
-                        {step.shortDesc}
-                    </p>
+                        <div className="flex items-baseline justify-between mb-2">
+                            <h3 className={`font-serif text-2xl md:text-5xl transition-colors duration-500 tracking-tighter uppercase font-semibold ${activeStep === index ? 'text-pantone-ink' : 'text-stone-500'}`}>
+                                {step.title}
+                            </h3>
+                            <span className="font-sans text-meta font-bold text-stone-400">
+                                {step.id}
+                            </span>
+                        </div>
+                        <p className="font-sans text-[10px] uppercase tracking-widest text-stone-500">
+                            {step.shortDesc}
+                        </p>
+                     </div>
+
+                     {/* Mobile Content Accordion */}
+                     <AnimatePresence>
+                         {activeStep === index && (
+                             <motion.div 
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="lg:hidden overflow-hidden"
+                             >
+                                <div className="pt-4 pb-8 pl-4 pr-2 text-stone-700 font-sans font-light leading-relaxed border-b border-transparent">
+                                    {step.fullDesc}
+                                </div>
+                             </motion.div>
+                         )}
+                     </AnimatePresence>
                  </div>
                ))}
              </div>
           </div>
 
-          {/* Description Panel */}
-          <div className="process-panel-container w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
+          {/* Description Panel (Desktop Sticky) */}
+          <div className="process-panel-container w-full lg:w-1/2 relative lg:h-[600px] hidden lg:flex items-center">
             <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-pantone-accent/20 pl-8">
                <AnimatePresence mode='wait'>
                    <motion.article 
                      key={activeStep}
-                     id="process-panel"
+                     id={`process-panel-${activeStep}`}
                      role="tabpanel"
                      aria-labelledby={`process-tab-${activeStep}`}
                      initial={{ opacity: 0, x: 20 }}
@@ -159,7 +182,7 @@ const Process: React.FC = () => {
 
       {/* SEPARATOR */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10 text-[#F5F5F5] pointer-events-none">
-         <svg viewBox="0 0 1200 60" preserveAspectRatio="none" className="w-full h-[50px] md:h-[60px] fill-current">
+         <svg viewBox="0 0 1200 60" preserveAspectRatio="none" className="w-full h-[30px] md:h-[60px] fill-current">
             <path d="M0,60 L1200,60 L1200,10 C1150,30 1100,5 1050,20 C1000,50 950,10 900,30 C850,5 800,40 750,15 C700,50 650,20 600,40 C550,10 500,45 450,25 C400,50 350,10 300,35 C250,5 200,40 150,20 C100,50 50,10 0,60 Z"></path>
          </svg>
       </div>

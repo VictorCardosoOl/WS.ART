@@ -13,31 +13,30 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   const lenisRef = useRef<Lenis | null>(null);
 
   useLayoutEffect(() => {
-    // Configuração de Física "Heavy/Luxurious"
+    // Awwwards-tier configurations
     const lenis = new Lenis({
-      duration: 1.5, // Aumentado para dar mais "peso" e inércia ao parar
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva exponencial suave
+      duration: 1.2, // The sweet spot for "weight"
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential decay for smoothness
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.9, // Reduzido levemente para exigir mais intenção no scroll
+      wheelMultiplier: 1,
       touchMultiplier: 2,
     });
 
     lenisRef.current = lenis;
 
-    // Sincroniza Lenis com GSAP ScrollTrigger
+    // Sync Lenis scroll with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Integração no Ticker do GSAP para renderização de alta performance (60-120fps)
+    // Integate into GSAP's Ticker for high-performance rendering (60-120fps)
     const update = (time: number) => {
       lenis.raf(time * 1000);
     };
 
     gsap.ticker.add(update);
     
-    // Desativa lagSmoothing do GSAP para evitar saltos visuais durante cargas pesadas,
-    // deixando o Lenis gerenciar a suavidade.
+    // Crucial: Disconnect lag smoothing to prevent GSAP from "jumping" during heavy load
     gsap.ticker.lagSmoothing(0);
 
     return () => {

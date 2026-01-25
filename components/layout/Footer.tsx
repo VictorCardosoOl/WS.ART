@@ -88,8 +88,8 @@ const Footer: React.FC = () => {
              <a href="#" className="hover:text-white transition-colors">Termos e Condições</a>
           </div>
           
-          <div className="w-full text-right">
-             <h1 className="font-serif font-bold text-[18vw] leading-[0.7] text-stone-900 select-none pointer-events-none translate-y-2">
+          <div className="w-full text-right overflow-hidden">
+             <h1 className="font-serif font-bold text-fluid-display leading-[0.7] text-stone-900 select-none pointer-events-none translate-y-2 whitespace-nowrap">
                SIQUEIRA
              </h1>
              <p className="font-sans text-[9px] uppercase tracking-widest text-stone-600 absolute bottom-4 right-0">© 2024 William Siqueira Art Ltd.</p>

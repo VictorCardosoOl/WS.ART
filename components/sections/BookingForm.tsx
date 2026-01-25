@@ -82,22 +82,23 @@ const BookingForm: React.FC = () => {
     );
   }
 
+  // Ensure text-base for inputs to prevent iOS zoom
   const inputClasses = (fieldName: string) => `
-    w-full py-4 bg-transparent border-b transition-all duration-500 ease-out text-lg text-stone-900 font-serif placeholder:text-stone-300 focus:outline-none rounded-none appearance-none tracking-tight
+    w-full py-4 bg-transparent border-b transition-all duration-500 ease-out text-base md:text-lg text-stone-900 font-serif placeholder:text-stone-300 focus:outline-none rounded-none appearance-none tracking-tight
     ${focusedField === fieldName ? 'border-[#754548] pl-2' : 'border-stone-200'}
   `;
 
   const labelClasses = "block font-sans text-meta font-bold uppercase text-stone-500 mb-1";
 
   return (
-    <section id="booking" className="py-32 md:py-48 bg-white scroll-mt-20">
+    <section id="booking" className="py-section-sm md:py-section-lg bg-white scroll-mt-20">
       <div className="container mx-auto px-6">
         <SectionTitle subtitle="Agendamento" title="Inicie sua Jornada" />
         
         <div className="max-w-4xl mx-auto mt-20">
             
             {/* Context/Disclaimer */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20">
                 <div className="md:col-span-4">
                     <p className="font-sans text-meta font-bold uppercase text-[#754548] mb-4">
                         Informações Essenciais
@@ -113,7 +114,7 @@ const BookingForm: React.FC = () => {
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-16" noValidate>
+            <form onSubmit={handleSubmit} className="space-y-12 md:space-y-16" noValidate>
                 
                 {/* Contact Group */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
@@ -202,10 +203,10 @@ const BookingForm: React.FC = () => {
                     <button 
                         type="submit"
                         disabled={status === 'submitting' || !formData.agreeToDeposit}
-                        className="group relative px-12 py-5 bg-stone-900 text-white overflow-hidden rounded-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        className="group relative px-12 py-5 bg-stone-900 text-white overflow-hidden rounded-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all w-full md:w-auto"
                     >
                         <div className="absolute inset-0 w-0 bg-[#754548] transition-all duration-[600ms] ease-out group-hover:w-full"></div>
-                        <div className="relative flex items-center gap-4">
+                        <div className="relative flex items-center justify-center gap-4">
                             <span className="font-sans text-meta font-bold uppercase">
                                 {status === 'submitting' ? "Processando..." : "Enviar Solicitação"}
                             </span>
