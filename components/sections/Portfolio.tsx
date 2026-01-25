@@ -8,18 +8,16 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Parallax Image usando apenas GSAP
 const ParallaxImage = ({ src, alt }: { src: string, alt: string }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-        // Efeito Parallax Suave
         gsap.fromTo(imgRef.current, 
-            { yPercent: -10, scale: 1.1 },
+            { yPercent: -15, scale: 1.15 },
             { 
-                yPercent: 10,
+                yPercent: 15,
                 scale: 1,
                 ease: "none",
                 scrollTrigger: {
@@ -51,8 +49,11 @@ const ParallaxImage = ({ src, alt }: { src: string, alt: string }) => {
 const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
   return (
     <div className={`group flex flex-col gap-6 ${item.offsetY}`}>
-      {/* Container da Imagem */}
-      <div className={`relative w-full ${item.height} overflow-hidden bg-[#E5D0D4]/20 rounded-lg`}>
+      {/* Container da Imagem com Data Cursor */}
+      <div 
+        className={`relative w-full ${item.height} overflow-hidden bg-[#E5D0D4]/20 rounded-sm cursor-none`}
+        data-cursor="Ver Projeto"
+      >
         <ParallaxImage src={item.src} alt={item.altText} />
         <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none mix-blend-overlay"></div>
       </div>
@@ -96,7 +97,7 @@ const StudioScroller = () => {
                         trigger: sectionRef.current,
                         start: "top bottom",
                         end: "bottom top",
-                        scrub: 0.5 // Scrub mais suave
+                        scrub: 0.5 
                     }
                 });
             }
@@ -139,7 +140,7 @@ const Portfolio: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-32 border-b border-stone-100 pb-12">
           <Reveal>
              <h2 className="text-7xl md:text-[9vw] font-serif text-stone-900 leading-[0.8] tracking-tighter mix-blend-darken">
-               Acervo<span className="text-[#754548] text-4xl md:text-6xl align-top ml-2">.</span>
+               Acervo<span className="text-[#754548] text-4xl md:text-6xl align-top ml-2 italic">.</span>
              </h2>
           </Reveal>
           
@@ -155,7 +156,7 @@ const Portfolio: React.FC = () => {
           </Reveal>
         </div>
 
-        {/* Grid Assimétrico Estilo "Masonry Manual" */}
+        {/* Grid Assimétrico */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-x-8 lg:gap-x-12 gap-y-32">
             {PORTFOLIO_ITEMS.map((item, index) => (
                 <div 

@@ -10,16 +10,21 @@ interface SectionTitleProps {
 
 const SectionTitle: React.FC<SectionTitleProps> = ({ subtitle, title, align = 'center', light = false }) => {
   return (
-    <div className={`mb-20 md:mb-32 ${align === 'center' ? 'text-center' : 'text-left'}`}>
+    <div className={`mb-24 md:mb-36 ${align === 'center' ? 'text-center' : 'text-left'}`}>
       <Reveal>
-        <span className={`uppercase tracking-[0.3em] text-[10px] font-medium block mb-4 ${light ? 'text-rose-200' : 'text-rose-500'}`}>
-          {subtitle}
-        </span>
+        <div className={`flex items-center gap-3 mb-6 ${align === 'center' ? 'justify-center' : 'justify-start'}`}>
+             <div className={`h-[1px] w-8 ${light ? 'bg-rose-200' : 'bg-[#754548]'}`}></div>
+             <span className={`uppercase tracking-[0.3em] text-[9px] font-bold ${light ? 'text-rose-200' : 'text-[#754548]'}`}>
+              {subtitle}
+            </span>
+        </div>
       </Reveal>
       <Reveal delay={150}>
-        {/* Título com leading apertado (0.85) e tracking negativo para impacto escultórico */}
-        <h2 className={`text-5xl md:text-7xl lg:text-8xl font-serif font-medium tracking-tighter leading-[0.9] ${light ? 'text-white' : 'text-stone-900'}`}>
-          {title}
+        {/* Título com leading apertado e mistura de estilos */}
+        <h2 className={`text-6xl md:text-8xl lg:text-9xl font-serif font-light tracking-tighter leading-[0.85] ${light ? 'text-white' : 'text-stone-900'}`}>
+          {title.split(' ').map((word, i) => (
+             <span key={i} className={i % 2 !== 0 ? 'italic opacity-90 ml-2' : ''}>{word} </span>
+          ))}
         </h2>
       </Reveal>
     </div>

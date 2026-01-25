@@ -35,7 +35,6 @@ const Process: React.FC = () => {
 
   useEffect(() => {
     if (contentRef.current) {
-        // Animação leve de fade e slide
         gsap.fromTo(contentRef.current, 
             { opacity: 0, x: 20 }, 
             { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }
@@ -46,23 +45,43 @@ const Process: React.FC = () => {
   return (
     <section className="relative py-32 md:py-48 overflow-hidden" id="process">
       
-      {/* --- BACKGROUND ARTISTRY --- */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#FAF7F7] via-[#FDF7F8] to-[#FAF7F7] z-0"></div>
-      <div className="absolute bottom-0 left-[-10%] w-[600px] h-[600px] bg-[radial-gradient(circle,_#1c1917_0%,_transparent_70%)] opacity-[0.02] blur-[80px] pointer-events-none z-0"></div>
-      <div className="absolute top-0 right-[20%] w-[1px] h-full opacity-10 hidden lg:block z-0">
-         <svg height="100%" width="100%" preserveAspectRatio="none">
-            <path d="M0 0 Q 20 400 0 1000" stroke="#754548" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" strokeDasharray="10, 20"/>
+      {/* --- BACKGROUND ARTISTRY (Ink Wash Paper) --- */}
+      <div className="absolute inset-0 bg-[#F2E8E9] z-0"></div>
+      
+      {/* Top Gradient Fade */}
+      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FAF7F7] to-transparent z-1"></div>
+
+      {/* Abstract Ink Blot 1 */}
+      <div className="absolute top-20 right-[-10%] w-[800px] h-[800px] bg-[radial-gradient(circle,_rgba(117,69,72,0.08)_0%,_transparent_60%)] blur-[100px] pointer-events-none z-0"></div>
+      
+      {/* Abstract Ink Blot 2 */}
+      <div className="absolute bottom-20 left-[-10%] w-[600px] h-[600px] bg-[radial-gradient(circle,_rgba(28,25,23,0.04)_0%,_transparent_60%)] blur-[80px] pointer-events-none z-0"></div>
+
+      {/* Hand Drawn Decorative Line */}
+      <div className="absolute top-0 right-[20%] w-[2px] h-full opacity-10 hidden lg:block z-0 overflow-hidden">
+         <svg height="100%" width="20" preserveAspectRatio="none">
+            <path d="M10,0 Q 20,400 0,1000" stroke="#754548" strokeWidth="2" fill="none" style={{ filter: 'url(#pencil-process)' }} />
+            <defs>
+                <filter id="pencil-process">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise"/>
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+                </filter>
+            </defs>
          </svg>
       </div>
 
-      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-10 pb-24">
+      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pb-24">
         
         <div className="flex flex-col lg:flex-row gap-20 items-start">
           
           {/* List Content */}
           <div className="w-full lg:w-1/2">
              <Reveal>
-               <span className="text-xs font-bold uppercase tracking-ultra text-pantone-accent mb-12 block">O Processo Criativo</span>
+               <div className="flex items-center gap-4 mb-12">
+                   {/* Artistic Bullet */}
+                   <div className="w-3 h-3 rounded-full border border-[#754548] bg-transparent"></div>
+                   <span className="text-xs font-bold uppercase tracking-ultra text-[#754548]">O Processo Criativo</span>
+               </div>
              </Reveal>
 
              <div className="flex flex-col" role="tablist" aria-orientation="vertical">
@@ -74,7 +93,7 @@ const Process: React.FC = () => {
                     aria-selected={activeStep === index}
                     aria-controls="process-panel"
                     tabIndex={0}
-                    className={`group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4'}`}
+                    className={`group border-b border-[#1c1917]/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-[#754548]' : 'hover:pl-4'}`}
                     onMouseEnter={() => setActiveStep(index)}
                     onClick={() => setActiveStep(index)}
                     onKeyDown={(e) => {
@@ -84,17 +103,17 @@ const Process: React.FC = () => {
                       }
                     }}
                  >
-                    {/* Active Indicator Line */}
+                    {/* Active Indicator Line (Sketch Style) */}
                     <div 
-                        className={`absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-12 bg-pantone-accent transition-all duration-300 ${activeStep === index ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}
-                        style={{ borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%' }}
+                        className={`absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-12 bg-[#754548] transition-all duration-300 ${activeStep === index ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}
+                        style={{ maskImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 3 50\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1.5,0 Q0,25 3,50\' stroke=\'black\' stroke-width=\'3\' fill=\'none\'/%3E%3C/svg%3E")' }}
                     />
 
                     <div className="flex items-baseline justify-between mb-2">
-                        <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-pantone-accent italic' : 'text-pantone-ink'}`}>
+                        <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-[#754548] italic' : 'text-[#1c1917]'}`}>
                             {step.title}
                         </h3>
-                        <span className={`text-xs font-bold transition-colors ${activeStep === index ? 'text-pantone-accent' : 'text-stone-400'}`}>
+                        <span className={`text-xs font-bold transition-colors ${activeStep === index ? 'text-[#754548]' : 'text-stone-400'}`}>
                             {step.id}
                         </span>
                     </div>
@@ -108,17 +127,17 @@ const Process: React.FC = () => {
 
           {/* Text Description Reveal */}
           <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
-            <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-pantone-accent/20">
+            <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-[#754548]/20">
                <div ref={contentRef} className="relative will-change-transform">
                      {/* Background Number Watermark */}
-                     <span className="absolute -top-20 -left-10 text-[12rem] font-serif text-[#754548] opacity-[0.03] select-none pointer-events-none font-italic leading-none">
+                     <span className="absolute -top-24 -left-16 text-[14rem] font-serif text-[#754548] opacity-[0.05] select-none pointer-events-none font-italic leading-none mix-blend-multiply">
                         {steps[activeStep].id}
                      </span>
 
-                     <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10 relative z-10" aria-hidden="true">
+                     <h4 className="font-serif text-4xl md:text-6xl text-[#1c1917] mb-6 leading-none opacity-10 relative z-10" aria-hidden="true">
                         {steps[activeStep].id}
                      </h4>
-                     <h3 className="text-2xl font-serif text-pantone-ink mb-6 relative z-10">
+                     <h3 className="text-2xl font-serif text-[#1c1917] mb-6 relative z-10">
                         Detalhes da Etapa
                      </h3>
                      <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif relative z-10">
@@ -130,6 +149,9 @@ const Process: React.FC = () => {
 
         </div>
       </div>
+      
+      {/* Bottom transition to white */}
+      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent"></div>
     </section>
   );
 };
