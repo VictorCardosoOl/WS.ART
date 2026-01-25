@@ -4,7 +4,7 @@ import { GridGalleryItem } from '../../types';
 import { PORTFOLIO_ITEMS } from '../../data/portfolio';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import Marquee from '../ui/Marquee';
+
 
 const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
   const ref = useRef(null);
@@ -128,27 +128,7 @@ const Portfolio: React.FC = () => {
           ))}
         </div>
 
-        <div className="my-24 w-full opacity-30 select-none pointer-events-none mix-blend-difference overflow-hidden">
-          <Marquee
-            text="NEOTRADITIONAL — BLACKWORK — FINE LINE —"
-            repeat={4}
-            duration={30}
-            className="text-[8vw] md:text-[6vw] font-black italic text-stone-900 tracking-tighter"
-          />
-        </div>
 
-        <div className="mt-8 text-center" data-cursor="EXPLORAR">
-          <Reveal>
-            <a href="https://instagram.com" className="group inline-flex flex-col items-center gap-3 p-4">
-              <span className="font-serif text-2xl text-stone-400 group-hover:text-stone-900 transition-colors duration-500 uppercase tracking-tight">
-                Ver arquivo completo
-              </span>
-              <div className="relative w-[1px] h-12 md:h-16 bg-stone-200 overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full bg-[#754548] -translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out-expo"></div>
-              </div>
-            </a>
-          </Reveal>
-        </div>
       </div>
 
       <div className="absolute bottom-0 left-0 w-full flex justify-center overflow-hidden z-10 text-stone-200">
