@@ -32,8 +32,8 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['"Nippo"', 'sans-serif'],
-        sans: ['"Satoshi"', 'sans-serif'],
+        serif: ['"Panchang"', 'sans-serif'], // Usado para títulos/chamadas
+        sans: ['"Clash Grotesk"', 'sans-serif'], // Usado para textos/corpo
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)', 
