@@ -29,8 +29,9 @@ const CustomCursor: React.FC = () => {
     const cursor = cursorRef.current;
 
     gsap.set(cursor, { xPercent: -50, yPercent: -50 });
-    xTo.current = gsap.quickTo(cursor, "x", { duration: 0.4, ease: "power3.out" });
-    yTo.current = gsap.quickTo(cursor, "y", { duration: 0.4, ease: "power3.out" });
+    // Ajuste: Duration menor (0.25) para resposta mais rápida, mas mantendo a suavidade power3
+    xTo.current = gsap.quickTo(cursor, "x", { duration: 0.25, ease: "power3.out" });
+    yTo.current = gsap.quickTo(cursor, "y", { duration: 0.25, ease: "power3.out" });
 
     const updateMousePosition = (e: MouseEvent) => {
       xTo.current?.(e.clientX);
@@ -89,8 +90,8 @@ const CustomCursor: React.FC = () => {
                 backgroundColor: "#FAF7F7",
                 mixBlendMode: "difference", // Efeito artístico de inversão
                 opacity: 1,
-                duration: 0.4,
-                ease: "back.out(1.7)"
+                duration: 0.5,
+                ease: "elastic.out(1, 0.75)" // Elastic mais suave
             });
             if(textEl) {
                 gsap.to(textEl, { opacity: 1, scale: 1, duration: 0.3, delay: 0.1 });
@@ -103,7 +104,7 @@ const CustomCursor: React.FC = () => {
                 backgroundColor: "#FAF7F7", // Branco para contraste no preto, invertido no branco
                 mixBlendMode: "difference",
                 opacity: 1,
-                duration: 0.3,
+                duration: 0.4,
                 ease: "power2.out"
             });
             if(textEl) gsap.to(textEl, { opacity: 0, scale: 0.5, duration: 0.2 });
@@ -116,7 +117,7 @@ const CustomCursor: React.FC = () => {
             backgroundColor: "#1c1917", // Volta para preto padrão
             mixBlendMode: "normal",
             opacity: 1,
-            duration: 0.3,
+            duration: 0.4,
             ease: "power2.out"
         });
         if(textEl) gsap.to(textEl, { opacity: 0, scale: 0.5, duration: 0.2 });

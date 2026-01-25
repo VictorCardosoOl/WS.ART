@@ -12,29 +12,29 @@ const Hero: React.FC = () => {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. INTRO ANIMATION (Load)
-      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+      // 1. INTRO ANIMATION (Load) - Mais fluida e dramática
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       // Initial States
-      gsap.set(".char-reveal", { yPercent: 120 }); // Letters start below baseline
-      gsap.set(".hero-fade", { y: 20, autoAlpha: 0 });
+      gsap.set(".char-reveal", { yPercent: 120, opacity: 0 }); 
+      gsap.set(".hero-fade", { y: 30, autoAlpha: 0 });
       gsap.set(".hero-line", { scaleX: 0, transformOrigin: "left center" });
 
       // Sequence
       tl.to(".char-reveal", {
         yPercent: 0,
-        duration: 1.8,
-        stagger: 0.03, // Wave effect on letters
-        ease: "power3.out"
+        opacity: 1,
+        duration: 1.5,
+        stagger: { amount: 0.8, from: "start" }, // Stagger baseado em tempo total para fluidez
+        ease: "power4.out" // Entrada explosiva e final suave
       })
-      .to(".hero-line", { scaleX: 1, duration: 1.5, ease: "expo.out" }, "-=1.2")
+      .to(".hero-line", { scaleX: 1, duration: 1.8, ease: "expo.out" }, "-=1.0")
       .to(".hero-fade", {
         y: 0,
         autoAlpha: 1,
         duration: 1.2,
-        stagger: 0.1
-      }, "-=1.0");
-      // REMOVIDO: Animação yoyo/repeat de flutuação
+        stagger: 0.15
+      }, "-=1.2");
 
       // 2. SCROLL PARALLAX ANIMATION
       gsap.to(bgRef.current, {
@@ -50,13 +50,13 @@ const Hero: React.FC = () => {
 
       // Massive Text moves faster (Foreground Parallax)
       gsap.to(titleRef.current, {
-        yPercent: -25, 
+        yPercent: -20, // Reduzido levemente para evitar cortes
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: true
+          scrub: 1.2 // Adicionado Scrub delay para suavidade
         }
       });
 

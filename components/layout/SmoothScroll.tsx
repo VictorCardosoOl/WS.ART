@@ -14,31 +14,27 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
 
   useLayoutEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.8, // Aumentado de 1.2 para 1.8 para mais suavidade
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva exponencial suave
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 0.8, // Reduzido levemente para dar sensação de peso
       touchMultiplier: 2,
     });
 
     lenisRef.current = lenis;
 
-    // Sincroniza Lenis com ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Adiciona ao ticker do GSAP para garantir que rodem no mesmo frame
-    // Isso evita o "jitter" (tremor) quando se usa parallax
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
     
-    // Desativa o lag smoothing do GSAP para evitar saltos durante carregamento pesado
     gsap.ticker.lagSmoothing(0);
 
     return () => {
-      gsap.ticker.remove((time) => lenis.raf(time * 1000)); // Limpeza correta
+      gsap.ticker.remove((time) => lenis.raf(time * 1000));
       lenis.destroy();
       lenisRef.current = null;
     };
