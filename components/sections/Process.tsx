@@ -37,7 +37,7 @@ const Process: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Entrance Animation (ScrollTrigger)
+  // Entrance Animation
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       // Animate Section Title
@@ -58,7 +58,7 @@ const Process: React.FC = () => {
         x: -30,
         opacity: 0,
         duration: 0.8,
-        stagger: 0.1, // Creates the cascade effect
+        stagger: 0.1,
         ease: "power2.out",
         scrollTrigger: {
           trigger: listRef.current,
@@ -70,10 +70,10 @@ const Process: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
-  // Content Transition Animation (State Change)
+  // Content Transition Animation
   useLayoutEffect(() => {
     if (contentRef.current) {
-      // Fade out/in movement for content refresh
+      // Simple fade out/in for content refresh
       gsap.fromTo(contentRef.current,
         { opacity: 0, x: 20 },
         { opacity: 1, x: 0, duration: 0.5, ease: "power2.out", overwrite: true }

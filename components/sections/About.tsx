@@ -62,9 +62,8 @@ const About: React.FC = () => {
 
       // Scroll Parallax (Middle image moves slower/faster)
       if (images.length === 3) {
-        // Middle image moves UP slightly faster than scroll
         gsap.to(images[1], {
-          yPercent: -15, 
+          yPercent: -15, // Moves up slightly faster than scroll
           ease: "none",
           scrollTrigger: {
             trigger: imagesRef.current,
@@ -74,9 +73,8 @@ const About: React.FC = () => {
           }
         });
         
-        // Outer images move slightly slower for depth contrast
         gsap.to([images[0], images[2]], {
-          yPercent: 5, 
+          yPercent: 5, // Moves slightly slower
           ease: "none",
           scrollTrigger: {
             trigger: imagesRef.current,
@@ -130,7 +128,7 @@ const About: React.FC = () => {
                 />
             </div>
 
-            {/* Imagem 02 - Central (Offset visual via margin para quebrar o grid) */}
+            {/* Imagem 02 - Central */}
             <div className="about-img-wrapper relative aspect-[3/4] w-full overflow-hidden bg-stone-100 will-change-transform md:mt-12">
                 <img 
                     src="https://picsum.photos/800/1066?grayscale&random=102" 

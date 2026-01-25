@@ -72,16 +72,14 @@ const Testimonials: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
-  // Image Transition Animation (State Driven)
+  // Image Transition Animation
   useLayoutEffect(() => {
-    // Reset and Animate Image on Change
     if (imageRef.current) {
         gsap.fromTo(imageRef.current, 
             { opacity: 0, scale: 1.05 },
             { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out", overwrite: true }
         );
     }
-    // Animate Tag pop-in
     if (tagRef.current) {
         gsap.fromTo(tagRef.current,
             { y: 15, opacity: 0 },
