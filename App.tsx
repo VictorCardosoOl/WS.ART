@@ -20,27 +20,23 @@ const App: React.FC = () => {
     <SmoothScroll>
       <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-white relative">
         {/* Global Noise Overlay */}
-        <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.04] bg-noise mix-blend-overlay"></div>
+        <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-noise"></div>
         
         <CustomCursor />
         <Navbar />
-        
         <main className="flex-grow relative z-10">
           <Hero />
-          
-          <div className="relative z-20 bg-white shadow-[0_-50px_100px_rgba(255,255,255,1)]">
-            <Portfolio />
-            <About />
-            <Process />
-          </div>
+          <Portfolio />
+          <About />
+          <Process />
           
           {/* Seção Interativa 3D - Imersão */}
-          <section className="py-32 bg-[#FAF7F7] relative border-y border-stone-100/50 overflow-hidden">
-            <div className="container mx-auto px-6 mb-20 relative z-10">
+          <section className="py-24 bg-[#FAF7F7] relative border-y border-stone-100 overflow-hidden">
+            <div className="container mx-auto px-6 mb-16 relative z-10">
                <SectionTitle subtitle="Experiência" title="Imersão Visual" />
             </div>
             {/* Container 3D Isolado */}
-            <div className="w-full h-[600px] md:h-[700px] relative rounded-3xl overflow-hidden mx-auto max-w-[95%] shadow-[inset_0_0_60px_rgba(117,69,72,0.05)] bg-[#E5D0D4]/10">
+            <div className="w-full h-[600px] md:h-[700px] relative rounded-3xl overflow-hidden mx-auto max-w-[95%] shadow-[inset_0_0_40px_rgba(0,0,0,0.02)] bg-[#E5D0D4]/10">
                <FluidGlass 
                   mode="lens" 
                   lensProps={{
@@ -54,15 +50,12 @@ const App: React.FC = () => {
             </div>
           </section>
 
-          <div className="relative z-20 bg-white">
-            <FlashDay />
-            <PreCare />
-            <Testimonials />
-            <FAQ />
-            <BookingForm />
-          </div>
+          <FlashDay />
+          <PreCare />
+          <Testimonials />
+          <FAQ />
+          <BookingForm />
         </main>
-        
         <Footer />
       </div>
     </SmoothScroll>

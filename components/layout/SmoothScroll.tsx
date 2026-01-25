@@ -13,42 +13,41 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   const lenisRef = useRef<Lenis | null>(null);
 
   useLayoutEffect(() => {
+    // Awwwards-tier configurations
     const lenis = new Lenis({
-      duration: 1.8, // Aumentado para dar sensação de peso/luxo
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva exponencial suave
+      duration: 1.2, // The sweet spot for "weight"
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential decay for smoothness
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.9, // Reduzido ligeiramente para controle preciso
-      touchMultiplier: 1.5,
-      infinite: false,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
     });
 
     lenisRef.current = lenis;
 
-    // Sincroniza o Lenis com o ScrollTrigger do GSAP
+    // Sync Lenis scroll with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Injeta o Lenis no loop de renderização (Ticker) do GSAP
-    // Isso garante que o scroll e as animações sejam calculados no mesmo frame
-    gsap.ticker.add((time) => {
+    // Integate into GSAP's Ticker for high-performance rendering (60-120fps)
+    const update = (time: number) => {
       lenis.raf(time * 1000);
-    });
+    };
 
-    // Desativa o lag smoothing do GSAP para evitar "pulos" visuais
-    // quando o thread principal está ocupado, preferindo uma leve desaceleração
-    // à descontinuidade visual.
+    gsap.ticker.add(update);
+    
+    // Crucial: Disconnect lag smoothing to prevent GSAP from "jumping" during heavy load
     gsap.ticker.lagSmoothing(0);
 
     return () => {
-      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+      gsap.ticker.remove(update);
       lenis.destroy();
       lenisRef.current = null;
     };
   }, []);
 
   return (
-    <div id="smooth-wrapper" className="w-full min-h-screen will-change-transform">
+    <div id="smooth-wrapper" className="w-full min-h-screen">
       {children}
     </div>
   );

@@ -1,59 +1,48 @@
-import React, { useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface RevealProps {
   children: React.ReactNode;
   width?: 'fit-content' | '100%';
-  delay?: number; // Atraso em ms (agora convertido para segundos no GSAP)
-  yOffset?: number; // Distância vertical do movimento
-  duration?: number;
+  delay?: number;
 }
 
-const Reveal: React.FC<RevealProps> = ({ 
-  children, 
-  width = 'fit-content', 
-  delay = 0,
-  yOffset = 40,
-  duration = 1.2
-}) => {
+const Reveal: React.FC<RevealProps> = ({ children, width = 'fit-content', delay = 0 }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(el, 
-        {
-          y: yOffset,
-          autoAlpha: 0,
-          filter: 'blur(10px)',
-          scale: 0.98
-        },
-        {
-          y: 0,
-          autoAlpha: 1,
-          filter: 'blur(0px)',
-          scale: 1,
-          duration: duration,
-          delay: delay / 1000, // Converte ms para segundos
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%", // Inicia quando o topo do elemento atinge 85% da viewport
-            toggleActions: "play none none reverse" // Toca na entrada, reverte na saída (opcional, para sentir vivo)
-          }
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
         }
-      );
-    }, ref);
+      },
+      { 
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px" // Slightly offset trigger for better timing
+      } 
+    );
 
-    return () => ctx.revert();
-  }, [delay, yOffset, duration]);
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div ref={ref} style={{ width, position: 'relative', willChange: 'transform, opacity, filter' }} className="invisible">
-      {children}
+    <div ref={ref} style={{ width, position: 'relative', overflow: 'visible' }}>
+      <div
+        className={`transform transition-all duration-[1200ms] ease-out-expo ${
+          isVisible 
+            ? 'opacity-100 translate-y-0 blur-0 scale-100' 
+            : 'opacity-0 translate-y-12 blur-[10px] scale-[0.98]'
+        }`}
+        style={{ transitionDelay: `${delay}ms` }}
+      >
+        {children}
+      </div>
     </div>
   );
 };
