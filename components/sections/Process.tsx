@@ -41,7 +41,7 @@ const Process: React.FC = () => {
           {/* List Content */}
           <div className="w-full lg:w-1/2">
              <Reveal>
-               <span className="text-xs font-bold uppercase tracking-ultra text-pantone-accent mb-12 block">O Processo Criativo</span>
+               <span className="text-xs font-bold uppercase tracking-ultra text-pantone-accent mb-12 block font-sans">O Processo Criativo</span>
              </Reveal>
 
              <div className="flex flex-col" role="tablist" aria-orientation="vertical">
@@ -72,10 +72,10 @@ const Process: React.FC = () => {
                     )}
 
                     <div className="flex items-baseline justify-between mb-2">
-                        <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-pantone-accent italic' : 'text-pantone-ink'}`}>
+                        <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight uppercase ${activeStep === index ? 'text-pantone-accent' : 'text-pantone-ink'}`}>
                             {step.title}
                         </h3>
-                        <span className={`text-xs font-bold transition-colors ${activeStep === index ? 'text-pantone-accent' : 'text-stone-400'}`}>
+                        <span className={`text-xs font-bold transition-colors font-sans ${activeStep === index ? 'text-pantone-accent' : 'text-stone-400'}`}>
                             {step.id}
                         </span>
                     </div>
@@ -105,10 +105,10 @@ const Process: React.FC = () => {
                      <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10" aria-hidden="true">
                         {steps[activeStep].id}
                      </h4>
-                     <h3 className="text-2xl font-serif text-pantone-ink mb-6">
+                     <h3 className="text-2xl font-serif text-pantone-ink mb-6 uppercase">
                         Detalhes da Etapa
                      </h3>
-                     <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif">
+                     <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-sans">
                        {steps[activeStep].fullDesc}
                      </p>
                    </motion.div>
@@ -119,10 +119,10 @@ const Process: React.FC = () => {
         </div>
       </div>
 
-      {/* SEPARATOR: JAGGED EDGE TO WHITE */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
-         <svg viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-[30px] md:h-[40px] fill-white">
-            <path d="M0,40 L0,0 L20,8 L40,0 L60,6 L80,0 L100,5 L120,0 L140,8 L160,0 L180,6 L200,0 L220,5 L240,0 L260,8 L280,0 L300,6 L320,0 L340,5 L360,0 L380,8 L400,0 L420,6 L440,0 L460,5 L480,0 L500,8 L520,0 L540,6 L560,0 L580,5 L600,0 L620,8 L640,0 L660,6 L680,0 L700,5 L720,0 L740,8 L760,0 L780,6 L800,0 L820,5 L840,0 L860,8 L880,0 L900,6 L920,0 L940,5 L960,0 L980,8 L1000,0 L1020,6 L1040,0 L1060,5 L1080,0 L1100,8 L1120,0 L1140,6 L1160,0 L1180,5 L1200,0 L1200,40 Z"></path>
+      {/* SEPARATOR: INK BLEED EDGE (Transition to White) */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10 text-white">
+         <svg viewBox="0 0 1200 60" preserveAspectRatio="none" className="w-full h-[50px] md:h-[60px] fill-current">
+            <path d="M0,60 L1200,60 L1200,10 C1150,30 1100,5 1050,20 C1000,50 950,10 900,30 C850,5 800,40 750,15 C700,50 650,20 600,40 C550,10 500,45 450,25 C400,50 350,10 300,35 C250,5 200,40 150,20 C100,50 50,10 0,60 Z"></path>
          </svg>
       </div>
     </section>

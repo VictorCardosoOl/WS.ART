@@ -32,8 +32,8 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['"Panchang"', 'sans-serif'], // Usado para títulos/chamadas
-        sans: ['"Satoshi"', 'sans-serif'], // Usado para textos/corpo
+        serif: ['"Panchang"', 'sans-serif'], // Display/Títulos
+        sans: ['"Satoshi"', 'sans-serif'],   // Corpo/Textos
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)', 
@@ -45,7 +45,7 @@ export default {
         wide: '0.025em',
         wider: '0.05em',
         widest: '0.25em', 
-        ultra: '0.3em', // Specific request for 0.3em
+        ultra: '0.3em', // Editorial style
       },
       fontSize: {
         'editorial-sm': ['10px', { lineHeight: '1.6', letterSpacing: '0.3em' }],

@@ -84,9 +84,9 @@ const Hero: React.FC = () => {
               <div className="hidden md:flex flex-col gap-2 hero-fade pointer-events-auto">
                  <div className="flex items-center gap-3">
                     <div className="w-1.5 h-1.5 bg-[#754548] rounded-full animate-pulse"></div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">São Paulo, BR</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400 font-sans">São Paulo, BR</span>
                  </div>
-                 <span className="text-[10px] font-medium uppercase tracking-widest text-stone-300 pl-4.5">Est. 2018</span>
+                 <span className="text-[10px] font-medium uppercase tracking-widest text-stone-300 pl-4.5 font-sans">Est. 2018</span>
               </div>
 
               {/* Editorial Statement */}
@@ -105,7 +105,7 @@ const Hero: React.FC = () => {
 
                   <div className="hero-fade mt-10">
                       <Magnetic strength={0.5}>
-                        <a href="#gallery" className="group inline-flex items-center justify-end gap-4 text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548] hover:text-stone-900 transition-colors p-4 -mr-4">
+                        <a href="#gallery" className="group inline-flex items-center justify-end gap-4 text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548] hover:text-stone-900 transition-colors p-4 -mr-4 font-sans">
                             Explorar Acervo
                             <div className="relative overflow-hidden w-4 h-4 flex items-center justify-center">
                               <MoveRight size={14} className="absolute transition-transform duration-500 group-hover:translate-x-full" />
@@ -137,8 +137,10 @@ const Hero: React.FC = () => {
           </h1>
       </div>
 
-      {/* SEPARATOR: Smooth Fade to White */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-white z-20 pointer-events-none"></div>
+      {/* SEPARATOR: Smooth Fade to White with Noise */}
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-white z-20 pointer-events-none">
+         <div className="absolute inset-0 bg-noise opacity-10"></div>
+      </div>
 
     </section>
   );

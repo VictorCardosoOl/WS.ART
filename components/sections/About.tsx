@@ -70,12 +70,12 @@ const About: React.FC = () => {
     <section ref={containerRef} id="about" className="relative py-32 md:py-48 bg-white overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         
-        {/* ROW 1: Typography Block (Aligned Right structure, Left aligned text) */}
+        {/* ROW 1: Typography Block */}
         <div ref={textRef} className="flex flex-col lg:flex-row justify-end mb-24 md:mb-32">
           <div className="lg:w-1/2 flex flex-col items-start text-left">
             
             {/* Headline com hierarquia visual forte */}
-            <h2 className="font-sans font-bold text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] tracking-tighter text-stone-900 mb-8 uppercase">
+            <h2 className="font-serif font-bold text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] tracking-tighter text-stone-900 mb-8 uppercase">
               <div className="overflow-hidden"><span className="about-reveal-line block">Eu sou William</span></div>
               <div className="overflow-hidden"><span className="about-reveal-line block">Siqueira, e eu</span></div>
               <div className="overflow-hidden"><span className="about-reveal-line block text-stone-300">Materializo</span></div>
@@ -85,7 +85,7 @@ const About: React.FC = () => {
             {/* Subtexto Descritivo */}
             <div className="overflow-hidden mt-2">
                <div className="about-reveal-line">
-                  <p className="font-serif text-lg md:text-xl text-stone-500 max-w-sm leading-relaxed">
+                  <p className="font-sans text-lg md:text-xl text-stone-500 max-w-sm leading-relaxed">
                     Especialista em Neotradicional. Transformo narrativas pessoais em anatomia e arte perene.
                   </p>
                </div>
