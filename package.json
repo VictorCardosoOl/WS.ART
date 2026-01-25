@@ -13,14 +13,12 @@
     "react-dom": "^18.2.0",
     "lucide-react": "^0.263.1",
     "framer-motion": "^11.0.8",
-    "three": "^0.160.0",
     "lenis": "^1.0.42",
     "gsap": "^3.12.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "@types/three": "^0.160.0",
     "@vitejs/plugin-react": "^4.2.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.0",
