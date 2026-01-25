@@ -1,21 +1,26 @@
 // Centralização de assets para fácil substituição futura
-// Imagens otimizadas com parâmetros de qualidade e tamanho fixo
+// Imagens otimizadas com parâmetros de// Importando imagens diretamente para garantir processamento pelo Vite
+import portfolio1 from '../src/assets/images/portfolio_01.png';
+import portfolio2 from '../src/assets/images/portfolio_02.png';
+import portfolio3 from '../src/assets/images/portfolio_03.png';
+import portfolio4 from '../src/assets/images/portfolio_04.png';
+import portfolio5 from '../src/assets/images/portfolio_05.png';
+
+import about1 from '../src/assets/images/about_01.png';
+import about2 from '../src/assets/images/about_02.png';
+import about3 from '../src/assets/images/about_03.png';
 
 export const ASSETS = {
   portfolio: {
-    // Imagem Vertical (Lady Face) - Alta resolução, tons terrosos
-    img1: "https://images.unsplash.com/photo-1562962230-16bc46364924?q=80&w=800&auto=format&fit=crop",
-    
-    // Imagem Horizontal (Gothic Arch) - Arquitetura, P&B
-    img2: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop",
-    
-    // Imagem Quadrada/Pequena (Nature/Koi) - Textura de água/montanha
-    img3: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=600&auto=format&fit=crop",
-    
-    // Imagem Quadrada/Pequena (Rose) - Textura floral escura
-    img4: "https://images.unsplash.com/photo-1490750967868-58cb75069ed6?q=80&w=600&auto=format&fit=crop",
-    
-    // Imagem Panorâmica (The Vision) - Surrealista
-    img5: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop"
+    img1: portfolio1,
+    img2: portfolio2,
+    img3: portfolio3,
+    img4: portfolio4,
+    img5: portfolio5,
+  },
+  about: {
+    img1: about1,
+    img2: about2,
+    img3: about3,
   }
 };

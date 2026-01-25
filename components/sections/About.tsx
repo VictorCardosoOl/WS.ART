@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef } from 'react';
 import Reveal from '../ui/Reveal';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ASSETS } from '../../data/assets';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -71,18 +72,18 @@ const About: React.FC = () => {
                     <Reveal delay={100} width="100%">
                         <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100 group">
                             <img
-                                src="https://picsum.photos/800/1066?grayscale&random=101"
-                                alt="Processo Criativo"
+                                src={ASSETS.about.img1}
+                                alt="Processo Criativo - Sketching"
                                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out will-change-transform scale-110"
                             />
                         </div>
                     </Reveal>
 
-                    {/* Imagem 02 - Alinhada (sem margem extra forçada) */}
+                    {/* Imagem 02 */}
                     <Reveal delay={200} width="100%">
                         <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100 group">
                             <img
-                                src="https://picsum.photos/800/1066?grayscale&random=102"
+                                src={ASSETS.about.img2}
                                 alt="Retrato William Siqueira"
                                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out will-change-transform scale-110"
                             />
@@ -93,8 +94,8 @@ const About: React.FC = () => {
                     <Reveal delay={300} width="100%">
                         <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100 group">
                             <img
-                                src="https://picsum.photos/800/1066?grayscale&random=103"
-                                alt="Detalhe Estúdio"
+                                src={ASSETS.about.img3}
+                                alt="Detalhe Estúdio - Equipamentos"
                                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out will-change-transform scale-110"
                             />
                         </div>
