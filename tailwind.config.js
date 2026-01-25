@@ -37,6 +37,7 @@ export default {
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)', 
+        'cinema': 'cubic-bezier(0.22, 1, 0.36, 1)',
       },
       letterSpacing: {
         tighter: '-0.04em', // Slightly tighter for headlines
