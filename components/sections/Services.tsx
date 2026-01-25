@@ -1,86 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Reveal from '../ui/Reveal';
 import { ArrowRight } from 'lucide-react';
 import { SERVICES_ITEMS } from '../../data/services';
+import gsap from 'gsap';
+
+// Imagens de alta qualidade para o fundo
+const bgImages = [
+  "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=1920&auto=format&fit=crop", // Projetos Autorais
+  "https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=1920&auto=format&fit=crop", // Coberturas
+  "https://images.unsplash.com/photo-1542359649-31e03cd4d909?q=80&w=1920&auto=format&fit=crop", // Flash
+  "https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=1920&auto=format&fit=crop"  // Consultoria
+];
 
 const Services: React.FC = () => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Sobrescrevendo imagens com URLs de alta qualidade para este componente
-  const serviceImages = [
-    "https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1515965885000-142962f872f8?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=800&auto=format&fit=crop"
-  ];
+  const handleMouseEnter = (index: number) => {
+    setActiveIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setActiveIndex(null);
+  };
 
   return (
-    <section id="services" className="py-24 md:py-32 bg-stone-900 text-stone-100 overflow-hidden">
-      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20">
+    <section ref={containerRef} id="services" className="relative py-32 md:py-48 bg-stone-900 overflow-hidden min-h-screen flex items-center">
+      
+      {/* --- BACKGROUND LAYER --- */}
+      <div className="absolute inset-0 z-0 w-full h-full bg-black">
+         {/* Imagem Padrão (Sem Hover) */}
+         <div 
+            className={`absolute inset-0 bg-stone-900 transition-opacity duration-700 ${activeIndex === null ? 'opacity-100' : 'opacity-0'}`}
+         ></div>
+
+         {/* Imagens dos Serviços */}
+         {SERVICES_ITEMS.map((service, index) => (
+             <div 
+                key={index}
+                className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${activeIndex === index ? 'opacity-40' : 'opacity-0'}`}
+             >
+                 <img 
+                    src={bgImages[index]} 
+                    alt="" 
+                    className="w-full h-full object-cover grayscale opacity-60"
+                 />
+                 <div className="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-transparent"></div>
+             </div>
+         ))}
+      </div>
+
+      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
         
         <Reveal>
-            <div className="flex items-center gap-4 mb-16 md:mb-24">
-                <div className="h-[1px] w-12 bg-rose-500"></div>
-                <span className="uppercase tracking-[0.2em] text-sm font-medium text-rose-500">Especialidades</span>
+            <div className="mb-24">
+                <span className="uppercase tracking-[0.3em] text-xs font-bold text-[#754548] mb-4 block">Especialidades</span>
+                <h2 className="text-white font-serif text-5xl md:text-7xl">O que ofereço</h2>
             </div>
         </Reveal>
 
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
-          
-          {/* List Section */}
-          <div className="w-full lg:w-2/3 z-20">
+        <div className="flex flex-col w-full max-w-4xl">
             {SERVICES_ITEMS.map((service, index) => (
-              <Reveal key={index} delay={index * 100} width="100%">
-                <div 
-                  className="group relative border-t border-stone-800 py-10 md:py-16 cursor-pointer transition-colors hover:bg-white/5 px-4 -mx-4 rounded-xl"
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4">
-                    <div className="flex items-baseline gap-6">
-                        <span className="font-sans text-xs text-stone-600 font-bold">({service.id})</span>
-                        <h3 className="font-serif text-3xl md:text-5xl group-hover:text-rose-500 transition-colors duration-300">
+              <div 
+                key={index}
+                className="group relative border-t border-white/10 py-12 md:py-16 cursor-pointer transition-all duration-300"
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
+              >
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 group-hover:pl-8 transition-all duration-500">
+                    
+                    <div className="flex flex-col">
+                         <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548] mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            0{index + 1}
+                         </span>
+                         <h3 className="font-serif text-4xl md:text-6xl text-stone-400 group-hover:text-white transition-colors duration-300 leading-none group-hover:italic">
                           {service.title}
                         </h3>
                     </div>
-                    <p className="text-stone-500 text-sm uppercase tracking-wider group-hover:text-white transition-colors">
-                        {service.description}
-                    </p>
+
+                    <div className="max-w-xs opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 hidden md:block">
+                        <p className="text-stone-300 text-sm font-light leading-relaxed">
+                            {service.details}
+                        </p>
+                    </div>
+
+                    <ArrowRight className="text-white opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all duration-500" />
                   </div>
-                  
-                  <div className="h-0 overflow-hidden group-hover:h-auto group-hover:mt-4 transition-all duration-500 md:hidden">
-                      <p className="text-stone-400 text-sm leading-relaxed">{service.details}</p>
-                  </div>
-                  
-                  <ArrowRight className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500 text-rose-500 hidden md:block" />
-                </div>
-              </Reveal>
+              </div>
             ))}
-            <div className="border-t border-stone-800 w-full"></div>
-          </div>
-
-          {/* Floating Image Preview (Desktop Only) */}
-          <div className="hidden lg:block w-1/3 relative">
-            <div className="sticky top-32 w-full aspect-[3/4] overflow-hidden rounded-2xl border border-white/5 bg-stone-800/50">
-               {SERVICES_ITEMS.map((service, index) => (
-                   <img 
-                     key={index}
-                     src={serviceImages[index] || service.image} 
-                     alt={service.title}
-                     className={`absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 ease-out transform rounded-2xl ${
-                        hoveredIndex === index 
-                        ? 'opacity-100 scale-100 rotate-0' 
-                        : 'opacity-0 scale-110 rotate-2'
-                     }`}
-                   />
-               ))}
-               <div className={`absolute inset-0 flex items-center justify-center bg-stone-800 transition-opacity duration-500 rounded-2xl ${hoveredIndex !== null ? 'opacity-0' : 'opacity-100'}`}>
-                  <p className="text-stone-600 font-serif italic text-xl">Selecione uma especialidade</p>
-               </div>
-            </div>
-          </div>
-
+            <div className="border-t border-white/10"></div>
         </div>
+
       </div>
     </section>
   );
