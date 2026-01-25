@@ -32,8 +32,8 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', 'serif'],
-        sans: ['"Montserrat"', 'sans-serif'],
+        serif: ['"Nippo"', 'sans-serif'],
+        sans: ['"Satoshi"', 'sans-serif'],
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)', 
