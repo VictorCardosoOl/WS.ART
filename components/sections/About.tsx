@@ -1,9 +1,44 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import Reveal from '../ui/Reveal';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const About: React.FC = () => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const imagesRef = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+        const ctx = gsap.context(() => {
+            // Parallax Interno Sutil
+            // Apenas a IMAGEM se move dentro do container, o container fica fixo no grid.
+            const images = imagesRef.current?.querySelectorAll('img');
+
+            if (images) {
+                images.forEach((img) => {
+                    gsap.fromTo(img,
+                        { scale: 1.15, yPercent: -5 }, // Começa levemente "cima"
+                        {
+                            yPercent: 5, // Termina levemente "baixo"
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: img.parentElement, // Trigger é o container (moldura)
+                                start: "top bottom",
+                                end: "bottom top",
+                                scrub: true
+                            }
+                        }
+                    );
+                });
+            }
+        }, containerRef);
+
+        return () => ctx.revert();
+    }, []);
+
     return (
-        <section id="about" className="relative py-32 md:py-40 bg-white overflow-hidden">
+        <section ref={containerRef} id="about" className="relative py-32 md:py-40 bg-white overflow-hidden">
             <div className="w-full max-w-[1920px] mx-auto px-5 md:px-10 2xl:px-20 relative z-10">
 
                 {/* PARTE 1: TEXTO EDITORIAL */}
@@ -24,44 +59,43 @@ const About: React.FC = () => {
                                 <p className="font-serif text-xl md:text-2xl text-stone-600 leading-relaxed max-w-md">
                                     Especialista em Neotradicional. Transformo narrativas pessoais em anatomia e arte perene.
                                 </p>
-                                {/* Botão removido conforme solicitado */}
                             </div>
                         </Reveal>
                     </div>
                 </div>
 
-                {/* PARTE 2: GRID DE 3 IMAGENS (Niveladas) */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 items-start">
+                {/* PARTE 2: GRID DE 3 IMAGENS (Alinhamento Restaurado) */}
+                <div ref={imagesRef} className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 items-start">
 
                     {/* Imagem 01 */}
                     <Reveal delay={100} width="100%">
-                        <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
+                        <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100 group">
                             <img
                                 src="https://picsum.photos/800/1066?grayscale&random=101"
                                 alt="Processo Criativo"
-                                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-out"
+                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out will-change-transform scale-110"
                             />
                         </div>
                     </Reveal>
 
-                    {/* Imagem 02 - Margem removida para alinhar */}
+                    {/* Imagem 02 - Alinhada (sem margem extra forçada) */}
                     <Reveal delay={200} width="100%">
-                        <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
+                        <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100 group">
                             <img
                                 src="https://picsum.photos/800/1066?grayscale&random=102"
                                 alt="Retrato William Siqueira"
-                                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-out"
+                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out will-change-transform scale-110"
                             />
                         </div>
                     </Reveal>
 
-                    {/* Imagem 03 - Margem removida para alinhar */}
+                    {/* Imagem 03 */}
                     <Reveal delay={300} width="100%">
-                        <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
+                        <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100 group">
                             <img
                                 src="https://picsum.photos/800/1066?grayscale&random=103"
                                 alt="Detalhe Estúdio"
-                                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-out"
+                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out will-change-transform scale-110"
                             />
                         </div>
                     </Reveal>

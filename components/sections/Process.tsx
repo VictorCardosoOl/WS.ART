@@ -36,15 +36,15 @@ const Process: React.FC = () => {
     <section className="relative py-32 md:py-48 bg-pantone-skin overflow-hidden" id="process">
       <div className="w-full max-w-[1920px] mx-auto px-5 md:px-10 2xl:px-20 relative z-10 pb-24">
 
-        <div className="flex flex-col lg:flex-row gap-20 items-start">
+        <div className="flex flex-col lg:flex-row gap-20 lg:gap-32 items-start">
 
           {/* List Content */}
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-5/12">
             <Reveal>
-              <span className="text-xs font-bold uppercase tracking-ultra text-pantone-accent mb-12 block">O Processo Criativo</span>
+              <span className="text-xs font-bold uppercase tracking-ultra text-pantone-accent mb-16 block">O Processo Criativo</span>
             </Reveal>
 
-            <div className="flex flex-col" role="tablist" aria-orientation="vertical">
+            <div className="flex flex-col border-t border-pantone-ink/10" role="tablist" aria-orientation="vertical">
               {steps.map((step, index) => (
                 <div
                   key={index}
@@ -53,7 +53,7 @@ const Process: React.FC = () => {
                   aria-selected={activeStep === index}
                   aria-controls="process-panel"
                   tabIndex={0}
-                  className={`group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4'}`}
+                  className={`group border-b border-pantone-ink/10 py-8 cursor-pointer relative transition-all duration-500 focus-visible:outline-none flex flex-col gap-2`}
                   onMouseEnter={() => setActiveStep(index)}
                   onClick={() => setActiveStep(index)}
                   onKeyDown={(e) => {
@@ -63,63 +63,89 @@ const Process: React.FC = () => {
                     }
                   }}
                 >
-                  {/* Active Indicator Line */}
+                  {/* Visual Indicator (Barra lateral deslizante) */}
                   {activeStep === index && (
                     <motion.div
                       layoutId="activeIndicator"
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-pantone-accent rounded-full"
+                      className="absolute left-0 top-8 h-12 w-1 bg-pantone-accent"
+                      transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }} // Easing suave
                     />
                   )}
 
-                  <div className="flex items-baseline justify-between mb-2">
-                    <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-pantone-accent italic' : 'text-pantone-ink'}`}>
+                  <div className={`flex items-baseline justify-between transition-all duration-500 ${activeStep === index ? 'pl-6' : 'pl-0 group-hover:pl-2'}`}>
+                    <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-pantone-accent italic font-medium' : 'text-pantone-ink font-normal opacity-50 group-hover:opacity-80'}`}>
                       {step.title}
                     </h3>
-                    <span className={`text-xs font-bold transition-colors ${activeStep === index ? 'text-pantone-accent' : 'text-stone-400'}`}>
+                    <span className={`text-xs font-bold transition-colors ${activeStep === index ? 'text-pantone-accent' : 'text-stone-300'}`}>
                       {step.id}
                     </span>
                   </div>
-                  <p className={`text-stone-500 font-sans text-sm tracking-wide transition-opacity duration-500 ${activeStep === index ? 'opacity-100' : 'opacity-60'}`}>
-                    {step.shortDesc}
-                  </p>
+
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      height: activeStep === index ? 'auto' : 0,
+                      opacity: activeStep === index ? 1 : 0
+                    }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    className="overflow-hidden bg-transparent"
+                  >
+                    <p className="text-stone-500 font-sans text-xs tracking-wide pl-6 pt-1 max-w-sm">
+                      {step.shortDesc}
+                    </p>
+                  </motion.div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Text Description Reveal (Desktop & Mobile) */}
-          <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
-            <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-pantone-accent/20">
-              <AnimatePresence mode='wait'>
+          {/* Text Description Panel (Right) */}
+          <div className="hidden lg:block w-full lg:w-6/12 relative mt-20">
+            <AnimatePresence mode='wait'>
+              <motion.div
+                key={activeStep}
+                id="process-panel"
+                role="tabpanel"
+                aria-labelledby={`process-tab-${activeStep}`}
+                initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
+                animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                exit={{ opacity: 0, filter: "blur(10px)", y: -20 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="relative pl-12"
+              >
+                {/* Número Gigante de Fundo (Animado) */}
                 <motion.div
-                  key={activeStep}
-                  id="process-panel"
-                  role="tabpanel"
-                  aria-labelledby={`process-tab-${activeStep}`}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="relative"
+                  className="absolute -top-16 left-0 text-[8rem] font-serif leading-none text-pantone-accent/10 select-none pointer-events-none"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.1 }}
                 >
-                  <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10" aria-hidden="true">
-                    {steps[activeStep].id}
-                  </h4>
-                  <h3 className="text-2xl font-serif text-pantone-ink mb-6">
-                    Detalhes da Etapa
-                  </h3>
-                  <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif">
-                    {steps[activeStep].fullDesc}
-                  </p>
+                  {steps[activeStep].id}
                 </motion.div>
-              </AnimatePresence>
-            </div>
+
+                <h4 className="font-serif text-2xl text-stone-900 mb-6 relative z-10" aria-hidden="true">
+                  Detalhes da Etapa
+                </h4>
+
+                <p className="text-xl md:text-2xl font-light text-stone-600 leading-relaxed font-serif relative z-10 max-w-xl">
+                  {steps[activeStep].fullDesc}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Mobile Description Panel */}
+          <div className="block lg:hidden w-full mt-8">
+            <h4 className="font-serif text-xl text-pantone-accent mb-4 italic">{steps[activeStep].title}</h4>
+            <p className="text-base text-stone-600 leading-relaxed">
+              {steps[activeStep].fullDesc}
+            </p>
           </div>
 
         </div>
       </div>
 
-      {/* SEPARATOR: REVERSE CURVE TO WHITE (FLASH DAY) */}
+      {/* SEPARATOR */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-white">
           <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
