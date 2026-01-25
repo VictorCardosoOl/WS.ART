@@ -201,12 +201,12 @@
 .sm-panel-item {
   position: relative;
   color: #1c1917; /* Stone 900 */
-  font-family: 'Panchang', serif; /* Fonte do Projeto para Títulos */
-  font-weight: 600;
-  font-size: 2.5rem; /* Ajustado para Panchang que é larga */
+  font-family: 'Nippo', serif; /* Fonte do Projeto */
+  font-weight: 500;
+  font-size: 3rem;
   cursor: pointer;
   line-height: 1.1;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
   transition: color 0.3s ease;
   display: inline-block;
@@ -216,7 +216,7 @@
 
 @media (max-width: 768px) {
   .sm-panel-item {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
   .staggered-menu-panel {
     width: 100vw;
@@ -229,7 +229,7 @@
 
 .sm-panel-item:hover {
   color: #754548; /* Pantone Accent */
-  font-style: normal; /* Panchang não costuma ter itálico */
+  font-style: italic;
 }
 
 .sm-panel-itemLabel {

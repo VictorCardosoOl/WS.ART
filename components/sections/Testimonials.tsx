@@ -1,8 +1,7 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState } from 'react';
+import Reveal from '../ui/Reveal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote } from 'lucide-react';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 
 const testimonials = [
   {
@@ -33,90 +32,40 @@ const testimonials = [
 
 const Testimonials: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-  const imageContainerRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header Animation
-      gsap.fromTo(".testimonials-header",
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 75%"
-          }
-        }
-      );
-
-      // List Stagger
-      const items = gsap.utils.toArray('.testimonial-item');
-      gsap.fromTo(items,
-        { x: -30, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.15,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: listRef.current,
-            start: "top 70%"
-          }
-        }
-      );
-
-      // Image Container Entrance & Parallax
-      gsap.fromTo(imageContainerRef.current,
-        { scale: 0.9, opacity: 0, y: 50 },
-        {
-          scale: 1,
-          opacity: 1,
-          y: 0,
-          duration: 1.5,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: imageContainerRef.current,
-            start: "top 80%"
-          }
-        }
-      );
-
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full py-32 md:py-48 bg-[#FAF7F7] overflow-hidden" id="testimonials">
+    <section className="relative w-full py-32 md:py-48 bg-[#FAF7F7] overflow-hidden" id="testimonials">
       
+      {/* SEPARATOR: WAVE TOP */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
+         <svg viewBox="0 0 1440 320" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-[#F5F5F5]">
+             <path fillOpacity="1" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,208C1248,192,1344,192,1392,192L1440,192V0H1392C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0H0Z"></path>
+         </svg>
+      </div>
+
       {/* GRADIENTE RADIAL */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rose-200/30 via-[#FAF7F7] to-[#FAF7F7] pointer-events-none z-0"></div>
 
       <div className="container mx-auto px-6 relative z-10">
         
         {/* Header Minimalista */}
-        <div className="testimonials-header mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8 mt-12">
-            <div>
+        <div className="mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8 mt-12">
+            <Reveal>
                 <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tight">
                     Narrativas<span className="text-[#754548]">.</span>
                 </h2>
-            </div>
-            <div>
-                <p className="text-stone-500 uppercase tracking-widest text-xs mt-4 md:mt-0 font-bold font-sans">
+            </Reveal>
+            <Reveal delay={200}>
+                <p className="text-stone-500 uppercase tracking-widest text-xs mt-4 md:mt-0 font-bold">
                     Experiências Reais
                 </p>
-            </div>
+            </Reveal>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
             
             {/* COLUNA ESQUERDA: LISTA INTERATIVA */}
-            <div ref={listRef} className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20" role="list">
+            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20" role="list">
                 {testimonials.map((item, index) => (
                     <div 
                         key={item.id}
@@ -124,7 +73,7 @@ const Testimonials: React.FC = () => {
                         tabIndex={0}
                         aria-pressed={activeIndex === index}
                         aria-label={`Ver depoimento de ${item.client}`}
-                        className="testimonial-item group cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#754548] focus-visible:ring-offset-4 rounded-lg will-change-transform"
+                        className="group cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#754548] focus-visible:ring-offset-4 rounded-lg"
                         onMouseEnter={() => setActiveIndex(index)}
                         onClick={() => setActiveIndex(index)}
                         onKeyDown={(e) => {
@@ -134,30 +83,32 @@ const Testimonials: React.FC = () => {
                           }
                         }}
                     >
-                        <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
-                            <div className="mb-4">
-                                <Quote 
-                                    size={24} 
-                                    className={`mb-4 transition-colors duration-500 ${activeIndex === index ? 'text-[#754548] fill-[#754548]/10' : 'text-stone-300'}`} 
-                                />
-                                <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-900 italic">
-                                    "{item.text}"
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <div className={`h-[1px] w-8 transition-all duration-500 ${activeIndex === index ? 'bg-[#754548] w-16' : 'bg-stone-300'}`}></div>
-                                <div className="flex flex-col">
-                                    <span className="text-sm font-bold uppercase tracking-widest text-stone-900 font-sans">{item.client}</span>
-                                    <span className="text-[10px] uppercase tracking-wider text-stone-500 font-sans">{item.role}</span>
+                        <Reveal delay={index * 100} width="100%">
+                            <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
+                                <div className="mb-4">
+                                    <Quote 
+                                        size={24} 
+                                        className={`mb-4 transition-colors duration-500 ${activeIndex === index ? 'text-[#754548] fill-[#754548]/10' : 'text-stone-300'}`} 
+                                    />
+                                    <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-900 italic">
+                                        "{item.text}"
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <div className={`h-[1px] w-8 transition-all duration-500 ${activeIndex === index ? 'bg-[#754548] w-16' : 'bg-stone-300'}`}></div>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-bold uppercase tracking-widest text-stone-900">{item.client}</span>
+                                        <span className="text-[10px] uppercase tracking-wider text-stone-500">{item.role}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Reveal>
                     </div>
                 ))}
             </div>
 
             {/* COLUNA DIREITA: IMAGEM STICKY / REVEAL */}
-            <div ref={imageContainerRef} className="hidden lg:block w-1/2 relative h-[80vh] will-change-transform" aria-hidden="true">
+            <div className="hidden lg:block w-1/2 relative h-[80vh]" aria-hidden="true">
                 <div className="sticky top-32 w-full h-full">
                     <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl">
                         <div className="absolute inset-4 border border-white/20 z-20 pointer-events-none rounded-2xl"></div>
@@ -190,7 +141,7 @@ const Testimonials: React.FC = () => {
                                     transition={{ duration: 0.5 }}
                                     className="bg-white/90 backdrop-blur px-4 py-2 rounded-full"
                                 >
-                                    <span className="text-xs font-bold uppercase tracking-widest text-[#754548] font-sans">
+                                    <span className="text-xs font-bold uppercase tracking-widest text-[#754548]">
                                         {testimonials[activeIndex].tag}
                                     </span>
                                 </motion.div>
@@ -208,7 +159,7 @@ const Testimonials: React.FC = () => {
                     className="w-full h-full object-cover grayscale"
                  />
                  <div className="absolute bottom-4 left-4 bg-white px-3 py-1 rounded-full">
-                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548] font-sans">
+                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">
                         {testimonials[activeIndex].tag}
                     </span>
                  </div>
@@ -216,9 +167,6 @@ const Testimonials: React.FC = () => {
 
         </div>
       </div>
-
-      {/* SEPARATOR: SOFT FADE TO WHITE */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-white pointer-events-none z-10"></div>
     </section>
   );
 };

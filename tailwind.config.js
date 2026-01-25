@@ -32,30 +32,28 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['"Panchang"', 'sans-serif'], // Títulos (Display)
-        sans: ['"Satoshi"', 'sans-serif'],   // Corpo/Legendas
+        serif: ['"Nippo"', 'sans-serif'],
+        sans: ['"Satoshi"', 'sans-serif'],
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)', 
       },
       letterSpacing: {
-        tighter: '-0.06em', // Panchang Negative Kerning
+        tighter: '-0.05em',
         tight: '-0.03em',
         normal: '0em',
-        wide: '0.05em',
-        widest: '0.15em', 
-        editorial: '0.2em', // Satoshi Meta Text
-        ultra: '0.3em', 
+        wide: '0.025em',
+        wider: '0.05em',
+        widest: '0.25em', 
+        ultra: '0.3em', // Specific request for 0.3em
       },
       fontSize: {
-        'meta': ['10px', { lineHeight: '1.5', letterSpacing: '0.2em' }], // Satoshi Style
-        'fluid-h1': 'clamp(3.5rem, 12vw, 9rem)', // Panchang Hero
-        'fluid-h2': 'clamp(2.5rem, 6vw, 5rem)',  // Section Titles
-        'fluid-h3': 'clamp(1.5rem, 3vw, 2.5rem)', // Card Titles
+        'editorial-sm': ['10px', { lineHeight: '1.6', letterSpacing: '0.3em' }],
+        'fluid-h2': 'clamp(2.5rem, 5vw, 4.5rem)',
       },
       lineHeight: {
-        'tight-editorial': '0.9', // Panchang Leading
-        'snug-editorial': '1.1',
+        'tight-editorial': '0.9',
+        'snug-editorial': '1.05',
       },
       backgroundImage: {
         'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.05\"/%3E%3C/svg%3E')",
