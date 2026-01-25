@@ -1,7 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import Reveal from '../ui/Reveal';
 import { Quote } from 'lucide-react';
-import gsap from 'gsap';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const testimonials = [
   {
@@ -31,153 +34,159 @@ const testimonials = [
 ];
 
 const Testimonials: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const imageContainerRef = useRef<HTMLDivElement>(null);
-  const tagRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textWrapperRef = useRef<HTMLDivElement>(null);
+  const imageWrapperRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-        if (imageContainerRef.current) {
-            gsap.fromTo(imageContainerRef.current,
-                { opacity: 0.5, scale: 1.05 },
-                { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
-            );
+      const texts = gsap.utils.toArray<HTMLElement>('.testimonial-text');
+      const totalSlides = texts.length;
+      
+      // A seção fica 'pinada' por 300% da altura da viewport para dar tempo de ler
+      const scrollDuration = 300; 
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: `+=${scrollDuration}%`,
+          pin: true,
+          scrub: 1, // Suavidade no scroll
+          // markers: true, // Descomente para debug
         }
-        if (tagRef.current) {
-            gsap.fromTo(tagRef.current,
-                { y: 10, opacity: 0 },
-                { y: 0, opacity: 1, duration: 0.4, delay: 0.1, ease: "power2.out" }
-            );
-        }
-    });
+      });
+
+      // 1. Animação da Barra de Progresso
+      tl.to(progressBarRef.current, {
+        scaleY: 1,
+        ease: "none"
+      }, 0);
+
+      // 2. Animação dos Textos (Sobe: y 0% -> -200%)
+      // Movemos o wrapper para cima para revelar o próximo item que está embaixo
+      tl.to(textWrapperRef.current, {
+        yPercent: -100 * (totalSlides - 1),
+        ease: "none"
+      }, 0);
+
+      // 3. Animação das Imagens (Desce: y -200% -> 0%)
+      // O wrapper de imagens começa deslocado para cima (mostrando a última do DOM, que é a 1ª visualmente devido à ordem reversa)
+      // E desliza para baixo.
+      tl.fromTo(imageWrapperRef.current, 
+        { yPercent: -100 * (totalSlides - 1) }, // Começa mostrando a "última" imagem do grid (que é a #1 na nossa lógica reversa)
+        { 
+          yPercent: 0, // Termina no topo
+          ease: "none" 
+        }, 
+        0
+      );
+
+    }, sectionRef);
+
     return () => ctx.revert();
-  }, [activeIndex]);
+  }, []);
+
+  // Invertemos o array de imagens para a lógica de "scroll reverso" funcionar
+  // Assim, a imagem [0] fica no final do DOM (base da pilha visual se transformado).
+  // Mas vamos usar uma lógica visual: Imagens empilhadas [3, 2, 1].
+  // Viewport mostra [1]. Scroll move container para baixo, revelando [2] que está acima.
+  const reversedImages = [...testimonials].reverse();
 
   return (
-    <section className="relative w-full py-32 md:py-48 overflow-hidden" id="testimonials">
-      
-      {/* --- BACKGROUND ARTISTRY (Hand Drawn Scribbles) --- */}
-      <div className="absolute inset-0 bg-[#FAF7F7] z-0"></div>
-      
-      {/* Background Gradient Spot */}
-      <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[80vw] h-[80vw] bg-[radial-gradient(circle,_rgba(117,69,72,0.03)_0%,_transparent_70%)] blur-[80px] pointer-events-none z-0"></div>
-
-      {/* Hand Drawn Scribble SVG */}
-      <div className="absolute top-0 right-0 w-full h-full pointer-events-none z-0 opacity-[0.05]">
-          <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" className="w-full h-full fill-none stroke-[#1c1917] stroke-[3]">
-            <path d="M800,200 Q900,100 950,300 T800,500 T600,600 T400,500" vectorEffect="non-scaling-stroke" style={{ filter: 'url(#pencil-test)' }}/>
-            <path d="M-100,800 Q100,900 300,850 T500,900" vectorEffect="non-scaling-stroke" style={{ filter: 'url(#pencil-test)' }}/>
-            <defs>
-                <filter id="pencil-test">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" result="noise"/>
-                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" />
-                </filter>
-            </defs>
-          </svg>
-      </div>
-
-      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
-        
-        {/* Header Minimalista */}
-        <div className="mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8 mt-12">
-            <Reveal>
-                <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tight relative">
-                    Narrativas<span className="text-[#754548]">.</span>
-                </h2>
-            </Reveal>
-            <Reveal delay={200}>
-                <p className="text-stone-500 uppercase tracking-widest text-xs mt-4 md:mt-0 font-bold">
-                    Experiências Reais
-                </p>
-            </Reveal>
+    <section 
+        ref={sectionRef} 
+        id="testimonials" 
+        className="relative w-full h-screen bg-[#FAF7F7] overflow-hidden flex flex-col justify-center"
+    >
+        {/* Background Elements */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vh] h-[80vh] bg-[radial-gradient(circle,_rgba(117,69,72,0.03)_0%,_transparent_70%)] blur-[100px]"></div>
+             <svg className="absolute w-full h-full opacity-[0.03]" viewBox="0 0 100 100" preserveAspectRatio="none">
+                 <path d="M0,0 L100,100 M100,0 L0,100" stroke="#1c1917" strokeWidth="0.5" />
+             </svg>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
+        <div ref={containerRef} className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 h-full flex flex-col">
             
-            {/* COLUNA ESQUERDA: LISTA INTERATIVA */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20" role="list">
-                {testimonials.map((item, index) => (
-                    <div 
-                        key={item.id}
-                        role="button"
-                        tabIndex={0}
-                        aria-pressed={activeIndex === index}
-                        className="group cursor-pointer outline-none rounded-lg"
-                        onMouseEnter={() => setActiveIndex(index)}
-                        onClick={() => setActiveIndex(index)}
-                    >
-                        <Reveal delay={index * 100} width="100%">
-                            <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
-                                <div className="mb-4">
-                                    <Quote 
-                                        size={24} 
-                                        className={`mb-4 transition-colors duration-500 ${activeIndex === index ? 'text-[#754548] fill-[#754548]/10' : 'text-stone-300'}`} 
-                                    />
-                                    <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-900 italic">
-                                        "{item.text}"
-                                    </p>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    {/* Linha indicadora estilo pincelada */}
-                                    <div 
-                                        className={`h-[3px] transition-all duration-500 ${activeIndex === index ? 'bg-[#754548] w-16' : 'bg-stone-300 w-8'}`}
-                                        style={{ borderRadius: '2px 50% 50% 2px / 2px 20% 20% 2px' }}
-                                    ></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-bold uppercase tracking-widest text-stone-900">{item.client}</span>
-                                        <span className="text-[10px] uppercase tracking-wider text-stone-500">{item.role}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </Reveal>
-                    </div>
-                ))}
-            </div>
-
-            {/* COLUNA DIREITA: IMAGEM STICKY / REVEAL */}
-            <div className="hidden lg:block w-1/2 relative h-[80vh]" aria-hidden="true">
-                <div className="sticky top-32 w-full h-full">
-                    <div className="relative w-full h-full overflow-hidden rounded-sm shadow-2xl bg-white transform rotate-1 transition-transform duration-700 hover:rotate-0">
-                        
-                        {/* Frame Border Decorativo */}
-                        <div className="absolute inset-2 border border-stone-200 z-20 pointer-events-none opacity-50"></div>
-                        
-                        <div ref={imageContainerRef} className="absolute inset-0 w-full h-full will-change-transform">
-                            <img 
-                                src={testimonials[activeIndex].image} 
-                                alt={testimonials[activeIndex].client}
-                                className="w-full h-full object-cover grayscale contrast-[1.1]"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#754548]/40 to-transparent mix-blend-multiply opacity-60"></div>
-                        </div>
-
-                        <div ref={tagRef} className="absolute bottom-8 left-8 z-30">
-                            <div className="bg-white/95 backdrop-blur px-4 py-2 shadow-lg border-l-2 border-[#754548]">
-                                <span className="text-xs font-bold uppercase tracking-widest text-[#754548]">
-                                    {testimonials[activeIndex].tag}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* MOBILE ONLY */}
-            <div className="block lg:hidden w-full aspect-[4/5] mt-8 relative rounded-lg overflow-hidden shadow-lg" aria-hidden="true">
-                 <img 
-                    src={testimonials[activeIndex].image} 
-                    alt="Tattoo"
-                    className="w-full h-full object-cover grayscale"
-                 />
-                 <div className="absolute bottom-4 left-4 bg-white px-3 py-1 border-l-2 border-[#754548]">
-                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">
-                        {testimonials[activeIndex].tag}
+            {/* Header Fixo na Seção */}
+            <div className="absolute top-8 md:top-12 left-6 md:left-24 right-6 md:right-24 z-20 flex justify-between items-end border-b border-[#754548]/20 pb-6">
+                 <div>
+                    <span className="text-xs font-bold uppercase tracking-ultra text-[#754548] mb-2 block">
+                        Clientes
                     </span>
+                    <h2 className="text-4xl md:text-5xl font-serif text-stone-900 leading-none">
+                        Relatos
+                    </h2>
+                 </div>
+                 <div className="hidden md:flex gap-2 text-[10px] font-bold uppercase tracking-widest text-stone-400">
+                    <span>Scroll</span>
+                    <span className="animate-bounce">↓</span>
                  </div>
             </div>
 
+            {/* Conteúdo Central Scrollável */}
+            <div className="flex-grow flex items-center gap-8 md:gap-20 h-full pt-24 pb-12">
+                
+                {/* COLUNA ESQUERDA: TEXTOS (Move para Cima) */}
+                <div className="w-full lg:w-1/2 h-[50vh] md:h-[40vh] relative overflow-hidden flex items-center">
+                    {/* Barra de Progresso Lateral */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-stone-200">
+                        <div ref={progressBarRef} className="w-full h-full bg-[#754548] origin-top scale-y-0"></div>
+                    </div>
+
+                    <div ref={textWrapperRef} className="w-full pl-8 md:pl-16">
+                        {testimonials.map((item) => (
+                            <div key={item.id} className="testimonial-text h-[50vh] md:h-[40vh] flex flex-col justify-center">
+                                <Quote size={32} className="text-[#754548]/20 mb-6" />
+                                <p className="font-serif text-2xl md:text-4xl lg:text-5xl leading-tight text-stone-900 mb-8">
+                                    "{item.text}"
+                                </p>
+                                <div className="flex items-center gap-4">
+                                    <div className="h-[1px] w-12 bg-[#754548]"></div>
+                                    <div>
+                                        <p className="font-sans text-xs font-bold uppercase tracking-widest text-stone-900">
+                                            {item.client}
+                                        </p>
+                                        <p className="font-sans text-[10px] uppercase tracking-wide text-stone-500 mt-1">
+                                            {item.role}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* COLUNA DIREITA: IMAGENS (Move para Baixo - Efeito Reverso) */}
+                {/* Em mobile escondemos e mostramos apenas uma imagem estática ou simplificada, mas aqui faremos responsivo */}
+                <div className="hidden lg:block w-1/2 h-[60vh] relative overflow-hidden rounded-2xl shadow-2xl bg-white border border-stone-100">
+                    <div ref={imageWrapperRef} className="w-full h-full absolute top-0 left-0">
+                        {/* Renderizamos REVERSO para alinhar com a lógica de movimento para baixo */}
+                        {reversedImages.map((item) => (
+                            <div key={item.id} className="w-full h-full relative">
+                                <img 
+                                    src={item.image} 
+                                    alt={item.client}
+                                    className="w-full h-full object-cover grayscale contrast-[1.1]"
+                                />
+                                <div className="absolute inset-0 bg-[#754548]/10 mix-blend-multiply"></div>
+                                
+                                {/* Tag flutuante na imagem */}
+                                <div className="absolute bottom-8 right-8 bg-white/90 backdrop-blur px-4 py-2 rounded-full border border-stone-200">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">
+                                        {item.tag}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+            </div>
         </div>
-      </div>
     </section>
   );
 };
