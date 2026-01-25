@@ -43,176 +43,141 @@ const testimonials = [
 
 const Testimonials: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const bgShapeRef = useRef<HTMLDivElement>(null);
+  const leftColRef = useRef<HTMLDivElement>(null);
+  const rightColRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const slides = gsap.utils.toArray(".testimonial-slide");
-      const totalSlides = slides.length;
-      
-      // Cálculo da largura total para o scroll horizontal
-      const totalWidth = 100 * (totalSlides - 1); // Em porcentagem
+        const mm = gsap.matchMedia();
+        
+        mm.add("(min-width: 768px)", () => {
+            const itemsCount = testimonials.length;
+            const scrollDistance = (itemsCount - 1) * 100; // Porcentagem para mover (ex: 300% para 4 itens)
 
-      const tl = gsap.to(trackRef.current, {
-        xPercent: -totalWidth,
-        ease: "none", // Linear para o scrub controlar a velocidade
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          pin: true, // Trava a seção
-          scrub: 0.5, // Suaviza o movimento
-          snap: {
-            snapTo: 1 / (totalSlides - 1), // "Imanta" em cada slide
-            duration: { min: 0.2, max: 0.5 },
-            delay: 0.1,
-            ease: "power1.inOut"
-          },
-          end: () => "+=" + (trackRef.current?.offsetWidth || 3000) // Duração do scroll baseada na largura
-        }
-      });
-
-      // Animação de Parallax nas Imagens (efeito "janela")
-      slides.forEach((slide: any) => {
-        const img = slide.querySelector("img");
-        if (img) {
-            gsap.fromTo(img, 
-                { objectPosition: "0% 50%" },
-                { 
-                    objectPosition: "100% 50%",
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top top",
-                        end: "bottom bottom",
-                        scrub: true
-                    }
+            // Timeline Principal atrelada ao Scroll
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    pin: true, // Trava a seção na tela
+                    start: "top top",
+                    end: "+=" + (itemsCount * 100) + "%", // Duração do scroll baseada na altura
+                    scrub: 1, // Suavidade (Inércia)
+                    // snap: 1 / (itemsCount - 1) // Opcional: Snapping nos slides
                 }
-            );
-        }
-      });
+            });
 
-      // Background Shape Animation
-      gsap.to(bgShapeRef.current, {
-        rotation: 360,
-        x: -200,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1
-        }
-      });
+            // 1. COLUNA DIREITA (IMAGENS) - Sobe (Natural)
+            // Começa em 0 e vai para cima (-300vh)
+            tl.to(rightColRef.current, {
+                y: -(window.innerHeight * (itemsCount - 1)),
+                ease: "none"
+            }, 0);
+
+            // 2. COLUNA ESQUERDA (TEXTOS) - Desce (Reverso)
+            // Para vermos o Texto 1 inicialmente (que é o último no DOM da lista invertida ou o primeiro da lista normal?),
+            // Vamos usar a lista invertida no render [4, 3, 2, 1].
+            // O Item 1 está no Fundo (Bottom). Precisamos transladar para ver o fundo (-300vh).
+            // Ao rolar, transladamos para 0 (vendo o Topo, Item 4).
+            
+            // Set inicial: jogar container para cima para ver o último item (que é o #1 visualmente)
+            gsap.set(leftColRef.current, {
+                 y: -(window.innerHeight * (itemsCount - 1))
+            });
+            
+            // Animação: trazer para 0 (baixo)
+            tl.to(leftColRef.current, {
+                y: 0,
+                ease: "none"
+            }, 0);
+        });
 
     }, sectionRef);
-
     return () => ctx.revert();
   }, []);
 
+  // Invertemos a ordem dos textos para o layout da coluna esquerda funcionar na lógica "Reverse"
+  // Visualmente queremos: Scroll Down -> Aparece Texto 2 vindo de CIMA.
+  // Para isso, Texto 2 deve estar ACIMA de Texto 1 no DOM.
+  // Stack: [4, 3, 2, 1]. (1 está em baixo).
+  const reversedTextItems = [...testimonials].reverse();
+
   return (
-    <section 
-        ref={sectionRef} 
-        id="testimonials" 
-        className="relative h-screen bg-[#FAF7F7] overflow-hidden flex flex-col"
-    >
-      
-      {/* Background Decorativo */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-          <div className="absolute inset-0 bg-noise opacity-[0.03]"></div>
-          {/* Forma Geométrica Rotativa */}
-          <div ref={bgShapeRef} className="absolute -right-[10vw] top-[20vh] w-[40vw] h-[40vw] border border-[#754548]/10 rounded-full border-dashed opacity-50"></div>
-      </div>
+    <section ref={sectionRef} id="testimonials" className="relative h-screen bg-[#1c1917] overflow-hidden text-white">
+        
+        <div className="flex w-full h-full flex-col md:flex-row">
+            
+            {/* --- COLUNA ESQUERDA: TEXTOS (Desce ao rolar) --- */}
+            <div className="w-full md:w-1/2 h-full relative overflow-hidden order-2 md:order-1 bg-[#1c1917]">
+                <div ref={leftColRef} className="w-full absolute top-0 left-0">
+                    {reversedTextItems.map((item) => (
+                        <div key={item.id} className="h-screen w-full flex flex-col justify-center px-8 md:px-16 lg:px-24 border-r border-white/5 relative">
+                             
+                             {/* Indicador Sutil */}
+                             <div className="absolute top-1/2 -translate-y-1/2 right-0 w-1 h-24 bg-[#754548]"></div>
+                             
+                             <div className="mb-8">
+                                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548] mb-4 block">
+                                    Depoimento
+                                </span>
+                                <Quote size={40} className="text-white mb-6 opacity-20" />
+                                <p className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight text-stone-200">
+                                    "{item.text}"
+                                </p>
+                             </div>
+                             
+                             <div className="flex items-center gap-4 mt-4">
+                                <div className="h-[1px] w-12 bg-[#754548]"></div>
+                                <div>
+                                    <h4 className="font-sans text-sm font-bold uppercase tracking-widest text-white">
+                                        {item.client}
+                                    </h4>
+                                    <p className="text-[10px] uppercase tracking-wide text-stone-500 mt-1">
+                                        {item.role}
+                                    </p>
+                                </div>
+                             </div>
 
-      {/* Header Fixo (Fora do Track) */}
-      <div className="absolute top-8 left-6 md:left-12 z-20 mix-blend-multiply pointer-events-none">
-          <Reveal>
-             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548]">
-                Vozes
-             </span>
-             <h2 className="font-serif text-3xl md:text-4xl text-stone-900 mt-2">
-                Experiências Reais
-             </h2>
-          </Reveal>
-      </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
-      {/* TRACK HORIZONTAL */}
-      <div ref={trackRef} className="flex h-full w-[400%] will-change-transform">
-          
-          {testimonials.map((item) => (
-              <div 
-                key={item.id} 
-                className="testimonial-slide w-screen h-full flex flex-col md:flex-row items-center justify-center relative px-6 md:px-12 lg:px-24 gap-8 md:gap-16 lg:gap-24"
-              >
-                  
-                  {/* COLUNA IMAGEM (9:16 Ratio - Full Height feel) */}
-                  {/* Ordem no mobile: Imagem primeiro, depois texto. Desktop: Imagem Esquerda. */}
-                  <div className="w-full md:w-[45vh] lg:w-[50vh] h-[50vh] md:h-[80vh] lg:h-[90vh] flex-shrink-0 relative mt-16 md:mt-0 order-2 md:order-1">
-                      <div className="w-full h-full overflow-hidden relative shadow-2xl rounded-sm">
-                          <img 
-                            src={item.image} 
-                            alt={item.client} 
-                            className="w-full h-full object-cover grayscale contrast-[1.05] scale-110"
-                            loading="lazy"
-                          />
-                          {/* Tag Flutuante sobre a imagem */}
-                          <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2">
-                               <span className="text-[9px] font-bold uppercase tracking-widest text-[#754548]">
-                                  {item.project}
-                               </span>
-                          </div>
-                      </div>
-                  </div>
+            {/* --- COLUNA DIREITA: IMAGENS (Sobe ao rolar) --- */}
+            <div className="w-full md:w-1/2 h-full relative overflow-hidden order-1 md:order-2">
+                <div ref={rightColRef} className="w-full absolute top-0 left-0">
+                    {testimonials.map((item) => (
+                        <div key={item.id} className="h-screen w-full relative group">
+                             <img 
+                                src={item.image} 
+                                alt={item.project}
+                                className="w-full h-full object-cover grayscale contrast-[1.1] group-hover:grayscale-0 transition-all duration-700 ease-out"
+                             />
+                             <div className="absolute inset-0 bg-[#1c1917]/20 mix-blend-multiply pointer-events-none"></div>
+                             
+                             {/* Tag Project no canto da imagem */}
+                             <div className="absolute bottom-12 left-12 z-20">
+                                 <div className="bg-white/10 backdrop-blur-md border border-white/10 px-4 py-2 rounded-sm">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-white">
+                                        {item.project}
+                                    </span>
+                                 </div>
+                             </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
-                  {/* COLUNA TEXTO */}
-                  <div className="w-full md:w-1/2 lg:w-[40vw] flex flex-col justify-center order-1 md:order-2 z-10">
-                      
-                      {/* Ícone de Chat/Quote Estilizado */}
-                      <div className="mb-8 text-[#754548]">
-                          <Quote size={40} className="fill-[#754548]/10" />
-                      </div>
+            {/* Elemento Decorativo Central (Círculo) - Estilo Wonderkin */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vh] h-[60vh] border border-white/5 rounded-full pointer-events-none z-10 hidden md:block"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[58vh] h-[58vh] border border-white/5 rounded-full pointer-events-none z-10 hidden md:block border-dashed opacity-50 animate-[spin_60s_linear_infinite]"></div>
 
-                      <h3 className="font-serif text-2xl md:text-4xl lg:text-5xl leading-tight text-stone-900 mb-8 md:mb-12">
-                          "{item.text}"
-                      </h3>
+        </div>
 
-                      <div className="flex items-center gap-4 border-t border-stone-200 pt-6 max-w-sm">
-                          <div className="w-12 h-12 rounded-full overflow-hidden grayscale">
-                               <img src={item.image} className="w-full h-full object-cover" alt="Avatar" />
-                          </div>
-                          <div>
-                              <p className="font-sans text-sm font-bold uppercase tracking-widest text-stone-900">
-                                  {item.client}
-                              </p>
-                              <div className="flex items-center gap-2 mt-1">
-                                  <span className="text-[10px] text-stone-500 font-serif italic">
-                                      {item.role}
-                                  </span>
-                                  <div className="flex">
-                                      {[...Array(5)].map((_, i) => (
-                                          <Star key={i} size={8} className="fill-[#754548] text-[#754548]" />
-                                      ))}
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-
-                  </div>
-
-              </div>
-          ))}
-
-      </div>
-
-      {/* Indicador de Progresso / Scroll */}
-      <div className="absolute bottom-8 right-8 md:right-12 z-20 flex flex-col items-end pointer-events-none">
-          <span className="text-[9px] font-bold uppercase tracking-widest text-stone-400 mb-2">
-              Role para o lado
-          </span>
-          <div className="w-32 h-[1px] bg-stone-300 overflow-hidden">
-               <div className="h-full bg-[#754548] w-1/4 animate-[shimmer_2s_infinite]"></div>
-          </div>
-      </div>
-
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 mix-blend-difference pointer-events-none">
+            <span className="text-[9px] uppercase tracking-widest text-white font-bold">Scroll</span>
+            <div className="h-8 w-[1px] bg-white/50"></div>
+        </div>
     </section>
   );
 };
