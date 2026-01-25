@@ -397,7 +397,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       <header className="staggered-menu-header" aria-label="Main navigation header">
         {/* Custom Logo Logic for William Siqueira */}
         <a href="#" className="sm-logo group" aria-label="William Siqueira - Home">
-            <span className="font-serif text-2xl tracking-tighter text-white transition-opacity hover:opacity-80">
+            <span className="font-serif text-2xl tracking-tighter text-stone-900 transition-opacity hover:opacity-80">
                 W<span className="text-[#754548]">.</span>S
             </span>
         </a>

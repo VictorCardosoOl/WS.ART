@@ -29,8 +29,8 @@ const Navbar: React.FC = () => {
         // Pre-layers: Light Rose, Dark Rose, Off-white (Background)
         colors={['#E5D0D4', '#D9A9B0', '#FAF7F7']}
         
-        // Button Colors (Using white for mix-blend-mode: difference effect)
-        menuButtonColor="#ffffff" 
+        // Button Colors (Solid Black for visibility)
+        menuButtonColor="#1c1917" 
         openMenuButtonColor="#754548" // Rose 800 for active state
         
         accentColor="#754548"
