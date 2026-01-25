@@ -63,7 +63,7 @@
   border: none;
   cursor: pointer;
   color: #1c1917; /* Solid Stone-900 */
-  font-family: 'Clash Grotesk', sans-serif;
+  font-family: 'Satoshi', sans-serif;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -250,7 +250,7 @@
   top: 50%;
   left: -2.5rem;
   transform: translateY(-50%);
-  font-family: 'Clash Grotesk', sans-serif;
+  font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   color: #754548;
@@ -273,7 +273,7 @@
 
 .sm-socials-title {
   margin: 0;
-  font-family: 'Clash Grotesk', sans-serif;
+  font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -293,7 +293,7 @@
 }
 
 .sm-socials-link {
-  font-family: 'Clash Grotesk', sans-serif;
+  font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
   text-transform: uppercase;
