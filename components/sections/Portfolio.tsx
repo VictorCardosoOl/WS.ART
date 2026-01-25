@@ -1,24 +1,46 @@
-import React, { useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import Reveal from '../ui/Reveal';
 import { GridGalleryItem } from '../../types';
 import { PORTFOLIO_ITEMS } from '../../data/portfolio';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-  
-  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
-  const scaleBase = useTransform(scrollYProgress, [0, 1], [1.1, 1.1]); 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      if (imgRef.current && containerRef.current) {
+        gsap.fromTo(imgRef.current, 
+          { 
+            yPercent: -15, 
+            scale: 1.15 
+          },
+          {
+            yPercent: 15,
+            scale: 1.15, // Mantém escala para evitar bordas brancas durante o movimento
+            ease: "none",
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true // Vincula o progresso da animação diretamente ao scroll
+            }
+          }
+        );
+      }
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
-      <motion.div style={{ y, scale: scaleBase }} className="w-full h-full will-change-transform">
+    <div ref={containerRef} className={`relative overflow-hidden w-full h-full ${className}`}>
+      <div className="w-full h-full overflow-hidden">
         <img 
+          ref={imgRef}
           src={src} 
           alt={alt} 
           title={alt}
@@ -27,13 +49,12 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
             grayscale group-hover:grayscale-0 
             transition-all duration-[1200ms] 
             ease-[cubic-bezier(0.22,1,0.36,1)] 
-            group-hover:scale-105
             will-change-transform
           "
           loading="lazy"
           decoding="async"
         />
-      </motion.div>
+      </div>
     </div>
   );
 };
@@ -47,7 +68,7 @@ const BentoCard = ({ item }: { item: GridGalleryItem }) => {
         <ParallaxImage src={item.src} alt={item.altText} className="absolute inset-0" />
         
         {/* Cinematic Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)] z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)] z-10"></div>
 
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-20 flex flex-col justify-end translate-y-4 group-hover:translate-y-0 transition-transform duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)] opacity-0 group-hover:opacity-100">
             <div className="flex items-center gap-3 mb-2">
@@ -86,6 +107,7 @@ const Portfolio: React.FC = () => {
   return (
     <section id="gallery" className="relative pt-32 pb-40 bg-white overflow-hidden">
       
+      {/* Background Gradient Sutil */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#FAF7F7] via-white to-white pointer-events-none z-0"></div>
 
       <div className="container mx-auto px-6 relative z-10">

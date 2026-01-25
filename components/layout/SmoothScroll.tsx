@@ -13,41 +13,42 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   const lenisRef = useRef<Lenis | null>(null);
 
   useLayoutEffect(() => {
-    // Awwwards-tier configurations
     const lenis = new Lenis({
-      duration: 1.2, // The sweet spot for "weight"
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential decay for smoothness
+      duration: 1.8, // Aumentado para dar sensação de peso/luxo
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva exponencial suave
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
+      wheelMultiplier: 0.9, // Reduzido ligeiramente para controle preciso
+      touchMultiplier: 1.5,
+      infinite: false,
     });
 
     lenisRef.current = lenis;
 
-    // Sync Lenis scroll with GSAP ScrollTrigger
+    // Sincroniza o Lenis com o ScrollTrigger do GSAP
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Integate into GSAP's Ticker for high-performance rendering (60-120fps)
-    const update = (time: number) => {
+    // Injeta o Lenis no loop de renderização (Ticker) do GSAP
+    // Isso garante que o scroll e as animações sejam calculados no mesmo frame
+    gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
-    };
+    });
 
-    gsap.ticker.add(update);
-    
-    // Crucial: Disconnect lag smoothing to prevent GSAP from "jumping" during heavy load
+    // Desativa o lag smoothing do GSAP para evitar "pulos" visuais
+    // quando o thread principal está ocupado, preferindo uma leve desaceleração
+    // à descontinuidade visual.
     gsap.ticker.lagSmoothing(0);
 
     return () => {
-      gsap.ticker.remove(update);
+      gsap.ticker.remove((time) => lenis.raf(time * 1000));
       lenis.destroy();
       lenisRef.current = null;
     };
   }, []);
 
   return (
-    <div id="smooth-wrapper" className="w-full min-h-screen">
+    <div id="smooth-wrapper" className="w-full min-h-screen will-change-transform">
       {children}
     </div>
   );

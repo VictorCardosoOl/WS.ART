@@ -9,6 +9,7 @@ const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -16,15 +17,15 @@ const Hero: React.FC = () => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
       // Initial States
-      gsap.set(".char-reveal", { yPercent: 120 }); // Letters start below baseline
-      gsap.set(".hero-fade", { y: 20, autoAlpha: 0 });
+      gsap.set(".char-reveal", { yPercent: 120 });
+      gsap.set(".hero-fade", { y: 30, autoAlpha: 0 });
       gsap.set(".hero-line", { scaleX: 0, transformOrigin: "left center" });
 
       // Sequence
       tl.to(".char-reveal", {
         yPercent: 0,
         duration: 1.8,
-        stagger: 0.03, // Wave effect on letters
+        stagger: 0.03,
         ease: "power3.out"
       })
       .to(".hero-line", { scaleX: 1, duration: 1.5, ease: "expo.out" }, "-=1.2")
@@ -35,10 +36,11 @@ const Hero: React.FC = () => {
         stagger: 0.1
       }, "-=1.0");
 
-      // 2. SCROLL PARALLAX ANIMATION
-      // Background moves slower than foreground
+      // 2. SCROLL PARALLAX ANIMATION (Physics)
+      
+      // O Background move mais devagar que o scroll (sensação de distância)
       gsap.to(bgRef.current, {
-        yPercent: 30,
+        yPercent: 20,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
@@ -48,10 +50,21 @@ const Hero: React.FC = () => {
         }
       });
 
-      // Massive Text moves faster (Foreground Parallax)
-      // FIX: Removido opacity: 0 para que o texto não suma, apenas suba em parallax
+      // O Conteúdo (texto editorial) sobe um pouco mais rápido para criar separação
+      gsap.to(contentRef.current, {
+        yPercent: -10,
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true
+        }
+      });
+
+      // O Título Gigante se move mais rápido (Foreground)
       gsap.to(titleRef.current, {
-        yPercent: -25, // Aumentei ligeiramente a velocidade para efeito dramático
+        yPercent: -40, 
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
@@ -72,12 +85,11 @@ const Hero: React.FC = () => {
       {/* --- ATMOSPHERE (Parallax Layer) --- */}
       <div ref={bgRef} className="absolute inset-0 z-0 pointer-events-none will-change-transform">
           <div className="absolute inset-0 bg-noise opacity-[0.04] mix-blend-overlay"></div>
-          {/* Subtle Radial Gradient */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_var(--tw-gradient-stops))] from-rose-200/40 via-transparent to-transparent opacity-70"></div>
       </div>
 
       {/* --- CONTENT LAYER --- */}
-      <div className="container mx-auto px-6 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
+      <div ref={contentRef} className="container mx-auto px-6 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between will-change-transform">
           
           {/* Top Section */}
           <div className="flex flex-col md:flex-row justify-between items-start w-full">
