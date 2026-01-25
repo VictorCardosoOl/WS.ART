@@ -10,7 +10,6 @@ const CustomCursor: React.FC = () => {
   );
   
   const [cursorText, setCursorText] = useState("");
-  const [cursorMode, setCursorMode] = useState<'default' | 'lens' | 'text'>('default');
   const [isHovering, setIsHovering] = useState(false);
 
   const xTo = useRef<gsap.QuickToFunc>();
@@ -30,6 +29,7 @@ const CustomCursor: React.FC = () => {
     const cursor = cursorRef.current;
 
     gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+    // Ajuste: Duration menor (0.25) para resposta mais rápida, mas mantendo a suavidade power3
     xTo.current = gsap.quickTo(cursor, "x", { duration: 0.25, ease: "power3.out" });
     yTo.current = gsap.quickTo(cursor, "y", { duration: 0.25, ease: "power3.out" });
 
@@ -42,37 +42,26 @@ const CustomCursor: React.FC = () => {
       const target = e.target as HTMLElement;
       if (!target) return;
 
-      // 1. Lens Mode (Priority)
-      const lensTarget = target.closest('[data-cursor="lens"]');
-      if (lensTarget) {
-          setIsHovering(true);
-          setCursorMode('lens');
-          setCursorText("");
-          return;
-      }
-
-      // 2. Custom Text Mode
-      const customCursorData = target.closest('[data-cursor-text]');
+      // Detecta data-cursor para textos personalizados (ex: "Ver Projeto")
+      const customCursorData = target.closest('[data-cursor]');
+      
       if (customCursorData) {
         setIsHovering(true);
-        setCursorMode('text');
-        const text = customCursorData.getAttribute('data-cursor-text');
+        const text = customCursorData.getAttribute('data-cursor');
         setCursorText(text || "");
         return;
       }
 
-      // 3. Standard Interactive
+      // Detecta elementos interativos padrão
       const isInteractive = 
         target.matches('a, button, input, textarea, label') || 
         target.closest('a, button, [role="button"]');
 
       if (isInteractive) {
         setIsHovering(true);
-        setCursorMode('default');
         setCursorText("");
       } else {
         setIsHovering(false);
-        setCursorMode('default');
         setCursorText("");
       }
     };
@@ -93,36 +82,26 @@ const CustomCursor: React.FC = () => {
     const textEl = textRef.current;
 
     if (isHovering) {
-        if (cursorMode === 'lens') {
-             // LENS MODE: Huge, difference blend, transparent fill (or white with difference)
-             gsap.to(cursor, { 
-                width: 150, 
-                height: 150, 
-                backgroundColor: "#ffffff",
-                mixBlendMode: "difference",
-                opacity: 1,
-                duration: 0.6,
-                ease: "expo.out" 
-            });
-            if(textEl) gsap.to(textEl, { opacity: 0 });
-        } else if (cursorMode === 'text' && cursorText) {
-            // TEXT MODE
+        if (cursorText) {
+            // MODO: TEXTO (Portfolio Hover)
             gsap.to(cursor, { 
-                width: 100, 
+                width: 100, // Mais largo para caber texto
                 height: 100, 
                 backgroundColor: "#FAF7F7",
-                mixBlendMode: "difference", 
+                mixBlendMode: "difference", // Efeito artístico de inversão
                 opacity: 1,
                 duration: 0.5,
-                ease: "elastic.out(1, 0.75)"
+                ease: "elastic.out(1, 0.75)" // Elastic mais suave
             });
-            if(textEl) gsap.to(textEl, { opacity: 1, scale: 1, duration: 0.3, delay: 0.1 });
+            if(textEl) {
+                gsap.to(textEl, { opacity: 1, scale: 1, duration: 0.3, delay: 0.1 });
+            }
         } else {
-            // STANDARD HOVER (Small dot)
+            // MODO: HOVER LINK (Bolinha pequena)
             gsap.to(cursor, { 
                 width: 20, 
                 height: 20,
-                backgroundColor: "#FAF7F7",
+                backgroundColor: "#FAF7F7", // Branco para contraste no preto, invertido no branco
                 mixBlendMode: "difference",
                 opacity: 1,
                 duration: 0.4,
@@ -131,11 +110,11 @@ const CustomCursor: React.FC = () => {
             if(textEl) gsap.to(textEl, { opacity: 0, scale: 0.5, duration: 0.2 });
         }
     } else {
-        // IDLE
+        // MODO: IDLE (Ponto pequeno)
         gsap.to(cursor, { 
             width: 10,
             height: 10,
-            backgroundColor: "#1c1917", // Black default
+            backgroundColor: "#1c1917", // Volta para preto padrão
             mixBlendMode: "normal",
             opacity: 1,
             duration: 0.4,
@@ -143,7 +122,7 @@ const CustomCursor: React.FC = () => {
         });
         if(textEl) gsap.to(textEl, { opacity: 0, scale: 0.5, duration: 0.2 });
     }
-  }, [isHovering, cursorText, cursorMode, isVisible]);
+  }, [isHovering, cursorText, isVisible]);
 
   if (!isVisible) return null;
 
