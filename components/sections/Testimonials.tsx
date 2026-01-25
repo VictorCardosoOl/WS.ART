@@ -2,7 +2,7 @@ import React, { useRef, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Reveal from '../ui/Reveal';
-import { MessageCircle, Star, ShieldCheck, Quote } from 'lucide-react';
+import { Quote, Star } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,91 +10,97 @@ const testimonials = [
   {
     id: 1,
     client: "Ana Clara",
-    role: "Arquiteta & Urbanista",
-    date: "Outubro, 2023",
-    text: "Mais que tinta, William traduziu um momento de luto em beleza pura. O processo foi uma terapia, e o resultado é uma parte de mim que eu precisava resgatar.",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop",
+    role: "Arquiteta",
+    text: "O processo foi uma terapia. William não apenas tatuou, ele traduziu meu momento de luto em uma obra de arte perene.",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
     project: "Cobertura Floral"
   },
   {
     id: 2,
     client: "Marcos V.",
     role: "Diretor de Arte",
-    date: "Janeiro, 2024",
-    text: "A precisão anatômica é assustadora. Ele desenhou diretamente no meu braço (freehand) para garantir que o fluxo seguisse minha musculatura. Impecável.",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop",
+    text: "A precisão anatômica no freehand é assustadora. O desenho flui perfeitamente com a musculatura do braço.",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
     project: "Fechamento Neotrad"
   },
   {
     id: 3,
     client: "Juliana S.",
-    role: "Chef de Cozinha",
-    date: "Março, 2024",
-    text: "Eu nunca imaginei que uma tatuagem pudesse ser uma experiência tão tranquila. O estúdio privado faz toda a diferença na imersão e no conforto.",
-    image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=80&w=600&auto=format&fit=crop",
+    role: "Chef",
+    text: "Estúdio privado, segurança total e uma mão extremamente leve. A experiência inteira é de outro nível.",
+    image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=80&w=800&auto=format&fit=crop",
     project: "Projeto Autoral"
   },
   {
     id: 4,
     client: "Ricardo M.",
     role: "Músico",
-    date: "Abril, 2024",
-    text: "A interpretação visual que ele deu para a minha música favorita foi além do que eu conseguia visualizar. Arte que respira.",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop",
-    project: "Conceito Musical"
+    text: "Ele capturou a essência da minha música favorita em uma imagem. É arte que respira e conta história.",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop",
+    project: "Conceito Visual"
   }
 ];
 
 const Testimonials: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const shape1Ref = useRef<HTMLDivElement>(null);
-  const shape2Ref = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const bgShapeRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const slides = gsap.utils.toArray(".testimonial-card");
+      const slides = gsap.utils.toArray(".testimonial-slide");
       const totalSlides = slides.length;
       
-      // Animação Principal: Scroll Horizontal
-      const tl = gsap.to(slides, {
-        xPercent: -100 * (totalSlides - 1),
-        ease: "none",
+      // Cálculo da largura total para o scroll horizontal
+      const totalWidth = 100 * (totalSlides - 1); // Em porcentagem
+
+      const tl = gsap.to(trackRef.current, {
+        xPercent: -totalWidth,
+        ease: "none", // Linear para o scrub controlar a velocidade
         scrollTrigger: {
           trigger: sectionRef.current,
-          pin: true,
-          scrub: 1,
-          snap: 1 / (totalSlides - 1),
-          end: () => "+=" + (triggerRef.current?.offsetWidth || 2000), // Duração baseada na largura
-          invalidateOnRefresh: true,
+          pin: true, // Trava a seção
+          scrub: 0.5, // Suaviza o movimento
+          snap: {
+            snapTo: 1 / (totalSlides - 1), // "Imanta" em cada slide
+            duration: { min: 0.2, max: 0.5 },
+            delay: 0.1,
+            ease: "power1.inOut"
+          },
+          end: () => "+=" + (trackRef.current?.offsetWidth || 3000) // Duração do scroll baseada na largura
         }
       });
 
-      // Parallax Geométrico (Background Shapes)
-      // O Shape 1 move-se mais rápido que o scroll
-      gsap.to(shape1Ref.current, {
-        x: -300,
-        rotation: 45,
+      // Animação de Parallax nas Imagens (efeito "janela")
+      slides.forEach((slide: any) => {
+        const img = slide.querySelector("img");
+        if (img) {
+            gsap.fromTo(img, 
+                { objectPosition: "0% 50%" },
+                { 
+                    objectPosition: "100% 50%",
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top top",
+                        end: "bottom bottom",
+                        scrub: true
+                    }
+                }
+            );
+        }
+      });
+
+      // Background Shape Animation
+      gsap.to(bgShapeRef.current, {
+        rotation: 360,
+        x: -200,
         ease: "none",
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: () => "+=" + (triggerRef.current?.offsetWidth || 2000),
-          scrub: 1.5
-        }
-      });
-
-      // O Shape 2 move-se em outra direção
-      gsap.to(shape2Ref.current, {
-        x: 200,
-        y: -100,
-        rotation: -30,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: () => "+=" + (triggerRef.current?.offsetWidth || 2000),
-          scrub: 2
+          end: "bottom bottom",
+          scrub: 1
         }
       });
 
@@ -104,109 +110,106 @@ const Testimonials: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} id="testimonials" className="relative h-screen bg-[#FAF7F7] overflow-hidden flex flex-col justify-center">
+    <section 
+        ref={sectionRef} 
+        id="testimonials" 
+        className="relative h-screen bg-[#FAF7F7] overflow-hidden flex flex-col"
+    >
       
-      {/* --- LAYER 0: BACKGROUND PARALLAX SHAPES --- */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {/* Círculo Grande Sutil */}
-          <div ref={shape1Ref} className="absolute top-[10%] right-[-10%] w-[60vh] h-[60vh] rounded-full border border-[#754548]/10 opacity-60"></div>
-          
-          {/* Arco Decorativo */}
-          <div ref={shape2Ref} className="absolute bottom-[-10%] left-[10%] w-[40vh] h-[40vh] border-t-2 border-r-2 border-[#754548]/5 rounded-tr-full opacity-50"></div>
-          
-          {/* Noise Texture Global */}
+      {/* Background Decorativo */}
+      <div className="absolute inset-0 pointer-events-none z-0">
           <div className="absolute inset-0 bg-noise opacity-[0.03]"></div>
+          {/* Forma Geométrica Rotativa */}
+          <div ref={bgShapeRef} className="absolute -right-[10vw] top-[20vh] w-[40vw] h-[40vw] border border-[#754548]/10 rounded-full border-dashed opacity-50"></div>
       </div>
 
-      {/* --- LAYER 1: HEADER FIXO VISUALMENTE (DENTRO DO PIN) --- */}
-      <div className="absolute top-12 left-0 w-full px-6 md:px-24 z-20 flex justify-between items-end pointer-events-none">
+      {/* Header Fixo (Fora do Track) */}
+      <div className="absolute top-8 left-6 md:left-12 z-20 mix-blend-multiply pointer-events-none">
           <Reveal>
-             <div>
-                <div className="flex items-center gap-2 mb-2 text-[#754548]">
-                    <MessageCircle size={14} />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Feedback</span>
-                </div>
-                <h2 className="text-4xl md:text-6xl font-serif text-stone-900 leading-none">
-                    Vozes &<br/><span className="italic text-[#754548]">Narrativas.</span>
-                </h2>
-             </div>
+             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548]">
+                Vozes
+             </span>
+             <h2 className="font-serif text-3xl md:text-4xl text-stone-900 mt-2">
+                Experiências Reais
+             </h2>
           </Reveal>
-          <div className="hidden md:flex flex-col items-end">
-              <span className="text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Interação</span>
-              <span className="text-xs font-serif italic text-stone-600">Role para navegar</span>
-          </div>
       </div>
 
-      {/* --- LAYER 2: HORIZONTAL TRACK --- */}
-      <div ref={triggerRef} className="w-full h-[60vh] relative z-10 flex items-center pl-6 md:pl-24">
-          <div className="flex gap-12 md:gap-32 w-max px-4">
-              
-              {testimonials.map((item, index) => (
-                  <div 
-                    key={item.id} 
-                    className="testimonial-card relative w-[85vw] md:w-[60vw] lg:w-[45vw] flex-shrink-0"
-                  >
-                      {/* CARD ESTILO 'CHAT' SOFISTICADO */}
-                      <div className="bg-white p-8 md:p-12 rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.05)] border border-stone-100 relative group transition-all hover:border-[#754548]/30 hover:shadow-lg">
-                          
-                          {/* Chat Bubble Tail (Visual) */}
-                          <div className="absolute -bottom-4 left-12 w-8 h-8 bg-white border-b border-r border-stone-100 transform rotate-45 group-hover:border-[#754548]/30 transition-colors"></div>
-
-                          {/* Header do Card */}
-                          <div className="flex justify-between items-start mb-8">
-                              <div className="flex items-center gap-4">
-                                  <div className="relative w-12 h-12 rounded-full overflow-hidden border border-stone-100">
-                                      <img src={item.image} alt={item.client} className="w-full h-full object-cover grayscale" />
-                                  </div>
-                                  <div>
-                                      <h3 className="font-serif text-xl text-stone-900 leading-none">{item.client}</h3>
-                                      <p className="text-[10px] font-sans uppercase tracking-wider text-stone-400 mt-1">{item.role}</p>
-                                  </div>
-                              </div>
-                              <div className="flex items-center gap-1 bg-stone-50 px-3 py-1 rounded-full border border-stone-100">
-                                  <Star size={10} className="text-[#754548] fill-[#754548]" />
-                                  <span className="text-[9px] font-bold uppercase tracking-widest text-stone-500">Verificado</span>
-                              </div>
+      {/* TRACK HORIZONTAL */}
+      <div ref={trackRef} className="flex h-full w-[400%] will-change-transform">
+          
+          {testimonials.map((item) => (
+              <div 
+                key={item.id} 
+                className="testimonial-slide w-screen h-full flex flex-col md:flex-row items-center justify-center relative px-6 md:px-12 lg:px-24 gap-8 md:gap-16 lg:gap-24"
+              >
+                  
+                  {/* COLUNA IMAGEM (9:16 Ratio - Full Height feel) */}
+                  {/* Ordem no mobile: Imagem primeiro, depois texto. Desktop: Imagem Esquerda. */}
+                  <div className="w-full md:w-[45vh] lg:w-[50vh] h-[50vh] md:h-[80vh] lg:h-[90vh] flex-shrink-0 relative mt-16 md:mt-0 order-2 md:order-1">
+                      <div className="w-full h-full overflow-hidden relative shadow-2xl rounded-sm">
+                          <img 
+                            src={item.image} 
+                            alt={item.client} 
+                            className="w-full h-full object-cover grayscale contrast-[1.05] scale-110"
+                            loading="lazy"
+                          />
+                          {/* Tag Flutuante sobre a imagem */}
+                          <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2">
+                               <span className="text-[9px] font-bold uppercase tracking-widest text-[#754548]">
+                                  {item.project}
+                               </span>
                           </div>
-
-                          {/* Conteúdo (Quote) */}
-                          <div className="relative mb-8">
-                              <Quote className="absolute -top-2 -left-4 w-6 h-6 text-[#754548]/10 transform -scale-x-100" />
-                              <p className="font-serif text-2xl md:text-3xl lg:text-4xl text-stone-800 leading-snug italic relative z-10">
-                                  "{item.text}"
-                              </p>
-                          </div>
-
-                          {/* Footer do Card */}
-                          <div className="flex justify-between items-center border-t border-stone-100 pt-6">
-                              <div className="flex items-center gap-2">
-                                  <ShieldCheck size={14} className="text-[#754548]" />
-                                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">
-                                      {item.project}
-                                  </span>
-                              </div>
-                              <span className="text-[10px] font-sans text-stone-400">
-                                  {item.date}
-                              </span>
-                          </div>
-
                       </div>
                   </div>
-              ))}
 
-              {/* CARTÃO FINAL: CALL TO ACTION (Parte do fluxo horizontal) */}
-              <div className="testimonial-card relative w-[85vw] md:w-[60vw] lg:w-[45vw] flex-shrink-0 flex items-center justify-center">
-                  <div className="text-center">
-                      <h3 className="font-serif text-5xl md:text-7xl text-stone-900 mb-6">Sua vez.</h3>
-                      <p className="text-stone-500 max-w-md mx-auto mb-8 font-light">
-                          Cada tatuagem é um novo capítulo. Vamos escrever o seu?
-                      </p>
-                      <a href="#booking" className="inline-block bg-[#1c1917] text-white px-8 py-4 rounded-full font-sans text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#754548] transition-colors">
-                          Iniciar Projeto
-                      </a>
+                  {/* COLUNA TEXTO */}
+                  <div className="w-full md:w-1/2 lg:w-[40vw] flex flex-col justify-center order-1 md:order-2 z-10">
+                      
+                      {/* Ícone de Chat/Quote Estilizado */}
+                      <div className="mb-8 text-[#754548]">
+                          <Quote size={40} className="fill-[#754548]/10" />
+                      </div>
+
+                      <h3 className="font-serif text-2xl md:text-4xl lg:text-5xl leading-tight text-stone-900 mb-8 md:mb-12">
+                          "{item.text}"
+                      </h3>
+
+                      <div className="flex items-center gap-4 border-t border-stone-200 pt-6 max-w-sm">
+                          <div className="w-12 h-12 rounded-full overflow-hidden grayscale">
+                               <img src={item.image} className="w-full h-full object-cover" alt="Avatar" />
+                          </div>
+                          <div>
+                              <p className="font-sans text-sm font-bold uppercase tracking-widest text-stone-900">
+                                  {item.client}
+                              </p>
+                              <div className="flex items-center gap-2 mt-1">
+                                  <span className="text-[10px] text-stone-500 font-serif italic">
+                                      {item.role}
+                                  </span>
+                                  <div className="flex">
+                                      {[...Array(5)].map((_, i) => (
+                                          <Star key={i} size={8} className="fill-[#754548] text-[#754548]" />
+                                      ))}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
                   </div>
-              </div>
 
+              </div>
+          ))}
+
+      </div>
+
+      {/* Indicador de Progresso / Scroll */}
+      <div className="absolute bottom-8 right-8 md:right-12 z-20 flex flex-col items-end pointer-events-none">
+          <span className="text-[9px] font-bold uppercase tracking-widest text-stone-400 mb-2">
+              Role para o lado
+          </span>
+          <div className="w-32 h-[1px] bg-stone-300 overflow-hidden">
+               <div className="h-full bg-[#754548] w-1/4 animate-[shimmer_2s_infinite]"></div>
           </div>
       </div>
 
