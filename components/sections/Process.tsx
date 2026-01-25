@@ -1,6 +1,5 @@
-import React, { useState, useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
+import React, { useState } from 'react';
+import Reveal from '../ui/Reveal';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const steps = [
@@ -32,62 +31,20 @@ const steps = [
 
 const Process: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-        gsap.from(".process-title", {
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-                trigger: sectionRef.current,
-                start: "top 70%",
-            }
-        });
-
-        gsap.from(".process-item", {
-            x: -30,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out",
-            scrollTrigger: {
-                trigger: ".process-list",
-                start: "top 75%",
-            }
-        });
-
-        gsap.from(".process-content-panel", {
-            x: 30,
-            opacity: 0,
-            duration: 1,
-            ease: "power3.out",
-            delay: 0.3,
-            scrollTrigger: {
-                trigger: sectionRef.current,
-                start: "top 70%",
-            }
-        });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-32 md:py-48 bg-pantone-skin overflow-hidden" id="process">
+    <section className="relative py-32 md:py-48 bg-pantone-skin overflow-hidden" id="process">
       <div className="container mx-auto px-6 relative z-10 pb-24">
         
         <div className="flex flex-col lg:flex-row gap-20 items-start">
           
           {/* List Content */}
           <div className="w-full lg:w-1/2">
-             <div className="process-title">
+             <Reveal>
                <span className="text-xs font-bold uppercase tracking-ultra text-pantone-accent mb-12 block">O Processo Criativo</span>
-             </div>
+             </Reveal>
 
-             <div className="flex flex-col process-list" role="tablist" aria-orientation="vertical">
+             <div className="flex flex-col" role="tablist" aria-orientation="vertical">
                {steps.map((step, index) => (
                  <div 
                     key={index}
@@ -96,7 +53,7 @@ const Process: React.FC = () => {
                     aria-selected={activeStep === index}
                     aria-controls="process-panel"
                     tabIndex={0}
-                    className={`process-item group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4'}`}
+                    className={`group border-b border-pantone-ink/10 py-10 cursor-pointer relative transition-all duration-500 focus-visible:outline-none focus-visible:bg-white/50 rounded-sm ${activeStep === index ? 'pl-8 border-pantone-accent' : 'hover:pl-4'}`}
                     onMouseEnter={() => setActiveStep(index)}
                     onClick={() => setActiveStep(index)}
                     onKeyDown={(e) => {
@@ -130,8 +87,8 @@ const Process: React.FC = () => {
              </div>
           </div>
 
-          {/* Text Description Panel */}
-          <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center process-content-panel">
+          {/* Text Description Reveal (Desktop & Mobile) */}
+          <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
             <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-pantone-accent/20">
                <AnimatePresence mode='wait'>
                    <motion.div 

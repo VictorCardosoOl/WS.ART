@@ -1,6 +1,5 @@
-import React, { useState, useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
+import React, { useState } from 'react';
+import Reveal from '../ui/Reveal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote } from 'lucide-react';
 
@@ -33,54 +32,9 @@ const testimonials = [
 
 const Testimonials: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-        // Header
-        gsap.from(".testimonial-header", {
-            y: 60,
-            opacity: 0,
-            duration: 1.2,
-            ease: "power3.out",
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: "top 70%",
-            }
-        });
-
-        // List Items
-        gsap.from(".testimonial-item", {
-            x: -40,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power3.out",
-            scrollTrigger: {
-                trigger: ".testimonial-list",
-                start: "top 75%",
-            }
-        });
-
-        // Image Section
-        gsap.from(".testimonial-image-col", {
-            scale: 0.95,
-            opacity: 0,
-            duration: 1.5,
-            ease: "power4.out",
-            delay: 0.2,
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: "top 70%",
-            }
-        });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full py-32 md:py-48 bg-[#FAF7F7] overflow-hidden" id="testimonials">
+    <section className="relative w-full py-32 md:py-48 bg-[#FAF7F7] overflow-hidden" id="testimonials">
       
       {/* SEPARATOR: WAVE TOP */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
@@ -95,23 +49,23 @@ const Testimonials: React.FC = () => {
       <div className="container mx-auto px-6 relative z-10">
         
         {/* Header Minimalista */}
-        <div className="testimonial-header mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8 mt-12">
-            <div>
+        <div className="mb-24 flex flex-col md:flex-row justify-between items-end border-b border-[#754548]/20 pb-8 mt-12">
+            <Reveal>
                 <h2 className="text-5xl md:text-7xl font-serif text-stone-900 leading-none tracking-tight">
                     Narrativas<span className="text-[#754548]">.</span>
                 </h2>
-            </div>
-            <div>
+            </Reveal>
+            <Reveal delay={200}>
                 <p className="text-stone-500 uppercase tracking-widest text-xs mt-4 md:mt-0 font-bold">
                     Experiências Reais
                 </p>
-            </div>
+            </Reveal>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
             
             {/* COLUNA ESQUERDA: LISTA INTERATIVA */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20 testimonial-list" role="list">
+            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-12 relative z-20" role="list">
                 {testimonials.map((item, index) => (
                     <div 
                         key={item.id}
@@ -119,7 +73,7 @@ const Testimonials: React.FC = () => {
                         tabIndex={0}
                         aria-pressed={activeIndex === index}
                         aria-label={`Ver depoimento de ${item.client}`}
-                        className="testimonial-item group cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#754548] focus-visible:ring-offset-4 rounded-lg"
+                        className="group cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#754548] focus-visible:ring-offset-4 rounded-lg"
                         onMouseEnter={() => setActiveIndex(index)}
                         onClick={() => setActiveIndex(index)}
                         onKeyDown={(e) => {
@@ -129,30 +83,32 @@ const Testimonials: React.FC = () => {
                           }
                         }}
                     >
-                        <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
-                            <div className="mb-4">
-                                <Quote 
-                                    size={24} 
-                                    className={`mb-4 transition-colors duration-500 ${activeIndex === index ? 'text-[#754548] fill-[#754548]/10' : 'text-stone-300'}`} 
-                                />
-                                <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-900 italic">
-                                    "{item.text}"
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <div className={`h-[1px] w-8 transition-all duration-500 ${activeIndex === index ? 'bg-[#754548] w-16' : 'bg-stone-300'}`}></div>
-                                <div className="flex flex-col">
-                                    <span className="text-sm font-bold uppercase tracking-widest text-stone-900">{item.client}</span>
-                                    <span className="text-[10px] uppercase tracking-wider text-stone-500">{item.role}</span>
+                        <Reveal delay={index * 100} width="100%">
+                            <div className={`transition-all duration-500 ${activeIndex === index ? 'opacity-100 translate-x-4' : 'opacity-40 hover:opacity-70'}`}>
+                                <div className="mb-4">
+                                    <Quote 
+                                        size={24} 
+                                        className={`mb-4 transition-colors duration-500 ${activeIndex === index ? 'text-[#754548] fill-[#754548]/10' : 'text-stone-300'}`} 
+                                    />
+                                    <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-900 italic">
+                                        "{item.text}"
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <div className={`h-[1px] w-8 transition-all duration-500 ${activeIndex === index ? 'bg-[#754548] w-16' : 'bg-stone-300'}`}></div>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-bold uppercase tracking-widest text-stone-900">{item.client}</span>
+                                        <span className="text-[10px] uppercase tracking-wider text-stone-500">{item.role}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Reveal>
                     </div>
                 ))}
             </div>
 
             {/* COLUNA DIREITA: IMAGEM STICKY / REVEAL */}
-            <div className="hidden lg:block w-1/2 relative h-[80vh] testimonial-image-col" aria-hidden="true">
+            <div className="hidden lg:block w-1/2 relative h-[80vh]" aria-hidden="true">
                 <div className="sticky top-32 w-full h-full">
                     <div className="relative w-full h-full overflow-hidden rounded-3xl shadow-2xl">
                         <div className="absolute inset-4 border border-white/20 z-20 pointer-events-none rounded-2xl"></div>

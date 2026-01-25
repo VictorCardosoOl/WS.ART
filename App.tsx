@@ -12,8 +12,6 @@ import FlashDay from './components/sections/FlashDay';
 import Footer from './components/layout/Footer';
 import CustomCursor from './components/ui/CustomCursor';
 import SmoothScroll from './components/layout/SmoothScroll';
-import FluidGlass from './components/ui/FluidGlass';
-import SectionTitle from './components/ui/SectionTitle';
 
 const App: React.FC = () => {
   return (
@@ -29,27 +27,6 @@ const App: React.FC = () => {
           <Portfolio />
           <About />
           <Process />
-          
-          {/* Seção Interativa 3D - Imersão */}
-          <section className="py-24 bg-[#FAF7F7] relative border-y border-stone-100 overflow-hidden">
-            <div className="container mx-auto px-6 mb-16 relative z-10">
-               <SectionTitle subtitle="Experiência" title="Imersão Visual" />
-            </div>
-            {/* Container 3D Isolado */}
-            <div className="w-full h-[600px] md:h-[700px] relative rounded-3xl overflow-hidden mx-auto max-w-[95%] shadow-[inset_0_0_40px_rgba(0,0,0,0.02)] bg-[#E5D0D4]/10">
-               <FluidGlass 
-                  mode="lens" 
-                  lensProps={{
-                    scale: 1,
-                    ior: 1.2,
-                    thickness: 2,
-                    chromaticAberration: 0.08,
-                    anisotropy: 0.2
-                  }}
-               />
-            </div>
-          </section>
-
           <FlashDay />
           <PreCare />
           <Testimonials />
