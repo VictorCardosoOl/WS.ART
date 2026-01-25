@@ -1,38 +1,36 @@
 import React, { useRef, useLayoutEffect } from 'react';
 import Reveal from '../ui/Reveal';
-import { GridGalleryItem } from '../../types';
-import { PORTFOLIO_ITEMS } from '../../data/portfolio';
-import { ArrowUpRight, Maximize2 } from 'lucide-react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ArrowDownLeft, Scan, Layers, Maximize } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 // --- Componente de Imagem com Parallax Físico (Inércia) ---
-const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
+const ParallaxImage = ({ src, alt, className, speed = 1 }: { src: string, alt: string, className?: string, speed?: number }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-        // Parallax com Scrub numérico (1) cria o efeito de "peso" (a imagem demora a alcançar o scroll)
+        // Parallax suave com 'lag' físico para sensação de peso
         gsap.fromTo(imgRef.current, 
-            { yPercent: -12, scale: 1.15 },
+            { yPercent: -10 * speed, scale: 1.1 },
             { 
-                yPercent: 12,
-                scale: 1.15,
+                yPercent: 10 * speed,
+                scale: 1.1,
                 ease: "none",
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top bottom", 
                     end: "bottom top",   
-                    scrub: 1 // Inércia física
+                    scrub: 1 // Inércia
                 }
             }
         );
     }, containerRef);
     return () => ctx.revert();
-  }, []);
+  }, [speed]);
 
   return (
     <div ref={containerRef} className={`relative w-full h-full overflow-hidden ${className}`}>
@@ -42,222 +40,152 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
             alt={alt} 
             loading="lazy"
             decoding="async"
-            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-[800ms] ease-out-expo will-change-transform"
+            className="w-full h-full object-cover grayscale block will-change-transform"
         />
+        {/* Camada de Granulação Sutil */}
+        <div className="absolute inset-0 bg-noise opacity-[0.06] pointer-events-none mix-blend-overlay"></div>
     </div>
   );
 };
-
-// --- Item Padrão do Grid ---
-const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
-  return (
-    <div className={`group flex flex-col gap-6 ${item.offsetY}`}>
-      {/* Container da Imagem */}
-      <div 
-        className={`relative w-full ${item.height} overflow-hidden bg-[#E5D0D4]/20 rounded-sm cursor-none`}
-        data-cursor="Ver Projeto"
-      >
-        <ParallaxImage src={item.src} alt={item.altText} />
-        {/* Noise Overlay Sutil */}
-        <div className="absolute inset-0 bg-noise opacity-[0.04] pointer-events-none mix-blend-overlay"></div>
-      </div>
-
-      {/* Legenda Minimalista */}
-      <div className="flex flex-col border-t border-stone-200 pt-4 group-hover:border-[#754548] transition-colors duration-700">
-         <div className="flex justify-between items-baseline">
-             <h3 className="font-serif text-3xl md:text-4xl text-stone-900 leading-none tracking-tight group-hover:italic transition-all duration-500 ease-out-expo">
-                 {item.title}
-             </h3>
-             <ArrowUpRight 
-                size={24} 
-                className="text-stone-300 group-hover:text-[#754548] group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-500 ease-out-expo" 
-             />
-         </div>
-         <span className="text-[10px] font-sans font-bold text-stone-400 uppercase tracking-[0.2em] mt-2 group-hover:text-[#754548] transition-colors">
-             {item.category}
-         </span>
-      </div>
-    </div>
-  );
-};
-
-// --- Featured Composition (Layout Triptych / Composite) ---
-// Baseado na descrição técnica: Widescreen, Assimétrico (50/25/25), Foco em Anatomia
-const FeaturedComposition = () => {
-    return (
-        <div className="w-full mb-32 lg:mb-48">
-            <Reveal width="100%">
-                {/* Header Técnico */}
-                <div className="flex justify-end mb-4 border-b border-stone-200 pb-2">
-                    <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-stone-400">
-                        Portfolio Case Study — 001
-                    </span>
-                </div>
-
-                {/* Grid Layout Composite */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[120vh] md:h-[90vh]">
-                    
-                    {/* Bloco Esquerdo (50%) - Plano Médio / Postura */}
-                    <div className="h-full relative group overflow-hidden bg-stone-100" data-cursor="Anatomia">
-                         <ParallaxImage 
-                            src="https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=1400&auto=format&fit=crop" 
-                            alt="Estudo de Anatomia e Fluxo - Vista Principal" 
-                         />
-                         {/* Metadados Técnicos Sobrepostos */}
-                         <div className="absolute bottom-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col gap-1 mix-blend-difference">
-                             <span className="text-[10px] text-white uppercase tracking-widest font-bold">Flow: Helicoidal</span>
-                             <span className="text-[10px] text-white uppercase tracking-widest font-bold">Placement: Deltoide Posterior</span>
-                         </div>
-                    </div>
-
-                    {/* Bloco Direito (50%) - Detalhes Empilhados */}
-                    <div className="flex flex-col gap-4 h-full">
-                        {/* Detalhe 1: Textura / Linha Fina */}
-                        <div className="h-1/2 relative group overflow-hidden bg-stone-100" data-cursor="Detalhes">
-                            <ParallaxImage 
-                                src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=800&auto=format&fit=crop" 
-                                alt="Detalhe de Fine Line e Textura" 
-                            />
-                             <div className="absolute bottom-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-difference">
-                                <span className="text-[10px] text-white uppercase tracking-widest font-bold">Tech: Whip Shading</span>
-                             </div>
-                        </div>
-                        
-                        {/* Detalhe 2: Contraste / Pele Nua */}
-                        <div className="h-1/2 relative group overflow-hidden bg-stone-100" data-cursor="Contraste">
-                            <ParallaxImage 
-                                src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=800&auto=format&fit=crop" 
-                                alt="Espaço Negativo e Contraste" 
-                            />
-                            <div className="absolute bottom-6 left-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-difference">
-                                <span className="text-[10px] text-white uppercase tracking-widest font-bold">Needle: 3RL</span>
-                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Legenda do Composite */}
-                <div className="flex flex-col md:flex-row justify-between items-start mt-6">
-                    <div>
-                        <h3 className="font-serif text-4xl md:text-5xl text-stone-900 leading-none">Flora Etérea</h3>
-                        <p className="text-[10px] font-sans font-bold text-[#754548] uppercase tracking-[0.2em] mt-2">
-                            Composição Neotradicional
-                        </p>
-                    </div>
-                    <div className="mt-4 md:mt-0 max-w-xs text-right hidden md:block">
-                        <p className="text-[10px] text-stone-500 uppercase tracking-wide leading-relaxed">
-                            A ausência de preto sólido preserva a leveza visual, utilizando a pele nua como elemento de luz na composição.
-                        </p>
-                    </div>
-                </div>
-            </Reveal>
-        </div>
-    );
-}
-
-// --- Scroller Atmosférico (Bastidores) ---
-const StudioScroller = () => {
-    const sectionRef = useRef<HTMLDivElement>(null);
-    const sliderRef = useRef<HTMLDivElement>(null);
-
-    useLayoutEffect(() => {
-        const ctx = gsap.context(() => {
-            if (sliderRef.current) {
-                gsap.to(sliderRef.current, {
-                    x: "-30%", // Movimento lateral
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top bottom",
-                        end: "bottom top",
-                        scrub: 1.5 // Inércia pesada
-                    }
-                });
-            }
-        }, sectionRef);
-        return () => ctx.revert();
-    }, []);
-
-    const studioImages = [
-        "https://images.unsplash.com/photo-1590246814883-057f66d4040a?q=80&w=600&auto=format&fit=crop", 
-        "https://images.unsplash.com/photo-1616091216791-a5360b5fc78a?q=80&w=600&auto=format&fit=crop", 
-        "https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=600&auto=format&fit=crop", 
-        "https://images.unsplash.com/photo-1550537687-c91357788f04?q=80&w=600&auto=format&fit=crop", 
-        "https://images.unsplash.com/photo-1621112904891-5af4d4771383?q=80&w=600&auto=format&fit=crop",
-    ];
-
-    return (
-        <div ref={sectionRef} className="w-full overflow-hidden py-32 bg-[#FAF7F7] border-t border-stone-100">
-            <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 mb-12 flex justify-between items-end">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548]">Atmosfera</span>
-                <span className="text-[9px] font-mono text-stone-400 hidden md:block">EST. 2018</span>
-            </div>
-            <div ref={sliderRef} className="flex gap-8 px-6 w-max will-change-transform">
-                {studioImages.map((src, i) => (
-                    <div key={i} className="w-[300px] md:w-[500px] aspect-[4/3] relative overflow-hidden bg-stone-200">
-                        <img src={src} alt="Studio Atmosphere" loading="lazy" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-out-expo" />
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
-}
 
 const Portfolio: React.FC = () => {
-  // Ignora os primeiros itens se quiser que o Featured seja único, ou use todos
-  const gridItems = PORTFOLIO_ITEMS.slice(0); 
+  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <>
-    <section id="gallery" className="relative pt-40 pb-24 bg-white overflow-hidden">
+    <section ref={containerRef} id="gallery" className="relative bg-white w-full pt-12 pb-32 overflow-hidden">
       
-      {/* Background Gradient Sutil para transição */}
-      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-[#FAF7F7] to-white pointer-events-none"></div>
-
-      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
-        
-        {/* Header - Renomeado para Portfólio */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-32 border-b border-stone-100 pb-12">
-          <Reveal>
-             <h2 className="text-7xl md:text-[9vw] font-serif text-stone-900 leading-[0.8] tracking-tighter mix-blend-darken">
-               Portfólio<span className="text-[#754548] text-4xl md:text-6xl align-top ml-2 italic">.</span>
-             </h2>
+      {/* 1. Header Minimalista Ancorado (Top Right) */}
+      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-16 mb-8 flex justify-end items-center border-b border-stone-100 pb-4">
+          <Reveal delay={100}>
+            <span className="font-sans text-[11px] font-bold tracking-[0.2em] text-stone-900 uppercase">
+                Portfólio
+            </span>
           </Reveal>
+      </div>
+
+      {/* 2. COMPOSITE LAYOUT (50% | 25% | 25%) */}
+      {/* Altura fixa em desktop para criar o efeito widescreen panorâmico */}
+      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-16">
           
-          <Reveal delay={200}>
-             <div className="mt-8 md:mt-0 text-right">
-                <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-2">
-                    [ Curadoria 2024 ]
-                </p>
-                <a href="https://instagram.com" className="font-serif italic text-xl text-stone-900 hover:text-[#754548] transition-colors border-b border-stone-900 hover:border-[#754548] pb-1">
-                    Ver arquivo completo
-                </a>
-             </div>
-          </Reveal>
-        </div>
+          <div className="flex flex-col lg:flex-row w-full lg:h-[85vh] gap-4">
+              
+              {/* BLOCO ESQUERDO (Principal - 50%) */}
+              <div className="w-full lg:w-1/2 h-[60vh] lg:h-full relative overflow-hidden group">
+                  <ParallaxImage 
+                      src="https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=1600&auto=format&fit=crop" 
+                      alt="Plano Médio - Anatomia e Postura"
+                      speed={1.2}
+                  />
+                  {/* Overlay Informativo ao Hover */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-end p-8">
+                      <div className="text-white mix-blend-difference">
+                          <p className="font-sans text-[10px] uppercase tracking-widest mb-1">Figura 01</p>
+                          <p className="font-serif text-2xl italic">Plano Médio / Postura</p>
+                      </div>
+                  </div>
+              </div>
 
-        {/* 1. Composição em Destaque (Composite Layout) */}
-        <FeaturedComposition />
+              {/* BLOCOS DIREITOS (Central e Direito - 50% divididos) */}
+              <div className="w-full lg:w-1/2 flex flex-col md:flex-row gap-4 h-[60vh] lg:h-full">
+                  
+                  {/* Bloco Central (25%) */}
+                  <div className="w-full md:w-1/2 h-1/2 md:h-full relative overflow-hidden group">
+                      <ParallaxImage 
+                          src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=900&auto=format&fit=crop" 
+                          alt="Detalhamento Fine Line"
+                          speed={1.0}
+                      />
+                       <div className="absolute top-4 left-4">
+                           <Scan size={20} className="text-stone-900/50 mix-blend-difference" strokeWidth={1} />
+                       </div>
+                  </div>
 
-        {/* 2. Grid Assimétrico Restante */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-8 lg:gap-x-12 gap-y-40">
-            {gridItems.map((item, index) => (
-                <div 
-                    key={item.id} 
-                    className={`${item.colSpan}`}
-                >
-                    <Reveal delay={index % 2 * 100} width="100%">
-                         <PortfolioItem item={item} />
-                    </Reveal>
-                </div>
-            ))}
-        </div>
+                  {/* Bloco Direito (25%) */}
+                  <div className="w-full md:w-1/2 h-1/2 md:h-full relative overflow-hidden group">
+                      <ParallaxImage 
+                          src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=900&auto=format&fit=crop" 
+                          alt="Textura e Contraste na Pele"
+                          speed={1.1} 
+                      />
+                      <div className="absolute bottom-4 right-4 rotate-180">
+                           <ArrowDownLeft size={20} className="text-stone-900/50 mix-blend-difference" strokeWidth={1} />
+                       </div>
+                  </div>
+
+              </div>
+          </div>
+
+          {/* 3. ANÁLISE TÉCNICA EDITORIAL */}
+          <div className="mt-16 lg:mt-24 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 border-t border-stone-200 pt-12">
+              
+              {/* Título do Estudo */}
+              <div className="lg:col-span-3">
+                  <Reveal>
+                      <h2 className="font-serif text-4xl md:text-5xl text-stone-900 leading-[0.9] mb-4">
+                          Flora<br/><span className="italic text-[#754548]">Helicoidal.</span>
+                      </h2>
+                      <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mt-2">
+                          Estudo de Caso 001
+                      </p>
+                  </Reveal>
+              </div>
+
+              {/* Coluna 1: Composição */}
+              <div className="lg:col-span-3 border-l border-stone-200 pl-6">
+                  <Reveal delay={100}>
+                      <div className="flex items-center gap-2 mb-4 text-[#754548]">
+                          <Maximize size={14} />
+                          <h3 className="font-sans text-[10px] font-bold uppercase tracking-widest">Composição & Grid</h3>
+                      </div>
+                      <p className="font-serif text-lg text-stone-600 leading-relaxed">
+                          Layout assimétrico em proporção widescreen. O plano médio foca na postura (50%), enquanto os blocos de suporte detalham a textura. 
+                          <br/><br/>
+                          <span className="font-sans text-xs text-stone-400 uppercase tracking-wide font-bold">Nota:</span> Equilíbrio minimalista com espaço negativo.
+                      </p>
+                  </Reveal>
+              </div>
+
+              {/* Coluna 2: Técnica */}
+              <div className="lg:col-span-3 border-l border-stone-200 pl-6">
+                   <Reveal delay={200}>
+                      <div className="flex items-center gap-2 mb-4 text-[#754548]">
+                          <Layers size={14} />
+                          <h3 className="font-sans text-[10px] font-bold uppercase tracking-widest">Técnica & Agulha</h3>
+                      </div>
+                      <ul className="space-y-4">
+                          <li className="font-serif text-lg text-stone-600 leading-tight">
+                              <strong className="block font-sans text-xs font-bold text-stone-900 uppercase tracking-wider mb-1">Estilo</strong>
+                              Fine Line contemporâneo com Whip Shading (pontilhismo suave).
+                          </li>
+                          <li className="font-serif text-lg text-stone-600 leading-tight">
+                              <strong className="block font-sans text-xs font-bold text-stone-900 uppercase tracking-wider mb-1">Execução</strong>
+                              Agulhas 3RL para contornos. Variação de peso de linha para criar profundidade visual nas nervuras.
+                          </li>
+                      </ul>
+                  </Reveal>
+              </div>
+
+              {/* Coluna 3: Anatomia */}
+              <div className="lg:col-span-3 border-l border-stone-200 pl-6">
+                  <Reveal delay={300}>
+                      <div className="flex items-center gap-2 mb-4 text-[#754548]">
+                          <Scan size={14} />
+                          <h3 className="font-sans text-[10px] font-bold uppercase tracking-widest">Mapeamento & Flow</h3>
+                      </div>
+                      <p className="font-serif text-lg text-stone-600 leading-relaxed mb-6">
+                          Projeto "meia-manga" fluida. Origem no deltoide posterior, seguindo uma <span className="italic text-stone-900">curva helicoidal</span> descendente que respeita o tríceps.
+                      </p>
+                      <div className="bg-stone-100 p-4 rounded-sm">
+                          <p className="font-sans text-[10px] uppercase tracking-wider text-stone-500 font-bold mb-1">Iluminação</p>
+                          <p className="font-serif text-sm text-stone-800">Luz difusa (Softbox) para destacar a tridimensionalidade do ombro sem reflexos especulares.</p>
+                      </div>
+                  </Reveal>
+              </div>
+
+          </div>
 
       </div>
     </section>
-    
-    <StudioScroller />
-    </>
   );
 };
 
