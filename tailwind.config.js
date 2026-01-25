@@ -55,8 +55,9 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', 'serif'],
+        serif: ['"Cormorant"', 'serif'],
         sans: ['"Montserrat"', 'sans-serif'],
+        script: ['"Pinyon Script"', 'cursive'],
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',

@@ -1,142 +1,121 @@
-import React, { useRef } from 'react';
-import Reveal from '../ui/Reveal';
-import { GridGalleryItem } from '../../types';
-import { PORTFOLIO_ITEMS } from '../../data/portfolio';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
-
-
-const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-
-  // Parallax refinado: movimento suave e consistente
-  const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
-  const scaleBase = useTransform(scrollYProgress, [0, 1], [1.1, 1.1]);
-
-  return (
-    <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
-      <motion.div style={{ y, scale: scaleBase }} className="w-full h-full will-change-transform">
-        <img
-          src={src}
-          alt={alt}
-          title={alt}
-          className="
-            w-full h-full object-cover 
-            grayscale group-hover:grayscale-0 
-            transition-all duration-[1000ms] 
-            ease-[cubic-bezier(0.22,1,0.36,1)] 
-            will-change-transform
-          "
-          loading="lazy"
-          decoding="async"
-        />
-      </motion.div>
-    </div>
-  );
-};
-
-const BentoCard = ({ item }: { item: GridGalleryItem }) => {
-  return (
-    <div
-      className={`group relative w-full h-full overflow-hidden rounded-sm bg-stone-100 cursor-pointer flex flex-col`}
-      data-cursor="VER PROJETO"
-    >
-      <ParallaxImage src={item.src} alt={item.altText} className="absolute inset-0" />
-
-      {/* Cinematic Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)] z-10"></div>
-
-      <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-20 flex flex-col justify-end translate-y-4 group-hover:translate-y-0 transition-transform duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
-        <div className="flex items-center gap-3 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-[1000ms] delay-100 ease-[cubic-bezier(0.22,1,0.36,1)]">
-          <span className="h-[1px] w-6 bg-rose-400"></span>
-          <span className="font-sans text-meta font-bold text-rose-200">
-            {item.category}
-          </span>
-        </div>
-
-        <div className="flex justify-between items-end">
-          <div className="flex flex-col gap-3 max-w-[85%]">
-            <h3 className="font-serif text-3xl md:text-fluid-h3 text-white leading-tight-editorial font-semibold tracking-tighter group-hover:text-rose-50 transition-colors duration-[1000ms] uppercase">
-              {item.title}
-            </h3>
-
-            {item.description && (
-              <p className="font-sans text-[10px] text-stone-300 leading-relaxed tracking-wide opacity-0 group-hover:opacity-100 transition-all duration-[1000ms] delay-200 transform translate-y-4 group-hover:translate-y-0 border-l border-white/20 pl-3 hidden md:block ease-[cubic-bezier(0.22,1,0.36,1)]">
-                {item.description}
-              </p>
-            )}
-          </div>
-
-          <div className="overflow-hidden w-8 h-8 flex items-center justify-center flex-shrink-0">
-            <ArrowUpRight
-              className="text-white transform translate-y-full -translate-x-full group-hover:translate-y-0 group-hover:translate-x-0 transition-transform duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-              size={24}
-              strokeWidth={1.5}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+import React, { useRef, useLayoutEffect } from 'react';
+import { PORTFOLIO_STORIES } from '../../data/portfolio';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 const Portfolio: React.FC = () => {
+  const componentRef = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // Simple parallax for the header
+      gsap.to(".watermark-text", {
+        xPercent: 5,
+        scrollTrigger: {
+          trigger: componentRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+    }, componentRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="gallery" className="relative pt-32 pb-40 bg-[#FAF7F7] overflow-hidden">
-      {/* Updated background to lighter harmonious rose noise */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#D9A9B0]/20 via-[#FAF7F7] to-[#FAF7F7] pointer-events-none z-0"></div>
+    <section ref={componentRef} id="acervo" className="relative pt-32 pb-64 bg-[#FFFFFF] overflow-hidden">
 
-      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-10 2xl:px-20 relative z-10">
+      {/* EXACT HEADER MATCH */}
+      <div className="relative w-full mb-40 px-4 md:px-12 flex flex-col items-center">
 
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-[#D48C95]/30 pb-6">
-          <Reveal>
-            <h2 className="font-serif text-fluid-h1 text-[#4A3B3B] leading-tight-editorial tracking-tighter uppercase">
-              Acervo<span className="text-[#8F5E62] text-4xl">.</span>
-            </h2>
-          </Reveal>
-
-          <Reveal delay={200}>
-            <div className="mt-8 md:mt-0 text-right">
-              <p className="font-sans text-meta font-bold text-[#8F5E62]">
-                Obras selecionadas 2023 — 2024
-              </p>
-            </div>
-          </Reveal>
+        {/* Top Label (Like Print "The Symbol of Freedom") */}
+        <div className="w-full max-w-[1920px] flex justify-between border-b border-[#E5E5E5] pb-4 mb-20">
+          <span className="font-sans text-[11px] text-[#8F5E62] uppercase tracking-widest">Selected Works</span>
+          <div className="hidden md:flex gap-8">
+            <span className="font-sans text-[11px] text-[#1A1818] uppercase tracking-widest cursor-pointer hover:text-[#8F5E62]">All</span>
+            <span className="font-sans text-[11px] text-stone-400 uppercase tracking-widest cursor-pointer hover:text-[#8F5E62]">Neotraditional</span>
+            <span className="font-sans text-[11px] text-stone-400 uppercase tracking-widest cursor-pointer hover:text-[#8F5E62]">Fine Line</span>
+          </div>
         </div>
 
-        {/* 
-            GRID LAYOUT FIXES:
-            - Adicionado h-full no Reveal para garantir que o componente ocupe toda a célula do grid
-            - Estrutura Bento Grid mantida
-        */}
-        <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-auto md:auto-rows-[380px] gap-4 md:gap-6">
-          {PORTFOLIO_ITEMS.map((item, index) => (
-            <div
-              key={item.id}
-              className={`${item.colSpan} relative w-full h-[350px] md:h-full`}
-            >
-              <Reveal delay={index * 50} width="100%" className="h-full">
-                <div className={`w-full h-full absolute inset-0 md:relative`}>
-                  <BentoCard item={item} />
+        {/* VISUAL LAYOUT: SENSEUTIVELY */}
+        <div className="relative w-full text-center">
+          {/* Watermark: Massive, Grey, Sharp */}
+          <h1 className="watermark-text font-sans font-bold text-[19vw] leading-[0.75] tracking-tighter text-[#F0F0F0] select-none scale-y-110 origin-bottom">
+            SENSEUTIVELY
+          </h1>
+
+          {/* Script: Lowercase, Black, Overlapping centered */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/4 z-10">
+            <span className="font-script text-[5rem] md:text-[8rem] text-[#1A1818] leading-none whitespace-nowrap">
+              about you
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* RAW IMAGE GRID (Sharp, No Gap? Or Specific Layout) */}
+      <div className="container mx-auto px-0 max-w-[1920px]">
+
+        {PORTFOLIO_STORIES.map((story, index) => {
+          const isEven = index % 2 === 0;
+
+          return (
+            <div key={story.id} className="mb-40 last:mb-0">
+
+              {/* Project Header (Like Print Top-Left Text) */}
+              <div className="px-6 md:px-24 mb-6">
+                <h3 className="font-serif italic text-3xl text-[#1A1818]">{story.title}</h3>
+                <div className="h-[1px] w-full bg-[#E5E5E5] mt-4"></div>
+              </div>
+
+              {/* Images: Raw, Sharp, High Contrast B&W */}
+              <div className={`flex flex-col md:flex-row w-full aspect-[16/9] md:aspect-[21/9]`}>
+
+                {/* Image 1: Large */}
+                <div className={`w-full md:w-2/3 h-full relative overflow-hidden bg-stone-50 ${isEven ? 'order-1' : 'order-2'}`}>
+                  <img
+                    src={story.mainImage}
+                    alt={story.title}
+                    className="w-full h-full object-cover grayscale contrast-110 hover:grayscale-0 transition-all duration-700"
+                  />
+                  <span className="absolute bottom-6 left-6 font-sans text-[10px] uppercase tracking-widest text-white/80 mix-blend-difference">
+                    {story.id} — Main View
+                  </span>
                 </div>
-              </Reveal>
-            </div>
-          ))}
-        </div>
 
+                {/* Image 2: Detail (Side) */}
+                <div className={`w-full md:w-1/3 h-full relative overflow-hidden border-l border-white ${isEven ? 'order-2' : 'order-1'}`}>
+                  <img
+                    src={story.detailImage}
+                    alt="Detail"
+                    className="w-full h-full object-cover grayscale contrast-110 hover:grayscale-0 transition-all duration-700"
+                  />
+                  <span className="absolute bottom-6 left-6 font-sans text-[10px] uppercase tracking-widest text-white/80 mix-blend-difference">
+                    Texture Detail
+                  </span>
+                </div>
+
+              </div>
+            </div>
+          );
+        })}
 
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full flex justify-center overflow-hidden z-10 text-[#8F5E62]">
-        <svg width="100%" height="40" viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-[30px] md:h-[40px] stroke-current fill-none opacity-40">
-          <path d="M0,20 Q150,25 300,18 T600,22 T900,18 T1200,20" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-          <path d="M50,22 Q200,28 350,16 T650,24 T950,16 T1150,22" strokeWidth="0.5" vectorEffect="non-scaling-stroke" strokeOpacity="0.5" />
+      {/* Divider Icon */}
+      <div className="flex justify-center mt-32 opacity-30">
+        <svg width="30" height="50" viewBox="0 0 30 50" fill="none">
+          <path d="M15 50C15 50 17 30 28 15" stroke="#1A1818" />
+          <path d="M15 30C15 30 15 10 15 0" stroke="#1A1818" />
+          <path d="M15 20C15 20 22 12 26 5" stroke="#1A1818" strokeWidth="0.5" />
+          <path d="M15 25C15 25 8 18 4 10" stroke="#1A1818" strokeWidth="0.5" />
         </svg>
       </div>
+
     </section>
   );
 };
