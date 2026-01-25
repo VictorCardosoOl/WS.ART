@@ -1,6 +1,5 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import './StaggeredMenu.css';
 
 interface MenuItem {
   label: string;
@@ -21,7 +20,7 @@ interface StaggeredMenuProps {
   displaySocials?: boolean;
   displayItemNumbering?: boolean;
   className?: string;
-  logoContent?: React.ReactNode; // Alterado para aceitar Node React
+  logoContent?: React.ReactNode;
   menuButtonColor?: string;
   openMenuButtonColor?: string;
   accentColor?: string;
@@ -52,7 +51,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const openRef = useRef(false);
-  const panelRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
   const preLayersRef = useRef<HTMLDivElement | null>(null);
   const preLayerElsRef = useRef<HTMLDivElement[]>([]);
   const plusHRef = useRef<HTMLSpanElement | null>(null);
@@ -376,19 +375,19 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     };
   }, [closeOnClickAway, open, closeMenu]);
 
-  // Handler para cliques nos links do menu
   const handleLinkClick = () => {
     closeMenu();
   };
 
   return (
     <div
-      className={(className ? className + ' ' : '') + 'staggered-menu-wrapper' + (isFixed ? ' fixed-wrapper' : '')}
+      className={`${className || ''} fixed top-0 left-0 w-full h-0 z-50 ${isFixed ? 'fixed top-0 left-0 w-full h-screen z-50 overflow-hidden pointer-events-none' : ''}`}
       style={accentColor ? { ['--sm-accent' as any]: accentColor } : undefined}
       data-position={position}
       data-open={open || undefined}
     >
-      <div ref={preLayersRef} className="sm-prelayers" aria-hidden="true">
+      {/* Pre-Layers */}
+      <div ref={preLayersRef} className={`fixed top-0 bottom-0 z-35 h-full w-[clamp(300px,85vw,600px)] pointer-events-none ${position === 'left' ? 'left-0' : 'right-0'}`} aria-hidden="true">
         {(() => {
           const raw = colors && colors.length ? colors.slice(0, 4) : ['#1e1e22', '#35353c'];
           let arr = [...raw];
@@ -396,11 +395,13 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             const mid = Math.floor(arr.length / 2);
             arr.splice(mid, 1);
           }
-          return arr.map((c, i) => <div key={i} className="sm-prelayer" style={{ background: c }} />);
+          return arr.map((c, i) => <div key={i} className="absolute top-0 right-0 h-full w-full transform translate-x-0 sm-prelayer" style={{ background: c }} />);
         })()}
       </div>
-      <header className="staggered-menu-header" aria-label="Main navigation header">
-        <div className="sm-logo" aria-label="Logo">
+
+      {/* Header / Toggle Button Area */}
+      <header className="fixed top-0 left-0 w-full flex items-center justify-between px-6 py-6 md:px-12 pointer-events-none z-[51]">
+        <div className="flex items-center select-none z-[52] pointer-events-auto text-stone-900">
           {logoContent ? logoContent : (
              <span className="font-serif text-2xl tracking-tighter text-[#1c1917]">
                W<span className="text-[#754548]">.</span>S
@@ -409,44 +410,58 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         </div>
         <button
           ref={toggleBtnRef}
-          className="sm-toggle"
+          className="relative inline-flex items-center gap-3 bg-transparent border-none cursor-pointer text-[#1c1917] font-sans font-bold tracking-[0.15em] uppercase text-xs leading-none overflow-visible z-[52] pointer-events-auto focus-visible:outline-1 focus-visible:outline-[#754548] focus-visible:outline-offset-4 focus-visible:rounded"
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
-          aria-controls="staggered-menu-panel"
           onClick={toggleMenu}
           type="button"
         >
-          <span ref={textWrapRef} className="sm-toggle-textWrap" aria-hidden="true">
-            <span ref={textInnerRef} className="sm-toggle-textInner">
+          <span ref={textWrapRef} className="relative inline-block h-[1em] overflow-hidden whitespace-nowrap w-[40px] text-right">
+            <span ref={textInnerRef} className="flex flex-col leading-none">
               {textLines.map((l, i) => (
-                <span className="sm-toggle-line" key={i}>
+                <span className="block h-[1em] leading-none" key={i}>
                   {l}
                 </span>
               ))}
             </span>
           </span>
-          <span ref={iconRef} className="sm-icon" aria-hidden="true">
-            <span ref={plusHRef} className="sm-icon-line" />
-            <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
+          <span ref={iconRef} className="relative w-[14px] h-[14px] flex-none inline-flex items-center justify-center will-change-transform">
+            <span ref={plusHRef} className="absolute left-1/2 top-1/2 w-full h-[2px] bg-current transform -translate-x-1/2 -translate-y-1/2 will-change-transform" />
+            <span ref={plusVRef} className="absolute left-1/2 top-1/2 w-full h-[2px] bg-current transform -translate-x-1/2 -translate-y-1/2 rotate-90 will-change-transform sm-icon-line-v" />
           </span>
         </button>
       </header>
 
-      <aside id="staggered-menu-panel" ref={panelRef} className="staggered-menu-panel" aria-hidden={!open}>
-        <div className="sm-panel-inner">
-          <ul className="sm-panel-list" role="list" data-numbering={displayItemNumbering || undefined}>
+      {/* Main Panel */}
+      <aside 
+        ref={panelRef} 
+        className={`fixed top-0 h-screen bg-[#FAF7F7] flex flex-col pt-32 pb-16 px-8 md:px-16 overflow-y-auto z-40 pointer-events-auto border-l border-[#754548]/10
+        w-[clamp(300px,85vw,600px)]
+        ${position === 'left' ? 'left-0 border-r border-l-0' : 'right-0'}
+        `}
+        aria-hidden={!open}
+      >
+        <div className="flex-1 flex flex-col justify-center gap-8">
+          <ul className="list-none m-0 p-0 flex flex-col gap-2 sm-panel-list" role="list" data-numbering={displayItemNumbering || undefined}>
             {items && items.length ? (
               items.map((it, idx) => (
-                <li className="sm-panel-itemWrap" key={it.label + idx}>
+                <li className="relative overflow-hidden leading-none sm-panel-itemWrap" key={it.label + idx}>
                   <a 
-                    className="sm-panel-item" 
+                    className="relative text-[#1c1917] font-serif italic font-light text-[3.5rem] md:text-[4rem] cursor-pointer leading-none no-underline transition-colors duration-300 inline-block pr-0 hover:text-[#754548] sm-panel-item group" 
                     href={it.link} 
                     aria-label={it.ariaLabel} 
                     data-index={idx + 1}
                     onClick={handleLinkClick}
                   >
-                    <span className="sm-panel-itemLabel">{it.label}</span>
+                    {/* Numbering styled via CSS pseudo-elements in logic or manually here if needed. Keeping data-numbering logic for JSGSAP */}
+                    <span className="sm-panel-itemLabel inline-block will-change-transform origin-bottom">{it.label}</span>
                   </a>
+                  {/* Tailwind-based numbering override if CSS is fully removed */}
+                  {displayItemNumbering && (
+                      <span className="absolute top-1/2 -translate-y-1/2 -left-8 font-sans text-xs font-bold text-[#754548] tracking-widest opacity-0 sm:numbering-hack">
+                          0{idx+1}
+                      </span>
+                  )}
                 </li>
               ))
             ) : (
@@ -457,13 +472,14 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               </li>
             )}
           </ul>
+          
           {displaySocials && socialItems && socialItems.length > 0 && (
-            <div className="sm-socials" aria-label="Social links">
-              <h3 className="sm-socials-title">Socials</h3>
-              <ul className="sm-socials-list" role="list">
+            <div className="mt-auto pt-12 flex flex-col gap-4 border-t border-[#1c1917]/10 sm-socials">
+              <h3 className="m-0 font-sans text-xs font-bold tracking-[0.2em] uppercase text-[#BC8F8F] sm-socials-title">Socials</h3>
+              <ul className="list-none m-0 p-0 flex flex-row items-center gap-6 flex-wrap sm-socials-list" role="list">
                 {socialItems.map((s, i) => (
                   <li key={s.label + i} className="sm-socials-item">
-                    <a href={s.link} target="_blank" rel="noopener noreferrer" className="sm-socials-link">
+                    <a href={s.link} target="_blank" rel="noopener noreferrer" className="font-sans text-sm font-medium uppercase tracking-wider text-[#754548] no-underline relative transition-all duration-300 hover:text-[#1c1917] sm-socials-link">
                       {s.label}
                     </a>
                   </li>
@@ -473,6 +489,30 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           )}
         </div>
       </aside>
+      <style>{`
+        /* Essential for GSAP targeting and pseudo-element numbering */
+        .sm-panel-list[data-numbering] { counter-reset: smItem; }
+        .sm-panel-list[data-numbering] .sm-panel-item::before {
+            counter-increment: smItem;
+            content: "0" counter(smItem);
+            position: absolute;
+            top: 50%;
+            left: -2.5rem;
+            transform: translateY(-50%);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #754548;
+            letter-spacing: 0.1em;
+            pointer-events: none;
+            opacity: var(--sm-num-opacity, 0);
+            transition: opacity 0.3s;
+        }
+        .sm-socials-link::after {
+            content: ''; position: absolute; width: 0; height: 1px; bottom: -2px; left: 0; background-color: #1c1917; transition: width 0.3s ease;
+        }
+        .sm-socials-link:hover::after { width: 100%; }
+      `}</style>
     </div>
   );
 };

@@ -17,7 +17,11 @@ const BookingForm: React.FC = () => {
   });
 
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [fileError, setFileError] = useState<string | null>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -29,15 +33,28 @@ const BookingForm: React.FC = () => {
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFileError(null);
     if (e.target.files && e.target.files[0]) {
-      // Security: Validate file type and size here in a real scenario
-      setFormData(prev => ({ ...prev, referenceFile: e.target.files![0] }));
+      const file = e.target.files[0];
+
+      if (!ALLOWED_TYPES.includes(file.type)) {
+          setFileError("Formato inválido. Use JPG, PNG ou WEBP.");
+          return;
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+          setFileError("O arquivo deve ter no máximo 5MB.");
+          return;
+      }
+
+      setFormData(prev => ({ ...prev, referenceFile: file }));
     }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!formData.agreeToDeposit) return;
+    if (fileError) return;
     
     setStatus('submitting');
     
@@ -179,13 +196,16 @@ const BookingForm: React.FC = () => {
                 <div>
                      <span className={labelClasses}>Referência Visual (Opcional)</span>
                      <label htmlFor="file-upload" className="flex items-center gap-4 cursor-pointer mt-4 group w-fit">
-                        <div className="w-12 h-12 border border-stone-300 rounded-full flex items-center justify-center group-hover:border-[#754548] group-hover:bg-[#754548] group-hover:text-white transition-all duration-300">
-                            <Upload size={18} strokeWidth={1.5} />
+                        <div className={`w-12 h-12 border rounded-full flex items-center justify-center transition-all duration-300 ${fileError ? 'border-red-500 bg-red-50 text-red-500' : 'border-stone-300 group-hover:border-[#754548] group-hover:bg-[#754548] group-hover:text-white'}`}>
+                            {fileError ? <AlertTriangle size={18} /> : <Upload size={18} strokeWidth={1.5} />}
                         </div>
-                        <span className="text-sm text-stone-500 group-hover:text-stone-900 transition-colors border-b border-transparent group-hover:border-stone-900 pb-px">
-                            {formData.referenceFile ? formData.referenceFile.name : "Selecionar arquivo de referência"}
-                        </span>
-                        <input id="file-upload" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                        <div className="flex flex-col">
+                            <span className="text-sm text-stone-500 group-hover:text-stone-900 transition-colors border-b border-transparent group-hover:border-stone-900 pb-px">
+                                {formData.referenceFile ? formData.referenceFile.name : "Selecionar arquivo de referência"}
+                            </span>
+                            {fileError && <span className="text-[10px] text-red-500 font-bold mt-1">{fileError}</span>}
+                        </div>
+                        <input id="file-upload" type="file" className="hidden" accept="image/png, image/jpeg, image/webp" onChange={handleFileChange} />
                      </label>
                 </div>
 
@@ -204,7 +224,7 @@ const BookingForm: React.FC = () => {
 
                     <button 
                         type="submit"
-                        disabled={status === 'submitting' || !formData.agreeToDeposit}
+                        disabled={status === 'submitting' || !formData.agreeToDeposit || !!fileError}
                         className="group relative px-12 py-5 bg-stone-900 text-white overflow-hidden rounded-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                     >
                         <div className="absolute inset-0 w-0 bg-[#754548] transition-all duration-[600ms] ease-out group-hover:w-full"></div>

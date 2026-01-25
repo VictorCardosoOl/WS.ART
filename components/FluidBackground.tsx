@@ -1,20 +1,30 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const FluidBackground: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    // CTO Optimization: Check for mobile or reduced motion preference
+    // This prevents battery drain on weaker devices
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!isMobile && !prefersReducedMotion) {
+      setShouldRender(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!shouldRender || !containerRef.current) return;
 
     // 1. Setup Three.js
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     
-    // Resize é gerenciado pelo Observer
-    renderer.setSize(0, 0);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Cap pixel ratio for performance
     containerRef.current.appendChild(renderer.domElement);
 
     // 2. SHADER CONFIG
@@ -130,7 +140,12 @@ const FluidBackground: React.FC = () => {
       material.dispose();
       renderer.dispose();
     };
-  }, []);
+  }, [shouldRender]);
+
+  if (!shouldRender) {
+      // Fallback estático leve para mobile
+      return <div className="w-full h-full bg-[#FAF7F7]"></div>;
+  }
 
   return (
     <div 
