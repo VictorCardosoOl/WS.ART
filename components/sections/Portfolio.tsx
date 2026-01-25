@@ -1,53 +1,39 @@
-import React, { useRef, useLayoutEffect } from 'react';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
+import React, { useRef } from 'react';
 import Reveal from '../ui/Reveal';
 import { GridGalleryItem } from '../../types';
 import { PORTFOLIO_ITEMS } from '../../data/portfolio';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
 const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // Efeito Parallax com Inércia (Scrub 1.5)
-      gsap.fromTo(imgRef.current, 
-        { scale: 1.2, yPercent: -10 },
-        {
-          scale: 1.2, // Mantém escala
-          yPercent: 10, // Move verticalmente oposto ao scroll
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.5 // A inércia aqui é o segredo do "peso"
-          }
-        }
-      );
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  
+  const y = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["-2%", "2%"]);
+  const scaleBase = useTransform(scrollYProgress, [0, 1], [1.15, 1.15]); 
 
   return (
-    <div ref={containerRef} className={`relative overflow-hidden w-full h-full ${className}`}>
+    <div ref={ref} className={`relative overflow-hidden w-full h-full ${className}`}>
+      <motion.div style={{ y, x, scale: scaleBase }} className="w-full h-full">
         <img 
-          ref={imgRef}
           src={src} 
           alt={alt} 
           title={alt}
           className="
             w-full h-full object-cover 
             grayscale group-hover:grayscale-0 
-            transition-all duration-[1000ms] 
-            ease-out
-            will-change-transform
+            transition-all duration-[800ms] 
+            ease-[cubic-bezier(0.22,1,0.36,1)] 
+            group-hover:scale-105
           "
           loading="lazy"
+          decoding="async"
         />
+      </motion.div>
     </div>
   );
 };
@@ -126,7 +112,7 @@ const Portfolio: React.FC = () => {
                     key={item.id} 
                     className={`${item.colSpan} relative w-full h-full min-h-[300px] md:min-h-auto`}
                 >
-                    <Reveal delay={index * 100} width="100%">
+                    <Reveal delay={index * 50} width="100%">
                         <div className={`w-full h-full`}>
                              <BentoCard item={item} />
                         </div>
