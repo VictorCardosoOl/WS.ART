@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
          </svg>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-10">
         
         {/* Top Grid Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-12 md:gap-y-16 border-b border-stone-800 pb-12 md:pb-16">

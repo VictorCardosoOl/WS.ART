@@ -5,8 +5,6 @@ import { PORTFOLIO_ITEMS } from '../../data/portfolio';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { ArrowUpRight, ArrowRight } from 'lucide-react';
 
-// Efeito de "Clipped Reveal" inspirado no site de referência (Lass Tattoo)
-// A imagem começa com zoom e recortada, e se "revela" ao entrar na tela.
 const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-10% 0px -10% 0px" });
@@ -34,12 +32,11 @@ const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
                 loading="lazy"
             />
             
-            {/* Overlay sutil apenas para textura */}
             <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none mix-blend-overlay"></div>
         </motion.div>
       </div>
 
-      {/* Legenda Estilo Editorial - Título grande e seta */}
+      {/* Legenda Estilo Editorial */}
       <div className="flex flex-col border-t border-stone-200 pt-4 group-hover:border-[#754548] transition-colors duration-700">
          <div className="flex justify-between items-baseline">
              <h3 className="font-serif text-3xl md:text-4xl text-stone-900 leading-none tracking-tight group-hover:italic transition-all duration-500">
@@ -64,7 +61,6 @@ const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
   );
 };
 
-// Componente de Scroll Horizontal (PhotoScroller da referência)
 const StudioScroller = () => {
     const scrollRef = useRef(null);
     const { scrollYProgress } = useScroll({
@@ -75,21 +71,21 @@ const StudioScroller = () => {
     const x = useTransform(scrollYProgress, [0, 1], ["0%", "-25%"]);
 
     const studioImages = [
-        "https://images.unsplash.com/photo-1590246814883-057f66d4040a?q=80&w=600&auto=format&fit=crop", // Studio Detail
-        "https://images.unsplash.com/photo-1616091216791-a5360b5fc78a?q=80&w=600&auto=format&fit=crop", // Ink/Needle
-        "https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=600&auto=format&fit=crop", // Skin detail
-        "https://images.unsplash.com/photo-1550537687-c91357788f04?q=80&w=600&auto=format&fit=crop", // Interior
-        "https://images.unsplash.com/photo-1621112904891-5af4d4771383?q=80&w=600&auto=format&fit=crop", // Art
+        "https://images.unsplash.com/photo-1590246814883-057f66d4040a?q=80&w=600&auto=format&fit=crop", 
+        "https://images.unsplash.com/photo-1616091216791-a5360b5fc78a?q=80&w=600&auto=format&fit=crop", 
+        "https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=600&auto=format&fit=crop", 
+        "https://images.unsplash.com/photo-1550537687-c91357788f04?q=80&w=600&auto=format&fit=crop", 
+        "https://images.unsplash.com/photo-1621112904891-5af4d4771383?q=80&w=600&auto=format&fit=crop",
     ];
 
     return (
         <div ref={scrollRef} className="w-full overflow-hidden py-32 bg-[#FAF7F7]">
-            <div className="container mx-auto px-6 mb-12">
+            <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 mb-12">
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548]">Bastidores & Atmosfera</span>
             </div>
             <motion.div style={{ x }} className="flex gap-8 px-6 w-max">
                 {studioImages.map((src, i) => (
-                    <div key={i} className="w-[300px] md:w-[450px] aspect-[4/3] relative overflow-hidden bg-stone-200">
+                    <div key={i} className="w-[300px] md:w-[500px] aspect-[4/3] relative overflow-hidden bg-stone-200">
                         <img src={src} alt="Studio Atmosphere" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                     </div>
                 ))}
@@ -103,7 +99,7 @@ const Portfolio: React.FC = () => {
     <>
     <section id="gallery" className="relative pt-40 pb-24 bg-white overflow-hidden">
       
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
+      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-10">
         
         {/* Header - Alinhamento Editorial */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-32 border-b border-stone-100 pb-12">
@@ -126,7 +122,7 @@ const Portfolio: React.FC = () => {
         </div>
 
         {/* Grid Assimétrico Estilo "Masonry Manual" */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-8 gap-y-32">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-8 lg:gap-x-12 gap-y-32">
             {PORTFOLIO_ITEMS.map((item, index) => (
                 <div 
                     key={item.id} 
@@ -143,7 +139,6 @@ const Portfolio: React.FC = () => {
       </div>
     </section>
     
-    {/* Seção de Scroll Horizontal inspirada na referência */}
     <StudioScroller />
     </>
   );

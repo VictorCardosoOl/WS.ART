@@ -14,7 +14,7 @@ const FAQ: React.FC = () => {
 
   return (
     <section id="faq" className="py-24 md:py-32 bg-white relative z-10">
-      <div className="container mx-auto px-6">
+      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20">
         <SectionTitle subtitle="Dúvidas" title="Perguntas Frequentes" />
         
         <div className="mt-16 flex flex-col border-t border-stone-200">

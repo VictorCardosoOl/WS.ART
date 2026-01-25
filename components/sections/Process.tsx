@@ -33,8 +33,18 @@ const Process: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
 
   return (
-    <section className="relative py-32 md:py-48 bg-pantone-skin overflow-hidden" id="process">
-      <div className="container mx-auto px-6 relative z-10 pb-24">
+    <section className="relative py-32 md:py-48 overflow-hidden" id="process">
+      
+      {/* --- BACKGROUND ARTISTRY --- */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#FAF7F7] via-[#FDF7F8] to-[#FAF7F7] z-0"></div>
+      <div className="absolute bottom-0 left-[-10%] w-[600px] h-[600px] bg-[radial-gradient(circle,_#1c1917_0%,_transparent_70%)] opacity-[0.02] blur-[80px] pointer-events-none z-0"></div>
+      <div className="absolute top-0 right-[20%] w-[1px] h-full opacity-10 hidden lg:block z-0">
+         <svg height="100%" width="100%" preserveAspectRatio="none">
+            <path d="M0 0 Q 20 400 0 1000" stroke="#754548" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" strokeDasharray="10, 20"/>
+         </svg>
+      </div>
+
+      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-10 pb-24">
         
         <div className="flex flex-col lg:flex-row gap-20 items-start">
           
@@ -67,7 +77,8 @@ const Process: React.FC = () => {
                     {activeStep === index && (
                         <motion.div 
                             layoutId="activeIndicator"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-pantone-accent rounded-full"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-12 bg-pantone-accent"
+                            style={{ borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%' }}
                         />
                     )}
 
@@ -87,7 +98,7 @@ const Process: React.FC = () => {
              </div>
           </div>
 
-          {/* Text Description Reveal (Desktop & Mobile) */}
+          {/* Text Description Reveal */}
           <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
             <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-pantone-accent/20">
                <AnimatePresence mode='wait'>
@@ -102,13 +113,18 @@ const Process: React.FC = () => {
                      transition={{ duration: 0.4, ease: "easeOut" }}
                      className="relative"
                    >
-                     <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10" aria-hidden="true">
+                     {/* Background Number Watermark */}
+                     <span className="absolute -top-20 -left-10 text-[12rem] font-serif text-[#754548] opacity-[0.03] select-none pointer-events-none font-italic leading-none">
+                        {steps[activeStep].id}
+                     </span>
+
+                     <h4 className="font-serif text-4xl md:text-6xl text-pantone-ink mb-6 leading-none opacity-10 relative z-10" aria-hidden="true">
                         {steps[activeStep].id}
                      </h4>
-                     <h3 className="text-2xl font-serif text-pantone-ink mb-6">
+                     <h3 className="text-2xl font-serif text-pantone-ink mb-6 relative z-10">
                         Detalhes da Etapa
                      </h3>
-                     <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif">
+                     <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif relative z-10">
                        {steps[activeStep].fullDesc}
                      </p>
                    </motion.div>
@@ -117,13 +133,6 @@ const Process: React.FC = () => {
           </div>
 
         </div>
-      </div>
-
-      {/* SEPARATOR: REVERSE CURVE TO WHITE (FLASH DAY) */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
-         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-white">
-            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
-         </svg>
       </div>
     </section>
   );

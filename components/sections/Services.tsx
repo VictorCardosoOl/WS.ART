@@ -8,7 +8,7 @@ const Services: React.FC = () => {
 
   return (
     <section id="services" className="py-24 md:py-32 bg-stone-900 text-stone-100 overflow-hidden">
-      <div className="container mx-auto px-6">
+      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20">
         
         <Reveal>
             <div className="flex items-center gap-4 mb-16 md:mb-24">
@@ -40,7 +40,6 @@ const Services: React.FC = () => {
                     </p>
                   </div>
                   
-                  {/* Expandable Details for Mobile */}
                   <div className="h-0 overflow-hidden group-hover:h-auto group-hover:mt-4 transition-all duration-500 md:hidden">
                       <p className="text-stone-400 text-sm leading-relaxed">{service.details}</p>
                   </div>
@@ -52,7 +51,7 @@ const Services: React.FC = () => {
             <div className="border-t border-stone-800 w-full"></div>
           </div>
 
-          {/* Floating Image Preview (Desktop Only) - Arredondada */}
+          {/* Floating Image Preview (Desktop Only) */}
           <div className="hidden lg:block w-1/3 relative">
             <div className="sticky top-32 w-full aspect-[3/4] overflow-hidden rounded-2xl border border-white/5 bg-stone-800/50">
                {SERVICES_ITEMS.map((service, index) => (
@@ -67,7 +66,6 @@ const Services: React.FC = () => {
                      }`}
                    />
                ))}
-               {/* Default State image if nothing hovered */}
                <div className={`absolute inset-0 flex items-center justify-center bg-stone-800 transition-opacity duration-500 rounded-2xl ${hoveredIndex !== null ? 'opacity-0' : 'opacity-100'}`}>
                   <p className="text-stone-600 font-serif italic text-xl">Selecione uma especialidade</p>
                </div>

@@ -36,7 +36,6 @@ const Hero: React.FC = () => {
       }, "-=1.0");
 
       // 2. SCROLL PARALLAX ANIMATION
-      // Background moves slower than foreground
       gsap.to(bgRef.current, {
         yPercent: 30,
         ease: "none",
@@ -49,9 +48,8 @@ const Hero: React.FC = () => {
       });
 
       // Massive Text moves faster (Foreground Parallax)
-      // FIX: Removido opacity: 0 para que o texto não suma, apenas suba em parallax
       gsap.to(titleRef.current, {
-        yPercent: -25, // Aumentei ligeiramente a velocidade para efeito dramático
+        yPercent: -25, 
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
@@ -77,7 +75,7 @@ const Hero: React.FC = () => {
       </div>
 
       {/* --- CONTENT LAYER --- */}
-      <div className="container mx-auto px-6 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
+      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
           
           {/* Top Section */}
           <div className="flex flex-col md:flex-row justify-between items-start w-full">
@@ -131,7 +129,7 @@ const Hero: React.FC = () => {
         ref={titleRef}
         className="absolute bottom-0 left-0 w-full flex justify-center items-end leading-none z-10 mix-blend-darken pointer-events-none select-none pb-0 will-change-transform"
       >
-          <h1 className="font-sans font-black text-[21vw] text-[#12100E] tracking-tighter text-center leading-[0.75] w-full opacity-90 overflow-hidden">
+          <h1 className="font-sans font-black text-[22vw] text-[#12100E] tracking-tighter text-center leading-[0.7] w-full opacity-90 overflow-hidden translate-y-[2%]">
                <SplitText charClass="char-reveal" wordClass="overflow-hidden pb-[1vw]">
                 WILLIAM
                </SplitText>

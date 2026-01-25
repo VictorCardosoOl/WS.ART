@@ -5,7 +5,7 @@ import Reveal from '../ui/Reveal';
 const FlashDay: React.FC = () => {
   return (
     <section id="flashday" className="py-24 md:py-32 bg-white border-b border-stone-100 relative overflow-hidden">
-      <div className="container mx-auto px-6">
+      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 md:mb-24 border-b border-rose-200 pb-8">

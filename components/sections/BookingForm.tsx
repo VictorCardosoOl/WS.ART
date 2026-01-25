@@ -59,7 +59,7 @@ const BookingForm: React.FC = () => {
   if (status === 'success') {
     return (
       <section id="booking" className="py-40 bg-white">
-        <div className="container mx-auto px-6 text-center">
+        <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 text-center">
             <Reveal>
                 <div className="flex justify-center mb-8">
                     <CheckCircle className="w-20 h-20 text-stone-900 stroke-[0.5]" />
@@ -94,7 +94,7 @@ const BookingForm: React.FC = () => {
 
   return (
     <section id="booking" className="py-32 md:py-48 bg-white scroll-mt-20">
-      <div className="container mx-auto px-6">
+      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20">
         <SectionTitle subtitle="Agendamento" title="Inicie sua Jornada" />
         
         <div className="max-w-4xl mx-auto mt-20">

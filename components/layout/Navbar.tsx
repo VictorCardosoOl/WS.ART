@@ -2,10 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Instagram } from 'lucide-react';
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 import StaggeredMenu from '../ui/StaggeredMenu';
+import Magnetic from '../ui/Magnetic';
+import { Menu, X } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const scrollY = useScrollPosition();
   const [isVisible, setIsVisible] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const lastScrollY = useRef(0);
 
   // Scroll Direction Logic
@@ -37,10 +40,9 @@ const Navbar: React.FC = () => {
     <>
       {/* 
         DESKTOP NAVIGATION (Visible > 1024px) 
-        Mantemos a navbar horizontal para desktop pois combina melhor com o Hero "Creative Giants"
       */}
       <nav 
-        className={`fixed top-0 left-0 w-full z-40 hidden lg:flex items-center justify-between px-12 py-6 transition-all duration-500 ${isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-stone-100 py-4' : 'bg-transparent'}`}
+        className={`fixed top-0 left-0 w-full z-40 hidden lg:flex items-center justify-between px-6 md:px-12 lg:px-20 py-6 transition-all duration-500 max-w-[1920px] mx-auto left-0 right-0 ${isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-stone-100 py-4' : 'bg-transparent'}`}
       >
         {/* Brand */}
         <a href="#" className="group flex items-center relative z-50">
@@ -67,18 +69,24 @@ const Navbar: React.FC = () => {
             <a href="https://instagram.com" className={`hover:text-stone-900 transition-colors ${isScrolled ? 'text-stone-400' : 'text-stone-800'}`}>
                 <Instagram size={18} strokeWidth={1.5} />
             </a>
-            <a
-                href="#booking"
-                className="relative px-6 py-2.5 overflow-hidden rounded-sm text-[10px] font-bold uppercase tracking-[0.2em] bg-stone-900 text-white hover:bg-[#754548] transition-colors"
-            >
-                Agendar
-            </a>
+            <Magnetic strength={0.3}>
+                <a
+                    href="#booking"
+                    className={`
+                        relative px-6 py-2.5 overflow-hidden rounded-sm text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-500 border group inline-block
+                        ${isScrolled 
+                            ? 'border-[#754548] text-[#754548] hover:bg-[#754548] hover:text-white' 
+                            : 'bg-stone-900 border-stone-900 text-white hover:bg-[#754548] hover:border-[#754548]'}
+                    `}
+                >
+                    <span className="relative z-10 transition-colors">Agendar</span>
+                </a>
+            </Magnetic>
         </div>
       </nav>
 
       {/* 
         MOBILE/TABLET NAVIGATION (Visible < 1024px)
-        Substitui o botão hamburger antigo e o overlay pelo novo StaggeredMenu
       */}
       <div className="lg:hidden">
           <StaggeredMenu
@@ -91,7 +99,6 @@ const Navbar: React.FC = () => {
             openMenuButtonColor="#1c1917"
             accentColor="#754548"
             changeMenuColorOnOpen={false}
-            // Cores do efeito swipe baseadas na paleta do site
             colors={['#F2E8E9', '#E5D0D4', '#FAF7F7']} 
             logoContent={
                 <a href="#" className="group flex items-center z-50 relative focus:outline-none">

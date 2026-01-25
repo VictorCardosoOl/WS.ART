@@ -30,39 +30,40 @@ const careItems = [
 
 const PreCare: React.FC = () => {
   return (
-    <section className="py-32 md:py-40 bg-[#F5F5F5] text-stone-900 relative overflow-hidden" id="precare">
+    <section className="py-32 md:py-40 bg-[#FAF7F7] text-stone-900 relative overflow-hidden" id="precare">
       
-      {/* SEPARATOR: TOP CURVE FROM WHITE */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10 rotate-180">
-         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[80px] fill-white">
-             <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V56.44Z"></path>
-         </svg>
-      </div>
+      {/* --- BACKGROUND ARTISTRY --- */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] bg-[radial-gradient(circle,_#ffffff_0%,_#FAF7F7_60%)] z-0 pointer-events-none"></div>
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[radial-gradient(circle,_#754548_0%,_transparent_70%)] opacity-[0.03] blur-[80px] pointer-events-none z-0"></div>
 
-      {/* GRADIENTE RADIAL */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#E5D0D4]/40 via-[#F5F5F5] to-[#F5F5F5] pointer-events-none z-0"></div>
-
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
+      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-10">
         
         {/* Header Gigante Editorial */}
-        <div className="mb-32 md:mb-48 mt-12">
+        <div className="mb-32 md:mb-48 mt-12 relative">
             <Reveal>
                 <h2 className="font-sans font-medium text-7xl md:text-9xl tracking-tighter text-stone-900 leading-[0.8]">
                     O Preparo
-                    <span className="block font-serif text-2xl md:text-4xl italic font-normal text-stone-500 mt-2 tracking-normal">
+                    <span className="block font-serif text-2xl md:text-4xl italic font-normal text-[#754548] mt-2 tracking-normal opacity-80">
                         (guia essencial)
                     </span>
                 </h2>
             </Reveal>
+            
+            {/* Linha decorativa desenhada à mão abaixo do título */}
+            <div className="absolute -bottom-10 left-0 w-64 opacity-20">
+                <svg viewBox="0 0 300 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 10 Q 150 20 295 5" fill="none" stroke="#1c1917" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+            </div>
         </div>
 
-        {/* Grid de Colunas com Linhas */}
+        {/* Grid de Colunas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-20">
            {careItems.map((item, index) => (
              <Reveal key={index} delay={index * 100} width="100%">
-               <div className="flex flex-col h-full group">
+               <div className="flex flex-col h-full group relative p-4 hover:bg-white hover:shadow-sm hover:rounded-sm transition-all duration-500">
                  
-                 <span className="text-xs font-bold font-sans mb-4 block">{item.id}</span>
+                 <span className="text-xs font-bold font-sans mb-4 block text-[#754548]/60">{item.id}.</span>
 
                  <h3 className="font-sans text-3xl md:text-4xl font-medium tracking-tight text-stone-900 mb-1 leading-none">
                     {item.title}
@@ -71,7 +72,11 @@ const PreCare: React.FC = () => {
                     {item.subtitle}
                  </span>
 
-                 <div className="w-full h-[1px] bg-stone-300 mb-6 group-hover:bg-[#754548] transition-colors duration-500"></div>
+                 <div className="w-full h-2 mb-6 opacity-30 group-hover:opacity-100 transition-opacity duration-500">
+                    <svg width="100%" height="100%" preserveAspectRatio="none">
+                        <line x1="0" y1="50%" x2="100%" y2="50%" stroke="currentColor" strokeWidth="1" strokeDasharray="1, 4" className="text-[#754548]" />
+                    </svg>
+                 </div>
 
                  <p className="text-sm leading-relaxed text-stone-600 font-sans max-w-xs">
                     {item.content}
