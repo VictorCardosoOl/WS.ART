@@ -5,7 +5,17 @@ import Reveal from '../ui/Reveal';
 const FlashDay: React.FC = () => {
   return (
     <section id="flashday" className="py-24 md:py-32 bg-white border-b border-stone-100 relative overflow-hidden">
-      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20">
+      
+      {/* Background Decorativo para preencher vazio */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+          <img 
+            src="https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=1200&auto=format&fit=crop" 
+            className="w-full h-full object-cover grayscale"
+            alt=""
+          />
+      </div>
+
+      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-10">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 md:mb-24 border-b border-rose-200 pb-8">
@@ -30,13 +40,13 @@ const FlashDay: React.FC = () => {
             {/* Left: Typography Statement */}
             <div className="relative">
                 <Reveal>
-                    <div className="text-[10vw] md:text-[6vw] font-black font-sans leading-[0.85] text-stone-100 tracking-tighter select-none absolute -top-12 -left-8 -z-10">
+                    <div className="text-[10vw] md:text-[6vw] font-black font-sans leading-[0.85] text-stone-100 tracking-tighter select-none absolute -top-12 -left-8 -z-10 mix-blend-multiply">
                         LIMITED
                     </div>
                 </Reveal>
                 
                 <Reveal delay={100}>
-                    <div className="bg-[#FAF7F7] p-8 md:p-12 border border-stone-100 relative overflow-hidden group rounded-3xl">
+                    <div className="bg-[#FAF7F7]/95 backdrop-blur-sm p-8 md:p-12 border border-stone-100 relative overflow-hidden group rounded-3xl shadow-xl">
                         {/* Decorative Line */}
                         <div className="absolute top-0 left-0 w-full h-1 bg-rose-500 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-out-expo"></div>
                         
@@ -46,7 +56,7 @@ const FlashDay: React.FC = () => {
                                  <span className="text-4xl md:text-5xl font-bold text-stone-900 mt-2">MARÇO</span>
                                  <span className="text-lg font-medium text-rose-600">Dia 15, 2024</span>
                              </div>
-                             <div className="w-16 h-16 border border-stone-200 rounded-full flex items-center justify-center animate-spin-slow">
+                             <div className="w-16 h-16 border border-stone-200 rounded-full flex items-center justify-center animate-spin-slow bg-white">
                                 <span className="text-[8px] uppercase tracking-widest text-stone-400">Soon</span>
                              </div>
                         </div>
@@ -83,7 +93,7 @@ const FlashDay: React.FC = () => {
                         Arte acessível,<br/> 
                         <span className="italic text-rose-500">qualidade inegociável.</span>
                     </h3>
-                    <p className="text-stone-600 leading-relaxed mb-8 font-light">
+                    <p className="text-stone-600 leading-relaxed mb-8 font-light bg-white/50 p-4 rounded-lg backdrop-blur-sm">
                         Os Flash Days são a oportunidade perfeita para colecionar uma peça original. 
                         Diferente dos projetos sob medida, aqui você escolhe a arte pronta que mais ressoa com você no dia.
                         <br/><br/>

@@ -1,39 +1,72 @@
-import React, { useRef } from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 import Reveal from '../ui/Reveal';
 import { GridGalleryItem } from '../../types';
 import { PORTFOLIO_ITEMS } from '../../data/portfolio';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { ArrowUpRight, ArrowRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-10% 0px -10% 0px" });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+        // Clip Path Reveal Animation on Scroll
+        gsap.fromTo(containerRef.current, 
+            { clipPath: 'inset(15% 15% 15% 15%)' },
+            { 
+                clipPath: 'inset(0% 0% 0% 0%)', 
+                duration: 1.4, 
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            }
+        );
+
+        // Scale Image Animation
+        gsap.fromTo(imgRef.current,
+            { scale: 1.3 },
+            {
+                scale: 1,
+                duration: 1.4,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            }
+        );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div className={`group flex flex-col gap-6 ${item.offsetY}`}>
       {/* Container da Imagem com Efeito Clip + Zoom */}
       <div 
-        ref={ref}
+        ref={containerRef}
         className={`relative w-full ${item.height} overflow-hidden bg-[#E5D0D4]/20`}
+        style={{ clipPath: 'inset(15% 15% 15% 15%)' }} // Initial state for CSS fallback
       >
-        <motion.div 
-            className="w-full h-full relative overflow-hidden"
-            initial={{ clipPath: 'inset(15% 15% 15% 15%)' }}
-            animate={isInView ? { clipPath: 'inset(0% 0% 0% 0%)' } : { clipPath: 'inset(15% 15% 15% 15%)' }}
-            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }} // Ease-out expo suave
-        >
-            <motion.img 
+        <div className="w-full h-full relative overflow-hidden">
+            <img 
+                ref={imgRef}
                 src={item.src} 
                 alt={item.altText} 
                 className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0"
-                initial={{ scale: 1.3 }}
-                animate={isInView ? { scale: 1 } : { scale: 1.3 }}
-                transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
                 loading="lazy"
             />
             
             <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none mix-blend-overlay"></div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Legenda Estilo Editorial */}
@@ -62,13 +95,26 @@ const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
 };
 
 const StudioScroller = () => {
-    const scrollRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: scrollRef,
-        offset: ["start end", "end start"]
-    });
-    
-    const x = useTransform(scrollYProgress, [0, 1], ["0%", "-25%"]);
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const sliderRef = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+        const ctx = gsap.context(() => {
+            if (sliderRef.current) {
+                gsap.to(sliderRef.current, {
+                    x: "-25%",
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true
+                    }
+                });
+            }
+        }, sectionRef);
+        return () => ctx.revert();
+    }, []);
 
     const studioImages = [
         "https://images.unsplash.com/photo-1590246814883-057f66d4040a?q=80&w=600&auto=format&fit=crop", 
@@ -79,17 +125,17 @@ const StudioScroller = () => {
     ];
 
     return (
-        <div ref={scrollRef} className="w-full overflow-hidden py-32 bg-[#FAF7F7]">
-            <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 mb-12">
+        <div ref={sectionRef} className="w-full overflow-hidden py-32 bg-[#FAF7F7]">
+            <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 mb-12">
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548]">Bastidores & Atmosfera</span>
             </div>
-            <motion.div style={{ x }} className="flex gap-8 px-6 w-max">
+            <div ref={sliderRef} className="flex gap-8 px-6 w-max">
                 {studioImages.map((src, i) => (
                     <div key={i} className="w-[300px] md:w-[500px] aspect-[4/3] relative overflow-hidden bg-stone-200">
                         <img src={src} alt="Studio Atmosphere" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                     </div>
                 ))}
-            </motion.div>
+            </div>
         </div>
     )
 }
@@ -99,7 +145,7 @@ const Portfolio: React.FC = () => {
     <>
     <section id="gallery" className="relative pt-40 pb-24 bg-white overflow-hidden">
       
-      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-10">
+      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
         
         {/* Header - Alinhamento Editorial */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-32 border-b border-stone-100 pb-12">

@@ -33,7 +33,19 @@ const Hero: React.FC = () => {
         autoAlpha: 1,
         duration: 1.2,
         stagger: 0.1
-      }, "-=1.0");
+      }, "-=1.0")
+      // Adicionando Flutuação Orgânica Contínua
+      .to(".char-reveal", {
+        yPercent: -10, // Flutua levemente para cima (negativo para não cortar no overflow inferior)
+        duration: 3,   // Ciclo lento para ser elegante
+        ease: "sine.inOut", // Movimento de onda suave
+        yoyo: true,    // Vai e volta
+        repeat: -1,    // Infinito
+        stagger: {
+          each: 0.15,  // Tempo entre cada letra
+          from: "random" // Início aleatório para parecer orgânico/independente
+        }
+      }, "-=0.5");
 
       // 2. SCROLL PARALLAX ANIMATION
       gsap.to(bgRef.current, {
@@ -75,7 +87,7 @@ const Hero: React.FC = () => {
       </div>
 
       {/* --- CONTENT LAYER --- */}
-      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
+      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
           
           {/* Top Section */}
           <div className="flex flex-col md:flex-row justify-between items-start w-full">

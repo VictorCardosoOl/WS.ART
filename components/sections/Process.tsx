@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Reveal from '../ui/Reveal';
-import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
 
 const steps = [
   {
@@ -31,6 +31,17 @@ const steps = [
 
 const Process: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Animação de troca de conteúdo com GSAP
+  useEffect(() => {
+    if (contentRef.current) {
+        gsap.fromTo(contentRef.current, 
+            { opacity: 0, x: 20 }, 
+            { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }
+        );
+    }
+  }, [activeStep]);
 
   return (
     <section className="relative py-32 md:py-48 overflow-hidden" id="process">
@@ -74,13 +85,10 @@ const Process: React.FC = () => {
                     }}
                  >
                     {/* Active Indicator Line */}
-                    {activeStep === index && (
-                        <motion.div 
-                            layoutId="activeIndicator"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-12 bg-pantone-accent"
-                            style={{ borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%' }}
-                        />
-                    )}
+                    <div 
+                        className={`absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-12 bg-pantone-accent transition-all duration-300 ${activeStep === index ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}
+                        style={{ borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%' }}
+                    />
 
                     <div className="flex items-baseline justify-between mb-2">
                         <h3 className={`text-3xl md:text-5xl font-serif transition-colors duration-500 tracking-tight ${activeStep === index ? 'text-pantone-accent italic' : 'text-pantone-ink'}`}>
@@ -101,18 +109,7 @@ const Process: React.FC = () => {
           {/* Text Description Reveal */}
           <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
             <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-pantone-accent/20">
-               <AnimatePresence mode='wait'>
-                   <motion.div 
-                     key={activeStep}
-                     id="process-panel"
-                     role="tabpanel"
-                     aria-labelledby={`process-tab-${activeStep}`}
-                     initial={{ opacity: 0, x: 20 }}
-                     animate={{ opacity: 1, x: 0 }}
-                     exit={{ opacity: 0, x: -20 }}
-                     transition={{ duration: 0.4, ease: "easeOut" }}
-                     className="relative"
-                   >
+               <div ref={contentRef} className="relative">
                      {/* Background Number Watermark */}
                      <span className="absolute -top-20 -left-10 text-[12rem] font-serif text-[#754548] opacity-[0.03] select-none pointer-events-none font-italic leading-none">
                         {steps[activeStep].id}
@@ -127,8 +124,7 @@ const Process: React.FC = () => {
                      <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif relative z-10">
                        {steps[activeStep].fullDesc}
                      </p>
-                   </motion.div>
-               </AnimatePresence>
+               </div>
             </div>
           </div>
 

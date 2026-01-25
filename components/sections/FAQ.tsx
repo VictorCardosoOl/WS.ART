@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import SectionTitle from '../ui/SectionTitle';
 import Reveal from '../ui/Reveal';
 import { FAQ_ITEMS } from '../../data/faq';
-import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
+import gsap from 'gsap';
 
 const FAQ: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const toggleAccordion = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
+
+  useEffect(() => {
+    contentRefs.current.forEach((el, index) => {
+        if (!el) return;
+        
+        if (index === activeIndex) {
+            gsap.to(el, { height: "auto", opacity: 1, duration: 0.4, ease: "power2.out" });
+        } else {
+            gsap.to(el, { height: 0, opacity: 0, duration: 0.3, ease: "power2.in" });
+        }
+    });
+  }, [activeIndex]);
 
   return (
     <section id="faq" className="py-24 md:py-32 bg-white relative z-10">
@@ -61,26 +74,19 @@ const FAQ: React.FC = () => {
                         </button>
 
                         {/* Conteúdo Expansível */}
-                        <AnimatePresence>
-                            {isOpen && (
-                                <motion.div
-                                    id={`faq-answer-${idx}`}
-                                    role="region"
-                                    aria-labelledby={`faq-question-${idx}`}
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: "auto", opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                                    className="overflow-hidden"
-                                >
-                                    <div className="pb-6 pl-0 md:pl-[25%] pr-4 md:pr-24">
-                                        <p className="text-stone-500 text-sm md:text-base font-light leading-relaxed font-sans max-w-2xl">
-                                            {item.a}
-                                        </p>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                        <div
+                            ref={el => { contentRefs.current[idx] = el }}
+                            id={`faq-answer-${idx}`}
+                            role="region"
+                            aria-labelledby={`faq-question-${idx}`}
+                            className="overflow-hidden h-0 opacity-0"
+                        >
+                            <div className="pb-6 pl-0 md:pl-[25%] pr-4 md:pr-24">
+                                <p className="text-stone-500 text-sm md:text-base font-light leading-relaxed font-sans max-w-2xl">
+                                    {item.a}
+                                </p>
+                            </div>
+                        </div>
                     </Reveal>
                 </div>
               );

@@ -6,6 +6,14 @@ import { SERVICES_ITEMS } from '../../data/services';
 const Services: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
+  // Sobrescrevendo imagens com URLs de alta qualidade para este componente
+  const serviceImages = [
+    "https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1515965885000-142962f872f8?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=800&auto=format&fit=crop"
+  ];
+
   return (
     <section id="services" className="py-24 md:py-32 bg-stone-900 text-stone-100 overflow-hidden">
       <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20">
@@ -57,7 +65,7 @@ const Services: React.FC = () => {
                {SERVICES_ITEMS.map((service, index) => (
                    <img 
                      key={index}
-                     src={service.image} 
+                     src={serviceImages[index] || service.image} 
                      alt={service.title}
                      className={`absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 ease-out transform rounded-2xl ${
                         hoveredIndex === index 

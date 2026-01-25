@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Reveal from '../ui/Reveal';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Quote } from 'lucide-react';
+import gsap from 'gsap';
 
 const testimonials = [
   {
@@ -9,7 +9,7 @@ const testimonials = [
     client: "Ana Clara",
     role: "Arquiteta",
     text: "Mais que tinta, William traduziu um momento de luto em beleza pura. O processo foi uma terapia, e o resultado é uma parte de mim.",
-    image: "https://picsum.photos/800/1000?grayscale&random=99",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop",
     tag: "Cobertura / Floral"
   },
   {
@@ -17,7 +17,7 @@ const testimonials = [
     client: "Marcos V.",
     role: "Designer",
     text: "A precisão anatômica é assustadora. Ele desenhou diretamente no meu braço para garantir que o fluxo seguisse minha musculatura.",
-    image: "https://picsum.photos/800/1000?grayscale&random=98",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop",
     tag: "Fechamento / Neotrad"
   },
   {
@@ -25,13 +25,30 @@ const testimonials = [
     client: "Juliana S.",
     role: "Chef",
     text: "Eu nunca imaginei que uma tatuagem pudesse ser uma experiência tão tranquila. O estúdio privado faz toda a diferença.",
-    image: "https://picsum.photos/800/1000?grayscale&random=97",
+    image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=80&w=1000&auto=format&fit=crop",
     tag: "Projeto Autoral"
   }
 ];
 
 const Testimonials: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const tagRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (imageContainerRef.current) {
+        gsap.fromTo(imageContainerRef.current,
+            { opacity: 0, scale: 1.1 },
+            { opacity: 1, scale: 1, duration: 0.7, ease: "power4.out" }
+        );
+    }
+    if (tagRef.current) {
+        gsap.fromTo(tagRef.current,
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, delay: 0.2, ease: "power2.out" }
+        );
+    }
+  }, [activeIndex]);
 
   return (
     <section className="relative w-full py-32 md:py-48 overflow-hidden" id="testimonials">
@@ -115,39 +132,21 @@ const Testimonials: React.FC = () => {
                         {/* Frame Border Decorativo com cantos "imperfeitos" visualmente */}
                         <div className="absolute inset-2 border border-stone-200 z-20 pointer-events-none rounded-2xl opacity-50"></div>
                         
-                        <AnimatePresence mode='wait'>
-                            <motion.div
-                                key={activeIndex}
-                                initial={{ opacity: 0, scale: 1.1 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                                className="absolute inset-0 w-full h-full"
-                            >
-                                <img 
-                                    src={testimonials[activeIndex].image} 
-                                    alt={testimonials[activeIndex].client}
-                                    className="w-full h-full object-cover grayscale contrast-[1.1] hover:grayscale-0 transition-all duration-1000"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#754548]/40 to-transparent mix-blend-multiply opacity-60"></div>
-                            </motion.div>
-                        </AnimatePresence>
+                        <div ref={imageContainerRef} className="absolute inset-0 w-full h-full">
+                            <img 
+                                src={testimonials[activeIndex].image} 
+                                alt={testimonials[activeIndex].client}
+                                className="w-full h-full object-cover grayscale contrast-[1.1] hover:grayscale-0 transition-all duration-1000"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#754548]/40 to-transparent mix-blend-multiply opacity-60"></div>
+                        </div>
 
-                        <div className="absolute bottom-8 left-8 z-30">
-                            <AnimatePresence mode='wait'>
-                                <motion.div
-                                    key={activeIndex}
-                                    initial={{ y: 20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: -20, opacity: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="bg-white/95 backdrop-blur px-4 py-2 rounded-sm shadow-lg border-l-2 border-[#754548]"
-                                >
-                                    <span className="text-xs font-bold uppercase tracking-widest text-[#754548]">
-                                        {testimonials[activeIndex].tag}
-                                    </span>
-                                </motion.div>
-                            </AnimatePresence>
+                        <div ref={tagRef} className="absolute bottom-8 left-8 z-30">
+                            <div className="bg-white/95 backdrop-blur px-4 py-2 rounded-sm shadow-lg border-l-2 border-[#754548]">
+                                <span className="text-xs font-bold uppercase tracking-widest text-[#754548]">
+                                    {testimonials[activeIndex].tag}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
