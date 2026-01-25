@@ -5,29 +5,37 @@ const Footer: React.FC = () => {
   return (
     <footer className="relative bg-black text-white pt-24 md:pt-32 pb-0 font-sans overflow-hidden">
       
-      {/* Clean Separator */}
-      <div className="absolute top-0 left-0 w-full h-px bg-stone-800"></div>
+      {/* SEPARATOR: INVERTED CURVE FROM WHITE (BOOKING SECTION) */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
+         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-white">
+            <path d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z" className="opacity-100"></path>
+         </svg>
+      </div>
 
       <div className="container mx-auto px-6 relative z-10">
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 border-b border-stone-800 pb-16">
+        {/* Top Grid Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-12 md:gap-y-16 border-b border-stone-800 pb-12 md:pb-16">
           
-          {/* Brand */}
+          {/* Column 1: Brand & Info */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-serif font-bold text-xl">W</div>
-                <h3 className="font-sans text-meta font-bold text-stone-300">
-                  INTERVENÇÕES ARTÍSTICAS ÚNICAS //<br/>EXPERIÊNCIAS IMERSIVAS
+              <div className="flex items-center gap-3 mb-6 md:mb-8">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-black text-xl flex-shrink-0">
+                  W
+                </div>
+                <h3 className="text-xs font-bold tracking-widest uppercase leading-tight text-stone-300">
+                  INTERVENÇÕES ARTÍSTICAS ÚNICAS //<br/>
+                  EXPERIÊNCIAS IMERSIVAS
                 </h3>
               </div>
               
-              <p className="text-stone-500 text-sm leading-relaxed max-w-sm mb-12 font-light tracking-wide font-sans">
-                Fundada por William Siqueira, unimos décadas de prática artística e visão neotradicional, redefinindo as possibilidades da arte na pele.
+              <p className="text-stone-500 text-sm leading-relaxed max-w-sm mb-8 md:mb-12">
+                Fundada por William Siqueira, unimos décadas de prática artística e visão neotradicional, redefinindo as possibilidades da arte na pele e no ambiente construído.
               </p>
             </div>
             
-            <div className="space-y-4 text-sm text-stone-400 font-light font-sans tracking-wide">
+            <div className="space-y-4 text-sm text-stone-400">
               <p>Estúdio Privado, São Paulo - SP</p>
               <a href="mailto:contato@wsart.com" className="block text-white hover:text-stone-300 transition-colors">hello@williamsiqueira.art</a>
               
@@ -39,7 +47,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Nav */}
+          {/* Column 2: Navigation Links */}
           <div className="lg:col-span-4 flex flex-col">
             {[
               { name: 'INÍCIO', href: '#' },
@@ -50,49 +58,66 @@ const Footer: React.FC = () => {
               <a 
                 key={i} 
                 href={link.href}
-                className="group flex justify-between items-center py-5 border-b border-stone-800 first:border-t hover:pl-2 transition-all duration-300 cursor-pointer"
+                className="group flex justify-between items-center py-5 md:py-6 border-b border-stone-800 first:border-t hover:pl-4 transition-all duration-300 cursor-pointer"
               >
-                <span className="font-sans text-meta font-bold text-stone-300 group-hover:text-white">{link.name}</span>
-                <ArrowUpRight size={16} className="text-stone-500 group-hover:text-white" />
+                <span className="tracking-[0.2em] uppercase text-xs font-bold text-stone-300 group-hover:text-white">{link.name}</span>
+                <ArrowUpRight size={16} className="text-stone-500 group-hover:text-white transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
               </a>
             ))}
-             <a href="#booking" className="group flex justify-between items-center py-5 border-b border-stone-800 hover:pl-2 transition-all duration-300 cursor-pointer">
-                <span className="font-sans text-meta font-bold text-white">ENTRE EM CONTATO</span>
-                <ArrowUpRight size={16} className="text-white" />
+             <a 
+                href="#booking"
+                className="group flex justify-between items-center py-5 md:py-6 border-b border-stone-800 hover:pl-4 transition-all duration-300 cursor-pointer"
+              >
+                <span className="tracking-[0.2em] uppercase text-xs font-bold text-white">ENTRE EM CONTATO</span>
+                <ArrowUpRight size={16} className="text-white transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
               </a>
           </div>
 
-          {/* CTA */}
+          {/* Column 3: CTA */}
           <div className="lg:col-span-4 flex flex-col">
-            <h2 className="font-serif text-fluid-h3 text-white leading-tight-editorial mb-6 uppercase tracking-tighter font-semibold">
+            <h2 className="text-3xl md:text-5xl font-serif text-white leading-[1.1] mb-4 md:mb-6">
               Pronto para dar início a uma sessão de descoberta?
             </h2>
-            <p className="text-stone-500 text-sm leading-relaxed mb-8 font-light font-sans tracking-wide">
+            <p className="text-stone-500 text-sm leading-relaxed mb-8">
               Compartilhe suas ideias conosco e começaremos a transformar sua visão em realidade hoje mesmo.
             </p>
             
             <div className="mt-auto flex justify-start md:justify-end">
-               <a href="https://wa.me/5511999999999" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-green-400 hover:text-green-300 transition-colors group">
-                 <span className="font-sans text-meta font-bold">Iniciar conversa</span>
+               <a 
+                 href="https://wa.me/5511999999999" 
+                 target="_blank" 
+                 rel="noreferrer"
+                 className="flex items-center gap-3 text-green-400 hover:text-green-300 transition-colors group"
+               >
+                 <span className="uppercase tracking-widest text-xs font-bold">Iniciar conversa</span>
                  <MessageCircle size={32} className="group-hover:scale-110 transition-transform"/>
                </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="pt-12 pb-4 flex flex-col md:flex-row items-end justify-between relative">
-          <div className="grid grid-cols-2 gap-x-8 gap-y-3 font-sans text-meta text-stone-500 mb-12 md:mb-0 w-full md:w-auto">
+        {/* Bottom Section */}
+        <div className="pt-10 md:pt-12 flex flex-col md:flex-row items-end justify-between relative">
+          
+          {/* Small Links Grid */}
+          <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-[10px] uppercase tracking-wider text-stone-500 mb-12 md:mb-16 w-full md:w-auto relative z-10">
              <a href="#" className="hover:text-white transition-colors">Guia de cuidados</a>
+             <a href="#" className="hover:text-white transition-colors">Showroom</a>
              <a href="#" className="hover:text-white transition-colors">Política de Privacidade</a>
              <a href="#" className="hover:text-white transition-colors">Termos e Condições</a>
+             <a href="#" className="hover:text-white transition-colors">Devoluções</a>
+             <a href="#" className="hover:text-white transition-colors">Garantia</a>
           </div>
           
-          <div className="w-full text-right overflow-hidden">
-             <h1 className="font-serif font-bold text-fluid-display leading-[0.7] text-stone-900 select-none pointer-events-none translate-y-2 whitespace-nowrap">
+          {/* Massive Brand Name - SIQUEIRA with Q Safe Zone */}
+          <div className="w-full text-right relative h-auto overflow-visible pb-2 md:pb-4">
+             {/* Adjusted text size to scale on mobile (~17vw) and desktop to avoid cutoff */}
+             <h1 className="text-[17vw] leading-[0.75] font-black text-white tracking-tighter mix-blend-difference select-none pointer-events-none translate-y-[5%]">
                SIQUEIRA
              </h1>
-             <p className="font-sans text-[9px] uppercase tracking-widest text-stone-600 absolute bottom-4 right-0">© 2024 William Siqueira Art Ltd.</p>
+             <div className="absolute bottom-6 md:bottom-12 left-0 md:left-auto md:right-0 w-full md:w-auto text-center md:text-right z-20">
+                <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-stone-600">© 2024 William Siqueira Art Ltd.</p>
+             </div>
           </div>
         </div>
 
