@@ -16,15 +16,15 @@ const Hero: React.FC = () => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
       // Initial States
-      gsap.set(".char-reveal", { yPercent: 120 }); // Letters start below baseline
-      gsap.set(".hero-fade", { y: 20, autoAlpha: 0 });
+      gsap.set(".char-reveal", { yPercent: 120 });
+      gsap.set(".hero-fade", { y: 30, autoAlpha: 0 });
       gsap.set(".hero-line", { scaleX: 0, transformOrigin: "left center" });
 
       // Sequence
       tl.to(".char-reveal", {
         yPercent: 0,
         duration: 1.8,
-        stagger: 0.03, // Wave effect on letters
+        stagger: 0.04,
         ease: "power3.out"
       })
       .to(".hero-line", { scaleX: 1, duration: 1.5, ease: "expo.out" }, "-=1.2")
@@ -36,28 +36,28 @@ const Hero: React.FC = () => {
       }, "-=1.0");
 
       // 2. SCROLL PARALLAX ANIMATION
-      // Background moves slower than foreground
+      // Background (Mais lento, com inércia)
       gsap.to(bgRef.current, {
-        yPercent: 30,
+        yPercent: 40,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: true
+          scrub: 1 // Inércia de 1s
         }
       });
 
-      // Massive Text moves faster (Foreground Parallax)
-      // FIX: Removido opacity: 0 para que o texto não suma, apenas suba em parallax
+      // Massive Text (Mais rápido, sobrepondo o conteúdo)
       gsap.to(titleRef.current, {
-        yPercent: -25, // Aumentei ligeiramente a velocidade para efeito dramático
+        yPercent: -30,
+        opacity: 0.5,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: true
+          scrub: 0.5 // Inércia leve
         }
       });
 
