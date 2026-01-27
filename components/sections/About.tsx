@@ -4,86 +4,69 @@ import ParallaxImage from '../ui/ParallaxImage';
 
 const About: React.FC = () => {
   return (
-    <section id="about" className="relative py-32 md:py-48 overflow-hidden bg-[#FAF7F7]">
-      
-      {/* Texture Layer */}
-      <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none z-0"></div>
-
-      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
+    <section id="about" className="relative py-24 md:py-32 bg-white overflow-hidden">
+      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         
-        {/* Header Section - Editorial Style */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32 items-start">
-            <div className="lg:col-span-9">
+        {/* Header Grid - Layout do Print: Espaço à esquerda, Texto à direita */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20 md:mb-24 items-end">
+            <div className="hidden lg:block relative h-full">
+               {/* Ponto decorativo minimalista do print */}
+               <div className="absolute bottom-4 left-0 w-2 h-2 bg-stone-900 rounded-full"></div>
+            </div>
+
+            <div className="flex flex-col justify-end text-left">
                 <Reveal>
-                    <span className="block text-[#754548] text-xs font-bold uppercase tracking-[0.3em] mb-8">Manifesto</span>
-                </Reveal>
-                <Reveal delay={100}>
-                    <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl leading-[0.9] text-stone-900 mb-12">
-                        Não é apenas um estúdio.<br/> 
-                        É um <span className="italic text-[#754548] opacity-80">Santuário</span>.
+                    <h2 className="font-sans font-bold text-4xl md:text-5xl lg:text-6xl leading-[0.9] text-stone-900 uppercase tracking-tighter mb-8">
+                        Eu sou William<br />
+                        Siqueira, e eu<br />
+                        <span className="text-stone-400">Materializo</span><br />
+                        Histórias.
                     </h2>
                 </Reveal>
-            </div>
-            
-            <div className="lg:col-span-3 flex justify-end">
-                 <Reveal delay={200}>
-                    <div className="w-24 h-[1px] bg-stone-900 mt-12 hidden lg:block"></div>
-                 </Reveal>
-            </div>
-        </div>
-
-        {/* Poetry Layout - Staggered Text */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 relative">
-            
-            {/* Imagem Flutuante com Efeito Parallax/Mask */}
-            <div className="col-span-12 md:col-span-5 md:col-start-8 mb-12 md:mb-0 relative order-first md:order-last h-[600px]">
-                 <div className="w-full h-full shadow-2xl" data-cursor="O Artista">
-                    <ParallaxImage 
-                        src="https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=800&auto=format&fit=crop" 
-                        alt="William Siqueira" 
-                    />
-                 </div>
-                 {/* Borda decorativa fora do overflow hidden */}
-                 <div className="absolute -bottom-6 -left-6 z-[-1] w-full h-full border border-[#754548]/20 rounded-2xl"></div>
-            </div>
-
-            <div className="col-span-12 md:col-span-7 flex flex-col gap-16 md:gap-24 text-lg md:text-xl font-light text-stone-600 font-serif leading-relaxed">
                 
-                {/* Parágrafo 1 */}
                 <Reveal delay={200}>
-                    <div className="max-w-md ml-0 border-l-2 border-[#754548] pl-6 py-2">
-                        <p>
-                            "Minha prática não se trata de decorar a pele, mas de <strong className="text-stone-900 font-medium">revelar</strong> o que já existe internamente. Cada projeto é uma colaboração íntima entre a sua história e a minha visão."
+                    <div className="max-w-md">
+                        <p className="font-serif text-lg text-stone-600 leading-relaxed">
+                            Especialista em Neotradicional.<br />
+                            Transformo narrativas pessoais em anatomia e arte perene.
                         </p>
                     </div>
                 </Reveal>
-
-                {/* Parágrafo 2 */}
-                <Reveal delay={300}>
-                    <p className="max-w-md ml-0 md:ml-24 lg:ml-48">
-                        Abandonei as regras rígidas da tatuagem comercial para focar em <span className="italic text-stone-900 bg-[#754548]/10 px-1">liberdade anatômica</span>. O Neotradicional é a ferramenta, mas a conexão humana é a essência.
-                    </p>
-                </Reveal>
-
-                {/* Parágrafo 3 */}
-                <Reveal delay={400}>
-                    <p className="max-w-md ml-0 md:ml-12">
-                        Aqui, o tempo desacelera. Cada sessão é um ritual de transformação, realizado em total privacidade para garantir que a arte receba o respeito que merece.
-                    </p>
-                </Reveal>
-
-                 <Reveal delay={500}>
-                    <img 
-                        src="https://signature.freefire-name.com/img.php?f=7&t=William" 
-                        alt="Assinatura" 
-                        className="h-24 opacity-80 mix-blend-multiply mt-8 ml-0 md:ml-32 rotate-[-2deg]" 
-                    />
-                </Reveal>
             </div>
         </div>
-        
-        {/* Imagens Secundárias - Grid Inferior (Opcional, ou removido para manter o layout 'Poetry' mais limpo) */}
-        {/* Mantendo simples para focar na narrativa visual principal acima */}
+
+        {/* Grid de 3 Imagens - Estilo Tríptico */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[600px]">
+            {/* Imagem 1: Industrial/Textura */}
+            <div className="w-full aspect-[3/4] md:h-full md:aspect-auto relative group overflow-hidden">
+                <div className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 ease-out">
+                    <ParallaxImage 
+                        src="https://images.unsplash.com/photo-1565620612-421422703816?q=80&w=800&auto=format&fit=crop" 
+                        alt="Processo Industrial" 
+                    />
+                </div>
+            </div>
+            
+            {/* Imagem 2: Urbano/Fachada */}
+            <div className="w-full aspect-[3/4] md:h-full md:aspect-auto relative group overflow-hidden">
+                 <div className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 ease-out">
+                    <ParallaxImage 
+                        src="https://images.unsplash.com/photo-1549140698-b6481cb7076c?q=80&w=800&auto=format&fit=crop" 
+                        alt="Fachada Estúdio" 
+                    />
+                 </div>
+            </div>
+
+            {/* Imagem 3: Natureza/Atmosfera */}
+            <div className="w-full aspect-[3/4] md:h-full md:aspect-auto relative group overflow-hidden">
+                 <div className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 ease-out">
+                    <ParallaxImage 
+                        src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=800&auto=format&fit=crop" 
+                        alt="Inspiração Natural" 
+                    />
+                 </div>
+            </div>
+        </div>
 
       </div>
     </section>
