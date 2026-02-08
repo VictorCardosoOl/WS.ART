@@ -218,7 +218,6 @@
 }
 
 .sm-panel-item:hover {
-    font-style: italic;
     color: var(--sm-accent);
 }
 

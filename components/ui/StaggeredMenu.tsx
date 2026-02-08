@@ -439,7 +439,7 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               items.map((it, idx) => (
                 <li className="relative overflow-hidden leading-tight" key={it.label + idx}>
                   <a 
-                    className="relative text-stone-900 font-serif font-light text-5xl md:text-6xl cursor-pointer leading-none tracking-tight capitalize inline-block no-underline transition-colors duration-300 hover:italic hover:text-[#754548]"
+                    className="relative text-stone-900 font-serif font-light text-5xl md:text-6xl cursor-pointer leading-none tracking-tight capitalize inline-block no-underline transition-colors duration-300 hover:text-[#754548]"
                     href={it.link} 
                     aria-label={it.ariaLabel} 
                     data-index={idx + 1}
