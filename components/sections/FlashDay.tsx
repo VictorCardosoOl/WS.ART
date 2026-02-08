@@ -1,140 +1,167 @@
 import React from 'react';
-import { ArrowUpRight, Calendar, Clock, Infinity, Zap } from 'lucide-react';
+import { ArrowRight, Calendar, Clock, Crown, Ticket, Zap, CheckCircle2 } from 'lucide-react';
 import Reveal from '../ui/Reveal';
 
 const FlashDay: React.FC = () => {
   return (
-    <section id="flashday" className="py-24 md:py-32 bg-white border-b border-stone-100 relative overflow-hidden">
+    <section id="flashday" className="py-24 md:py-32 bg-stone-50 border-b border-stone-200 relative overflow-hidden">
       
-      {/* Background Decorativo */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-          <img 
-            src="https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=1200&auto=format&fit=crop" 
-            className="w-full h-full object-cover grayscale"
-            alt=""
-          />
-      </div>
+      {/* Background Decorativo Global */}
+      <div className="absolute inset-0 opacity-[0.4] pointer-events-none mix-blend-multiply bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-rose-100/40 via-transparent to-transparent"></div>
 
       <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-10">
         
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 md:mb-24 border-b border-rose-200 pb-8">
+        {/* Header da Seção */}
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 md:mb-24">
             <Reveal>
                 <div>
-                    <span className="text-xs font-bold uppercase tracking-ultra text-rose-500 mb-2 block">Experiências & Eventos</span>
-                    <h2 className="font-serif text-5xl md:text-7xl text-stone-900 leading-none">Modalidades</h2>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="h-[1px] w-8 bg-rose-400"></div>
+                        <span className="text-xs font-bold uppercase tracking-widest text-rose-500">Agendamento & Eventos</span>
+                    </div>
+                    <h2 className="font-serif text-5xl md:text-7xl text-stone-900 leading-[0.9] tracking-tight">
+                        Escolha sua<br />
+                        <span className="italic text-stone-400">Experiência.</span>
+                    </h2>
                 </div>
             </Reveal>
             <Reveal delay={200}>
-                <div className="mt-8 md:mt-0">
-                    <p className="text-stone-500 text-sm max-w-sm text-right leading-relaxed font-sans">
-                        Duas formas distintas de materializar sua história.<br/>
-                        Escolha entre a energia do coletivo ou a imersão exclusiva.
+                <div className="mt-8 md:mt-0 max-w-md text-right">
+                    <p className="text-stone-500 text-sm leading-relaxed font-medium">
+                        Da adrenalina dos eventos coletivos à quietude de uma sessão exclusiva.
+                        Duas formas de integrar arte à sua pele.
                     </p>
                 </div>
             </Reveal>
         </div>
 
-        {/* Grid de Cards: Evento (Ticket Claro) vs Full Day (VIP Escuro) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+        {/* Grid de Cards Contrastantes */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
             
-            {/* --- CARD 1: FLASH DAY (O Evento) --- */}
+            {/* --- CARD 1: FLASH DAY (Raw / Organic Style) --- */}
             <Reveal width="100%">
-                <div className="h-full bg-[#FAF7F7] border border-stone-200 p-8 md:p-12 rounded-3xl relative overflow-hidden group hover:shadow-xl hover:shadow-stone-200/50 transition-all duration-500">
-                    {/* Decorative Top Line */}
-                    <div className="absolute top-0 left-0 w-full h-1 bg-rose-400 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-out-expo"></div>
+                <div className="relative group h-full min-h-[600px] bg-[#FAF9F6] rounded-sm overflow-hidden border border-stone-200 hover:border-stone-300 transition-colors duration-500 flex flex-col">
                     
-                    {/* Badge */}
-                    <div className="absolute top-8 right-8">
-                        <div className="bg-white border border-stone-200 px-3 py-1 rounded-full flex items-center gap-2">
-                             <Zap size={12} className="text-rose-500 fill-rose-500" />
-                             <span className="text-[10px] uppercase font-bold tracking-widest text-stone-600">Evento Coletivo</span>
+                    {/* Background Texture: Sketches */}
+                    <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-700 pointer-events-none mix-blend-multiply">
+                        <img 
+                            src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=1000&auto=format&fit=crop" 
+                            alt="Sketches Background" 
+                            className="w-full h-full object-cover grayscale"
+                        />
+                    </div>
+                    
+                    {/* Top Tag */}
+                    <div className="relative z-10 p-8 md:p-12 flex justify-between items-start">
+                        <div className="bg-stone-900 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest inline-flex items-center gap-2">
+                            <Zap size={12} className="fill-white" />
+                            Flash Day
                         </div>
+                        <Ticket size={24} className="text-stone-300 group-hover:text-stone-900 transition-colors" strokeWidth={1} />
                     </div>
 
-                    <div className="mt-8 mb-12">
-                         <span className="font-serif italic text-2xl text-stone-400">Modelo Clássico</span>
-                         <h3 className="text-4xl md:text-5xl font-bold text-stone-900 mt-2 leading-none">Flash Day</h3>
-                         <p className="mt-4 text-stone-600 leading-relaxed text-sm max-w-sm">
-                            Eventos sazonais onde o estúdio abre as portas para sessões rápidas. Desenhos autorais prontos, valores promocionais e atendimento por ordem de chegada.
-                         </p>
+                    {/* Content Body */}
+                    <div className="relative z-10 px-8 md:px-12 flex-grow flex flex-col justify-center">
+                        <span className="text-[120px] leading-none font-serif text-stone-100 absolute top-1/2 -translate-y-1/2 left-4 pointer-events-none mix-blend-multiply select-none group-hover:text-stone-200 transition-colors">01</span>
+                        
+                        <h3 className="font-serif text-4xl md:text-5xl text-stone-900 relative z-10 mb-4">
+                            Sessões Rápidas <br/>
+                            <span className="italic text-stone-400">& Catálogo Pronto</span>
+                        </h3>
+                        <p className="text-stone-600 text-sm leading-relaxed max-w-sm relative z-10 mb-8">
+                            O estúdio abre as portas para o público. Desenhos autorais pré-definidos, valores especiais e atendimento por ordem de chegada. A oportunidade perfeita para colecionar peças menores.
+                        </p>
+
+                        <ul className="space-y-3 relative z-10 mb-8">
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-stone-500">
+                                <CheckCircle2 size={14} className="text-rose-500" /> Desenhos Exclusivos do Dia
+                            </li>
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-stone-500">
+                                <CheckCircle2 size={14} className="text-rose-500" /> Valores Promocionais
+                            </li>
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-stone-500">
+                                <CheckCircle2 size={14} className="text-rose-500" /> Ordem de Chegada
+                            </li>
+                        </ul>
                     </div>
 
-                    {/* Specs Grid */}
-                    <div className="grid grid-cols-2 gap-6 mb-12 border-t border-stone-200 pt-8">
-                        <div>
-                             <div className="flex items-center gap-2 text-rose-500 mb-2">
-                                <Calendar size={18} />
-                                <span className="text-xs font-bold uppercase tracking-widest">Data</span>
-                             </div>
-                             <span className="block font-serif text-xl text-stone-900">15 de Março</span>
+                    {/* Footer / CTA */}
+                    <div className="relative z-10 p-8 md:p-12 border-t border-stone-200 mt-auto bg-white/50 backdrop-blur-sm group-hover:bg-white transition-colors duration-500">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-2 text-stone-500">
+                                <Calendar size={16} />
+                                <span className="text-xs font-bold uppercase tracking-widest">Próxima Data:</span>
+                            </div>
+                            <span className="text-stone-900 font-serif font-bold text-lg">15 . OUT</span>
                         </div>
-                        <div>
-                             <div className="flex items-center gap-2 text-rose-500 mb-2">
-                                <Clock size={18} />
-                                <span className="text-xs font-bold uppercase tracking-widest">Formato</span>
-                             </div>
-                             <span className="block font-serif text-xl text-stone-900">Walk-in (Chegou, fez)</span>
-                        </div>
-                    </div>
-
-                    <div className="mt-auto">
-                        <button className="w-full py-4 bg-white border border-stone-200 text-stone-900 font-sans text-xs font-bold uppercase tracking-[0.2em] hover:bg-stone-900 hover:text-white transition-colors flex justify-between items-center px-6 rounded-xl group/btn">
-                            <span>Ver Próxima Data</span>
-                            <ArrowUpRight size={16} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                        <button className="w-full py-4 bg-stone-900 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-rose-900 transition-colors flex items-center justify-center gap-3 group/btn">
+                            Ver Designs Disponíveis
+                            <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                         </button>
                     </div>
                 </div>
             </Reveal>
 
-            {/* --- CARD 2: FULL DAY (A Experiência) --- */}
+            {/* --- CARD 2: FULL DAY (Premium / Noir Style) --- */}
             <Reveal width="100%" delay={200}>
-                <div className="h-full bg-[#1c1917] text-white p-8 md:p-12 rounded-3xl relative overflow-hidden group hover:shadow-2xl hover:shadow-stone-900/30 transition-all duration-500 flex flex-col justify-between">
+                <div className="relative group h-full min-h-[600px] bg-[#0c0a09] rounded-sm overflow-hidden text-white flex flex-col shadow-2xl shadow-stone-900/20">
                     
-                    {/* Background Noise/Texture for Premium Feel */}
-                    <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none"></div>
-                    <div className="absolute -bottom-24 -right-24 text-[15rem] text-white opacity-[0.02] font-serif italic font-black select-none pointer-events-none">
-                        VIP
+                    {/* Background Texture: Ink/Noise */}
+                    <div className="absolute inset-0 opacity-40 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none">
+                        <img 
+                            src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=1000&auto=format&fit=crop" 
+                            alt="Ink Texture" 
+                            className="w-full h-full object-cover mix-blend-overlay"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] via-transparent to-transparent"></div>
                     </div>
-
-                    {/* Badge */}
-                    <div className="absolute top-8 right-8 z-20">
-                         <div className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full flex items-center gap-2">
-                             <Infinity size={12} className="text-rose-300" />
-                             <span className="text-[10px] uppercase font-bold tracking-widest text-stone-300">Exclusivo</span>
+                    
+                    {/* Top Tag */}
+                    <div className="relative z-10 p-8 md:p-12 flex justify-between items-start">
+                        <div className="bg-rose-900/80 text-rose-100 border border-rose-800/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest inline-flex items-center gap-2">
+                            <Crown size={12} />
+                            Experiência VIP
                         </div>
+                        <Clock size={24} className="text-stone-600 group-hover:text-rose-200 transition-colors" strokeWidth={1} />
                     </div>
 
-                    <div className="mt-8 mb-12 relative z-10">
-                         <span className="font-serif italic text-2xl text-stone-500">Imersão Total</span>
-                         <h3 className="text-4xl md:text-5xl font-bold text-white mt-2 leading-none">Full Day</h3>
-                         <p className="mt-4 text-stone-400 leading-relaxed text-sm max-w-sm">
-                            Você "aluga" o artista por um dia inteiro. Ideal para fechamentos, múltiplos projetos pequenos ou para quem viaja de longe. Foco absoluto em você.
-                         </p>
+                    {/* Content Body */}
+                    <div className="relative z-10 px-8 md:px-12 flex-grow flex flex-col justify-center">
+                        <span className="text-[120px] leading-none font-serif text-white absolute top-1/2 -translate-y-1/2 right-4 pointer-events-none opacity-[0.03] select-none">02</span>
+
+                        <h3 className="font-serif text-4xl md:text-5xl text-white relative z-10 mb-4">
+                            Full Day <br/>
+                            <span className="italic text-rose-200/60">& Imersão Total</span>
+                        </h3>
+                        <p className="text-stone-400 text-sm leading-relaxed max-w-sm relative z-10 mb-8">
+                            Você "aluga" o artista por um dia inteiro. Foco absoluto no seu projeto, sem pressa. Ideal para fechamentos de braço/costas ou múltiplos projetos menores em uma única sessão.
+                        </p>
+
+                        <ul className="space-y-3 relative z-10 mb-8">
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-stone-400">
+                                <CheckCircle2 size={14} className="text-rose-400" /> Diária Fechada (6h - 8h)
+                            </li>
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-stone-400">
+                                <CheckCircle2 size={14} className="text-rose-400" /> Projetos Autorais Extensos
+                            </li>
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-stone-400">
+                                <CheckCircle2 size={14} className="text-rose-400" /> Privacidade Total
+                            </li>
+                        </ul>
                     </div>
 
-                    {/* Specs Grid */}
-                    <div className="grid grid-cols-2 gap-6 mb-12 border-t border-white/10 pt-8 relative z-10">
-                        <div>
-                             <div className="flex items-center gap-2 text-rose-300 mb-2">
-                                <Clock size={18} />
-                                <span className="text-xs font-bold uppercase tracking-widest">Duração</span>
-                             </div>
-                             <span className="block font-serif text-xl text-stone-200">Diária (6h - 8h)</span>
+                    {/* Footer / CTA */}
+                    <div className="relative z-10 p-8 md:p-12 border-t border-white/10 mt-auto bg-black/20 backdrop-blur-sm">
+                        <div className="flex items-center justify-between mb-4">
+                             <div className="flex items-center gap-2 text-stone-400">
+                                <Calendar size={16} />
+                                <span className="text-xs font-bold uppercase tracking-widest">Disponibilidade:</span>
+                            </div>
+                            <span className="text-white font-serif font-bold text-lg">Sob Consulta</span>
                         </div>
-                        <div>
-                             <div className="flex items-center gap-2 text-rose-300 mb-2">
-                                <Infinity size={18} />
-                                <span className="text-xs font-bold uppercase tracking-widest">Quantidade</span>
-                             </div>
-                             <span className="block font-serif text-xl text-stone-200">Sem limite de peças</span>
-                        </div>
-                    </div>
-
-                    <div className="mt-auto relative z-10">
-                        <button className="w-full py-4 bg-[#754548] text-white font-sans text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-stone-900 transition-colors flex justify-between items-center px-6 rounded-xl group/btn border border-transparent">
-                            <span>Consultar Agenda</span>
-                            <ArrowUpRight size={16} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                        <button className="w-full py-4 bg-white text-stone-950 text-xs font-bold uppercase tracking-[0.2em] hover:bg-rose-200 transition-colors flex items-center justify-center gap-3 group/btn">
+                            Solicitar Orçamento Full Day
+                            <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                         </button>
                     </div>
                 </div>
