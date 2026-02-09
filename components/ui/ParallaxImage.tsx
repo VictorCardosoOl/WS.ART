@@ -50,6 +50,7 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({ src, alt, className = "",
           alt={alt}
           className="w-full h-full object-cover will-change-transform"
           loading={priority ? "eager" : "lazy"}
+          decoding="async"
           style={{
             y: y, // Aplica o parallax
             scale: 1.25, // Zoom necessário para evitar bordas brancas durante o movimento

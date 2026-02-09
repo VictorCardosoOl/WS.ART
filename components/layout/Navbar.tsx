@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef } from 'react';
 import StaggeredMenu from '../ui/StaggeredMenu';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { Link } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,22 +18,16 @@ const Navbar: React.FC = () => {
         paused: true,
         duration: 0.4,
         ease: "power3.inOut"
-      }).progress(1); // Começa visível (progresso 1)
+      }).progress(1); // Começa visível
 
       ScrollTrigger.create({
         start: "top top",
         end: "max",
         onUpdate: (self) => {
-            // self.direction: 1 = descendo, -1 = subindo
-            // Se rolar para baixo E passou de 50px -> ESCONDE (reverse vai para 0, que no .from é o estado oculto -100%?)
-            // Não, .from(yPercent: -100). 
-            // .progress(1) = estado natural (y: 0).
-            // .reverse() = volta para o inicio (y: -100%).
-            
             if (self.direction === -1) {
-                showAnim.play(); // Mostra (vai para y:0)
+                showAnim.play(); // Mostra
             } else if (self.direction === 1 && self.scroll() > 50) { 
-                showAnim.reverse(); // Esconde (vai para y:-100%)
+                showAnim.reverse(); // Esconde
             }
 
             // Lógica de Estilo (Vidro/Cor)
@@ -41,8 +36,8 @@ const Navbar: React.FC = () => {
                     backgroundColor: "rgba(255, 255, 255, 0.8)", 
                     backdropFilter: "blur(8px)", 
                     boxShadow: "0 2px 20px rgba(0, 0, 0, 0.03)",
-                    paddingTop: "0.75rem", // Padding menor
-                    paddingBottom: "0.75rem", // Padding menor
+                    paddingTop: "0.75rem", 
+                    paddingBottom: "0.75rem", 
                     duration: 0.3 
                 });
                 gsap.to(brandRef.current, { color: "#754548", scale: 0.9, duration: 0.3 });
@@ -51,8 +46,8 @@ const Navbar: React.FC = () => {
                     backgroundColor: "transparent", 
                     backdropFilter: "blur(0px)", 
                     boxShadow: "none",
-                    paddingTop: "1.5rem", // Padding original
-                    paddingBottom: "1.5rem", // Padding original
+                    paddingTop: "1.5rem", 
+                    paddingBottom: "1.5rem", 
                     duration: 0.3 
                 });
                 gsap.to(brandRef.current, { color: "#1c1917", scale: 1, duration: 0.3 });
@@ -64,12 +59,12 @@ const Navbar: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
+  // Estrutura de Navegação Simplificada para SPA Multi-Page
   const navLinks = [
-    { label: 'Galeria', link: '#gallery', ariaLabel: 'Ver galeria' },
-    { label: 'Processo', link: '#process', ariaLabel: 'Processo criativo' },
-    { label: 'Sobre', link: '#about', ariaLabel: 'Sobre o artista' },
-    { label: 'Info', link: '#precare', ariaLabel: 'Cuidados' },
-    { label: 'Contato', link: '#booking', ariaLabel: 'Contato' }
+    { label: 'Início', link: '/', ariaLabel: 'Página Inicial' },
+    { label: 'O Ritual', link: '/ritual', ariaLabel: 'Guia, Processo e Cuidados' },
+    // Mantemos Contato como âncora global pois o BookingForm está em ambas as páginas
+    { label: 'Contato', link: '#booking', ariaLabel: 'Agendamento' } 
   ];
 
   const socialItems = [
@@ -83,10 +78,10 @@ const Navbar: React.FC = () => {
         ref={navRef}
         className="fixed top-0 left-0 w-full z-40 flex items-center justify-between px-6 md:px-12 lg:px-24 py-6 transition-none max-w-[1920px] left-0 right-0 mx-auto bg-transparent"
       >
-        {/* Brand */}
-        <a href="#" ref={brandRef} className="group flex items-center relative z-50 font-serif text-2xl md:text-3xl tracking-tighter text-stone-900 origin-left">
+        {/* Brand - Agora usa Link para evitar reload */}
+        <Link to="/" ref={brandRef} className="group flex items-center relative z-50 font-serif text-2xl md:text-3xl tracking-tighter text-stone-900 origin-left">
            W<span className="text-[#754548]">.</span>S
-        </a>
+        </Link>
 
         {/* Menu Trigger Area (gerenciado pelo StaggeredMenu) */}
         <div className="relative z-50"></div>

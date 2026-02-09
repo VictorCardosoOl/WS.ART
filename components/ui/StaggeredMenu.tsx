@@ -1,5 +1,6 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 interface MenuItem {
   label: string;
@@ -69,6 +70,9 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
   const busyRef = useRef(false);
   const itemEntranceTweenRef = useRef<gsap.core.Tween | null>(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -360,6 +364,24 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     }
   }, [playClose, animateIcon, animateColor, animateText, onMenuClose]);
 
+  // Handler inteligente para links
+  const handleLinkClick = (e: React.MouseEvent, link: string) => {
+    closeMenu();
+    
+    // Tratamento para âncoras (#)
+    if (link.startsWith('#')) {
+      e.preventDefault();
+      const elementId = link.substring(1);
+      const element = document.getElementById(elementId);
+      if (element) {
+        // Pequeno delay para permitir o fechamento do menu
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 400);
+      }
+    }
+  };
+
   React.useEffect(() => {
     if (!closeOnClickAway || !open) return;
 
@@ -381,7 +403,6 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     };
   }, [closeOnClickAway, open, closeMenu]);
 
-  // CORREÇÃO CRÍTICA: Se for fixo, remove 'relative' e usa 'fixed'.
   const wrapperClasses = isFixed 
       ? `fixed top-0 left-0 w-screen h-screen z-50 overflow-hidden pointer-events-none ${className || ''}`
       : `relative w-full h-full z-40 pointer-events-none ${className || ''}`;
@@ -436,26 +457,45 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         <div className="flex-1 flex flex-col gap-8 justify-center">
           <ul className="list-none m-0 p-0 flex flex-col gap-6" role="list">
             {items && items.length ? (
-              items.map((it, idx) => (
-                <li className="relative overflow-hidden leading-tight" key={it.label + idx}>
-                  <a 
-                    className="relative text-stone-900 font-serif font-light text-5xl md:text-6xl cursor-pointer leading-none tracking-tight capitalize inline-block no-underline transition-colors duration-300 hover:text-[#754548]"
-                    href={it.link} 
-                    aria-label={it.ariaLabel} 
-                    data-index={idx + 1}
-                    onClick={(e) => {
-                        closeMenu();
-                    }}
-                  >
-                    {displayItemNumbering && (
-                         <span className="sm-panel-number absolute top-1/2 -left-10 -translate-y-1/2 font-sans text-[10px] font-bold text-[#754548] tracking-widest pointer-events-none select-none opacity-0 transition-opacity">
-                            0{idx + 1}
-                         </span>
+              items.map((it, idx) => {
+                const isInternal = it.link.startsWith('/') && !it.link.startsWith('http');
+                
+                return (
+                  <li className="relative overflow-hidden leading-tight" key={it.label + idx}>
+                    {isInternal ? (
+                      <Link
+                        to={it.link}
+                        className="relative text-stone-900 font-serif font-light text-5xl md:text-6xl cursor-pointer leading-none tracking-tight capitalize inline-block no-underline transition-colors duration-300 hover:text-[#754548]"
+                        aria-label={it.ariaLabel}
+                        data-index={idx + 1}
+                        onClick={() => closeMenu()}
+                      >
+                         {displayItemNumbering && (
+                             <span className="sm-panel-number absolute top-1/2 -left-10 -translate-y-1/2 font-sans text-[10px] font-bold text-[#754548] tracking-widest pointer-events-none select-none opacity-0 transition-opacity">
+                                0{idx + 1}
+                             </span>
+                        )}
+                        <span className="sm-panel-itemLabel inline-block will-change-transform origin-bottom">{it.label}</span>
+                      </Link>
+                    ) : (
+                      <a 
+                        className="relative text-stone-900 font-serif font-light text-5xl md:text-6xl cursor-pointer leading-none tracking-tight capitalize inline-block no-underline transition-colors duration-300 hover:text-[#754548]"
+                        href={it.link} 
+                        aria-label={it.ariaLabel} 
+                        data-index={idx + 1}
+                        onClick={(e) => handleLinkClick(e, it.link)}
+                      >
+                        {displayItemNumbering && (
+                             <span className="sm-panel-number absolute top-1/2 -left-10 -translate-y-1/2 font-sans text-[10px] font-bold text-[#754548] tracking-widest pointer-events-none select-none opacity-0 transition-opacity">
+                                0{idx + 1}
+                             </span>
+                        )}
+                        <span className="sm-panel-itemLabel inline-block will-change-transform origin-bottom">{it.label}</span>
+                      </a>
                     )}
-                    <span className="sm-panel-itemLabel inline-block will-change-transform origin-bottom">{it.label}</span>
-                  </a>
-                </li>
-              ))
+                  </li>
+                )
+              })
             ) : (
               <li className="relative overflow-hidden leading-tight" aria-hidden="true">
                 <span className="relative text-stone-400 font-serif font-light text-5xl cursor-default leading-none">

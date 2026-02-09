@@ -1,41 +1,40 @@
 import React from 'react';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
-import Hero from './components/sections/Hero';
-import About from './components/sections/About';
-import Portfolio from './components/sections/Portfolio';
-import Process from './components/sections/Process';
-import PreCare from './components/sections/PreCare';
-import Testimonials from './components/sections/Testimonials';
-import FAQ from './components/sections/FAQ';
-import BookingForm from './components/sections/BookingForm';
-import FlashDay from './components/sections/FlashDay';
 import Footer from './components/layout/Footer';
 import CustomCursor from './components/ui/CustomCursor';
 import SmoothScroll from './components/layout/SmoothScroll';
+import ScrollToTop from './components/layout/ScrollToTop';
+
+// Pages
+import Home from './pages/Home';
+import Ritual from './pages/Ritual';
 
 const App: React.FC = () => {
   return (
-    <SmoothScroll>
-      <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-white relative">
-        {/* Global Noise Overlay */}
-        <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-noise"></div>
-        
-        <CustomCursor />
-        <Navbar />
-        <main className="flex-grow relative z-10">
-          <Hero />
-          <Portfolio />
-          <About />
-          <Process />
-          <FlashDay />
-          <PreCare />
-          <Testimonials />
-          <FAQ />
-          <BookingForm />
-        </main>
-        <Footer />
-      </div>
-    </SmoothScroll>
+    <Router>
+      <SmoothScroll>
+        <ScrollToTop />
+        <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-white relative">
+          {/* Global Noise Overlay */}
+          <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-noise"></div>
+          
+          <CustomCursor />
+          <Navbar />
+          
+          <main className="flex-grow relative z-10 w-full min-h-screen">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/ritual" element={<Ritual />} />
+              {/* Fallback para redirecionar qualquer rota desconhecida para Home */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+          
+          <Footer />
+        </div>
+      </SmoothScroll>
+    </Router>
   );
 };
 

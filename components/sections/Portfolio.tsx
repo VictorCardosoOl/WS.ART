@@ -10,7 +10,11 @@ const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
       
       {/* Container da Imagem - O ParallaxImage cuida do overflow e rounded interno via clip-path */}
       <div className={`relative w-full ${item.height} mb-6 shadow-sm`}>
-        <ParallaxImage src={item.src} alt={item.altText} />
+        <ParallaxImage 
+          src={item.src} 
+          alt={item.altText} 
+          priority={false} // Explicit lazy loading
+        />
         
         {/* Floating Tag Interativa */}
         <div className="absolute top-4 right-4 z-20">
