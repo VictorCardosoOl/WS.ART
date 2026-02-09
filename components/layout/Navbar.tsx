@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
   // Estrutura de Navegação Simplificada para SPA Multi-Page
   const navLinks = [
     { label: 'Início', link: '/', ariaLabel: 'Página Inicial' },
-    { label: 'O Ritual', link: '/ritual', ariaLabel: 'Guia, Processo e Cuidados' },
+    { label: 'Processo', link: '/processo', ariaLabel: 'Guia, Processo e Cuidados' },
     // Mantemos Contato como âncora global pois o BookingForm está em ambas as páginas
     { label: 'Contato', link: '#booking', ariaLabel: 'Agendamento' } 
   ];

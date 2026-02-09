@@ -59,7 +59,7 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-4 flex flex-col">
             {[
               { name: 'INÍCIO', link: '/' },
-              { name: 'O RITUAL', link: '/ritual' },
+              { name: 'PROCESSO', link: '/processo' },
               { name: 'GALERIA', link: '/' }, // Aponta para Home pois a galeria está lá
               { name: 'FLASH DAY', link: '/' }, // Aponta para Home
             ].map((item, i) => (
@@ -111,7 +111,7 @@ const Footer: React.FC = () => {
           
           {/* Small Links Grid */}
           <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-[10px] uppercase tracking-wider text-stone-600 mb-12 md:mb-16 w-full md:w-auto relative z-10">
-             <Link to="/ritual" className="hover:text-white transition-colors">Guia de cuidados</Link>
+             <Link to="/processo" className="hover:text-white transition-colors">Guia de cuidados</Link>
              <Link to="/" className="hover:text-white transition-colors">Showroom</Link>
              <a href="#" className="hover:text-white transition-colors">Política de Privacidade</a>
              <a href="#" className="hover:text-white transition-colors">Termos e Condições</a>

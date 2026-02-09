@@ -1,6 +1,8 @@
 import React from 'react';
 import Reveal from '../ui/Reveal';
 import ParallaxImage from '../ui/ParallaxImage';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const About: React.FC = () => {
   return (
@@ -30,6 +32,15 @@ const About: React.FC = () => {
                             Especialista em Neotradicional.<br />
                             Transformo narrativas pessoais em anatomia e arte perene.
                         </p>
+                    </div>
+                </Reveal>
+
+                <Reveal delay={400}>
+                    <div className="mt-10">
+                        <Link to="/processo" className="group inline-flex items-center gap-4 text-xs font-bold uppercase tracking-[0.2em] text-[#754548] hover:text-stone-900 transition-colors">
+                            <span>Entenda o Processo</span>
+                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
                     </div>
                 </Reveal>
             </div>

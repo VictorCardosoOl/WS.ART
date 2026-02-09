@@ -15,7 +15,7 @@ const RitualHeader: React.FC = () => {
                 Manual do Cliente
              </span>
              <h1 className="font-serif text-6xl md:text-8xl text-stone-900 leading-[0.9]">
-                O Ritual
+                O Processo
              </h1>
           </Reveal>
           <Reveal delay={200}>

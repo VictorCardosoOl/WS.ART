@@ -25,7 +25,7 @@ const App: React.FC = () => {
           <main className="flex-grow relative z-10 w-full min-h-screen">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/ritual" element={<Ritual />} />
+              <Route path="/processo" element={<Ritual />} />
               {/* Fallback para redirecionar qualquer rota desconhecida para Home */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
