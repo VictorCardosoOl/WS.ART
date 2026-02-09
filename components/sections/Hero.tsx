@@ -75,12 +75,13 @@ const Hero: React.FC = () => {
       <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
           
           <div className="flex flex-col md:flex-row justify-between items-start w-full">
-              <div className="hidden md:flex flex-col gap-2 hero-fade pointer-events-auto">
+              <div className="hidden md:flex flex-col gap-3 hero-fade pointer-events-auto">
                  <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 bg-[#754548] rounded-full animate-pulse"></div>
+                    <div className="w-1 h-1 bg-[#754548] rounded-full animate-pulse"></div>
+                    {/* Aumento do Tracking para 0.25em */}
                     <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">São Paulo, BR</span>
                  </div>
-                 <span className="text-[10px] font-medium uppercase tracking-widest text-stone-300 pl-4.5">Est. 2018</span>
+                 <span className="text-[10px] font-medium uppercase tracking-widest text-stone-300 pl-4">Est. 2018</span>
               </div>
 
               <div className="flex flex-col items-end text-right pointer-events-auto ml-auto max-w-xl">
@@ -92,13 +93,14 @@ const Hero: React.FC = () => {
                   
                   <div className="hero-line w-full md:w-32 h-[1px] bg-[#754548] my-8 opacity-60"></div>
 
-                  <p className="hero-fade font-sans text-[10px] text-stone-500 leading-relaxed tracking-[0.3em] uppercase font-semibold text-right max-w-[280px]">
+                  {/* Line Height Luxury (2.0) e Tracking Ultra */}
+                  <p className="hero-fade font-sans text-[10px] text-stone-500 leading-luxury tracking-ultra uppercase font-semibold text-right max-w-[280px]">
                       Conectamos narrativa pessoal e anatomia em obras neotradicionais.
                   </p>
 
                   <div className="hero-fade mt-10">
                       <Magnetic strength={0.5}>
-                        <a href="#gallery" className="group inline-flex items-center justify-end gap-4 text-[10px] font-bold uppercase tracking-[0.3em] text-[#754548] hover:text-stone-900 transition-colors p-4 -mr-4">
+                        <a href="#gallery" className="group inline-flex items-center justify-end gap-4 text-[10px] font-bold uppercase tracking-widest text-[#754548] hover:text-stone-900 transition-colors p-4 -mr-4">
                             Explorar Portfólio
                             <div className="relative overflow-hidden w-4 h-4 flex items-center justify-center">
                               <MoveRight size={14} className="absolute transition-transform duration-500 group-hover:translate-x-full" />

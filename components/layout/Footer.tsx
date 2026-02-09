@@ -1,11 +1,11 @@
 import React from 'react';
-import { Instagram, ArrowUpRight, MessageCircle, Twitter, Facebook } from 'lucide-react';
+import { Instagram, ArrowUpRight, Twitter, Facebook } from 'lucide-react';
 import Magnetic from '../ui/Magnetic';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="relative bg-black text-white pt-24 md:pt-32 pb-0 font-sans overflow-hidden">
+    <footer className="relative bg-black text-white pt-24 md:pt-32 pb-12 font-sans overflow-hidden">
       
       {/* SEPARATOR: INVERTED CURVE FROM LIGHT (BOOKING SECTION) */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
@@ -26,13 +26,15 @@ const Footer: React.FC = () => {
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-black text-xl flex-shrink-0">
                   W
                 </div>
-                <h3 className="text-xs font-bold tracking-widest uppercase leading-tight text-stone-300">
+                {/* Tracking aumentado para estética editorial */}
+                <h3 className="text-[10px] font-bold tracking-widest uppercase leading-loose text-stone-300">
                   INTERVENÇÕES ARTÍSTICAS ÚNICAS //<br/>
                   EXPERIÊNCIAS IMERSIVAS
                 </h3>
               </div>
               
-              <p className="text-stone-500 text-sm leading-relaxed max-w-sm mb-8 md:mb-12 font-light">
+              {/* Uso do leading-luxury (2.0) para texto com muito respiro */}
+              <p className="text-stone-500 text-sm leading-luxury max-w-sm mb-8 md:mb-12 font-light">
                 Fundada por William Siqueira, unimos décadas de prática artística e visão neotradicional, redefinindo as possibilidades da arte na pele e no ambiente construído.
               </p>
             </div>
@@ -43,89 +45,63 @@ const Footer: React.FC = () => {
               
               <div className="flex gap-4 mt-6 pt-6 border-t border-stone-800 w-fit">
                 <Magnetic>
-                    <a href="#" className="hover:text-white transition-colors p-2 -ml-2"><Instagram size={20} /></a>
+                    <a href="https://instagram.com" className="hover:text-white transition-colors p-2 -ml-2"><Instagram size={20} /></a>
                 </Magnetic>
                 <Magnetic>
-                    <a href="#" className="hover:text-white transition-colors p-2"><Twitter size={20} /></a>
+                    <a href="https://twitter.com" className="hover:text-white transition-colors p-2"><Twitter size={20} /></a>
                 </Magnetic>
                 <Magnetic>
-                    <a href="#" className="hover:text-white transition-colors p-2"><Facebook size={20} /></a>
+                    <a href="https://facebook.com" className="hover:text-white transition-colors p-2"><Facebook size={20} /></a>
                 </Magnetic>
               </div>
             </div>
           </div>
 
           {/* Column 2: Navigation Links */}
-          <div className="lg:col-span-4 flex flex-col">
-            {[
-              { name: 'INÍCIO', link: '/' },
-              { name: 'PROCESSO', link: '/processo' },
-              { name: 'GALERIA', link: '/' }, // Aponta para Home pois a galeria está lá
-              { name: 'FLASH DAY', link: '/' }, // Aponta para Home
-            ].map((item, i) => (
-              <Link 
-                key={i} 
-                to={item.link}
-                className="group flex justify-between items-center py-5 md:py-6 border-b border-stone-800 first:border-t hover:pl-4 transition-all duration-300 cursor-pointer"
-              >
-                <span className="tracking-[0.2em] uppercase text-xs font-bold text-stone-400 group-hover:text-white transition-colors">{item.name}</span>
-                <ArrowUpRight size={16} className="text-stone-600 group-hover:text-white transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
-              </Link>
-            ))}
-             <a 
-                href="#booking"
-                className="group flex justify-between items-center py-5 md:py-6 border-b border-stone-800 hover:pl-4 transition-all duration-300 cursor-pointer"
-              >
-                <span className="tracking-[0.2em] uppercase text-xs font-bold text-white">ENTRE EM CONTATO</span>
-                <ArrowUpRight size={16} className="text-white transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
-              </a>
+          <div className="lg:col-span-2 lg:col-start-6">
+             <h4 className="text-stone-500 text-[10px] font-bold uppercase tracking-widest mb-8">Menu</h4>
+             <ul className="space-y-4">
+                <li><Link to="/" className="text-white hover:text-rose-300 transition-colors text-sm tracking-wide">Início</Link></li>
+                <li><Link to="/processo" className="text-white hover:text-rose-300 transition-colors text-sm tracking-wide">Processo</Link></li>
+                <li><a href="#gallery" className="text-white hover:text-rose-300 transition-colors text-sm tracking-wide">Portfólio</a></li>
+                <li><a href="#booking" className="text-white hover:text-rose-300 transition-colors text-sm tracking-wide">Contato</a></li>
+             </ul>
           </div>
 
-          {/* Column 3: CTA */}
-          <div className="lg:col-span-4 flex flex-col">
-            <h2 className="text-3xl md:text-5xl font-serif text-white leading-[1.1] mb-4 md:mb-6">
-              Pronto para dar início a uma <span className="italic text-stone-500">sessão de descoberta?</span>
-            </h2>
-            <p className="text-stone-500 text-sm leading-relaxed mb-8">
-              Compartilhe suas ideias conosco e começaremos a transformar sua visão em realidade hoje mesmo.
-            </p>
-            
-            <div className="mt-auto flex justify-start md:justify-end">
-               <Magnetic strength={0.5}>
-                   <a 
-                     href="https://wa.me/5511999999999" 
-                     target="_blank" 
-                     rel="noreferrer"
-                     className="flex items-center gap-3 text-white border border-stone-800 px-6 py-4 rounded-full hover:bg-white hover:text-black transition-all group"
-                   >
-                     <span className="uppercase tracking-widest text-xs font-bold">Iniciar conversa</span>
-                     <MessageCircle size={20} className="group-hover:scale-110 transition-transform"/>
-                   </a>
-               </Magnetic>
-            </div>
+          {/* Column 3: Legal / Extra */}
+          <div className="lg:col-span-2">
+             <h4 className="text-stone-500 text-[10px] font-bold uppercase tracking-widest mb-8">Legal</h4>
+             <ul className="space-y-4">
+                <li><a href="#" className="text-stone-400 hover:text-white transition-colors text-sm tracking-wide">Termos de Uso</a></li>
+                <li><a href="#" className="text-stone-400 hover:text-white transition-colors text-sm tracking-wide">Privacidade</a></li>
+                <li><a href="#" className="text-stone-400 hover:text-white transition-colors text-sm tracking-wide">Cuidados (FAQ)</a></li>
+             </ul>
           </div>
+
+          {/* Column 4: Newsletter / Action */}
+          <div className="lg:col-span-3">
+             <h4 className="text-stone-500 text-[10px] font-bold uppercase tracking-widest mb-8">Fique Atualizado</h4>
+             <p className="text-stone-400 text-xs leading-luxury mb-6">
+                Novas aberturas de agenda e flash days exclusivos.
+             </p>
+             <form className="flex border-b border-stone-700 pb-2 group focus-within:border-white transition-colors">
+                <input type="email" placeholder="Seu e-mail" className="bg-transparent border-none outline-none text-white placeholder-stone-600 text-sm w-full" />
+                <button type="button" className="text-stone-400 hover:text-white transition-colors">
+                   <ArrowUpRight size={18} />
+                </button>
+             </form>
+          </div>
+
         </div>
-
-        {/* Bottom Section */}
-        <div className="pt-10 md:pt-12 flex flex-col md:flex-row items-end justify-between relative">
-          
-          {/* Small Links Grid */}
-          <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-[10px] uppercase tracking-wider text-stone-600 mb-12 md:mb-16 w-full md:w-auto relative z-10">
-             <Link to="/processo" className="hover:text-white transition-colors">Guia de cuidados</Link>
-             <Link to="/" className="hover:text-white transition-colors">Showroom</Link>
-             <a href="#" className="hover:text-white transition-colors">Política de Privacidade</a>
-             <a href="#" className="hover:text-white transition-colors">Termos e Condições</a>
-          </div>
-          
-          {/* Massive Brand Name */}
-          <div className="w-full text-right relative h-auto overflow-visible pb-2 md:pb-4">
-             <h1 className="text-[17vw] leading-[0.75] font-black text-[#1a1a1a] tracking-tighter select-none pointer-events-none translate-y-[5%]">
-               SIQUEIRA
-             </h1>
-             <div className="absolute bottom-6 md:bottom-12 left-0 md:left-auto md:right-0 w-full md:w-auto text-center md:text-right z-20">
-                <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-stone-600">© 2024 William Siqueira Art Ltd.</p>
-             </div>
-          </div>
+        
+        {/* Bottom Bar */}
+        <div className="pt-12 flex flex-col md:flex-row justify-between items-center gap-6">
+           <p className="text-stone-600 text-[10px] uppercase tracking-widest">
+              © {new Date().getFullYear()} William Siqueira. All rights reserved.
+           </p>
+           <p className="text-stone-700 text-[10px] uppercase tracking-widest flex items-center gap-2">
+              Designed with <span className="text-rose-900">♥</span> in SP
+           </p>
         </div>
 
       </div>

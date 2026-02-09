@@ -40,13 +40,13 @@ export default {
         'cinema': 'cubic-bezier(0.22, 1, 0.36, 1)',
       },
       letterSpacing: {
-        tighter: '-0.04em', // Slightly tighter for headlines
+        tighter: '-0.04em',
         tight: '-0.02em',
         normal: '0em',
         wide: '0.03em',
         wider: '0.08em',
-        widest: '0.2em', 
-        ultra: '0.35em', // More spacing for labels
+        widest: '0.25em', // Aumentado para 0.25em
+        ultra: '0.35em', 
       },
       fontSize: {
         'editorial-sm': ['10px', { lineHeight: '1.6', letterSpacing: '0.3em' }],
@@ -55,9 +55,27 @@ export default {
       lineHeight: {
         'tight-editorial': '0.9',
         'snug-editorial': '1.05',
+        'luxury': '2.0', // Novo line-height para parágrafos pequenos (Aesthetic of Silence)
       },
       backgroundImage: {
-        'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.05\"/%3E%3C/svg%3E')",
+        'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.8\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.1\"/%3E%3C/svg%3E')",
+      },
+      keyframes: {
+        grain: {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '10%': { transform: 'translate(-5%, -10%)' },
+          '20%': { transform: 'translate(-15%, 5%)' },
+          '30%': { transform: 'translate(7%, -25%)' },
+          '40%': { transform: 'translate(-5%, 25%)' },
+          '50%': { transform: 'translate(-15%, 10%)' },
+          '60%': { transform: 'translate(15%, 0%)' },
+          '70%': { transform: 'translate(0%, 15%)' },
+          '80%': { transform: 'translate(3%, 35%)' },
+          '90%': { transform: 'translate(-10%, 10%)' },
+        }
+      },
+      animation: {
+        'grain': 'grain 8s steps(10) infinite',
       },
       cursor: {
         none: 'none',

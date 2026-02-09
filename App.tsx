@@ -16,8 +16,11 @@ const App: React.FC = () => {
       <SmoothScroll>
         <ScrollToTop />
         <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-white relative">
-          {/* Global Noise Overlay */}
-          <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-noise"></div>
+          
+          {/* Global Noise Overlay (Animated Texture) */}
+          <div className="fixed inset-0 z-50 pointer-events-none mix-blend-overlay opacity-[0.07] overflow-hidden">
+             <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-noise animate-grain"></div>
+          </div>
           
           <CustomCursor />
           <Navbar />

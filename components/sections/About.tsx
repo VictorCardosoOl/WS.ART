@@ -37,7 +37,8 @@ const About: React.FC = () => {
 
                 <Reveal delay={400}>
                     <div className="mt-10">
-                        <Link to="/processo" className="group inline-flex items-center gap-4 text-xs font-bold uppercase tracking-[0.2em] text-[#754548] hover:text-stone-900 transition-colors">
+                        {/* Tracking Widest (0.25em) */}
+                        <Link to="/processo" className="group inline-flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-[#754548] hover:text-stone-900 transition-colors">
                             <span>Entenda o Processo</span>
                             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
