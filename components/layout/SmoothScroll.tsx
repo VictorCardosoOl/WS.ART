@@ -13,28 +13,24 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   const lenisRef = useRef<Lenis | null>(null);
 
   useLayoutEffect(() => {
-    // Configuração otimizada para sensação "High-End"
     const lenis = new Lenis({
-      duration: 1.5, // Levemente reduzido de 1.8 para evitar sensação de lentidão
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential ease out
+      duration: 1.8, // Aumentado para sensação de peso/luxo
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva exponencial suave
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.9, // Controle preciso
-      touchMultiplier: 1.5, // Mais responsivo no mobile
-      infinite: false,
+      wheelMultiplier: 0.8, // Reduzido levemente para controle preciso
+      touchMultiplier: 2,
     });
 
     lenisRef.current = lenis;
 
-    // Sincronizar Lenis com GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
     
-    // Desativa lagSmoothing para evitar "pulos" visuais durante o carregamento pesado
     gsap.ticker.lagSmoothing(0);
 
     return () => {

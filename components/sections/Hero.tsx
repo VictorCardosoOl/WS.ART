@@ -12,32 +12,31 @@ const Hero: React.FC = () => {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. INTRO ANIMATION (Load) - Sequência refinada
+      // 1. INTRO ANIMATION (Load)
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      gsap.set(".char-reveal", { yPercent: 110, opacity: 0 }); // Menor distância inicial
-      gsap.set(".hero-fade", { y: 20, autoAlpha: 0 });
+      gsap.set(".char-reveal", { yPercent: 120, opacity: 0 }); 
+      gsap.set(".hero-fade", { y: 30, autoAlpha: 0 });
       gsap.set(".hero-line", { scaleX: 0, transformOrigin: "left center" });
 
       tl.to(".char-reveal", {
         yPercent: 0,
         opacity: 1,
-        duration: 1.4,
-        stagger: { amount: 0.6, from: "start" }, // Stagger mais rápido
-        ease: "power4.out" // Snap mais elegante
+        duration: 1.6,
+        stagger: { amount: 0.8, from: "start" },
+        ease: "power4.out"
       })
-      .to(".hero-line", { scaleX: 1, duration: 1.5, ease: "expo.out" }, "-=1.0")
+      .to(".hero-line", { scaleX: 1, duration: 1.8, ease: "expo.out" }, "-=1.2")
       .to(".hero-fade", {
         y: 0,
         autoAlpha: 1,
-        duration: 1.2,
-        stagger: 0.1
-      }, "-=1.2");
+        duration: 1.4,
+        stagger: 0.15
+      }, "-=1.4");
 
-      // 2. SCROLL PARALLAX (Subtil e Elegante)
-      // Fundo move mais devagar para dar profundidade sem tontura
+      // 2. SCROLL PARALLAX (Físico)
       gsap.to(bgRef.current, {
-        yPercent: 20, 
+        yPercent: 30,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
@@ -47,16 +46,15 @@ const Hero: React.FC = () => {
         }
       });
 
-      // Texto Gigante (Foreground) - Movimento oposto sutil
+      // Texto Gigante (Foreground)
       gsap.to(titleRef.current, {
-        yPercent: -15, // Reduzido para sutileza
-        opacity: 0.5, // Fade out ao rolar
+        yPercent: -20,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: 1.5 // Inércia maior para sensação de peso
+          scrub: 1 // Leve inércia
         }
       });
 
@@ -71,8 +69,7 @@ const Hero: React.FC = () => {
       {/* Atmosphere Layer */}
       <div ref={bgRef} className="absolute inset-0 z-0 pointer-events-none will-change-transform">
           <div className="absolute inset-0 bg-noise opacity-[0.04] mix-blend-overlay"></div>
-          {/* Gradiente mais suave e difuso */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_40%,_var(--tw-gradient-stops))] from-rose-100/40 via-transparent to-transparent opacity-70"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_var(--tw-gradient-stops))] from-rose-200/30 via-transparent to-transparent opacity-60"></div>
       </div>
 
       <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
