@@ -1,7 +1,6 @@
 import React from 'react';
 import { Instagram, ArrowUpRight, MessageCircle, Twitter, Facebook } from 'lucide-react';
 import Magnetic from '../ui/Magnetic';
-import Marquee from '../ui/Marquee';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
@@ -105,20 +104,6 @@ const Footer: React.FC = () => {
                </Magnetic>
             </div>
           </div>
-        </div>
-
-        {/* Marquee Section */}
-        <div className="py-12 border-b border-stone-800 overflow-hidden opacity-30">
-             <Marquee baseVelocity={2}>
-                <span className="text-6xl md:text-8xl font-serif italic text-stone-700 px-8">Neotraditional</span>
-                <span className="text-6xl md:text-8xl font-sans font-bold text-stone-800 px-8 stroke-text">·</span>
-                <span className="text-6xl md:text-8xl font-serif italic text-stone-700 px-8">Fine Art</span>
-                <span className="text-6xl md:text-8xl font-sans font-bold text-stone-800 px-8 stroke-text">·</span>
-                <span className="text-6xl md:text-8xl font-serif italic text-stone-700 px-8">São Paulo</span>
-                <span className="text-6xl md:text-8xl font-sans font-bold text-stone-800 px-8 stroke-text">·</span>
-                <span className="text-6xl md:text-8xl font-serif italic text-stone-700 px-8">Exclusividade</span>
-                <span className="text-6xl md:text-8xl font-sans font-bold text-stone-800 px-8 stroke-text">·</span>
-             </Marquee>
         </div>
 
         {/* Bottom Section */}
