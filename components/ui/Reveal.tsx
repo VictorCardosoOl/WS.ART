@@ -16,8 +16,8 @@ const Reveal: React.FC<RevealProps> = ({
   children, 
   width = 'fit-content', 
   delay = 0,
-  duration = 1.4,
-  yOffset = 50
+  duration = 1.6, // Duração ligeiramente maior para elegância
+  yOffset = 40 // Movimento menor para ser mais sutil
 }) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
@@ -29,9 +29,9 @@ const Reveal: React.FC<RevealProps> = ({
         {
           y: yOffset,
           opacity: 0,
-          scale: 0.96,
-          filter: "blur(6px)",
-          rotationX: 3, // Leve inclinação 3D
+          scale: 0.98, // Scale sutil
+          filter: "blur(4px)", // Blur reduzido para performance
+          rotationX: 2, 
           transformOrigin: "center top"
         },
         {
@@ -41,11 +41,11 @@ const Reveal: React.FC<RevealProps> = ({
           filter: "blur(0px)",
           rotationX: 0,
           duration: duration,
-          ease: "power3.out",
+          ease: "power4.out", // Easing mais "Premium"
           delay: delay / 1000,
           scrollTrigger: {
             trigger: elementRef.current,
-            start: "top 92%", // Aciona um pouco antes de entrar totalmente
+            start: "top 90%", // Aciona mais cedo na viewport para evitar buracos brancos
             toggleActions: "play none none reverse"
           }
         }
