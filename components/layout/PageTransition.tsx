@@ -8,14 +8,14 @@ interface PageTransitionProps {
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, filter: 'blur(8px)', y: 20 }}
-      animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
-      exit={{ opacity: 0, filter: 'blur(4px)', y: -20 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
       transition={{ 
-        duration: 0.8, 
-        ease: [0.22, 1, 0.36, 1] // Curva "Cinema" (Custom cubic-bezier)
+        duration: 0.6, // Levemente mais rápido para compensar a falta do blur
+        ease: [0.22, 1, 0.36, 1] // Curva "Cinema" mantida
       }}
-      className="w-full will-change-[opacity,transform,filter]"
+      className="w-full will-change-[transform,opacity]" // Blur removido do will-change
     >
       {children}
     </motion.div>
