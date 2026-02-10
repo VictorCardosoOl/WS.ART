@@ -29,10 +29,10 @@ const App: React.FC = () => {
         <ScrollToTop />
         <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-white relative">
           
-          {/* Global Noise Overlay (Animated Texture) - OTIMIZADO */}
-          {/* translate-z-0 e backface-invisible forçam a GPU a renderizar essa camada separadamente */}
-          <div className="fixed inset-0 z-50 pointer-events-none mix-blend-overlay opacity-[0.07] overflow-hidden transform-gpu translate-z-0 backface-invisible">
-             <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-noise animate-grain will-change-transform"></div>
+          {/* Global Noise Overlay (Static) - OTIMIZADO */}
+          {/* A animação 'animate-grain' foi removida para melhorar drasticamente a performance do scroll */}
+          <div className="fixed inset-0 z-50 pointer-events-none mix-blend-overlay opacity-[0.05] overflow-hidden transform-gpu translate-z-0">
+             <div className="absolute inset-0 w-full h-full bg-noise bg-repeat"></div>
           </div>
           
           <CustomCursor />

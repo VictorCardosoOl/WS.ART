@@ -14,12 +14,12 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
 
   useLayoutEffect(() => {
     const lenis = new Lenis({
-      duration: 1.5, // Reduzido de 2.2 para 1.5 (Equilíbrio entre peso luxuoso e performance)
+      duration: 1.2, // Levemente ajustado para resposta mais rápida
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1, // Normalizado para 1 para evitar aceleração excessiva que causa pulos
+      wheelMultiplier: 1,
       touchMultiplier: 2,
       infinite: false,
     });
@@ -34,9 +34,10 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
       lenis.raf(time * 1000);
     });
     
-    // REMOVIDO: gsap.ticker.lagSmoothing(0)
-    // Permitir o lagSmoothing padrão (500, 33) ajuda o GSAP a lidar com soluços de frame
-    // sem tentar "pular" para a posição final instantaneamente.
+    // CRÍTICO: Desativa o lag smoothing do GSAP.
+    // Isso impede que o GSAP tente "pular" a animação para alcançar o tempo real 
+    // quando há uma queda leve de FPS, o que visualmente parece um "engasgo".
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
       gsap.ticker.remove((time) => lenis.raf(time * 1000));

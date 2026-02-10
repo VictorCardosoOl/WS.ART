@@ -27,7 +27,10 @@ const Navbar: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  
+  // Refs para lógica de scroll sem re-render desnecessário
   const lastScrollY = useRef(0);
+  const ticking = useRef(false);
   const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   const location = useLocation();
@@ -63,62 +66,68 @@ const Navbar: React.FC = () => {
     }
   ];
 
-  // --- SMART NAVBAR LOGIC ---
+  // --- SMART NAVBAR LOGIC (OPTIMIZED) ---
 
-  // Função para reiniciar o timer de inatividade
   const resetInactivityTimer = useCallback(() => {
     if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
-    
-    // Se o menu estiver aberto, não oculta por inatividade
     if (isExpanded) return;
 
-    // Define inatividade após 4 segundos
     inactivityTimer.current = setTimeout(() => {
-       const currentY = window.scrollY;
-       // Só oculta por inatividade se já tiver rolado um pouco (não no topo)
-       if (currentY > 100) {
+       // Apenas oculta se não estiver no topo absoluto
+       if (window.scrollY > 100) {
          setIsVisible(false);
        }
     }, 4000);
   }, [isExpanded]);
 
-  // Handle Scroll Direction & Activity
   useEffect(() => {
-    const handleScroll = () => {
+    const updateNavbarState = () => {
       const currentY = window.scrollY;
       const delta = currentY - lastScrollY.current;
 
-      // Sempre mostrar se estiver no topo ou se estiver rolando para CIMA
-      // Ocultar se rolar para BAIXO (mais que 10px de diferença para evitar micro-movimentos)
+      // Lógica de Direção
       if (currentY < 50) {
+        // Topo da página: sempre visível
         setIsVisible(true);
-      } else if (delta > 10) {
-        // Rolando para baixo -> Ocultar (se não estiver expandido)
-        if (!isExpanded) setIsVisible(false);
-      } else if (delta < -10) {
-        // Rolando para cima -> Mostrar
-        setIsVisible(true);
+      } else if (Math.abs(delta) > 10) { 
+        // Apenas processa se o movimento for significativo (>10px)
+        if (delta > 0 && !isExpanded) {
+          // Scroll Down -> Hide
+          setIsVisible(false);
+        } else if (delta < 0) {
+          // Scroll Up -> Show
+          setIsVisible(true);
+        }
       }
 
       lastScrollY.current = currentY;
-      resetInactivityTimer();
+      ticking.current = false;
     };
 
-    const handleMouseMove = () => {
-       // Se o mouse se mover no topo da tela, mostra a nav
-       // Isso ajuda caso o usuário queira acessar o menu após ele sumir por inatividade
+    const onScroll = () => {
+      // Reinicia o timer de inatividade a cada scroll (debounce leve implicito)
+      resetInactivityTimer();
+
+      if (!ticking.current) {
+        window.requestAnimationFrame(updateNavbarState);
+        ticking.current = true;
+      }
+    };
+
+    const onMouseMove = () => {
+       // Apenas reinicia o timer, não afeta visibilidade imediata
        resetInactivityTimer();
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-
-    // Start timer on mount
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    
+    // Timer inicial
     resetInactivityTimer();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('mousemove', onMouseMove);
       if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
     };
   }, [isExpanded, resetInactivityTimer]);
@@ -127,18 +136,12 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        if (isExpanded) {
-           toggleMenu(); // Fecha o menu se clicar fora
-        }
+        if (isExpanded) toggleMenu();
       }
     };
 
     const handleEscKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        if (isExpanded) {
-           toggleMenu(); // Fecha com ESC
-        }
-      }
+      if (event.key === 'Escape' && isExpanded) toggleMenu();
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -236,7 +239,6 @@ const Navbar: React.FC = () => {
     const tl = tlRef.current;
     if (!tl) return;
     
-    // Se estiver fechado e formos abrir, garantimos que a navbar está visível
     if (!isExpanded) {
       setIsVisible(true);
       setIsHamburgerOpen(true);
@@ -269,6 +271,7 @@ const Navbar: React.FC = () => {
     <div 
         ref={containerRef} 
         className={`card-nav-container ${!isVisible && !isExpanded ? 'nav-hidden' : ''}`}
+        style={{ willChange: 'transform' }} // Dica para o navegador otimizar
     >
       <nav ref={navRef} className={`card-nav ${isExpanded ? 'open' : ''}`}>
         
