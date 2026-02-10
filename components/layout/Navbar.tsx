@@ -1,111 +1,264 @@
-import React, { useLayoutEffect, useRef } from 'react';
-import StaggeredMenu from '../ui/StaggeredMenu';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { ArrowUpRight } from 'lucide-react';
+import './Navbar.css';
 
-gsap.registerPlugin(ScrollTrigger);
+interface NavLink {
+  label: string;
+  href: string;
+  ariaLabel: string;
+  external?: boolean;
+}
+
+interface NavItem {
+  label: string;
+  bgColor: string;
+  textColor: string;
+  links: NavLink[];
+}
 
 const Navbar: React.FC = () => {
+  const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const navRef = useRef<HTMLElement>(null);
-  const brandRef = useRef<HTMLAnchorElement>(null);
+  const cardsRef = useRef<HTMLDivElement[]>([]);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const location = useLocation();
+
+  // Definição dos itens do menu conforme a marca
+  const items: NavItem[] = [
+    {
+      label: "Navegação",
+      bgColor: "#FAF7F7", // Rose 50
+      textColor: "#1c1917",
+      links: [
+        { label: "Início", href: "/", ariaLabel: "Ir para Início" },
+        { label: "O Processo", href: "/processo", ariaLabel: "Ver Processo" }
+      ]
+    },
+    {
+      label: "Acervo",
+      bgColor: "#E5D0D4", // Rose 200
+      textColor: "#1c1917",
+      links: [
+        { label: "Portfólio", href: "/#gallery", ariaLabel: "Ver Portfólio" },
+        { label: "Flash Day", href: "/#flashday", ariaLabel: "Ver Flash Days" }
+      ]
+    },
+    {
+      label: "Contato",
+      bgColor: "#1c1917", // Stone 900
+      textColor: "#FFFFFF",
+      links: [
+        { label: "WhatsApp", href: "https://wa.me/5511999999999", ariaLabel: "Contato WhatsApp", external: true },
+        { label: "Instagram", href: "https://instagram.com", ariaLabel: "Instagram", external: true },
+        { label: "E-mail", href: "mailto:contato@wsart.com", ariaLabel: "Enviar Email", external: true }
+      ]
+    }
+  ];
+
+  const calculateHeight = () => {
+    const navEl = navRef.current;
+    if (!navEl) return 280; // Altura padrão desktop expandida
+
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+      const contentEl = navEl.querySelector('.card-nav-content') as HTMLElement;
+      if (contentEl) {
+        // Truque para medir altura oculta
+        const originalStyle = {
+            visibility: contentEl.style.visibility,
+            position: contentEl.style.position,
+            height: contentEl.style.height
+        };
+
+        contentEl.style.visibility = 'visible';
+        contentEl.style.position = 'static';
+        contentEl.style.height = 'auto';
+
+        const contentHeight = contentEl.offsetHeight;
+
+        // Reverter estilos
+        contentEl.style.visibility = originalStyle.visibility;
+        contentEl.style.position = originalStyle.position;
+        contentEl.style.height = originalStyle.height;
+
+        const topBar = 70;
+        return topBar + contentHeight;
+      }
+    }
+    return 280;
+  };
+
+  const createTimeline = () => {
+    const navEl = navRef.current;
+    if (!navEl) return null;
+
+    // Reset inicial
+    gsap.set(navEl, { height: 70, overflow: 'hidden' });
+    gsap.set(cardsRef.current, { y: 60, opacity: 0 });
+
+    const tl = gsap.timeline({ paused: true });
+
+    tl.to(navEl, {
+      height: () => calculateHeight(),
+      duration: 0.5,
+      ease: "power3.inOut"
+    });
+
+    tl.to(cardsRef.current, { 
+        y: 0, 
+        opacity: 1, 
+        duration: 0.4, 
+        ease: "power3.out", 
+        stagger: 0.06 
+    }, '-=0.3');
+
+    return tl;
+  };
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animação de esconder (yPercent: -100 joga para cima)
-      const showAnim = gsap.from(navRef.current, { 
-        yPercent: -100,
-        paused: true,
-        duration: 0.4,
-        ease: "power3.inOut"
-      }).progress(1); // Começa visível
+    // Fecha o menu ao mudar de rota
+    if (isExpanded) {
+        toggleMenu();
+    }
+  }, [location.pathname]);
 
-      ScrollTrigger.create({
-        start: "top top",
-        end: "max",
-        onUpdate: (self) => {
-            if (self.direction === -1) {
-                showAnim.play(); // Mostra
-            } else if (self.direction === 1 && self.scroll() > 50) { 
-                showAnim.reverse(); // Esconde
-            }
+  useLayoutEffect(() => {
+    const tl = createTimeline();
+    tlRef.current = tl;
 
-            // Lógica de Estilo (Vidro/Cor)
-            if (self.scroll() > 50) {
-                gsap.to(navRef.current, { 
-                    backgroundColor: "rgba(255, 255, 255, 0.8)", 
-                    backdropFilter: "blur(8px)", 
-                    boxShadow: "0 2px 20px rgba(0, 0, 0, 0.03)",
-                    paddingTop: "0.75rem", 
-                    paddingBottom: "0.75rem", 
-                    duration: 0.3 
-                });
-                gsap.to(brandRef.current, { color: "#754548", scale: 0.9, duration: 0.3 });
-            } else {
-                gsap.to(navRef.current, { 
-                    backgroundColor: "transparent", 
-                    backdropFilter: "blur(0px)", 
-                    boxShadow: "none",
-                    paddingTop: "1.5rem", 
-                    paddingBottom: "1.5rem", 
-                    duration: 0.3 
-                });
-                gsap.to(brandRef.current, { color: "#1c1917", scale: 1, duration: 0.3 });
-            }
-        }
-      });
-    }, navRef);
-
-    return () => ctx.revert();
+    return () => {
+      tl?.kill();
+      tlRef.current = null;
+    };
   }, []);
 
-  // Estrutura de Navegação Simplificada para SPA Multi-Page
-  const navLinks = [
-    { label: 'Início', link: '/', ariaLabel: 'Página Inicial' },
-    { label: 'Processo', link: '/processo', ariaLabel: 'Guia, Processo e Cuidados' },
-    // Mantemos Contato como âncora global pois o BookingForm está em ambas as páginas
-    { label: 'Contato', link: '#booking', ariaLabel: 'Agendamento' } 
-  ];
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      if (!tlRef.current) return;
+      
+      // Recalcula se estiver aberto para ajustar altura mobile/desktop
+      if (isExpanded) {
+        const newHeight = calculateHeight();
+        gsap.to(navRef.current, { height: newHeight, duration: 0.2 });
+      }
+    };
 
-  const socialItems = [
-    { label: 'Instagram', link: 'https://instagram.com' },
-    { label: 'WhatsApp', link: 'https://wa.me/5511999999999' }
-  ];
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isExpanded]);
+
+  const toggleMenu = () => {
+    const tl = tlRef.current;
+    if (!tl) return;
+    
+    if (!isExpanded) {
+      setIsHamburgerOpen(true);
+      setIsExpanded(true);
+      tl.play();
+    } else {
+      setIsHamburgerOpen(false);
+      tl.reverse().then(() => setIsExpanded(false));
+    }
+  };
+
+  const addToRefs = (el: HTMLDivElement | null) => {
+    if (el && !cardsRef.current.includes(el)) {
+      cardsRef.current.push(el);
+    }
+  };
+
+  const handleLinkClick = (e: React.MouseEvent, href: string) => {
+    // Se for âncora interna, fecha o menu e faz scroll suave
+    if (href.startsWith('/#') || href.startsWith('#')) {
+        const id = href.split('#')[1];
+        const element = document.getElementById(id);
+        if (element) {
+             // Pequeno delay para a animação de fechar começar
+             toggleMenu();
+             setTimeout(() => element.scrollIntoView({ behavior: 'smooth' }), 300);
+        }
+    } else {
+        // Link normal fecha o menu (tratado pelo useLayoutEffect de location)
+    }
+  };
 
   return (
-    <>
-      <nav 
-        ref={navRef}
-        className="fixed top-0 left-0 w-full z-40 flex items-center justify-between px-6 md:px-12 lg:px-24 py-6 transition-none max-w-[1920px] left-0 right-0 mx-auto bg-transparent"
-      >
-        {/* Brand - Agora usa Link para evitar reload */}
-        <Link to="/" ref={brandRef} className="group flex items-center relative z-50 font-serif text-2xl md:text-3xl tracking-tighter text-stone-900 origin-left">
-           W<span className="text-[#754548]">.</span>S
-        </Link>
+    <div className="card-nav-container">
+      <nav ref={navRef} className={`card-nav ${isExpanded ? 'open' : ''}`}>
+        
+        {/* Top Bar */}
+        <div className="card-nav-top">
+          
+          {/* Logo Centralizado (Texto) */}
+          <div className="logo-container">
+             <Link to="/" className="brand-text" onClick={() => isExpanded && toggleMenu()}>
+                W<span className="brand-dot">.</span>S
+             </Link>
+          </div>
 
-        {/* Menu Trigger Area (gerenciado pelo StaggeredMenu) */}
-        <div className="relative z-50"></div>
+          {/* Hamburger (Esquerda ou Direita dependendo do CSS, aqui ajustado pelo CSS flex order em mobile) */}
+          <div
+            className={`hamburger-menu ${isHamburgerOpen ? 'open' : ''}`}
+            onClick={toggleMenu}
+            role="button"
+            aria-label={isExpanded ? 'Fechar menu' : 'Abrir menu'}
+            tabIndex={0}
+          >
+            <div className="hamburger-line" />
+            <div className="hamburger-line" />
+          </div>
+
+          {/* CTA Button */}
+          <button
+            type="button"
+            className="card-nav-cta-button"
+            onClick={() => {
+                const element = document.getElementById('booking');
+                if(element) element.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            Agendar
+          </button>
+        </div>
+
+        {/* Content Cards */}
+        <div className="card-nav-content" aria-hidden={!isExpanded}>
+          {items.map((item, idx) => (
+            <div
+              key={`${item.label}-${idx}`}
+              className="nav-card"
+              ref={addToRefs}
+              style={{ backgroundColor: item.bgColor, color: item.textColor }}
+            >
+              <div className="nav-card-label">{item.label}</div>
+              <div className="nav-card-links">
+                {item.links.map((lnk, i) => {
+                    const Component = lnk.external ? 'a' : Link;
+                    const props = lnk.external 
+                        ? { href: lnk.href, target: "_blank", rel: "noreferrer" } 
+                        : { to: lnk.href, onClick: (e: React.MouseEvent) => handleLinkClick(e, lnk.href) };
+
+                    return (
+                        <Component 
+                            key={`${lnk.label}-${i}`} 
+                            className="nav-card-link" 
+                            aria-label={lnk.ariaLabel}
+                            {...props as any}
+                        >
+                            <ArrowUpRight className="nav-card-link-icon" size={16} aria-hidden="true" />
+                            {lnk.label}
+                        </Component>
+                    );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
       </nav>
-
-      {/* Menu Overlay */}
-      <div className="fixed inset-0 z-50 pointer-events-none">
-          <StaggeredMenu
-            position="right"
-            items={navLinks}
-            socialItems={socialItems}
-            displaySocials={true}
-            displayItemNumbering={true}
-            menuButtonColor="#1c1917"
-            openMenuButtonColor="#1c1917"
-            accentColor="#754548"
-            changeMenuColorOnOpen={false}
-            colors={['#F2E8E9', '#E5D0D4', '#FAF7F7']} 
-            logoContent={null}
-            isFixed={true}
-            closeOnClickAway={true}
-          />
-      </div>
-    </>
+    </div>
   );
 };
 
