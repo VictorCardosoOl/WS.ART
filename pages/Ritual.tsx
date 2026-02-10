@@ -5,6 +5,7 @@ import Testimonials from '../components/sections/Testimonials';
 import FAQ from '../components/sections/FAQ';
 import BookingForm from '../components/sections/BookingForm';
 import Reveal from '../components/ui/Reveal';
+import PageTransition from '../components/layout/PageTransition';
 
 const RitualHeader: React.FC = () => {
   return (
@@ -30,14 +31,14 @@ const RitualHeader: React.FC = () => {
 
 const Ritual: React.FC = () => {
   return (
-    <>
+    <PageTransition>
       <RitualHeader />
       <Process />
       <PreCare />
       <Testimonials />
       <FAQ />
       <BookingForm />
-    </>
+    </PageTransition>
   );
 };
 

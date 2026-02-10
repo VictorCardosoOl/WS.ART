@@ -4,16 +4,17 @@ import About from '../components/sections/About';
 import Portfolio from '../components/sections/Portfolio';
 import FlashDay from '../components/sections/FlashDay';
 import BookingForm from '../components/sections/BookingForm';
+import PageTransition from '../components/layout/PageTransition';
 
 const Home: React.FC = () => {
   return (
-    <>
+    <PageTransition>
       <Hero />
       <Portfolio />
       <About />
       <FlashDay />
       <BookingForm />
-    </>
+    </PageTransition>
   );
 };
 
