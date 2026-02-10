@@ -14,43 +14,54 @@ interface ParallaxImageProps {
 const ParallaxImage: React.FC<ParallaxImageProps> = ({ src, alt, className = "", priority = false }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       if (!containerRef.current || !imgRef.current) return;
 
-      // 1. Animação de Parallax (A imagem move dentro do container)
-      gsap.fromTo(imgRef.current, 
-        { 
-          yPercent: -15, // Começa deslocada para cima
-          scale: 1.15    // Leve zoom para cobrir o movimento
-        },
-        {
-          yPercent: 15,  // Termina deslocada para baixo
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top bottom", // Quando o topo do container entra em baixo da tela
-            end: "bottom top",   // Quando o fundo do container sai por cima
-            scrub: true,         // Link direto com o scroll (sem delay artificial)
-          }
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top bottom", // Começa quando o topo do container entra na tela
+          end: "bottom top",   // Termina quando sai
+          scrub: true,         // Movimento atrelado ao scroll
         }
+      });
+
+      // 1. ANIMAÇÃO DE PARALLAX (VERTICAL)
+      // A imagem se move no eixo Y para criar profundidade
+      tl.fromTo(imgRef.current, 
+        { yPercent: -15 }, 
+        { yPercent: 15, ease: "none" },
+        0
       );
 
-      // 2. Animação de Recorte (Clip Path Reveal)
-      // Simula o efeito que tinhamos antes com Framer Motion, mas usando GSAP
+      // 2. ANIMAÇÃO DE SCALE (ZOOM OUT)
+      // A imagem começa com Zoom (1.4) e diminui para (1.1)
+      // Mantemos 1.1 para evitar bordas brancas durante o parallax
+      tl.fromTo(imgRef.current,
+        { scale: 1.4 },
+        { scale: 1.1, ease: "none" },
+        0
+      );
+
+      // 3. REVEAL (CLIP PATH) - Separado do ScrollTrigger principal para ter controle de Trigger diferente
+      // Queremos que a imagem "abra" assim que entrar na tela, não durante todo o scroll
       gsap.fromTo(containerRef.current,
-        {
-          clipPath: "inset(12% 8% 12% 8% round 12px)" // Começa pequeno e arredondado
+        { 
+          clipPath: "inset(15% 10% 15% 10% round 2px)", // Começa fechada
+          filter: "brightness(0.8)" // Levemente escura
         },
         {
-          clipPath: "inset(0% 0% 0% 0% round 0px)", // Abre para tela cheia
-          ease: "power2.out",
+          clipPath: "inset(0% 0% 0% 0% round 0px)", // Abre totalmente
+          filter: "brightness(1)",
+          duration: 1.5,
+          ease: "power3.out", // Curva elegante
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top 95%", // Começa a abrir assim que entra na tela
-            end: "center center", // Termina de abrir no meio
-            scrub: 1 // Leve suavidade na abertura
+            start: "top 85%", // Aciona quando o topo está a 85% da tela
+            toggleActions: "play none none reverse"
           }
         }
       );
@@ -63,9 +74,9 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({ src, alt, className = "",
   return (
     <div 
       ref={containerRef} 
-      className={`relative w-full h-full overflow-hidden ${className}`}
-      // Definimos um clip-path inicial via CSS para evitar FOUC (Flash of Unstyled Content)
-      style={{ clipPath: "inset(12% 8% 12% 8% round 12px)" }}
+      className={`relative w-full h-full overflow-hidden will-change-transform ${className}`}
+      // Clip-path inicial inline para evitar flash
+      style={{ clipPath: "inset(15% 10% 15% 10% round 2px)" }}
     >
       <img
         ref={imgRef}
@@ -76,8 +87,11 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({ src, alt, className = "",
         decoding="async"
       />
       
-      {/* Camada de Overlay opcional para profundidade extra e atmosfera */}
-      <div className="absolute inset-0 bg-[#1c1917]/5 mix-blend-multiply pointer-events-none"></div>
+      {/* Camada de Overlay para atmosfera cinematográfica */}
+      <div 
+        ref={overlayRef}
+        className="absolute inset-0 bg-[#1c1917]/10 mix-blend-multiply pointer-events-none" 
+      />
     </div>
   );
 };

@@ -1,37 +1,71 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import Reveal from '../ui/Reveal';
 import { GridGalleryItem } from '../../types';
 import { PORTFOLIO_ITEMS } from '../../data/portfolio';
 import ParallaxImage from '../ui/ParallaxImage';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
+  const textRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+        // Animação dos textos (Título e Categoria)
+        // Eles surgem de baixo para cima APÓS a imagem começar a aparecer
+        const texts = textRef.current?.children;
+        
+        if (texts) {
+            gsap.fromTo(texts, 
+                { y: 30, opacity: 0 },
+                { 
+                    y: 0, 
+                    opacity: 1, 
+                    duration: 0.8, 
+                    stagger: 0.1, 
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: containerRef.current,
+                        start: "top 75%", // Aciona quando a imagem já está bem visível
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        }
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className={`group relative w-full flex flex-col ${item.offsetY}`}>
+    <div ref={containerRef} className={`group relative w-full flex flex-col ${item.offsetY}`}>
       
-      {/* Container da Imagem - O ParallaxImage cuida do overflow e rounded interno via clip-path */}
-      <div className={`relative w-full ${item.height} mb-6 shadow-sm`}>
+      {/* Container da Imagem - O ParallaxImage cuida do zoom e reveal */}
+      <div className={`relative w-full ${item.height} mb-6 shadow-sm overflow-hidden`}>
         <ParallaxImage 
           src={item.src} 
           alt={item.altText} 
-          priority={false} // Explicit lazy loading
+          priority={false} 
         />
         
         {/* Floating Tag Interativa */}
-        <div className="absolute top-4 right-4 z-20">
-             <div className="bg-white/90 backdrop-blur px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 rounded-full shadow-lg">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">Ver Projeto</span>
+        <div className="absolute top-4 right-4 z-20 overflow-hidden">
+             <div className="bg-white/90 backdrop-blur px-4 py-2 opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out rounded-full shadow-lg">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">Ver Detalhes</span>
             </div>
         </div>
       </div>
 
-      {/* Meta Dados Minimalistas */}
-      <div className="flex items-baseline justify-between border-b border-stone-200 pb-2 group-hover:border-[#754548] transition-colors duration-500">
-         <div className="flex flex-col">
-            <span className="font-serif text-2xl md:text-3xl text-stone-900 leading-none group-hover:italic transition-all">
+      {/* Meta Dados com Animação Restaurada */}
+      <div ref={textRef} className="flex items-baseline justify-between border-b border-stone-200 pb-2 group-hover:border-[#754548] transition-colors duration-500">
+         <div className="flex flex-col overflow-hidden">
+            <span className="font-serif text-2xl md:text-3xl text-stone-900 leading-none group-hover:italic transition-all duration-300 origin-left">
               {item.title}
             </span>
          </div>
-         <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400 group-hover:text-[#754548]">
+         <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400 group-hover:text-[#754548] transition-colors duration-300">
             {item.category}
          </span>
       </div>
@@ -76,7 +110,6 @@ const Portfolio: React.FC = () => {
               key={item.id} 
               className={`${item.colSpan}`}
             >
-              {/* Removemos o Reveal do container para deixar o ParallaxImage controlar a entrada via Mask */}
               <PortfolioItem item={item} />
             </div>
           ))}
