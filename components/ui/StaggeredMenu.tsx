@@ -1,1 +1,1 @@
-// This file is deprecated and can be deleted. The navigation logic is now inside components/layout/Navbar.tsx using the CardNav pattern.
+// DELETED: Deprecated
