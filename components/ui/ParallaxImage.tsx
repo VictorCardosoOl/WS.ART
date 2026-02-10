@@ -9,62 +9,66 @@ interface ParallaxImageProps {
   alt: string;
   className?: string;
   priority?: boolean;
+  aspectRatio?: string; // ex: "aspect-[3/4]"
 }
 
-const ParallaxImage: React.FC<ParallaxImageProps> = ({ src, alt, className = "", priority = false }) => {
+const ParallaxImage: React.FC<ParallaxImageProps> = ({ 
+  src, 
+  alt, 
+  className = "", 
+  priority = false,
+  aspectRatio = "aspect-[3/4]"
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       if (!containerRef.current || !imgRef.current) return;
 
+      // Configuração refinada para movimento ultra-suave
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top bottom", // Começa quando o topo do container entra na tela
-          end: "bottom top",   // Termina quando sai
-          scrub: true,         // Movimento atrelado ao scroll
+          start: "top bottom", // Começa assim que o topo do container entra na tela (em baixo)
+          end: "bottom top",   // Termina quando o fundo sai (em cima)
+          scrub: 1.2,          // Inércia aumentada para sensação de "peso" e elegância
         }
       });
 
-      // 1. ANIMAÇÃO DE PARALLAX (VERTICAL)
-      // A imagem se move no eixo Y para criar profundidade
-      tl.fromTo(imgRef.current, 
-        { yPercent: -15 }, 
-        { yPercent: 15, ease: "none" },
-        0
-      );
-
-      // 2. ANIMAÇÃO DE SCALE (ZOOM OUT)
-      // A imagem começa com Zoom (1.4) e diminui para (1.1)
-      // Mantemos 1.1 para evitar bordas brancas durante o parallax
+      // 1. ZOOM OUT (A imagem começa grande e se acomoda)
+      // Escala de 1.25 para 1.05 (mantendo 1.05 para evitar bordas brancas no movimento Y)
       tl.fromTo(imgRef.current,
-        { scale: 1.4 },
-        { scale: 1.1, ease: "none" },
+        { scale: 1.25 },
+        { scale: 1.05, ease: "power1.inOut" }, 
         0
       );
 
-      // 3. REVEAL (CLIP PATH) - Separado do ScrollTrigger principal para ter controle de Trigger diferente
-      // Queremos que a imagem "abra" assim que entrar na tela, não durante todo o scroll
-      gsap.fromTo(containerRef.current,
-        { 
-          clipPath: "inset(15% 10% 15% 10% round 2px)", // Começa fechada
-          filter: "brightness(0.8)" // Levemente escura
-        },
-        {
-          clipPath: "inset(0% 0% 0% 0% round 0px)", // Abre totalmente
-          filter: "brightness(1)",
-          duration: 1.5,
-          ease: "power3.out", // Curva elegante
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 85%", // Aciona quando o topo está a 85% da tela
-            toggleActions: "play none none reverse"
-          }
-        }
+      // 2. PARALLAX Y (Deslocamento vertical oposto ao scroll)
+      tl.fromTo(imgRef.current,
+        { yPercent: -12 },
+        { yPercent: 12, ease: "none" },
+        0
       );
+
+      // 3. Reveal Inicial (Clip Path) - Apenas uma vez
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top 85%",
+        once: true, // Executa apenas uma vez para não ficar piscando
+        onEnter: () => {
+             gsap.to(containerRef.current, {
+                 clipPath: "inset(0% 0% 0% 0% round 0px)",
+                 duration: 1.4,
+                 ease: "expo.out"
+             });
+             gsap.to(imgRef.current, {
+                 filter: "brightness(1) grayscale(0%)", // Remove o filtro inicial
+                 duration: 1.4,
+                 ease: "power2.out"
+             });
+        }
+      });
 
     }, containerRef);
 
@@ -74,24 +78,21 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({ src, alt, className = "",
   return (
     <div 
       ref={containerRef} 
-      className={`relative w-full h-full overflow-hidden will-change-transform ${className}`}
-      // Clip-path inicial inline para evitar flash
-      style={{ clipPath: "inset(15% 10% 15% 10% round 2px)" }}
+      className={`relative w-full overflow-hidden bg-stone-100 ${aspectRatio} ${className}`}
+      // Estado inicial fechado e com filtro para o reveal
+      style={{ clipPath: "inset(5% 5% 5% 5% round 4px)" }}
     >
       <img
         ref={imgRef}
         src={src}
         alt={alt}
         className="w-full h-full object-cover will-change-transform"
+        style={{ filter: "brightness(0.9) grayscale(20%)" }} // Estilo inicial
         loading={priority ? "eager" : "lazy"}
         decoding="async"
       />
-      
-      {/* Camada de Overlay para atmosfera cinematográfica */}
-      <div 
-        ref={overlayRef}
-        className="absolute inset-0 bg-[#1c1917]/10 mix-blend-multiply pointer-events-none" 
-      />
+      {/* Overlay de granulação sutil para textura */}
+      <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none mix-blend-overlay"></div>
     </div>
   );
 };

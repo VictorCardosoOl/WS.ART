@@ -1,138 +1,176 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import Reveal from '../ui/Reveal';
-import { GridGalleryItem } from '../../types';
 import { PORTFOLIO_ITEMS } from '../../data/portfolio';
 import ParallaxImage from '../ui/ParallaxImage';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ArrowRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PortfolioItem = ({ item }: { item: GridGalleryItem }) => {
-  const textRef = useRef<HTMLDivElement>(null);
+interface PortfolioItemProps {
+  item: any;
+  index: number;
+}
+
+const PortfolioItem: React.FC<PortfolioItemProps> = ({ item, index }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const numberRef = useRef<HTMLSpanElement>(null);
+
+  // Define layout classes based on item configuration
+  const layoutClasses = {
+      left: "mr-auto md:ml-12 lg:ml-24",
+      right: "ml-auto md:mr-12 lg:mr-24",
+      center: "mx-auto"
+  };
+  
+  const widthClasses = {
+      left: "w-full md:w-[85%] lg:w-[70%]", // Mais estreito
+      right: "w-full md:w-[85%] lg:w-[70%]",
+      center: "w-full md:w-[95%] lg:w-[90%]" // Cinematic Wide
+  };
+
+  const currentLayout = (item.offsetY || 'center') as keyof typeof layoutClasses;
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-        // Animação dos textos (Título e Categoria)
-        // Eles surgem de baixo para cima APÓS a imagem começar a aparecer
-        const texts = textRef.current?.children;
-        
-        if (texts) {
-            gsap.fromTo(texts, 
-                { y: 30, opacity: 0 },
-                { 
-                    y: 0, 
-                    opacity: 1, 
-                    duration: 0.8, 
-                    stagger: 0.1, 
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: "top 75%", // Aciona quando a imagem já está bem visível
-                        toggleActions: "play none none reverse"
-                    }
-                }
-            );
-        }
-    }, containerRef);
-    return () => ctx.revert();
+      const ctx = gsap.context(() => {
+          if(!containerRef.current) return;
+
+          // Parallax sutil no Número (01, 02...)
+          gsap.to(numberRef.current, {
+              yPercent: 40,
+              ease: "none",
+              scrollTrigger: {
+                  trigger: containerRef.current,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: 1
+              }
+          });
+
+          // Texto deslizando suavemente
+          if (textRef.current) {
+              gsap.fromTo(textRef.current,
+                  { y: 50, opacity: 0 },
+                  { 
+                      y: 0, 
+                      opacity: 1, 
+                      duration: 1,
+                      ease: "power3.out",
+                      scrollTrigger: {
+                          trigger: textRef.current,
+                          start: "top 90%",
+                          toggleActions: "play none none reverse"
+                      }
+                  }
+              );
+          }
+
+      }, containerRef);
+      return () => ctx.revert();
   }, []);
 
   return (
-    <div ref={containerRef} className={`group relative w-full flex flex-col ${item.offsetY}`}>
-      
-      {/* Container da Imagem - O ParallaxImage cuida do zoom e reveal */}
-      <div className={`relative w-full ${item.height} mb-6 shadow-sm overflow-hidden`}>
-        <ParallaxImage 
-          src={item.src} 
-          alt={item.altText} 
-          priority={false} 
-        />
+    <div ref={containerRef} className={`relative mb-32 md:mb-56 group ${widthClasses[currentLayout]} ${layoutClasses[currentLayout]}`}>
         
-        {/* Floating Tag Interativa */}
-        <div className="absolute top-4 right-4 z-20 overflow-hidden">
-             <div className="bg-white/90 backdrop-blur px-4 py-2 opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out rounded-full shadow-lg">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">Ver Detalhes</span>
+        {/* Número Decorativo Gigante (Parallax Background) */}
+        <div className="absolute -top-12 md:-top-24 -left-4 md:-left-12 z-0 overflow-hidden mix-blend-multiply opacity-[0.06] pointer-events-none select-none">
+            <span ref={numberRef} className="block text-[150px] md:text-[250px] font-serif leading-none text-[#754548]">
+                0{index + 1}
+            </span>
+        </div>
+
+        {/* Bloco de Imagem */}
+        <div className="relative z-10">
+            <ParallaxImage 
+                src={item.src} 
+                alt={item.altText} 
+                aspectRatio={item.height}
+            />
+        </div>
+
+        {/* Bloco de Informação (Sobreposto ou Lateral dependendo do layout) */}
+        <div ref={textRef} className={`
+            flex flex-col md:flex-row md:items-end justify-between gap-6 mt-8 md:mt-12
+            ${currentLayout === 'center' ? 'md:px-12' : ''}
+        `}>
+            {/* Título e Categoria */}
+            <div>
+                <div className="flex items-center gap-4 mb-3">
+                    <span className="h-[1px] w-8 bg-[#754548]"></span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#754548]">
+                        {item.category} — {item.year}
+                    </span>
+                </div>
+                <h3 className="text-4xl md:text-6xl font-serif text-stone-900 leading-none">
+                    {item.title}
+                </h3>
+            </div>
+
+            {/* Botão / Link */}
+            <div className="md:text-right">
+                 <button className="group/btn flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-colors">
+                    Ver Projeto
+                    <div className="w-8 h-8 rounded-full border border-stone-200 flex items-center justify-center group-hover/btn:border-[#754548] group-hover/btn:bg-[#754548] group-hover/btn:text-white transition-all">
+                        <ArrowRight size={14} className="group-hover/btn:-rotate-45 transition-transform duration-300" />
+                    </div>
+                 </button>
             </div>
         </div>
-      </div>
 
-      {/* Meta Dados com Animação Restaurada */}
-      <div ref={textRef} className="flex items-baseline justify-between border-b border-stone-200 pb-2 group-hover:border-[#754548] transition-colors duration-500">
-         <div className="flex flex-col overflow-hidden">
-            <span className="font-serif text-2xl md:text-3xl text-stone-900 leading-none group-hover:italic transition-all duration-300 origin-left">
-              {item.title}
-            </span>
-         </div>
-         <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400 group-hover:text-[#754548] transition-colors duration-300">
-            {item.category}
-         </span>
-      </div>
     </div>
   );
 };
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="gallery" className="relative pt-32 pb-48 bg-white overflow-hidden">
+    <section id="gallery" className="relative pt-32 pb-32 bg-[#FAF7F7] overflow-hidden">
       
-      {/* Background Decorativo */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[radial-gradient(circle,_rgba(117,69,72,0.03)_0%,_transparent_70%)] blur-[80px] pointer-events-none z-0"></div>
-
-      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
-        
-        {/* Header com Design Editorial */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 md:mb-40">
-          <Reveal>
-             <h2 className="text-6xl md:text-[8vw] font-serif text-stone-900 leading-[0.8] tracking-tighter">
-               Acervo<br/>
-               <span className="italic text-[#754548] opacity-80 ml-12">Selecionado</span>
-             </h2>
-          </Reveal>
-          
-          <Reveal delay={200}>
-            <div className="mt-12 md:mt-0 max-w-xs text-right">
-              <p className="text-stone-500 text-xs leading-relaxed uppercase tracking-wide mb-4">
-                [ Arquivo 2023 — 2024 ]
-              </p>
-              <p className="text-stone-400 font-serif text-lg italic">
-                Uma curadoria de narrativas visuais<br/> eternizadas na pele.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Grid Assimétrico */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-8 gap-y-24">
-          {PORTFOLIO_ITEMS.map((item, index) => (
-            <div 
-              key={item.id} 
-              className={`${item.colSpan}`}
-            >
-              <PortfolioItem item={item} />
-            </div>
-          ))}
-        </div>
-        
-        {/* Footer Link Minimalista */}
-        <div className="mt-40 text-center">
-           <Reveal>
-             <a href="https://instagram.com" className="group inline-flex items-center gap-4 cursor-none" data-cursor="Instagram">
-               <span className="w-12 h-[1px] bg-stone-300 group-hover:w-24 group-hover:bg-[#754548] transition-all duration-500"></span>
-               <span className="font-serif italic text-2xl text-stone-500 group-hover:text-stone-900 transition-colors">Explorar arquivo completo</span>
-               <span className="w-12 h-[1px] bg-stone-300 group-hover:w-24 group-hover:bg-[#754548] transition-all duration-500"></span>
-             </a>
-           </Reveal>
-        </div>
-
+      {/* Elemento Sticky Lateral (Apenas Desktop) */}
+      <div className="hidden xl:block fixed top-1/2 left-8 -translate-y-1/2 z-10 mix-blend-difference pointer-events-none">
+         <div className="flex items-center gap-6 -rotate-90 origin-left">
+             <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400 whitespace-nowrap">
+                 Acervo Selecionado
+             </span>
+             <div className="w-16 h-[1px] bg-stone-400"></div>
+         </div>
       </div>
 
-      {/* SEPARATOR: ORGANIC CURVE */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10 opacity-30">
-        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[60px] md:h-[120px] fill-[#754548]">
-            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="transform scale-y-[-1] origin-center"></path>
-        </svg>
+      <div className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-24 relative z-20">
+        
+        {/* Header Minimalista */}
+        <div className="mb-32 md:mb-48 border-b border-[#754548]/20 pb-12 flex flex-col md:flex-row justify-between items-end">
+            <div className="max-w-2xl">
+                 <h2 className="text-5xl md:text-8xl font-serif text-stone-900 leading-[0.85] tracking-tight">
+                    Corpo &<br/>
+                    <span className="italic text-[#754548] ml-12">Narrativa</span>
+                 </h2>
+            </div>
+            <div className="mt-8 md:mt-0 text-right">
+                <p className="text-stone-500 font-sans text-xs tracking-widest uppercase mb-2">
+                    [ Atualização: Out 2024 ]
+                </p>
+                <p className="text-stone-900 font-serif italic text-xl">
+                    Obras Autorais
+                </p>
+            </div>
+        </div>
+
+        {/* Lista de Projetos */}
+        <div className="flex flex-col w-full">
+            {PORTFOLIO_ITEMS.map((item, index) => (
+                <PortfolioItem key={item.id} item={item} index={index} />
+            ))}
+        </div>
+
+        {/* Footer Link */}
+        <div className="mt-20 md:mt-40 text-center flex flex-col items-center">
+             <div className="h-24 w-[1px] bg-stone-300 mb-8"></div>
+             <a href="https://instagram.com" className="text-2xl md:text-4xl font-serif italic text-stone-400 hover:text-[#754548] transition-colors duration-500">
+                Ver arquivo completo no Instagram
+             </a>
+        </div>
+
       </div>
     </section>
   );
