@@ -1,18 +1,13 @@
-import { GridGalleryItem } from '../types';
+import { PortfolioItem } from '../types';
 
-// Extendemos a interface temporariamente aqui ou assumimos que o componente lidará com os campos extras
-// Vamos usar os campos existentes de forma criativa:
-// height -> aspectRatio
-// offsetY -> layoutType (left, right, center)
-
-export const PORTFOLIO_ITEMS: any[] = [
+export const PORTFOLIO_ITEMS: PortfolioItem[] = [
   { 
     id: 1, 
     src: "https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=1200&auto=format&fit=crop", 
     category: "Anatomy Flow", 
     title: "Spine Composition", 
-    height: "aspect-[3/4]", // Vertical Portrait
-    offsetY: "right", // Alinhamento
+    height: "aspect-[3/4]", 
+    offsetY: "right", 
     altText: "Tatuagem fluida nas costas",
     year: "2024"
   },
@@ -21,7 +16,7 @@ export const PORTFOLIO_ITEMS: any[] = [
     src: "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=1200&auto=format&fit=crop", 
     category: "Neotraditional", 
     title: "Ethereal Flora", 
-    height: "aspect-[16/10]", // Landscape Cinematic
+    height: "aspect-[16/10]", 
     offsetY: "center",
     altText: "Tatuagem floral no ombro",
     year: "2023"

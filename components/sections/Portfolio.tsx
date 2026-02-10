@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import { PORTFOLIO_ITEMS } from '../../data/portfolio';
+import { PortfolioItem as PortfolioItemType } from '../../types';
 import ParallaxImage from '../ui/ParallaxImage';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -8,7 +9,7 @@ import { ArrowRight } from 'lucide-react';
 gsap.registerPlugin(ScrollTrigger);
 
 interface PortfolioItemProps {
-  item: any;
+  item: PortfolioItemType;
   index: number;
 }
 
@@ -17,7 +18,6 @@ const PortfolioItem: React.FC<PortfolioItemProps> = ({ item, index }) => {
   const textRef = useRef<HTMLDivElement>(null);
   const numberRef = useRef<HTMLSpanElement>(null);
 
-  // Define layout classes based on item configuration
   const layoutClasses = {
       left: "mr-auto md:ml-12 lg:ml-24",
       right: "ml-auto md:mr-12 lg:mr-24",
@@ -25,30 +25,32 @@ const PortfolioItem: React.FC<PortfolioItemProps> = ({ item, index }) => {
   };
   
   const widthClasses = {
-      left: "w-full md:w-[85%] lg:w-[70%]", // Mais estreito
+      left: "w-full md:w-[85%] lg:w-[70%]",
       right: "w-full md:w-[85%] lg:w-[70%]",
-      center: "w-full md:w-[95%] lg:w-[90%]" // Cinematic Wide
+      center: "w-full md:w-[95%] lg:w-[90%]"
   };
 
-  const currentLayout = (item.offsetY || 'center') as keyof typeof layoutClasses;
+  const currentLayout = item.offsetY || 'center';
 
   useLayoutEffect(() => {
       const ctx = gsap.context(() => {
           if(!containerRef.current) return;
 
-          // Parallax sutil no Número (01, 02...)
-          gsap.to(numberRef.current, {
-              yPercent: 40,
-              ease: "none",
-              scrollTrigger: {
-                  trigger: containerRef.current,
-                  start: "top bottom",
-                  end: "bottom top",
-                  scrub: 1
-              }
-          });
+          // Parallax for Background Number
+          if (numberRef.current) {
+            gsap.to(numberRef.current, {
+                yPercent: 40,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 1
+                }
+            });
+          }
 
-          // Texto deslizando suavemente
+          // Text Reveal Animation
           if (textRef.current) {
               gsap.fromTo(textRef.current,
                   { y: 50, opacity: 0 },
@@ -73,14 +75,14 @@ const PortfolioItem: React.FC<PortfolioItemProps> = ({ item, index }) => {
   return (
     <div ref={containerRef} className={`relative mb-32 md:mb-56 group ${widthClasses[currentLayout]} ${layoutClasses[currentLayout]}`}>
         
-        {/* Número Decorativo Gigante (Parallax Background) */}
+        {/* Decorative Number */}
         <div className="absolute -top-12 md:-top-24 -left-4 md:-left-12 z-0 overflow-hidden mix-blend-multiply opacity-[0.06] pointer-events-none select-none">
             <span ref={numberRef} className="block text-[150px] md:text-[250px] font-serif leading-none text-[#754548]">
-                0{index + 1}
+                {String(index + 1).padStart(2, '0')}
             </span>
         </div>
 
-        {/* Bloco de Imagem */}
+        {/* Image Block */}
         <div className="relative z-10">
             <ParallaxImage 
                 src={item.src} 
@@ -89,12 +91,11 @@ const PortfolioItem: React.FC<PortfolioItemProps> = ({ item, index }) => {
             />
         </div>
 
-        {/* Bloco de Informação (Sobreposto ou Lateral dependendo do layout) */}
+        {/* Info Block */}
         <div ref={textRef} className={`
             flex flex-col md:flex-row md:items-end justify-between gap-6 mt-8 md:mt-12
             ${currentLayout === 'center' ? 'md:px-12' : ''}
         `}>
-            {/* Título e Categoria */}
             <div>
                 <div className="flex items-center gap-4 mb-3">
                     <span className="h-[1px] w-8 bg-[#754548]"></span>
@@ -107,7 +108,6 @@ const PortfolioItem: React.FC<PortfolioItemProps> = ({ item, index }) => {
                 </h3>
             </div>
 
-            {/* Botão / Link */}
             <div className="md:text-right">
                  <button className="group/btn flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-colors">
                     Ver Projeto
@@ -126,7 +126,7 @@ const Portfolio: React.FC = () => {
   return (
     <section id="gallery" className="relative pt-32 pb-32 bg-[#FAF7F7] overflow-hidden">
       
-      {/* Elemento Sticky Lateral (Apenas Desktop) */}
+      {/* Sticky Sidebar (Desktop Only) */}
       <div className="hidden xl:block fixed top-1/2 left-8 -translate-y-1/2 z-10 mix-blend-difference pointer-events-none">
          <div className="flex items-center gap-6 -rotate-90 origin-left">
              <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400 whitespace-nowrap">
@@ -138,7 +138,7 @@ const Portfolio: React.FC = () => {
 
       <div className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-24 relative z-20">
         
-        {/* Header Minimalista */}
+        {/* Header */}
         <div className="mb-32 md:mb-48 border-b border-[#754548]/20 pb-12 flex flex-col md:flex-row justify-between items-end">
             <div className="max-w-2xl">
                  <h2 className="text-5xl md:text-8xl font-serif text-stone-900 leading-[0.85] tracking-tight">
@@ -156,7 +156,7 @@ const Portfolio: React.FC = () => {
             </div>
         </div>
 
-        {/* Lista de Projetos */}
+        {/* Portfolio List */}
         <div className="flex flex-col w-full">
             {PORTFOLIO_ITEMS.map((item, index) => (
                 <PortfolioItem key={item.id} item={item} index={index} />

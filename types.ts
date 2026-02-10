@@ -1,20 +1,14 @@
 import React from 'react';
 
-export interface GalleryItem {
+export interface PortfolioItem {
   id: number;
   src: string;
   category: string;
   title: string;
-}
-
-// Expanded type for grid control with specific SEO alt text
-export interface GridGalleryItem extends GalleryItem {
-  colSpan: string; // Tailwind class like "md:col-span-6"
-  height: string; // Tailwind class like "h-[600px]" or aspect ratio
-  offsetY?: string; // CSS translation for staggered layout
-  altText: string; // Descriptive text for SEO/Accessibility
-  description?: string; // New field: Short editorial description for hover state
-  enableOverlay?: boolean; // Se true, o texto aparece sobre a imagem
+  height: string; // Expecting tailwind aspect ratio classes e.g., "aspect-[3/4]"
+  offsetY?: 'left' | 'right' | 'center';
+  altText: string;
+  year: string;
 }
 
 export interface FormData {
@@ -26,4 +20,17 @@ export interface FormData {
   description: string;
   referenceFile: File | null;
   agreeToDeposit: boolean;
+}
+
+export interface ServiceItem {
+  id: string;
+  title: string;
+  description: string;
+  details: string;
+  image: string;
+}
+
+export interface FaqItem {
+  q: string;
+  a: string;
 }

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import SplitText from './SplitText';
 
@@ -9,28 +9,24 @@ interface PreloaderProps {
 const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const percentRef = useRef<HTMLSpanElement>(null);
-  
-  // Estado local apenas para garantir renderização, o valor é controlado via DOM/GSAP
-  const [progress, setProgress] = useState(0);
 
   useLayoutEffect(() => {
+    // Lock scroll immediately
+    document.body.style.overflow = 'hidden';
+
     const ctx = gsap.context(() => {
-      // Bloqueia o scroll durante a entrada
-      document.body.style.overflow = 'hidden';
-      
       const tl = gsap.timeline({
         onComplete: () => {
-          // Desbloqueia scroll e desmonta
-          document.body.style.overflow = '';
-          onComplete();
+            // Safety unlock is handled in cleanup, but we call onComplete here
+            onComplete();
         }
       });
 
-      // 1. Animação do Contador (0 a 100)
+      // 1. Counter Animation
       const counterObj = { value: 0 };
       tl.to(counterObj, {
         value: 100,
-        duration: 2.5, // Tempo de "carregamento" simulado
+        duration: 2.5,
         ease: "power2.out",
         onUpdate: () => {
           if (percentRef.current) {
@@ -39,16 +35,16 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         }
       });
 
-      // 2. Animação do Texto de Intro (Entrada)
+      // 2. Text Intro
       tl.to(".preloader-char", {
         y: 0,
         opacity: 1,
         stagger: 0.05,
         duration: 1,
         ease: "power3.out"
-      }, "<"); // Começa junto com o contador
+      }, "<"); 
 
-      // 3. Saída dos Elementos Internos (Fade Out e Slide Up leve)
+      // 3. Exit Elements
       tl.to([".preloader-text", ".preloader-counter"], {
         y: -50,
         opacity: 0,
@@ -57,19 +53,23 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         delay: 0.2
       });
 
-      // 4. THE GRAND ENTRANCE (A Cortina Sobe)
+      // 4. Reveal App
       tl.to(containerRef.current, {
-        yPercent: -100, // Desliza todo o container para cima
+        yPercent: -100,
         duration: 1.5,
-        ease: "power4.inOut", // Curva "pesada" e elegante
-      }, "-=0.2"); // Começa um pouco antes do fade out terminar
+        ease: "power4.inOut", 
+      }, "-=0.2"); 
 
-      // 5. Cleanup (Display none para garantir que não bloqueie clicks se algo falhar)
+      // 5. Hide completely
       tl.set(containerRef.current, { display: "none" });
 
     }, containerRef);
 
-    return () => ctx.revert();
+    // ROBUST CLEANUP: Ensure scroll is unlocked even if unmounted mid-animation
+    return () => {
+        document.body.style.overflow = '';
+        ctx.revert();
+    };
   }, [onComplete]);
 
   return (
@@ -77,7 +77,6 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       ref={containerRef}
       className="fixed inset-0 z-[9999] bg-[#12100E] flex flex-col items-center justify-center text-[#F2E8E9] w-full h-full"
     >
-      {/* Container Central do Texto */}
       <div className="preloader-text overflow-hidden mb-4 relative z-10 px-6">
         <h1 className="font-serif text-3xl md:text-5xl italic font-light tracking-wide text-center leading-tight mix-blend-difference">
           <SplitText 
@@ -89,7 +88,6 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         </h1>
       </div>
 
-      {/* Contador no Canto Inferior Direito */}
       <div className="preloader-counter absolute bottom-8 right-8 md:bottom-12 md:right-12 flex items-end gap-1 overflow-hidden">
           <span 
             ref={percentRef} 
@@ -102,14 +100,12 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           </span>
       </div>
 
-      {/* Assinatura no Canto Inferior Esquerdo */}
       <div className="preloader-counter absolute bottom-8 left-8 md:bottom-12 md:left-12 opacity-50">
           <span className="font-sans text-[10px] font-bold tracking-widest uppercase text-stone-600">
               William Siqueira © 2024
           </span>
       </div>
 
-      {/* Grain Overlay para Textura */}
       <div className="absolute inset-0 opacity-[0.08] pointer-events-none bg-noise animate-grain mix-blend-overlay"></div>
     </div>
   );

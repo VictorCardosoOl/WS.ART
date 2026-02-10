@@ -42,22 +42,19 @@ const Process: React.FC = () => {
     }
   }, [activeStep]);
 
+  // Guard clause to prevent crashes if index is out of bounds
+  const currentStep = steps[activeStep] || steps[0];
+
   return (
     <section className="relative py-32 md:py-48 overflow-hidden" id="process">
       
-      {/* --- BACKGROUND ARTISTRY (Ink Wash Paper) --- */}
+      {/* Background Layer */}
       <div className="absolute inset-0 bg-[#F2E8E9] z-0"></div>
-      
-      {/* Top Gradient Fade */}
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FAF7F7] to-transparent z-1"></div>
-
-      {/* Abstract Ink Blot 1 */}
       <div className="absolute top-20 right-[-10%] w-[800px] h-[800px] bg-[radial-gradient(circle,_rgba(117,69,72,0.08)_0%,_transparent_60%)] blur-[100px] pointer-events-none z-0"></div>
-      
-      {/* Abstract Ink Blot 2 */}
       <div className="absolute bottom-20 left-[-10%] w-[600px] h-[600px] bg-[radial-gradient(circle,_rgba(28,25,23,0.04)_0%,_transparent_60%)] blur-[80px] pointer-events-none z-0"></div>
 
-      {/* Hand Drawn Decorative Line */}
+      {/* Decorative Line (SVG Filtered) */}
       <div className="absolute top-0 right-[20%] w-[2px] h-full opacity-10 hidden lg:block z-0 overflow-hidden">
          <svg height="100%" width="20" preserveAspectRatio="none">
             <path d="M10,0 Q 20,400 0,1000" stroke="#754548" strokeWidth="2" fill="none" style={{ filter: 'url(#pencil-process)' }} />
@@ -78,7 +75,6 @@ const Process: React.FC = () => {
           <div className="w-full lg:w-1/2">
              <Reveal>
                <div className="flex items-center gap-4 mb-12">
-                   {/* Artistic Bullet */}
                    <div className="w-3 h-3 rounded-full border border-[#754548] bg-transparent"></div>
                    <span className="text-xs font-bold uppercase tracking-ultra text-[#754548]">O Processo Criativo</span>
                </div>
@@ -103,7 +99,7 @@ const Process: React.FC = () => {
                       }
                     }}
                  >
-                    {/* Active Indicator Line (Sketch Style) */}
+                    {/* Active Indicator */}
                     <div 
                         className={`absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-12 bg-[#754548] transition-all duration-300 ${activeStep === index ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}
                         style={{ maskImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 3 50\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1.5,0 Q0,25 3,50\' stroke=\'black\' stroke-width=\'3\' fill=\'none\'/%3E%3C/svg%3E")' }}
@@ -129,19 +125,19 @@ const Process: React.FC = () => {
           <div className="w-full lg:w-1/2 relative lg:h-[600px] flex items-center">
             <div className="w-full lg:sticky lg:top-32 lg:pl-12 border-l border-[#754548]/20">
                <div ref={contentRef} className="relative will-change-transform">
-                     {/* Background Number Watermark */}
+                     {/* Watermark Number */}
                      <span className="absolute -top-24 -left-16 text-[14rem] font-serif text-[#754548] opacity-[0.05] select-none pointer-events-none font-italic leading-none mix-blend-multiply">
-                        {steps[activeStep].id}
+                        {currentStep.id}
                      </span>
 
                      <h4 className="font-serif text-4xl md:text-6xl text-[#1c1917] mb-6 leading-none opacity-10 relative z-10" aria-hidden="true">
-                        {steps[activeStep].id}
+                        {currentStep.id}
                      </h4>
                      <h3 className="text-2xl font-serif text-[#1c1917] mb-6 relative z-10">
                         Detalhes da Etapa
                      </h3>
                      <p className="text-lg md:text-xl font-light text-stone-700 leading-relaxed font-serif relative z-10">
-                       {steps[activeStep].fullDesc}
+                       {currentStep.fullDesc}
                      </p>
                </div>
             </div>
@@ -150,7 +146,7 @@ const Process: React.FC = () => {
         </div>
       </div>
       
-      {/* Bottom transition to white */}
+      {/* Bottom Fade */}
       <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent"></div>
     </section>
   );

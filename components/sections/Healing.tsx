@@ -45,6 +45,10 @@ const phases = [
 const Healing: React.FC = () => {
   const [activePhase, setActivePhase] = useState<number>(1);
 
+  // Safe access to current phase data
+  const currentPhaseIndex = Math.max(0, Math.min(activePhase - 1, phases.length - 1));
+  const currentPhase = phases[currentPhaseIndex];
+
   return (
     <section className="py-24 md:py-32 bg-[#FAF7F7] relative overflow-hidden" id="healing">
       
@@ -85,7 +89,7 @@ const Healing: React.FC = () => {
                             <span className={`block text-[10px] font-bold uppercase tracking-widest mb-1 transition-colors ${
                                 activePhase === phase.id ? 'text-[#754548]' : 'text-stone-400'
                             }`}>
-                                Fase 0{phase.id}
+                                Fase {String(phase.id).padStart(2, '0')}
                             </span>
                             <span className={`block font-serif text-2xl md:text-3xl transition-colors ${
                                 activePhase === phase.id ? 'text-stone-900' : 'text-stone-400 group-hover:text-stone-600'
@@ -117,21 +121,21 @@ const Healing: React.FC = () => {
                     >
                         <div className="flex items-baseline gap-4 mb-8">
                              <span className="text-8xl font-serif text-stone-100 absolute -top-10 -left-6 select-none pointer-events-none z-[-1]">
-                                0{activePhase}
+                                {String(activePhase).padStart(2, '0')}
                              </span>
                              <h3 className="text-3xl md:text-5xl font-serif text-stone-900 leading-none">
-                                {phases[activePhase - 1].title}
+                                {currentPhase.title}
                              </h3>
                         </div>
 
                         <p className="text-lg text-stone-600 leading-relaxed font-light mb-10 border-l border-[#754548] pl-6 py-1">
-                            {phases[activePhase - 1].description}
+                            {currentPhase.description}
                         </p>
 
                         <div className="space-y-4">
                             <h4 className="text-xs font-bold uppercase tracking-widest text-[#754548] mb-6">Diretrizes da Fase</h4>
                             <ul className="space-y-4">
-                                {phases[activePhase - 1].guide.map((item, i) => (
+                                {currentPhase.guide.map((item, i) => (
                                     <li key={i} className="flex items-start gap-4 text-stone-600 text-sm md:text-base font-light">
                                         <div className="w-1.5 h-1.5 rounded-full bg-stone-300 mt-2 flex-shrink-0"></div>
                                         <span>{item}</span>
@@ -142,7 +146,7 @@ const Healing: React.FC = () => {
                     </motion.div>
                 </AnimatePresence>
                 
-                {/* Decorative Abstract Blobs for each phase background */}
+                {/* Decorative Abstract Blobs */}
                 <div className={`absolute top-0 right-0 w-64 h-64 rounded-full blur-[80px] opacity-30 transition-colors duration-1000 pointer-events-none
                     ${activePhase === 1 ? 'bg-rose-300' : activePhase === 2 ? 'bg-amber-100' : 'bg-blue-50'}
                 `}></div>
