@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SectionTitle from '../ui/SectionTitle';
 import { ArrowUpRight, MessageCircle, Instagram } from 'lucide-react';
 import Reveal from '../ui/Reveal';
+import BookingModal from '../ui/BookingModal';
 
 const BookingForm: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    // Alterado bg-[#1c1917] para bg-[#FAF7F7] (claro) e text-white para text-stone-900
     <section id="booking" className="py-32 md:py-48 bg-[#FAF7F7] text-stone-900 scroll-mt-20 relative overflow-hidden">
       
+      {/* Modal Component */}
+      <BookingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
       {/* Background Noise Texture (Subtil no claro) */}
       <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none"></div>
 
       <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
         
-        {/* Removido prop 'light' do SectionTitle para usar cores escuras padrão */}
         <SectionTitle subtitle="Contato" title="Inicie sua Jornada" align='left' />
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 mt-20 items-center">
@@ -27,7 +31,7 @@ const BookingForm: React.FC = () => {
                 </Reveal>
                 <Reveal delay={200}>
                     <p className="text-stone-600 text-lg md:text-xl leading-relaxed max-w-xl font-light">
-                        Atualmente, para garantir um atendimento mais próximo e dinâmico, toda a gestão de agenda e orçamentos é realizada diretamente via WhatsApp.
+                        Atualmente, para garantir um atendimento mais próximo e dinâmico, utilizamos nosso Concierge Digital para pré-avaliar seu projeto antes do contato direto.
                         <br/><br/>
                         Isso nos permite trocar referências visuais com agilidade e alinhar expectativas para o seu projeto exclusivo.
                     </p>
@@ -43,13 +47,11 @@ const BookingForm: React.FC = () => {
             {/* Coluna Direita: Cards de Ação */}
             <div className="flex flex-col gap-6">
                 
-                {/* WhatsApp Card (Primary) - Mantido Verde mas com sombra ajustada para fundo claro */}
+                {/* Concierge Card (Modal Trigger) */}
                 <Reveal delay={300} width="100%">
-                    <a 
-                        href="https://wa.me/5511999999999" 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="group relative block w-full bg-[#1c1917] text-white p-8 md:p-10 rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-xl shadow-stone-200"
+                    <button 
+                        onClick={() => setIsModalOpen(true)}
+                        className="group relative block w-full bg-[#1c1917] text-white p-8 md:p-10 rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-xl shadow-stone-200 text-left cursor-pointer"
                     >
                         {/* Ícone de fundo sutil */}
                         <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -57,21 +59,21 @@ const BookingForm: React.FC = () => {
                         </div>
                         
                         <div className="relative z-10 flex flex-col items-start h-full justify-between min-h-[160px]">
-                            <div className="bg-[#25D366] text-white p-3 rounded-full mb-4">
+                            <div className="bg-[#754548] text-white p-3 rounded-full mb-4">
                                 <MessageCircle size={32} />
                             </div>
                             <div>
-                                <h3 className="text-3xl font-bold font-sans tracking-tight mb-2">WhatsApp</h3>
+                                <h3 className="text-3xl font-bold font-sans tracking-tight mb-2">Concierge Digital</h3>
                                 <p className="text-stone-400 text-sm md:text-base font-medium">Orçamentos e Agendamento</p>
                             </div>
                             <div className="absolute bottom-8 right-8 bg-white text-stone-900 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest flex items-center gap-2 group-hover:pr-6 transition-all">
-                                Iniciar Conversa <ArrowUpRight size={14} />
+                                Iniciar Aplicação <ArrowUpRight size={14} />
                             </div>
                         </div>
-                    </a>
+                    </button>
                 </Reveal>
 
-                {/* Instagram Card (Secondary) - Ajustado para fundo claro (Borda visível) */}
+                {/* Instagram Card (Secondary) */}
                 <Reveal delay={400} width="100%">
                     <a 
                         href="https://instagram.com" 

@@ -7,6 +7,7 @@ import SmoothScroll from './components/layout/SmoothScroll';
 import ScrollToTop from './components/layout/ScrollToTop';
 import Preloader from './components/ui/Preloader';
 import AnimatedRoutes from './components/layout/AnimatedRoutes';
+import ThemeController from './components/layout/ThemeController';
 
 const App: React.FC = () => {
   // Estado para controlar a exibição do Preloader
@@ -26,11 +27,11 @@ const App: React.FC = () => {
       {loading && <Preloader onComplete={() => setLoading(false)} />}
       
       <SmoothScroll>
+        <ThemeController />
         <ScrollToTop />
-        <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden bg-white relative">
+        <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden relative transition-colors duration-700">
           
-          {/* Global Noise Overlay (Static) - OTIMIZADO */}
-          {/* A animação 'animate-grain' foi removida para melhorar drasticamente a performance do scroll */}
+          {/* Global Noise Overlay (Static) */}
           <div className="fixed inset-0 z-50 pointer-events-none mix-blend-overlay opacity-[0.05] overflow-hidden transform-gpu translate-z-0">
              <div className="absolute inset-0 w-full h-full bg-noise bg-repeat"></div>
           </div>

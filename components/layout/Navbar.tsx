@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useRef, useState, useEffect, useCallback } from
 import gsap from 'gsap';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
-import { useLenis } from './SmoothScroll'; // Importa o hook do Lenis
+import { useLenis } from './SmoothScroll'; 
 import './Navbar.css';
 
 interface NavLink {
@@ -28,10 +28,7 @@ const Navbar: React.FC = () => {
   const linksRef = useRef<HTMLDivElement[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   
-  // Acesso ao Lenis para controlar o scroll
   const lenis = useLenis();
-  
-  // Refs para lógica de scroll
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
   const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -57,14 +54,31 @@ const Navbar: React.FC = () => {
     }
   ];
 
+  // --- EASTER EGG: INVERT COLORS ---
+  const handleLogoClick = (e: React.MouseEvent) => {
+    // Se clicar 3 vezes (e.detail conta cliques rápidos consecutivos)
+    if (e.detail === 3) {
+      e.preventDefault();
+      const html = document.documentElement;
+      const currentFilter = html.style.filter;
+      
+      // Toggle Invert
+      if (currentFilter.includes('invert(1)')) {
+          gsap.to(html, { filter: 'invert(0)', duration: 0.5, ease: 'power2.out' });
+      } else {
+          gsap.to(html, { filter: 'invert(1)', duration: 0.5, ease: 'power2.out' });
+      }
+    }
+  };
+
   // --- TRAVAMENTO DE SCROLL ---
   useEffect(() => {
     if (isExpanded) {
-        lenis?.stop(); // Trava o scroll suave
-        document.body.style.overflow = 'hidden'; // Trava scroll nativo como fallback
+        lenis?.stop(); 
+        document.body.style.overflow = 'hidden'; 
     } else {
-        lenis?.start(); // Destrava o scroll suave
-        document.body.style.overflow = ''; // Destrava scroll nativo
+        lenis?.start(); 
+        document.body.style.overflow = ''; 
     }
     
     return () => {
@@ -75,7 +89,6 @@ const Navbar: React.FC = () => {
 
 
   // --- SMART NAVBAR LOGIC ---
-
   const resetInactivityTimer = useCallback(() => {
     if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
     if (isExpanded) return;
@@ -150,17 +163,12 @@ const Navbar: React.FC = () => {
   }, [isExpanded]);
 
   // --- ANIMATION LOGIC (HEAVY PHYSICS) ---
-
   const calculateAnimationValues = () => {
     const screenW = window.innerWidth;
     const isMobile = screenW <= 1024;
-    
-    // Dimensões Finais
     const finalWidth = isMobile ? Math.min(screenW * 0.92, 400) : Math.min(screenW * 0.95, 940);
     const finalHeight = isMobile ? Math.min(window.innerHeight * 0.7, 500) : 80;
-    
-    // Cálculos de Centralização X
-    const rightMargin = 32; // 2rem
+    const rightMargin = 32; 
     const xTranslation = rightMargin + (finalWidth / 2) - (screenW / 2);
 
     return { finalWidth, finalHeight, xTranslation, isMobile };
@@ -177,7 +185,6 @@ const Navbar: React.FC = () => {
 
     const tl = gsap.timeline({ paused: true });
 
-    // 1. ANIMAÇÃO PRINCIPAL (Container)
     tl.to(container, {
         width: finalWidth,
         height: finalHeight,
@@ -197,21 +204,18 @@ const Navbar: React.FC = () => {
         }
     });
 
-    // 2. MORPH DO BACKGROUND
     tl.to(bg, {
         borderRadius: isMobile ? "24px" : "999px",
         duration: 0.85,
         ease: "power4.inOut"
     }, "<");
 
-    // 3. CONTEÚDO
     tl.fromTo(content, 
         { autoAlpha: 0, y: 10 },
         { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
         "-=0.5"
     );
 
-    // 4. LINKS
     if (linksRef.current.length > 0) {
         tl.fromTo(linksRef.current,
             { opacity: 0, x: 20 },
@@ -224,12 +228,11 @@ const Navbar: React.FC = () => {
   };
 
   useLayoutEffect(() => {
-    if (isExpanded) toggleMenu(); // Close on route change
+    if (isExpanded) toggleMenu(); 
   }, [location.pathname]);
 
   const toggleMenu = () => {
     if (!isExpanded) {
-        // OPENING
         const tl = createTimeline();
         if (tl) {
             tlRef.current = tl;
@@ -239,7 +242,6 @@ const Navbar: React.FC = () => {
             tl.play();
         }
     } else {
-        // CLOSING
         setIsHamburgerOpen(false);
         if (tlRef.current) {
             tlRef.current.reverse().then(() => {
@@ -270,21 +272,20 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-        {/* 1. LOGO INDEPENDENTE (Fixado à Esquerda) */}
+        {/* LOGO (Com Easter Egg no click) */}
         <div className={`floating-logo ${!isVisible && !isExpanded ? 'nav-hidden' : ''}`}>
-             <Link to="/" className="brand-text">
+             <Link to="/" className="brand-text" onClick={handleLogoClick}>
                 W<span className="brand-dot">.</span>S
              </Link>
         </div>
 
-        {/* 2. MENU CONTAINER (Botão à Direita que expande) */}
+        {/* MENU CONTAINER */}
         <div 
             ref={navContainerRef} 
             className={`card-nav-container ${!isVisible && !isExpanded ? 'nav-hidden' : ''}`}
         >
           <nav ref={navBgRef} className={`card-nav ${isExpanded ? 'open' : ''}`}>
             
-            {/* Header interno do menu (apenas o botão X fica aqui visualmente) */}
             <div className="card-nav-top">
               <div
                 className={`hamburger-menu ${isHamburgerOpen ? 'open' : ''}`}
@@ -298,12 +299,9 @@ const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* Conteúdo dos Links (Centralizado) */}
             <div ref={contentRef} className="card-nav-content" aria-hidden={!isExpanded}>
-              
               {items.map((group, gIdx) => (
                 <React.Fragment key={gIdx}>
-                    {/* Grupo de Links */}
                     <div className="nav-card">
                         <p className="nav-card-label">{group.label}</p>
                         <div className="nav-card-links">
@@ -328,12 +326,9 @@ const Navbar: React.FC = () => {
                             })}
                         </div>
                     </div>
-                    
-                    {/* Divisor Visual */}
                     {gIdx < items.length - 1 && <div className="nav-divider"></div>}
                 </React.Fragment>
               ))}
-
             </div>
           </nav>
         </div>

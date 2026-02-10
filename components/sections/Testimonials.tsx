@@ -52,39 +52,29 @@ const Testimonials: React.FC = () => {
         
         mm.add("(min-width: 768px)", () => {
             const itemsCount = testimonials.length;
-            const scrollDistance = (itemsCount - 1) * 100; // Porcentagem para mover (ex: 300% para 4 itens)
+            const scrollDistance = (itemsCount - 1) * 100;
 
-            // Timeline Principal atrelada ao Scroll
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    pin: true, // Trava a seção na tela
+                    pin: true, 
                     start: "top top",
-                    end: "+=" + (itemsCount * 100) + "%", // Duração do scroll baseada na altura
-                    scrub: 1, // Suavidade (Inércia)
-                    // snap: 1 / (itemsCount - 1) // Opcional: Snapping nos slides
+                    end: "+=" + (itemsCount * 100) + "%", 
+                    scrub: 1, 
                 }
             });
 
-            // 1. COLUNA DIREITA (IMAGENS) - Sobe (Natural)
-            // Começa em 0 e vai para cima (-300vh)
+            // 1. COLUNA DIREITA (IMAGENS) - Sobe
             tl.to(rightColRef.current, {
                 y: -(window.innerHeight * (itemsCount - 1)),
                 ease: "none"
             }, 0);
 
-            // 2. COLUNA ESQUERDA (TEXTOS) - Desce (Reverso)
-            // Para vermos o Texto 1 inicialmente (que é o último no DOM da lista invertida ou o primeiro da lista normal?),
-            // Vamos usar a lista invertida no render [4, 3, 2, 1].
-            // O Item 1 está no Fundo (Bottom). Precisamos transladar para ver o fundo (-300vh).
-            // Ao rolar, transladamos para 0 (vendo o Topo, Item 4).
-            
-            // Set inicial: jogar container para cima para ver o último item (que é o #1 visualmente)
+            // 2. COLUNA ESQUERDA (TEXTOS) - Desce
             gsap.set(leftColRef.current, {
                  y: -(window.innerHeight * (itemsCount - 1))
             });
             
-            // Animação: trazer para 0 (baixo)
             tl.to(leftColRef.current, {
                 y: 0,
                 ease: "none"
@@ -95,19 +85,16 @@ const Testimonials: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
-  // Invertemos a ordem dos textos para o layout da coluna esquerda funcionar na lógica "Reverse"
-  // Visualmente queremos: Scroll Down -> Aparece Texto 2 vindo de CIMA.
-  // Para isso, Texto 2 deve estar ACIMA de Texto 1 no DOM.
-  // Stack: [4, 3, 2, 1]. (1 está em baixo).
   const reversedTextItems = [...testimonials].reverse();
 
   return (
-    <section ref={sectionRef} id="testimonials" className="relative h-screen bg-[#1c1917] overflow-hidden text-white">
+    // Removido bg-[#1c1917], adicionado data-theme="dark"
+    <section ref={sectionRef} id="testimonials" data-theme="dark" className="relative h-screen overflow-hidden text-white transition-colors duration-700">
         
         <div className="flex w-full h-full flex-col md:flex-row">
             
             {/* --- COLUNA ESQUERDA: TEXTOS (Desce ao rolar) --- */}
-            <div className="w-full md:w-1/2 h-full relative overflow-hidden order-2 md:order-1 bg-[#1c1917]">
+            <div className="w-full md:w-1/2 h-full relative overflow-hidden order-2 md:order-1">
                 <div ref={leftColRef} className="w-full absolute top-0 left-0">
                     {reversedTextItems.map((item) => (
                         <div key={item.id} className="h-screen w-full flex flex-col justify-center px-8 md:px-16 lg:px-24 border-r border-white/5 relative">
@@ -154,7 +141,7 @@ const Testimonials: React.FC = () => {
                              />
                              <div className="absolute inset-0 bg-[#1c1917]/20 mix-blend-multiply pointer-events-none"></div>
                              
-                             {/* Tag Project no canto da imagem */}
+                             {/* Tag Project */}
                              <div className="absolute bottom-12 left-12 z-20">
                                  <div className="bg-white/10 backdrop-blur-md border border-white/10 px-4 py-2 rounded-sm">
                                     <span className="text-[10px] font-bold uppercase tracking-widest text-white">
@@ -167,7 +154,7 @@ const Testimonials: React.FC = () => {
                 </div>
             </div>
 
-            {/* Elemento Decorativo Central (Círculo) - Estilo Wonderkin */}
+            {/* Elemento Decorativo Central */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vh] h-[60vh] border border-white/5 rounded-full pointer-events-none z-10 hidden md:block"></div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[58vh] h-[58vh] border border-white/5 rounded-full pointer-events-none z-10 hidden md:block border-dashed opacity-50 animate-[spin_60s_linear_infinite]"></div>
 

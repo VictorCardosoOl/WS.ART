@@ -5,7 +5,8 @@ import { ShieldCheck, Droplets, Mic2, Wind } from 'lucide-react';
 
 const Arsenal: React.FC = () => {
   return (
-    <section className="relative py-32 md:py-48 bg-[#0c0a09] text-stone-200 overflow-hidden">
+    // Removido bg-[#0c0a09], adicionado data-theme="dark"
+    <section data-theme="dark" className="relative py-32 md:py-48 text-stone-200 overflow-hidden transition-colors duration-700">
       
       {/* Background Texture: Subtle Noise */}
       <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none mix-blend-overlay"></div>
@@ -32,12 +33,12 @@ const Arsenal: React.FC = () => {
             </Reveal>
         </div>
 
-        {/* GRID: MATERIAIS (Clinical Chic) */}
+        {/* GRID: MATERIAIS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
             
             {/* Card 1: Tintas */}
             <Reveal width="100%" delay={100}>
-                <div className="group relative bg-[#1c1917] p-8 md:p-10 h-full border border-white/5 hover:border-[#754548]/30 transition-colors duration-500">
+                <div className="group relative bg-[#1c1917]/50 p-8 md:p-10 h-full border border-white/5 hover:border-[#754548]/30 transition-colors duration-500">
                     <div className="absolute top-8 right-8 text-stone-700 group-hover:text-[#754548] transition-colors">
                         <Droplets size={24} strokeWidth={1} />
                     </div>
@@ -52,7 +53,7 @@ const Arsenal: React.FC = () => {
 
             {/* Card 2: Agulhas */}
             <Reveal width="100%" delay={200}>
-                <div className="group relative bg-[#1c1917] p-8 md:p-10 h-full border border-white/5 hover:border-[#754548]/30 transition-colors duration-500">
+                <div className="group relative bg-[#1c1917]/50 p-8 md:p-10 h-full border border-white/5 hover:border-[#754548]/30 transition-colors duration-500">
                     <div className="absolute top-8 right-8 text-stone-700 group-hover:text-[#754548] transition-colors">
                         <ShieldCheck size={24} strokeWidth={1} />
                     </div>
@@ -65,7 +66,7 @@ const Arsenal: React.FC = () => {
                 </div>
             </Reveal>
 
-            {/* Card 3: Imagem Macro (Visual Break) */}
+            {/* Card 3: Imagem Macro */}
             <Reveal width="100%" delay={300}>
                 <div className="relative h-[300px] md:h-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
                     <ParallaxImage 
@@ -81,7 +82,7 @@ const Arsenal: React.FC = () => {
             </Reveal>
         </div>
 
-        {/* SECTION: ATMOSFERA (Set & Setting) */}
+        {/* SECTION: ATMOSFERA */}
         <div className="relative bg-[#12100E] rounded-sm overflow-hidden border border-white/5">
             <div className="grid grid-cols-1 lg:grid-cols-2">
                 
