@@ -16,8 +16,8 @@
   
   /* Estado Oculto (Smart Scroll) - Move para cima */
   .nav-hidden {
-    transform: translateY(-150%) !important;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(-200%) !important;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
   
   /* O container visual (Vidro) */
@@ -27,15 +27,15 @@
     height: 100%;
     padding: 0;
     
-    /* Glassmorphism */
-    background-color: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    /* Glassmorphism Refinado */
+    background-color: rgba(255, 255, 255, 0.85); /* Mais opaco para dar peso */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Borda sutil */
     
     /* Começa totalmente redondo (Botão) */
-    border-radius: 50%; 
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    border-radius: 999px; 
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1); /* Sombra mais pesada */
     
     position: relative;
     overflow: hidden;
@@ -46,28 +46,27 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 100%; /* No modo botão, isso é 60px */
+    width: 60px; /* Fixo na largura do botão original para alinhar o hamburguer */
     height: 60px;
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Ícone sempre à direita */
-    padding: 0; /* Padding controlado via JS ou fixo */
-    z-index: 2;
+    justify-content: center;
+    z-index: 20;
   }
   
   /* --- HAMBURGER ICON --- */
   .hamburger-menu {
-    height: 60px; /* Ocupa todo o botão inicialmente */
+    height: 60px;
     width: 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    gap: 5px;
+    gap: 6px; /* Espaçamento ajustado */
     transition: opacity 0.3s;
-    /* Garante que fique centralizado no botão fechado */
-    margin-left: auto; 
+    position: relative;
+    z-index: 30;
   }
   
   .hamburger-menu:hover {
@@ -75,20 +74,20 @@
   }
   
   .hamburger-line {
-    width: 20px;
+    width: 24px;
     height: 2px;
     background-color: #1c1917;
-    transition: transform 0.3s ease, width 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), width 0.3s ease;
     transform-origin: center;
   }
   
   /* Animação do X */
   .hamburger-menu.open .hamburger-line:first-child {
-    transform: translateY(3.5px) rotate(45deg);
+    transform: translateY(4px) rotate(45deg);
   }
   
   .hamburger-menu.open .hamburger-line:last-child {
-    transform: translateY(-3.5px) rotate(-45deg);
+    transform: translateY(-4px) rotate(-45deg);
   }
   
   /* --- LOGO INDEPENDENTE (CANTO SUPERIOR ESQUERDO) --- */
@@ -97,25 +96,25 @@
     top: 2rem;
     left: 2rem;
     z-index: 999;
-    padding: 0.8rem 1.5rem;
+    padding: 0.8rem 1.8rem;
     
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: 999px;
     
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
   }
   
   .floating-logo.nav-hidden {
-    transform: translateY(-200%);
+    transform: translateY(-250%);
   }
   
   .brand-text {
     font-family: "Cormorant Garamond", serif;
     font-size: 1.5rem;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: -0.02em;
     color: #1c1917;
     text-decoration: none;
@@ -130,83 +129,60 @@
   .card-nav-content {
     position: absolute;
     left: 0;
-    right: 0;
-    top: 70px;
-    bottom: 0;
-    padding: 0 2rem 2rem 2rem;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* Layout Flex para centralizar itens horizontalmente no Desktop */
     display: flex;
-    align-items: stretch;
-    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0 5rem 0 2rem; /* Padding right maior para não bater no X */
     
     /* Controlado via GSAP */
     opacity: 0; 
     visibility: hidden;
-    pointer-events: none;
+    pointer-events: none; /* Crucial: desativado quando fechado */
+  }
+
+  /* Quando aberto, o JS/GSAP ativa o pointer-events, mas garantimos aqui */
+  .card-nav.open .card-nav-content {
+      pointer-events: auto;
   }
   
-  /* CTA dentro do menu aberto */
-  .nav-cta-wrapper {
-      position: absolute;
-      left: 2rem;
-      top: 0;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      opacity: 0; /* Animado pelo GSAP */
-  }
-  
-  .card-nav-cta-button {
-    background-color: #1c1917;
-    color: #F2E8E9;
-    border: none;
-    border-radius: 999px;
-    padding: 0.6rem 1.4rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .card-nav-cta-button:hover {
-    background-color: #754548;
-    color: white;
-    transform: translateY(-1px);
-  }
-  
-  /* Cards Styles (Mantidos) */
+  /* Cards Styles (Agora mais minimalistas para caber na barra) */
   .nav-card {
-    height: 100%;
-    flex: 1 1 0;
-    min-width: 0;
-    border-radius: 0.75rem;
-    position: relative;
     display: flex;
-    flex-direction: column;
-    padding: 1.5rem;
-    gap: 1rem;
-    user-select: none;
+    flex-direction: row; /* Horizontal por padrão no desktop */
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.5rem 1rem;
+    height: auto;
+    background: transparent !important; /* Removemos fundos coloridos no desktop para visual "Barra" */
+    color: #1c1917 !important;
   }
   
   .nav-card-label {
-    font-family: "Cormorant Garamond", serif;
-    font-weight: 400;
-    font-size: 1.5rem;
-    font-style: italic;
-    opacity: 0.7;
-    margin-bottom: 0.5rem;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.4;
+    margin-bottom: 0;
+    display: none; /* Oculta labels de categoria no modo barra compacta, ou mantém se preferir */
   }
   
   .nav-card-links {
-    margin-top: auto;
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    flex-direction: row;
+    gap: 2rem;
+    margin-top: 0;
   }
   
   .nav-card-link {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -215,28 +191,53 @@
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    color: inherit;
-    opacity: 0.8;
+    gap: 6px;
+    color: #1c1917;
+    opacity: 0.7;
+    position: relative;
   }
   
+  .nav-card-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 1px;
+      background-color: #754548;
+      transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   .nav-card-link:hover {
     opacity: 1;
-    transform: translateX(4px);
+  }
+
+  .nav-card-link:hover::after {
+      width: 100%;
   }
   
   .nav-card-link-icon {
-    opacity: 0.5;
+    opacity: 0.3;
     transition: transform 0.3s;
+    width: 12px;
+    height: 12px;
   }
   
   .nav-card-link:hover .nav-card-link-icon {
     transform: translate(2px, -2px);
     opacity: 1;
+    color: #754548;
+  }
+
+  /* Divisor vertical entre grupos de links */
+  .nav-divider {
+      width: 1px;
+      height: 20px;
+      background-color: rgba(0,0,0,0.1);
   }
   
   /* Mobile Adjustments */
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     .card-nav-container {
         right: 1.5rem;
         top: 1.5rem;
@@ -245,27 +246,46 @@
     .floating-logo {
         left: 1.5rem;
         top: 1.5rem;
-        padding: 0.6rem 1.2rem;
+        padding: 0.6rem 1.4rem;
     }
   
     .brand-text {
-        font-size: 1.25rem;
+        font-size: 1.35rem;
     }
   
+    /* No Mobile, voltamos ao layout de lista/cards empilhados */
     .card-nav-content {
       flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
       height: auto;
-      padding: 0 1rem 1rem 1rem;
-      top: 70px;
+      padding: 6rem 2rem 2rem 2rem; /* Espaço para o header */
+      overflow-y: auto;
     }
   
     .nav-card {
-      min-height: 120px;
-      flex: none;
+      flex-direction: column;
+      align-items: flex-start;
       width: 100%;
+      padding: 1.5rem;
+      background-color: #FAF7F7 !important; /* Volta o fundo no mobile */
+      border-radius: 12px;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
     
-    .nav-cta-wrapper {
-        display: none; /* Simplificar no mobile */
+    .nav-card-label {
+        display: block; /* Mostra label no mobile */
+        color: #754548;
+        opacity: 1;
+    }
+
+    .nav-card-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-divider {
+        display: none;
     }
   }

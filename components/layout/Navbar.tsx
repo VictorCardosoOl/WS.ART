@@ -13,8 +13,6 @@ interface NavLink {
 
 interface NavItem {
   label: string;
-  bgColor: string;
-  textColor: string;
   links: NavLink[];
 }
 
@@ -25,7 +23,8 @@ const Navbar: React.FC = () => {
   
   const navContainerRef = useRef<HTMLDivElement>(null);
   const navBgRef = useRef<HTMLElement>(null);
-  const cardsRef = useRef<HTMLDivElement[]>([]);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const linksRef = useRef<HTMLDivElement[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   
   // Refs para lógica de scroll
@@ -38,30 +37,18 @@ const Navbar: React.FC = () => {
   const items: NavItem[] = [
     {
       label: "Navegação",
-      bgColor: "#FAF7F7",
-      textColor: "#1c1917",
       links: [
         { label: "Início", href: "/", ariaLabel: "Ir para Início" },
-        { label: "O Processo", href: "/processo", ariaLabel: "Ver Processo" }
-      ]
-    },
-    {
-      label: "Acervo",
-      bgColor: "#E5D0D4",
-      textColor: "#1c1917",
-      links: [
-        { label: "Portfólio", href: "/#gallery", ariaLabel: "Ver Portfólio" },
-        { label: "Flash Day", href: "/#flashday", ariaLabel: "Ver Flash Days" }
+        { label: "O Processo", href: "/processo", ariaLabel: "Ver Processo" },
+        { label: "Portfólio", href: "/#gallery", ariaLabel: "Ver Portfólio" }
       ]
     },
     {
       label: "Contato",
-      bgColor: "#1c1917",
-      textColor: "#FFFFFF",
       links: [
+        { label: "Flash Day", href: "/#flashday", ariaLabel: "Ver Flash Days" },
         { label: "WhatsApp", href: "https://wa.me/5511999999999", ariaLabel: "Contato WhatsApp", external: true },
-        { label: "Instagram", href: "https://instagram.com", ariaLabel: "Instagram", external: true },
-        { label: "E-mail", href: "mailto:contato@wsart.com", ariaLabel: "Enviar Email", external: true }
+        { label: "Agendar", href: "#booking", ariaLabel: "Agendar Sessão", external: false }
       ]
     }
   ];
@@ -141,89 +128,95 @@ const Navbar: React.FC = () => {
     };
   }, [isExpanded]);
 
-  // --- ANIMATION LOGIC ---
+  // --- ANIMATION LOGIC (HEAVY PHYSICS) ---
 
-  const calculateFinalDimensions = () => {
-    const isMobile = window.innerWidth <= 768;
-    const width = Math.min(900, window.innerWidth * 0.95);
+  const calculateAnimationValues = () => {
+    const screenW = window.innerWidth;
+    const isMobile = screenW <= 1024;
     
-    // Altura base (Header)
-    let height = 70; 
+    // Dimensões Finais
+    // Desktop: Pílula larga (ex: 800px) e baixa (ex: 80px)
+    // Mobile: Bloco quase tela cheia
+    const finalWidth = isMobile ? Math.min(screenW * 0.92, 400) : Math.min(screenW * 0.9, 850);
+    const finalHeight = isMobile ? Math.min(window.innerHeight * 0.7, 500) : 80;
     
-    // Altura do conteúdo
-    if (isMobile) {
-        // Mobile: Altura calculada com base nos itens empilhados
-        // Estimativa segura: 70px (header) + (140px * 3 cards) + paddings
-        // Vamos deixar 'auto' no GSAP calcular, mas precisamos de um valor para o fallback se necessário
-        height = window.innerHeight * 0.8; 
-    } else {
-        height = 280; // Altura desktop padrão
-    }
+    // Cálculos de Centralização X
+    // Posição Atual (Direita Fixa): right: 2rem (32px)
+    // O container está ancorado à direita. Ao crescer a largura, ele cresce para a esquerda.
+    // Centro Atual X = ScreenW - 32 - (60 / 2) = ScreenW - 62
+    // Centro Desejado X = ScreenW / 2
+    // Se animarmos width para finalWidth, o novo centro (sem translação) seria:
+    // ScreenW - 32 - (finalWidth / 2)
+    // A translação X necessária é: CentroDesejado - NovoCentroSemTranslação
+    // = (ScreenW / 2) - (ScreenW - 32 - finalWidth / 2)
+    // = (ScreenW / 2) - ScreenW + 32 + finalWidth / 2
+    // = 32 + (finalWidth / 2) - (ScreenW / 2)
     
-    return { width, height, isMobile };
+    const rightMargin = 32; // 2rem
+    const xTranslation = rightMargin + (finalWidth / 2) - (screenW / 2);
+
+    return { finalWidth, finalHeight, xTranslation, isMobile };
   };
 
   const createTimeline = () => {
     const container = navContainerRef.current;
     const bg = navBgRef.current;
-    if (!container || !bg) return null;
+    const content = contentRef.current;
 
-    // Reset initial states
-    // O container começa na direita (CSS right: 2rem).
-    // Precisamos calcular quanto mover em X para centralizá-lo na tela.
-    
-    const { width: finalWidth, height: finalHeight } = calculateFinalDimensions();
-    
-    // Cálculo do centro
-    const screenCenter = window.innerWidth / 2;
-    const currentRight = parseFloat(window.getComputedStyle(container).right) || 32;
-    const currentWidth = 60; // Botão inicial
-    
-    // A posição atual do centro do botão em relação à tela:
-    const buttonCenterX = window.innerWidth - currentRight - (currentWidth / 2);
-    
-    // Onde o centro do menu deve ficar:
-    const targetCenterX = screenCenter;
-    
-    // O deslocamento necessário (x)
-    const xOffset = targetCenterX - buttonCenterX;
+    if (!container || !bg || !content) return null;
+
+    const { finalWidth, finalHeight, xTranslation, isMobile } = calculateAnimationValues();
 
     const tl = gsap.timeline({ paused: true });
 
-    // 1. Expansão do Container (Button -> Menu)
+    // 1. ANIMAÇÃO PRINCIPAL (Container)
+    // Usamos 'x' para centralizar e width/height para expandir.
+    // Ease: "power4.inOut" ou customizado para dar sensação de peso.
     tl.to(container, {
         width: finalWidth,
         height: finalHeight,
-        x: xOffset, // Move para o centro
-        duration: 0.6,
-        ease: "power4.inOut" // Movimento sofisticado
+        x: xTranslation, 
+        duration: 0.85,
+        ease: "power4.inOut", // Sensação de peso e inércia
+        onStart: () => {
+             // Garante z-index máximo durante animação
+             gsap.set(container, { zIndex: 1000 });
+        },
+        onComplete: () => {
+             // ATIVA CLIQUES NO CONTEÚDO APÓS ABERTURA
+             gsap.set(content, { pointerEvents: "auto" });
+        },
+        onReverseComplete: () => {
+             gsap.set(content, { pointerEvents: "none" });
+             // Limpa props para garantir responsividade se redimensionar janela
+             gsap.set(container, { clearProps: "width,height,x,zIndex" });
+             gsap.set(bg, { clearProps: "borderRadius" });
+        }
     });
 
-    // 2. Morph do Background (Círculo -> Retângulo Arredondado)
+    // 2. MORPH DO BACKGROUND (Circular -> Pílula/Retângulo)
     tl.to(bg, {
-        borderRadius: "1rem",
-        duration: 0.6,
-        ease: "power3.inOut"
+        borderRadius: isMobile ? "24px" : "999px", // Pílula no desktop, arredondado no mobile
+        duration: 0.85,
+        ease: "power4.inOut"
     }, "<");
 
-    // 3. Revelar Conteúdo Interno
-    tl.to(".card-nav-content", {
-        autoAlpha: 1, // visibility + opacity
-        duration: 0.4
-    }, "-=0.3");
-
-    // 4. Stagger dos Cards (Entrada elegante)
-    tl.fromTo(cardsRef.current, 
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out" },
-        "-=0.2"
+    // 3. CONTEÚDO (Fade In + Slide Up Sutil)
+    // Começa um pouco depois do container começar a abrir
+    tl.fromTo(content, 
+        { autoAlpha: 0, y: 10 },
+        { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        "-=0.5" // Overlap forte
     );
 
-    // 5. Revelar o CTA interno (Desktop)
-    tl.to(".nav-cta-wrapper", {
-        opacity: 1,
-        duration: 0.3
-    }, "<");
+    // 4. LINKS (Stagger)
+    if (linksRef.current.length > 0) {
+        tl.fromTo(linksRef.current,
+            { opacity: 0, x: 20 },
+            { opacity: 1, x: 0, duration: 0.4, stagger: 0.03, ease: "power2.out" },
+            "-=0.4"
+        );
+    }
 
     return tl;
   };
@@ -232,10 +225,10 @@ const Navbar: React.FC = () => {
     if (isExpanded) toggleMenu(); // Close on route change
   }, [location.pathname]);
 
-  // Create timeline only when opening to capture current screen dimensions
   const toggleMenu = () => {
     if (!isExpanded) {
         // OPENING
+        // Sempre recria a timeline para pegar as dimensões atuais da tela
         const tl = createTimeline();
         if (tl) {
             tlRef.current = tl;
@@ -250,9 +243,6 @@ const Navbar: React.FC = () => {
         if (tlRef.current) {
             tlRef.current.reverse().then(() => {
                 setIsExpanded(false);
-                // Limpa props inline do GSAP para garantir responsividade futura
-                gsap.set(navContainerRef.current, { clearProps: "all" });
-                gsap.set(navBgRef.current, { clearProps: "all" });
             });
         } else {
             setIsExpanded(false);
@@ -261,18 +251,18 @@ const Navbar: React.FC = () => {
   };
 
   const addToRefs = (el: HTMLDivElement | null) => {
-    if (el && !cardsRef.current.includes(el)) {
-      cardsRef.current.push(el);
+    if (el && !linksRef.current.includes(el)) {
+      linksRef.current.push(el);
     }
   };
 
   const handleLinkClick = (e: React.MouseEvent, href: string) => {
-    if (href.startsWith('/#') || href.startsWith('#')) {
-        const id = href.split('#')[1];
+    if (href.startsWith('#') || href.startsWith('/#')) {
+        const id = href.includes('#') ? href.split('#')[1] : href;
         const element = document.getElementById(id);
         if (element) {
              toggleMenu();
-             setTimeout(() => element.scrollIntoView({ behavior: 'smooth' }), 300);
+             setTimeout(() => element.scrollIntoView({ behavior: 'smooth' }), 500);
         }
     }
   };
@@ -293,27 +283,8 @@ const Navbar: React.FC = () => {
         >
           <nav ref={navBgRef} className={`card-nav ${isExpanded ? 'open' : ''}`}>
             
-            {/* Header interno do menu */}
+            {/* Header interno do menu (apenas o botão X fica aqui visualmente) */}
             <div className="card-nav-top">
-              
-              {/* CTA (Só aparece quando aberto no Desktop) */}
-              <div className="nav-cta-wrapper">
-                  <button
-                    type="button"
-                    className="card-nav-cta-button"
-                    onClick={() => {
-                        const element = document.getElementById('booking');
-                        if(element) {
-                            toggleMenu();
-                            setTimeout(() => element.scrollIntoView({ behavior: 'smooth' }), 500);
-                        }
-                    }}
-                  >
-                    Agendar Sessão
-                  </button>
-              </div>
-
-              {/* Trigger (Hamburger) */}
               <div
                 className={`hamburger-menu ${isHamburgerOpen ? 'open' : ''}`}
                 onClick={toggleMenu}
@@ -326,38 +297,42 @@ const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* Conteúdo dos Cards */}
-            <div className="card-nav-content" aria-hidden={!isExpanded}>
-              {items.map((item, idx) => (
-                <div
-                  key={`${item.label}-${idx}`}
-                  className="nav-card"
-                  ref={addToRefs}
-                  style={{ backgroundColor: item.bgColor, color: item.textColor }}
-                >
-                  <div className="nav-card-label">{item.label}</div>
-                  <div className="nav-card-links">
-                    {item.links.map((lnk, i) => {
-                        const Component = lnk.external ? 'a' : Link;
-                        const props = lnk.external 
-                            ? { href: lnk.href, target: "_blank", rel: "noreferrer" } 
-                            : { to: lnk.href, onClick: (e: React.MouseEvent) => handleLinkClick(e, lnk.href) };
+            {/* Conteúdo dos Links (Centralizado) */}
+            <div ref={contentRef} className="card-nav-content" aria-hidden={!isExpanded}>
+              
+              {items.map((group, gIdx) => (
+                <React.Fragment key={gIdx}>
+                    {/* Grupo de Links */}
+                    <div className="nav-card">
+                        <p className="nav-card-label">{group.label}</p>
+                        <div className="nav-card-links">
+                            {group.links.map((lnk, lIdx) => {
+                                const Component = lnk.external ? 'a' : Link;
+                                const props = lnk.external 
+                                    ? { href: lnk.href, target: "_blank", rel: "noreferrer" } 
+                                    : { to: lnk.href, onClick: (e: React.MouseEvent) => handleLinkClick(e, lnk.href) };
 
-                        return (
-                            <Component 
-                                key={`${lnk.label}-${i}`} 
-                                className="nav-card-link" 
-                                aria-label={lnk.ariaLabel}
-                                {...props as any}
-                            >
-                                <ArrowUpRight className="nav-card-link-icon" size={16} aria-hidden="true" />
-                                {lnk.label}
-                            </Component>
-                        );
-                    })}
-                  </div>
-                </div>
+                                return (
+                                    <div key={`${lnk.label}-${lIdx}`} ref={addToRefs}>
+                                        <Component 
+                                            className="nav-card-link" 
+                                            aria-label={lnk.ariaLabel}
+                                            {...props as any}
+                                        >
+                                            {lnk.label}
+                                            {lnk.external && <ArrowUpRight className="nav-card-link-icon" />}
+                                        </Component>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                    
+                    {/* Divisor Visual (apenas Desktop e se não for o último grupo) */}
+                    {gIdx < items.length - 1 && <div className="nav-divider"></div>}
+                </React.Fragment>
               ))}
+
             </div>
           </nav>
         </div>
