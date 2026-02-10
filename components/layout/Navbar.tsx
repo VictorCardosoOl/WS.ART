@@ -135,23 +135,12 @@ const Navbar: React.FC = () => {
     const isMobile = screenW <= 1024;
     
     // Dimensões Finais
-    // Desktop: Pílula larga (ex: 800px) e baixa (ex: 80px)
+    // Desktop: Pílula larga (agora 940px para evitar quebra de linha) e baixa (80px)
     // Mobile: Bloco quase tela cheia
-    const finalWidth = isMobile ? Math.min(screenW * 0.92, 400) : Math.min(screenW * 0.9, 850);
+    const finalWidth = isMobile ? Math.min(screenW * 0.92, 400) : Math.min(screenW * 0.95, 940);
     const finalHeight = isMobile ? Math.min(window.innerHeight * 0.7, 500) : 80;
     
     // Cálculos de Centralização X
-    // Posição Atual (Direita Fixa): right: 2rem (32px)
-    // O container está ancorado à direita. Ao crescer a largura, ele cresce para a esquerda.
-    // Centro Atual X = ScreenW - 32 - (60 / 2) = ScreenW - 62
-    // Centro Desejado X = ScreenW / 2
-    // Se animarmos width para finalWidth, o novo centro (sem translação) seria:
-    // ScreenW - 32 - (finalWidth / 2)
-    // A translação X necessária é: CentroDesejado - NovoCentroSemTranslação
-    // = (ScreenW / 2) - (ScreenW - 32 - finalWidth / 2)
-    // = (ScreenW / 2) - ScreenW + 32 + finalWidth / 2
-    // = 32 + (finalWidth / 2) - (ScreenW / 2)
-    
     const rightMargin = 32; // 2rem
     const xTranslation = rightMargin + (finalWidth / 2) - (screenW / 2);
 
@@ -170,46 +159,40 @@ const Navbar: React.FC = () => {
     const tl = gsap.timeline({ paused: true });
 
     // 1. ANIMAÇÃO PRINCIPAL (Container)
-    // Usamos 'x' para centralizar e width/height para expandir.
-    // Ease: "power4.inOut" ou customizado para dar sensação de peso.
     tl.to(container, {
         width: finalWidth,
         height: finalHeight,
         x: xTranslation, 
         duration: 0.85,
-        ease: "power4.inOut", // Sensação de peso e inércia
+        ease: "power4.inOut", 
         onStart: () => {
-             // Garante z-index máximo durante animação
              gsap.set(container, { zIndex: 1000 });
         },
         onComplete: () => {
-             // ATIVA CLIQUES NO CONTEÚDO APÓS ABERTURA
              gsap.set(content, { pointerEvents: "auto" });
         },
         onReverseComplete: () => {
              gsap.set(content, { pointerEvents: "none" });
-             // Limpa props para garantir responsividade se redimensionar janela
              gsap.set(container, { clearProps: "width,height,x,zIndex" });
              gsap.set(bg, { clearProps: "borderRadius" });
         }
     });
 
-    // 2. MORPH DO BACKGROUND (Circular -> Pílula/Retângulo)
+    // 2. MORPH DO BACKGROUND
     tl.to(bg, {
-        borderRadius: isMobile ? "24px" : "999px", // Pílula no desktop, arredondado no mobile
+        borderRadius: isMobile ? "24px" : "999px",
         duration: 0.85,
         ease: "power4.inOut"
     }, "<");
 
-    // 3. CONTEÚDO (Fade In + Slide Up Sutil)
-    // Começa um pouco depois do container começar a abrir
+    // 3. CONTEÚDO
     tl.fromTo(content, 
         { autoAlpha: 0, y: 10 },
         { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
-        "-=0.5" // Overlap forte
+        "-=0.5"
     );
 
-    // 4. LINKS (Stagger)
+    // 4. LINKS
     if (linksRef.current.length > 0) {
         tl.fromTo(linksRef.current,
             { opacity: 0, x: 20 },
@@ -228,7 +211,6 @@ const Navbar: React.FC = () => {
   const toggleMenu = () => {
     if (!isExpanded) {
         // OPENING
-        // Sempre recria a timeline para pegar as dimensões atuais da tela
         const tl = createTimeline();
         if (tl) {
             tlRef.current = tl;
@@ -328,7 +310,7 @@ const Navbar: React.FC = () => {
                         </div>
                     </div>
                     
-                    {/* Divisor Visual (apenas Desktop e se não for o último grupo) */}
+                    {/* Divisor Visual */}
                     {gIdx < items.length - 1 && <div className="nav-divider"></div>}
                 </React.Fragment>
               ))}
