@@ -22,15 +22,19 @@ const Footer: React.FC = () => {
           {/* Column 1: Brand & Info */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <div className="flex items-center gap-3 mb-6 md:mb-8">
+              {/* Brand Header Corrigido */}
+              <div className="flex items-center gap-4 mb-6 md:mb-8">
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-black text-xl flex-shrink-0">
                   W
                 </div>
-                {/* Tracking aumentado para estética editorial */}
-                <h3 className="text-[10px] font-bold tracking-widest uppercase leading-loose text-stone-300">
-                  INTERVENÇÕES ARTÍSTICAS ÚNICAS //<br/>
-                  EXPERIÊNCIAS IMERSIVAS
-                </h3>
+                <div className="flex flex-col">
+                    <h3 className="font-serif text-2xl text-white leading-none tracking-wide">
+                        William Siqueira
+                    </h3>
+                    <span className="text-[9px] font-bold tracking-widest uppercase text-stone-500 mt-1">
+                        Art & Tattoo Studio
+                    </span>
+                </div>
               </div>
               
               {/* Uso do leading-luxury (2.0) para texto com muito respiro */}
