@@ -29,6 +29,7 @@ export default {
         stone: {
           850: '#1c1917',
           900: '#12100E',
+          950: '#0c0a09', // Adicionado para o Footer Premium
         }
       },
       fontFamily: {
@@ -45,7 +46,7 @@ export default {
         normal: '0em',
         wide: '0.03em',
         wider: '0.08em',
-        widest: '0.25em', // Aumentado para 0.25em
+        widest: '0.25em', 
         ultra: '0.35em', 
       },
       fontSize: {
@@ -55,7 +56,7 @@ export default {
       lineHeight: {
         'tight-editorial': '0.9',
         'snug-editorial': '1.05',
-        'luxury': '2.0', // Novo line-height para parágrafos pequenos (Aesthetic of Silence)
+        'luxury': '2.0', 
       },
       backgroundImage: {
         'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.8\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.1\"/%3E%3C/svg%3E')",

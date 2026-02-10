@@ -1,111 +1,147 @@
 import React from 'react';
-import { Instagram, ArrowUpRight, Twitter, Facebook } from 'lucide-react';
-import Magnetic from '../ui/Magnetic';
 import { Link } from 'react-router-dom';
+import { ArrowUpRight, Instagram, MessageCircle, Mail, MapPin, ExternalLink } from 'lucide-react';
 
 const Footer: React.FC = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="relative bg-black text-white pt-24 md:pt-32 pb-12 font-sans overflow-hidden">
+    <footer className="relative bg-stone-950 text-stone-400 overflow-hidden font-sans border-t border-stone-900">
       
-      {/* SEPARATOR: INVERTED CURVE FROM LIGHT (BOOKING SECTION) */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-10">
-         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[100px] fill-[#FAF7F7]">
-            <path d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z" className="opacity-100"></path>
-         </svg>
+      {/* 1. TEXTURA DE RUÍDO ORGÂNICO (SVG Inline) */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.07] mix-blend-overlay">
+        <svg className="w-full h-full">
+          <filter id="noiseFilter">
+            <feTurbulence 
+              type="fractalNoise" 
+              baseFrequency="0.6" 
+              stitchTiles="stitch" 
+              numOctaves="3"
+            />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+        </svg>
       </div>
 
-      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-10">
+      {/* 2. TIPOGRAFIA DE FUNDO (Massiva) */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full z-0 pointer-events-none select-none flex justify-center items-end leading-none overflow-hidden">
+        <span className="font-serif text-[18vw] text-stone-900 opacity-30 tracking-tight whitespace-nowrap mix-blend-overlay blur-[2px]">
+          SIQUEIRA
+        </span>
+      </div>
+
+      <div className="w-full max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-24 relative z-10">
         
-        {/* Top Grid Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-12 md:gap-y-16 border-b border-stone-800 pb-12 md:pb-16">
-          
-          {/* Column 1: Brand & Info */}
-          <div className="lg:col-span-4 flex flex-col justify-between h-full">
-            <div>
-              {/* Brand Header Corrigido */}
-              <div className="flex items-center gap-4 mb-6 md:mb-8">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black font-black text-xl flex-shrink-0">
-                  W
-                </div>
-                <div className="flex flex-col">
-                    <h3 className="font-serif text-2xl text-white leading-none tracking-wide">
-                        William Siqueira
-                    </h3>
-                    <span className="text-[9px] font-bold tracking-widest uppercase text-stone-500 mt-1">
-                        Art & Tattoo Studio
-                    </span>
-                </div>
-              </div>
-              
-              {/* Uso do leading-luxury (2.0) para texto com muito respiro */}
-              <p className="text-stone-500 text-sm leading-luxury max-w-sm mb-8 md:mb-12 font-light">
-                Fundada por William Siqueira, unimos décadas de prática artística e visão neotradicional, redefinindo as possibilidades da arte na pele e no ambiente construído.
-              </p>
-            </div>
+        {/* 3. GRID LAYOUT */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-l border-r border-stone-800/50">
             
-            <div className="space-y-4 text-sm text-stone-400">
-              <p className="font-serif italic text-lg text-white">Estúdio Privado, São Paulo - SP</p>
-              <a href="mailto:contato@wsart.com" className="block text-white hover:text-stone-300 transition-colors tracking-wide">hello@williamsiqueira.art</a>
-              
-              <div className="flex gap-4 mt-6 pt-6 border-t border-stone-800 w-fit">
-                <Magnetic>
-                    <a href="https://instagram.com" className="hover:text-white transition-colors p-2 -ml-2"><Instagram size={20} /></a>
-                </Magnetic>
-                <Magnetic>
-                    <a href="https://twitter.com" className="hover:text-white transition-colors p-2"><Twitter size={20} /></a>
-                </Magnetic>
-                <Magnetic>
-                    <a href="https://facebook.com" className="hover:text-white transition-colors p-2"><Facebook size={20} /></a>
-                </Magnetic>
-              </div>
+            {/* COLUNA 1: IDENTIDADE */}
+            <div className="p-12 border-b lg:border-b-0 border-stone-800/50 flex flex-col justify-between h-full min-h-[300px]">
+                <div>
+                    <h2 className="font-serif text-4xl text-stone-100 leading-none mb-2">
+                        William<br/>Siqueira
+                    </h2>
+                    <p className="font-serif italic text-stone-600 text-lg">
+                        Tattoo Art Studio
+                    </p>
+                </div>
+                <div>
+                    <p className="text-[10px] uppercase tracking-widest text-stone-600 mb-4">
+                        Conceito
+                    </p>
+                    <p className="text-xs leading-relaxed text-stone-500 max-w-[200px]">
+                        Redefinindo a anatomia através de narrativas neotradicionais e arte perene.
+                    </p>
+                </div>
             </div>
-          </div>
 
-          {/* Column 2: Navigation Links */}
-          <div className="lg:col-span-2 lg:col-start-6">
-             <h4 className="text-stone-500 text-[10px] font-bold uppercase tracking-widest mb-8">Menu</h4>
-             <ul className="space-y-4">
-                <li><Link to="/" className="text-white hover:text-rose-300 transition-colors text-sm tracking-wide">Início</Link></li>
-                <li><Link to="/processo" className="text-white hover:text-rose-300 transition-colors text-sm tracking-wide">Processo</Link></li>
-                <li><a href="#gallery" className="text-white hover:text-rose-300 transition-colors text-sm tracking-wide">Portfólio</a></li>
-                <li><a href="#booking" className="text-white hover:text-rose-300 transition-colors text-sm tracking-wide">Contato</a></li>
-             </ul>
-          </div>
+            {/* COLUNA 2: LOCAL & CTA */}
+            <div className="p-12 border-b lg:border-b-0 lg:border-l border-stone-800/50 flex flex-col justify-between h-full min-h-[300px]">
+                <div>
+                    <div className="flex items-start gap-3 mb-6">
+                        <MapPin size={16} className="text-[#754548] mt-1 shrink-0" />
+                        <div>
+                            <p className="text-stone-300 font-serif text-lg">Estúdio Privado</p>
+                            <p className="text-xs text-stone-500 mt-1 uppercase tracking-wide">Av. Paulista, São Paulo - SP</p>
+                        </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                        <Mail size={16} className="text-[#754548] mt-1 shrink-0" />
+                        <div>
+                             <a href="mailto:contato@williamsiqueira.art" className="text-stone-300 hover:text-white transition-colors text-sm">
+                                hello@williamsiqueira.art
+                             </a>
+                        </div>
+                    </div>
+                </div>
 
-          {/* Column 3: Legal / Extra */}
-          <div className="lg:col-span-2">
-             <h4 className="text-stone-500 text-[10px] font-bold uppercase tracking-widest mb-8">Legal</h4>
-             <ul className="space-y-4">
-                <li><a href="#" className="text-stone-400 hover:text-white transition-colors text-sm tracking-wide">Termos de Uso</a></li>
-                <li><a href="#" className="text-stone-400 hover:text-white transition-colors text-sm tracking-wide">Privacidade</a></li>
-                <li><a href="#" className="text-stone-400 hover:text-white transition-colors text-sm tracking-wide">Cuidados (FAQ)</a></li>
-             </ul>
-          </div>
+                <a href="#booking" className="group inline-flex items-center justify-between w-full py-4 border-b border-stone-800 hover:border-stone-500 transition-colors">
+                    <span className="text-xs font-bold uppercase tracking-widest text-stone-300 group-hover:text-white">
+                        Iniciar Projeto
+                    </span>
+                    <ArrowUpRight size={16} className="text-stone-500 group-hover:text-[#754548] transition-colors" />
+                </a>
+            </div>
 
-          {/* Column 4: Newsletter / Action */}
-          <div className="lg:col-span-3">
-             <h4 className="text-stone-500 text-[10px] font-bold uppercase tracking-widest mb-8">Fique Atualizado</h4>
-             <p className="text-stone-400 text-xs leading-luxury mb-6">
-                Novas aberturas de agenda e flash days exclusivos.
-             </p>
-             <form className="flex border-b border-stone-700 pb-2 group focus-within:border-white transition-colors">
-                <input type="email" placeholder="Seu e-mail" className="bg-transparent border-none outline-none text-white placeholder-stone-600 text-sm w-full" />
-                <button type="button" className="text-stone-400 hover:text-white transition-colors">
-                   <ArrowUpRight size={18} />
-                </button>
-             </form>
-          </div>
+            {/* COLUNA 3: SOCIAL */}
+            <div className="p-12 border-b md:border-b-0 lg:border-l border-stone-800/50 flex flex-col h-full min-h-[300px]">
+                <p className="text-[10px] uppercase tracking-widest text-stone-600 mb-8">
+                    Conexão
+                </p>
+                <div className="flex flex-col gap-6">
+                    <a href="https://instagram.com" target="_blank" rel="noreferrer" className="flex items-center gap-4 text-stone-400 hover:text-white transition-colors group">
+                        <div className="w-8 h-8 rounded-full border border-stone-800 flex items-center justify-center group-hover:border-[#754548] transition-colors">
+                            <Instagram size={14} />
+                        </div>
+                        <span className="text-sm font-medium">Instagram</span>
+                    </a>
+                    <a href="https://wa.me/5511999999999" target="_blank" rel="noreferrer" className="flex items-center gap-4 text-stone-400 hover:text-white transition-colors group">
+                         <div className="w-8 h-8 rounded-full border border-stone-800 flex items-center justify-center group-hover:border-[#754548] transition-colors">
+                            <MessageCircle size={14} />
+                        </div>
+                        <span className="text-sm font-medium">WhatsApp</span>
+                    </a>
+                    <a href="#" className="flex items-center gap-4 text-stone-400 hover:text-white transition-colors group">
+                         <div className="w-8 h-8 rounded-full border border-stone-800 flex items-center justify-center group-hover:border-[#754548] transition-colors">
+                            <ExternalLink size={14} />
+                        </div>
+                        <span className="text-sm font-medium">Press Kit</span>
+                    </a>
+                </div>
+            </div>
+
+            {/* COLUNA 4: NAVEGAÇÃO & CRÉDITOS */}
+            <div className="p-12 lg:border-l border-stone-800/50 flex flex-col justify-between h-full min-h-[300px]">
+                <div>
+                     <p className="text-[10px] uppercase tracking-widest text-stone-600 mb-8">
+                        Menu
+                    </p>
+                    <nav className="flex flex-col gap-3">
+                        {['Início', 'O Processo', 'Portfólio', 'Flash Day', 'FAQ'].map((item) => (
+                            <Link 
+                                key={item} 
+                                to={item === 'Início' ? '/' : `/${item.toLowerCase().replace(' ', '')}`}
+                                className="text-sm text-stone-400 hover:text-white hover:translate-x-2 transition-all duration-300 w-fit"
+                            >
+                                {item}
+                            </Link>
+                        ))}
+                    </nav>
+                </div>
+
+                <div className="pt-8 mt-8 border-t border-stone-900">
+                    <p className="text-[10px] text-stone-700 uppercase tracking-widest flex flex-col gap-1">
+                        <span>© {currentYear} William Siqueira.</span>
+                        <span className="opacity-50">All rights reserved.</span>
+                    </p>
+                </div>
+            </div>
 
         </div>
         
-        {/* Bottom Bar */}
-        <div className="pt-12 flex flex-col md:flex-row justify-between items-center gap-6">
-           <p className="text-stone-600 text-[10px] uppercase tracking-widest">
-              © {new Date().getFullYear()} William Siqueira. All rights reserved.
-           </p>
-           <p className="text-stone-700 text-[10px] uppercase tracking-widest flex items-center gap-2">
-              Designed with <span className="text-rose-900">♥</span> in SP
-           </p>
+        {/* BARRA INFERIOR DECORATIVA */}
+        <div className="w-full h-2 bg-stone-900/50 mt-12 mb-12 flex items-center justify-center overflow-hidden">
+             <div className="w-full h-[1px] bg-stone-800"></div>
         </div>
 
       </div>
