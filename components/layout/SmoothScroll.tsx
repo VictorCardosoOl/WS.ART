@@ -5,7 +5,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Contexto para expor a instância do Lenis para outros componentes (como a Navbar)
 const LenisContext = createContext<Lenis | null>(null);
 
 export const useLenis = () => useContext(LenisContext);
@@ -15,48 +14,49 @@ interface SmoothScrollProps {
 }
 
 const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
-  const lenisRef = useRef<Lenis | null>(null);
   const [lenisInstance, setLenisInstance] = React.useState<Lenis | null>(null);
 
   useLayoutEffect(() => {
+    // Instanciação do Lenis com configurações otimizadas para performance
     const lenis = new Lenis({
       duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing suave
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing clássico suave
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
+      wheelMultiplier: 1, 
+      touchMultiplier: 1.5, // Reduzido para evitar sensibilidade excessiva em trackpads
       infinite: false,
     });
 
-    lenisRef.current = lenis;
     setLenisInstance(lenis);
 
-    // Sincronização com ScrollTrigger
+    // Conecta o Lenis ao ScrollTrigger do GSAP
+    // Isso garante que os cálculos de 'pin' e 'start/end' sejam exatos
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Integração com GSAP Ticker
+    // Integração profunda com o Ticker do GSAP
+    // Isso faz com que o Scroll e as Animações rodem no mesmo frame (evita jitter)
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
-    
-    // Desativa lagSmoothing para evitar "pulos" visuais em scroll-driven animations
+
+    // Desativa a suavização de lag do GSAP para priorizar a resposta imediata do scroll
     gsap.ticker.lagSmoothing(0);
 
-    // Garante que o ScrollTrigger recalcule posições após o carregamento inicial
+    // Força um recálculo inicial
     ScrollTrigger.refresh();
 
     return () => {
       gsap.ticker.remove((time) => lenis.raf(time * 1000));
       lenis.destroy();
-      lenisRef.current = null;
     };
   }, []);
 
   return (
     <LenisContext.Provider value={lenisInstance}>
-        <div id="smooth-wrapper" className="w-full min-h-screen">
+        {/* O wrapper não precisa de ID específico para o Lenis funcionar, mas ajuda na estrutura */}
+        <div className="w-full min-h-screen">
             {children}
         </div>
     </LenisContext.Provider>
