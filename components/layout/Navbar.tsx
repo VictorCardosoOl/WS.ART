@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect, useCallback } from 'react';
 import gsap from 'gsap';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
@@ -21,16 +21,21 @@ interface NavItem {
 const Navbar: React.FC = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  
   const navRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const lastScrollY = useRef(0);
+  const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  
   const location = useLocation();
 
-  // Definição dos itens do menu conforme a marca
   const items: NavItem[] = [
     {
       label: "Navegação",
-      bgColor: "#FAF7F7", // Rose 50
+      bgColor: "#FAF7F7",
       textColor: "#1c1917",
       links: [
         { label: "Início", href: "/", ariaLabel: "Ir para Início" },
@@ -39,7 +44,7 @@ const Navbar: React.FC = () => {
     },
     {
       label: "Acervo",
-      bgColor: "#E5D0D4", // Rose 200
+      bgColor: "#E5D0D4",
       textColor: "#1c1917",
       links: [
         { label: "Portfólio", href: "/#gallery", ariaLabel: "Ver Portfólio" },
@@ -48,7 +53,7 @@ const Navbar: React.FC = () => {
     },
     {
       label: "Contato",
-      bgColor: "#1c1917", // Stone 900
+      bgColor: "#1c1917",
       textColor: "#FFFFFF",
       links: [
         { label: "WhatsApp", href: "https://wa.me/5511999999999", ariaLabel: "Contato WhatsApp", external: true },
@@ -58,32 +63,115 @@ const Navbar: React.FC = () => {
     }
   ];
 
+  // --- SMART NAVBAR LOGIC ---
+
+  // Função para reiniciar o timer de inatividade
+  const resetInactivityTimer = useCallback(() => {
+    if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+    
+    // Se o menu estiver aberto, não oculta por inatividade
+    if (isExpanded) return;
+
+    // Define inatividade após 4 segundos
+    inactivityTimer.current = setTimeout(() => {
+       const currentY = window.scrollY;
+       // Só oculta por inatividade se já tiver rolado um pouco (não no topo)
+       if (currentY > 100) {
+         setIsVisible(false);
+       }
+    }, 4000);
+  }, [isExpanded]);
+
+  // Handle Scroll Direction & Activity
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      const delta = currentY - lastScrollY.current;
+
+      // Sempre mostrar se estiver no topo ou se estiver rolando para CIMA
+      // Ocultar se rolar para BAIXO (mais que 10px de diferença para evitar micro-movimentos)
+      if (currentY < 50) {
+        setIsVisible(true);
+      } else if (delta > 10) {
+        // Rolando para baixo -> Ocultar (se não estiver expandido)
+        if (!isExpanded) setIsVisible(false);
+      } else if (delta < -10) {
+        // Rolando para cima -> Mostrar
+        setIsVisible(true);
+      }
+
+      lastScrollY.current = currentY;
+      resetInactivityTimer();
+    };
+
+    const handleMouseMove = () => {
+       // Se o mouse se mover no topo da tela, mostra a nav
+       // Isso ajuda caso o usuário queira acessar o menu após ele sumir por inatividade
+       resetInactivityTimer();
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+
+    // Start timer on mount
+    resetInactivityTimer();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+    };
+  }, [isExpanded, resetInactivityTimer]);
+
+  // Handle Click Outside & ESC
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        if (isExpanded) {
+           toggleMenu(); // Fecha o menu se clicar fora
+        }
+      }
+    };
+
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        if (isExpanded) {
+           toggleMenu(); // Fecha com ESC
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscKey);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isExpanded]);
+
+  // --- END SMART LOGIC ---
+
   const calculateHeight = () => {
     const navEl = navRef.current;
-    if (!navEl) return 280; // Altura padrão desktop expandida
+    if (!navEl) return 280;
 
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     if (isMobile) {
       const contentEl = navEl.querySelector('.card-nav-content') as HTMLElement;
       if (contentEl) {
-        // Truque para medir altura oculta
         const originalStyle = {
             visibility: contentEl.style.visibility,
             position: contentEl.style.position,
             height: contentEl.style.height
         };
-
         contentEl.style.visibility = 'visible';
         contentEl.style.position = 'static';
         contentEl.style.height = 'auto';
-
         const contentHeight = contentEl.offsetHeight;
-
-        // Reverter estilos
         contentEl.style.visibility = originalStyle.visibility;
         contentEl.style.position = originalStyle.position;
         contentEl.style.height = originalStyle.height;
-
         const topBar = 70;
         return topBar + contentHeight;
       }
@@ -95,7 +183,6 @@ const Navbar: React.FC = () => {
     const navEl = navRef.current;
     if (!navEl) return null;
 
-    // Reset inicial
     gsap.set(navEl, { height: 70, overflow: 'hidden' });
     gsap.set(cardsRef.current, { y: 60, opacity: 0 });
 
@@ -119,7 +206,6 @@ const Navbar: React.FC = () => {
   };
 
   useLayoutEffect(() => {
-    // Fecha o menu ao mudar de rota
     if (isExpanded) {
         toggleMenu();
     }
@@ -128,7 +214,6 @@ const Navbar: React.FC = () => {
   useLayoutEffect(() => {
     const tl = createTimeline();
     tlRef.current = tl;
-
     return () => {
       tl?.kill();
       tlRef.current = null;
@@ -138,14 +223,11 @@ const Navbar: React.FC = () => {
   useLayoutEffect(() => {
     const handleResize = () => {
       if (!tlRef.current) return;
-      
-      // Recalcula se estiver aberto para ajustar altura mobile/desktop
       if (isExpanded) {
         const newHeight = calculateHeight();
         gsap.to(navRef.current, { height: newHeight, duration: 0.2 });
       }
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [isExpanded]);
@@ -154,7 +236,9 @@ const Navbar: React.FC = () => {
     const tl = tlRef.current;
     if (!tl) return;
     
+    // Se estiver fechado e formos abrir, garantimos que a navbar está visível
     if (!isExpanded) {
+      setIsVisible(true);
       setIsHamburgerOpen(true);
       setIsExpanded(true);
       tl.play();
@@ -171,35 +255,30 @@ const Navbar: React.FC = () => {
   };
 
   const handleLinkClick = (e: React.MouseEvent, href: string) => {
-    // Se for âncora interna, fecha o menu e faz scroll suave
     if (href.startsWith('/#') || href.startsWith('#')) {
         const id = href.split('#')[1];
         const element = document.getElementById(id);
         if (element) {
-             // Pequeno delay para a animação de fechar começar
              toggleMenu();
              setTimeout(() => element.scrollIntoView({ behavior: 'smooth' }), 300);
         }
-    } else {
-        // Link normal fecha o menu (tratado pelo useLayoutEffect de location)
     }
   };
 
   return (
-    <div className="card-nav-container">
+    <div 
+        ref={containerRef} 
+        className={`card-nav-container ${!isVisible && !isExpanded ? 'nav-hidden' : ''}`}
+    >
       <nav ref={navRef} className={`card-nav ${isExpanded ? 'open' : ''}`}>
         
-        {/* Top Bar */}
         <div className="card-nav-top">
-          
-          {/* Logo Centralizado (Texto) */}
           <div className="logo-container">
              <Link to="/" className="brand-text" onClick={() => isExpanded && toggleMenu()}>
                 W<span className="brand-dot">.</span>S
              </Link>
           </div>
 
-          {/* Hamburger (Esquerda ou Direita dependendo do CSS, aqui ajustado pelo CSS flex order em mobile) */}
           <div
             className={`hamburger-menu ${isHamburgerOpen ? 'open' : ''}`}
             onClick={toggleMenu}
@@ -211,7 +290,6 @@ const Navbar: React.FC = () => {
             <div className="hamburger-line" />
           </div>
 
-          {/* CTA Button */}
           <button
             type="button"
             className="card-nav-cta-button"
@@ -224,7 +302,6 @@ const Navbar: React.FC = () => {
           </button>
         </div>
 
-        {/* Content Cards */}
         <div className="card-nav-content" aria-hidden={!isExpanded}>
           {items.map((item, idx) => (
             <div
