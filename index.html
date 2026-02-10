@@ -91,11 +91,13 @@
       }
     </script>
     <style>
-      /* Smooth scroll removed to allow Lenis to handle physics */
+      /* Smooth scroll configuration */
       html, body {
         width: 100%;
         min-height: 100vh;
         overflow-x: hidden;
+        /* overscroll-behavior-y: none previne o efeito de "elástico" no final da página, que conflita com Lenis */
+        overscroll-behavior-y: none;
         overflow-y: auto;
       }
       body {

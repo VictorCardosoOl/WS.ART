@@ -1,9 +1,14 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, createContext, useContext } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Contexto para expor a instância do Lenis para outros componentes (como a Navbar)
+const LenisContext = createContext<Lenis | null>(null);
+
+export const useLenis = () => useContext(LenisContext);
 
 interface SmoothScrollProps {
   children: React.ReactNode;
@@ -11,11 +16,12 @@ interface SmoothScrollProps {
 
 const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   const lenisRef = useRef<Lenis | null>(null);
+  const [lenisInstance, setLenisInstance] = React.useState<Lenis | null>(null);
 
   useLayoutEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2, // Levemente ajustado para resposta mais rápida
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing suave
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
@@ -25,19 +31,21 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
     });
 
     lenisRef.current = lenis;
+    setLenisInstance(lenis);
 
-    // Sincronização crítica entre Lenis e ScrollTrigger
+    // Sincronização com ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Integração com o Ticker do GSAP
+    // Integração com GSAP Ticker
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
     
-    // CRÍTICO: Desativa o lag smoothing do GSAP.
-    // Isso impede que o GSAP tente "pular" a animação para alcançar o tempo real 
-    // quando há uma queda leve de FPS, o que visualmente parece um "engasgo".
+    // Desativa lagSmoothing para evitar "pulos" visuais em scroll-driven animations
     gsap.ticker.lagSmoothing(0);
+
+    // Garante que o ScrollTrigger recalcule posições após o carregamento inicial
+    ScrollTrigger.refresh();
 
     return () => {
       gsap.ticker.remove((time) => lenis.raf(time * 1000));
@@ -47,9 +55,11 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   }, []);
 
   return (
-    <div id="smooth-wrapper" className="w-full min-h-screen">
-      {children}
-    </div>
+    <LenisContext.Provider value={lenisInstance}>
+        <div id="smooth-wrapper" className="w-full min-h-screen">
+            {children}
+        </div>
+    </LenisContext.Provider>
   );
 };
 

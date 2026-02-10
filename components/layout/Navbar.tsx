@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef, useState, useEffect, useCallback } from
 import gsap from 'gsap';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
+import { useLenis } from './SmoothScroll'; // Importa o hook do Lenis
 import './Navbar.css';
 
 interface NavLink {
@@ -26,6 +27,9 @@ const Navbar: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef<HTMLDivElement[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  
+  // Acesso ao Lenis para controlar o scroll
+  const lenis = useLenis();
   
   // Refs para lógica de scroll
   const lastScrollY = useRef(0);
@@ -52,6 +56,23 @@ const Navbar: React.FC = () => {
       ]
     }
   ];
+
+  // --- TRAVAMENTO DE SCROLL ---
+  useEffect(() => {
+    if (isExpanded) {
+        lenis?.stop(); // Trava o scroll suave
+        document.body.style.overflow = 'hidden'; // Trava scroll nativo como fallback
+    } else {
+        lenis?.start(); // Destrava o scroll suave
+        document.body.style.overflow = ''; // Destrava scroll nativo
+    }
+    
+    return () => {
+        lenis?.start();
+        document.body.style.overflow = '';
+    };
+  }, [isExpanded, lenis]);
+
 
   // --- SMART NAVBAR LOGIC ---
 
@@ -135,8 +156,6 @@ const Navbar: React.FC = () => {
     const isMobile = screenW <= 1024;
     
     // Dimensões Finais
-    // Desktop: Pílula larga (agora 940px para evitar quebra de linha) e baixa (80px)
-    // Mobile: Bloco quase tela cheia
     const finalWidth = isMobile ? Math.min(screenW * 0.92, 400) : Math.min(screenW * 0.95, 940);
     const finalHeight = isMobile ? Math.min(window.innerHeight * 0.7, 500) : 80;
     
