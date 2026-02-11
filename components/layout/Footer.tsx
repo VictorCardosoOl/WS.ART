@@ -25,7 +25,8 @@ const Footer: React.FC = () => {
 
       {/* 2. TIPOGRAFIA DE FUNDO (Massiva) */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full z-0 pointer-events-none select-none flex justify-center items-end leading-none overflow-hidden">
-        <span className="font-serif text-[18vw] text-stone-900 opacity-30 tracking-tight whitespace-nowrap mix-blend-overlay blur-[2px]">
+        {/* COR AJUSTADA: de text-stone-900 opacity-30 para text-stone-800 opacity-50 (Mais claro) */}
+        <span className="font-serif text-[18vw] text-stone-800 opacity-50 tracking-tight whitespace-nowrap mix-blend-overlay blur-[2px]">
           SIQUEIRA
         </span>
       </div>
