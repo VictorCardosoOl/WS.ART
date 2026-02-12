@@ -1,68 +1,10 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React from 'react';
 import { ArrowRight, Calendar, Clock, Crown, Ticket, Zap, CheckCircle2 } from 'lucide-react';
 import Reveal from '../ui/Reveal';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const FlashDay: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const numberOneRef = useRef<HTMLSpanElement>(null);
-  const numberTwoRef = useRef<HTMLSpanElement>(null);
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-        // Parallax para os números gigantes de fundo
-        if(numberOneRef.current) {
-            gsap.to(numberOneRef.current, {
-                yPercent: 30,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: 1
-                }
-            });
-        }
-        if(numberTwoRef.current) {
-            gsap.to(numberTwoRef.current, {
-                yPercent: -30, // Move na direção oposta
-                ease: "none",
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: 1.5
-                }
-            });
-        }
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
-
-  // Hover effect logic
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-      const target = e.currentTarget;
-      const img = target.querySelector('.card-bg-img');
-      const content = target.querySelector('.card-content');
-      
-      if(img) gsap.to(img, { scale: 1.05, duration: 0.8, ease: "power2.out" });
-      if(content) gsap.to(content, { x: 10, duration: 0.5, ease: "power2.out" });
-  };
-
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-      const target = e.currentTarget;
-      const img = target.querySelector('.card-bg-img');
-      const content = target.querySelector('.card-content');
-
-      if(img) gsap.to(img, { scale: 1, duration: 0.8, ease: "power2.out" });
-      if(content) gsap.to(content, { x: 0, duration: 0.5, ease: "power2.out" });
-  };
-
   return (
-    <section ref={containerRef} id="flashday" className="py-24 md:py-32 bg-stone-50 border-b border-stone-100 relative overflow-hidden">
+    <section id="flashday" className="py-24 md:py-32 bg-stone-50 border-b border-stone-100 relative overflow-hidden">
       
       {/* Background Decorativo Global */}
       <div className="absolute inset-0 opacity-[0.4] pointer-events-none mix-blend-multiply bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-rose-100/40 via-transparent to-transparent"></div>
@@ -98,18 +40,14 @@ const FlashDay: React.FC = () => {
             
             {/* --- CARD 1: FLASH DAY (Raw / Organic Style) --- */}
             <Reveal width="100%">
-                <div 
-                    className="relative group h-full min-h-[600px] bg-[#FAF9F6] rounded-sm overflow-hidden border border-stone-100 hover:border-stone-200 transition-colors duration-500 flex flex-col"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                >
+                <div className="relative group h-full min-h-[600px] bg-[#FAF9F6] rounded-sm overflow-hidden border border-stone-100 hover:border-stone-200 transition-colors duration-500 flex flex-col">
                     
                     {/* Background Texture: Sketches */}
-                    <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-700 pointer-events-none mix-blend-multiply overflow-hidden">
+                    <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-700 pointer-events-none mix-blend-multiply">
                         <img 
                             src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=1000&auto=format&fit=crop" 
                             alt="Sketches Background" 
-                            className="card-bg-img w-full h-full object-cover grayscale will-change-transform"
+                            className="w-full h-full object-cover grayscale"
                         />
                     </div>
                     
@@ -123,13 +61,14 @@ const FlashDay: React.FC = () => {
                     </div>
 
                     {/* Content Body */}
-                    <div className="card-content relative z-10 px-8 md:px-12 flex-grow flex flex-col justify-center will-change-transform">
-                        <span ref={numberOneRef} className="text-[120px] leading-none font-serif text-stone-100 absolute top-1/2 -translate-y-1/2 left-4 pointer-events-none mix-blend-multiply select-none group-hover:text-stone-200 transition-colors">01</span>
+                    <div className="relative z-10 px-8 md:px-12 flex-grow flex flex-col justify-center">
+                        <span className="text-[120px] leading-none font-serif text-stone-100 absolute top-1/2 -translate-y-1/2 left-4 pointer-events-none mix-blend-multiply select-none group-hover:text-stone-200 transition-colors">01</span>
                         
                         <h3 className="font-serif text-4xl md:text-5xl text-stone-900 relative z-10 mb-4">
                             Sessões Rápidas <br/>
                             <span className="italic text-stone-400">& Catálogo Pronto</span>
                         </h3>
+                        {/* Leading Luxury aplicada */}
                         <p className="text-stone-600 text-sm leading-luxury max-w-sm relative z-10 mb-8">
                             O estúdio abre as portas para o público. Desenhos autorais pré-definidos, valores especiais e atendimento por ordem de chegada.
                         </p>
@@ -166,18 +105,14 @@ const FlashDay: React.FC = () => {
 
             {/* --- CARD 2: FULL DAY (Premium / Noir Style) --- */}
             <Reveal width="100%" delay={200}>
-                <div 
-                    className="relative group h-full min-h-[600px] bg-[#0c0a09] rounded-sm overflow-hidden text-white flex flex-col shadow-2xl shadow-stone-900/20 border border-transparent"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                >
+                <div className="relative group h-full min-h-[600px] bg-[#0c0a09] rounded-sm overflow-hidden text-white flex flex-col shadow-2xl shadow-stone-900/20 border border-transparent">
                     
                     {/* Background Texture: Ink/Noise */}
-                    <div className="absolute inset-0 opacity-40 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none overflow-hidden">
+                    <div className="absolute inset-0 opacity-40 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none">
                         <img 
                             src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=1000&auto=format&fit=crop" 
                             alt="Ink Texture" 
-                            className="card-bg-img w-full h-full object-cover mix-blend-overlay will-change-transform"
+                            className="w-full h-full object-cover mix-blend-overlay"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] via-transparent to-transparent"></div>
                     </div>
@@ -192,13 +127,14 @@ const FlashDay: React.FC = () => {
                     </div>
 
                     {/* Content Body */}
-                    <div className="card-content relative z-10 px-8 md:px-12 flex-grow flex flex-col justify-center will-change-transform">
-                        <span ref={numberTwoRef} className="text-[120px] leading-none font-serif text-white absolute top-1/2 -translate-y-1/2 right-4 pointer-events-none opacity-[0.03] select-none">02</span>
+                    <div className="relative z-10 px-8 md:px-12 flex-grow flex flex-col justify-center">
+                        <span className="text-[120px] leading-none font-serif text-white absolute top-1/2 -translate-y-1/2 right-4 pointer-events-none opacity-[0.03] select-none">02</span>
 
                         <h3 className="font-serif text-4xl md:text-5xl text-white relative z-10 mb-4">
                             Full Day <br/>
                             <span className="italic text-rose-200/60">& Imersão Total</span>
                         </h3>
+                        {/* Leading Luxury aplicada */}
                         <p className="text-stone-400 text-sm leading-luxury max-w-sm relative z-10 mb-8">
                             Você "aluga" o artista por um dia inteiro. Foco absoluto no seu projeto, sem pressa. Ideal para fechamentos de braço/costas.
                         </p>
