@@ -9,26 +9,20 @@ const About: React.FC = () => {
     <section id="about" className="relative py-24 md:py-32 bg-white overflow-hidden">
       <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         
-        {/* Header Grid - Layout do Print: Espaço à esquerda, Texto à direita */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20 md:mb-24 items-end">
-            <div className="hidden lg:block relative h-full">
-               {/* Ponto decorativo minimalista do print */}
-               <div className="absolute bottom-4 left-0 w-2 h-2 bg-stone-900 rounded-full"></div>
-            </div>
+            {/* Elemento removido conforme solicitação */}
+            <div className="hidden lg:block relative h-full"></div>
 
             <div className="flex flex-col justify-end text-left">
                 <Reveal>
-                    <h2 className="font-sans font-bold text-4xl md:text-5xl lg:text-6xl leading-[0.9] text-stone-900 uppercase tracking-tighter mb-8">
-                        Eu sou William<br />
-                        Siqueira, e eu<br />
-                        <span className="text-stone-400">Materializo</span><br />
-                        Histórias.
+                    <h2 className="font-display font-bold text-fluid-h2 leading-[1.0] text-stone-900 uppercase tracking-tighter mb-8 max-w-3xl">
+                        Eu sou William Siqueira,<br /> e eu <span className="text-stone-400">Materializo</span><br /> Histórias.
                     </h2>
                 </Reveal>
                 
                 <Reveal delay={200}>
                     <div className="max-w-md">
-                        <p className="font-serif text-lg text-stone-600 leading-relaxed">
+                        <p className="font-sans text-lg text-stone-600 leading-relaxed font-light">
                             Especialista em Neotradicional.<br />
                             Transformo narrativas pessoais em anatomia e arte perene.
                         </p>
@@ -37,8 +31,7 @@ const About: React.FC = () => {
 
                 <Reveal delay={400}>
                     <div className="mt-10">
-                        {/* Tracking Widest (0.25em) */}
-                        <Link to="/processo" className="group inline-flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-[#754548] hover:text-stone-900 transition-colors">
+                        <Link to="/processo" className="group inline-flex items-center gap-4 text-xs font-bold font-sans uppercase tracking-widest text-[#754548] hover:text-stone-900 transition-colors">
                             <span>Entenda o Processo</span>
                             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
@@ -47,9 +40,7 @@ const About: React.FC = () => {
             </div>
         </div>
 
-        {/* Grid de 3 Imagens - Estilo Tríptico */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[600px]">
-            {/* Imagem 1: Industrial/Textura */}
             <div className="w-full aspect-[3/4] md:h-full md:aspect-auto relative group overflow-hidden">
                 <div className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 ease-out">
                     <ParallaxImage 
@@ -59,7 +50,6 @@ const About: React.FC = () => {
                 </div>
             </div>
             
-            {/* Imagem 2: Urbano/Fachada */}
             <div className="w-full aspect-[3/4] md:h-full md:aspect-auto relative group overflow-hidden">
                  <div className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 ease-out">
                     <ParallaxImage 
@@ -69,7 +59,6 @@ const About: React.FC = () => {
                  </div>
             </div>
 
-            {/* Imagem 3: Natureza/Atmosfera */}
             <div className="w-full aspect-[3/4] md:h-full md:aspect-auto relative group overflow-hidden">
                  <div className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 ease-out">
                     <ParallaxImage 
