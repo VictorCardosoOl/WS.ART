@@ -5,27 +5,27 @@ import gsap from 'gsap';
 const steps = [
   {
     id: "01",
-    title: "Briefing",
-    shortDesc: "Alinhamento de expectativas.",
-    fullDesc: "A etapa fundamental de coleta de informações. Realizamos uma conversa técnica para entender as referências, dimensões, local do corpo e a narrativa que deve compor a obra. Definimos aqui a viabilidade técnica do projeto.",
+    title: "Briefing & Conexão",
+    shortDesc: "Entendemos sua história.",
+    fullDesc: "A sondagem da tatuagem. Nesta etapa inicial, realizamos uma conversa profunda para entender as motivações, símbolos e memórias que devem compor a obra. Não é apenas sobre o desenho, é sobre o significado.",
   },
   {
     id: "02",
-    title: "Concept Art",
-    shortDesc: "Desenvolvimento do projeto.",
-    fullDesc: "Criação digital e manual do desenho. Utilizamos softwares de edição para projetar a arte sobre a foto da sua anatomia (Mockup), garantindo fluidez e encaixe perfeito antes de qualquer intervenção na pele.",
+    title: "Estudo Anatômico",
+    shortDesc: "Projeção digital no corpo.",
+    fullDesc: "Utilizamos fotografia e edição digital (Photoshop) para projetar o desenho diretamente sobre a foto do seu corpo. Isso garante que a arte respeite sua musculatura, curvaturas e fluxo natural, criando uma peça orgânica e fluida.",
   },
   {
     id: "03",
-    title: "Preparação",
-    shortDesc: "Montagem de bancada.",
-    fullDesc: "Definição de paleta de cores, calibração de máquinas e preparação da bancada estéril. Todo o material é conferido e aberto na frente do cliente para garantir segurança biológica total.",
+    title: "Sketching",
+    shortDesc: "O desenho ganha vida.",
+    fullDesc: "Desenvolvimento dos rascunhos e arte final antes da tatuagem acontecer. Aqui definimos contraste, pesos de linha e paleta de cores. O desenho é refinado até atingir a excelência estética e técnica necessária.",
   },
   {
     id: "04",
-    title: "Execução",
-    shortDesc: "A sessão de tatuagem.",
-    fullDesc: "Aplicação técnica do pigmento. Focamos em traços limpos e solidez na cor, otimizando o tempo de sessão para reduzir o trauma na pele e garantir uma cicatrização mais eficiente.",
+    title: "A Sessão",
+    shortDesc: "Execução técnica.",
+    fullDesc: "O momento da materialização. Em um ambiente privado e estéril, a arte é transferida para a pele. Utilizamos técnicas modernas para garantir a durabilidade do pigmento e o conforto durante o procedimento.",
   }
 ];
 
@@ -51,7 +51,22 @@ const Process: React.FC = () => {
       {/* Background Layer */}
       <div className="absolute inset-0 bg-[#F2E8E9] z-0"></div>
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FAF7F7] to-transparent z-1"></div>
-      
+      <div className="absolute top-20 right-[-10%] w-[800px] h-[800px] bg-[radial-gradient(circle,_rgba(117,69,72,0.08)_0%,_transparent_60%)] blur-[100px] pointer-events-none z-0"></div>
+      <div className="absolute bottom-20 left-[-10%] w-[600px] h-[600px] bg-[radial-gradient(circle,_rgba(28,25,23,0.04)_0%,_transparent_60%)] blur-[80px] pointer-events-none z-0"></div>
+
+      {/* Decorative Line (SVG Filtered) */}
+      <div className="absolute top-0 right-[20%] w-[2px] h-full opacity-10 hidden lg:block z-0 overflow-hidden">
+         <svg height="100%" width="20" preserveAspectRatio="none">
+            <path d="M10,0 Q 20,400 0,1000" stroke="#754548" strokeWidth="2" fill="none" style={{ filter: 'url(#pencil-process)' }} />
+            <defs>
+                <filter id="pencil-process">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise"/>
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+                </filter>
+            </defs>
+         </svg>
+      </div>
+
       <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 pb-24">
         
         <div className="flex flex-col lg:flex-row gap-20 items-start">
@@ -61,7 +76,7 @@ const Process: React.FC = () => {
              <Reveal>
                <div className="flex items-center gap-4 mb-12">
                    <div className="w-3 h-3 rounded-full border border-[#754548] bg-transparent"></div>
-                   <span className="text-xs font-bold uppercase tracking-ultra text-[#754548]">Fluxo de Criação</span>
+                   <span className="text-xs font-bold uppercase tracking-ultra text-[#754548]">O Processo Criativo</span>
                </div>
              </Reveal>
 

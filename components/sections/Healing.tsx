@@ -19,8 +19,8 @@ const phases = [
   {
     id: 2,
     days: "Dias 4 — 10",
-    title: "Regeneração (Descamação)",
-    description: "A camada superficial começa a secar e descamar. É a fase de renovação da epiderme.",
+    title: "Regeneração (A Casca)",
+    description: "A camada superficial começa a secar e descamar. É a fase da coceira e da pele 'craquelada'.",
     guide: [
         "NUNCA arranque as cascas. Deixe-as cair naturalmente.",
         "Inicie a hidratação leve (fina camada) 2x ao dia.",
@@ -58,14 +58,14 @@ const Healing: React.FC = () => {
         <div className="mb-20 md:mb-24 text-center max-w-3xl mx-auto">
             <Reveal>
                 <h2 className="font-serif text-5xl md:text-7xl text-stone-900 leading-[0.9] mb-6">
-                    Protocolo <br/>
-                    <span className="italic text-[#754548]">Pós-Sessão.</span>
+                    A Jornada de <br/>
+                    <span className="italic text-[#754548]">Cura.</span>
                 </h2>
             </Reveal>
             <Reveal delay={200}>
                 <p className="text-stone-500 text-sm leading-luxury md:text-base">
-                    50% do resultado é a aplicação técnica. Os outros 50% são os cuidados nas semanas seguintes.
-                    Siga estritamente as orientações.
+                    50% do resultado é a aplicação técnica. Os outros 50% são seus cuidados nas semanas seguintes.
+                    Entenda a fisiologia da cicatrização.
                 </p>
             </Reveal>
         </div>
