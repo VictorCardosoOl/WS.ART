@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
         </svg>
       </div>
 
-      {/* 2. TIPOGRAFIA DE FUNDO (Massiva) - Corrigido para parecer branco/cinza */}
+      {/* 2. TIPOGRAFIA DE FUNDO (Massiva) */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full z-0 pointer-events-none select-none flex justify-center items-end leading-none overflow-hidden">
         <span className="font-display font-bold text-[18vw] text-white opacity-[0.03] tracking-tighter whitespace-nowrap blur-[1px] uppercase">
           SIQUEIRA
@@ -41,8 +41,8 @@ const Footer: React.FC = () => {
                     <h2 className="font-display font-medium text-4xl text-stone-100 leading-none mb-2 uppercase tracking-tight">
                         William<br/>Siqueira
                     </h2>
-                    <p className="font-sans italic text-stone-600 text-lg">
-                        Tattoo Art Studio
+                    <p className="font-hand text-2xl text-stone-500 rotate-[-2deg] mt-2">
+                        "Arte na pele."
                     </p>
                 </div>
                 <div>
@@ -129,11 +129,16 @@ const Footer: React.FC = () => {
                     </nav>
                 </div>
 
-                <div className="pt-8 mt-8 border-t border-stone-900">
+                <div className="pt-8 mt-8 border-t border-stone-900 relative">
                     <p className="text-[10px] text-stone-700 uppercase tracking-widest flex flex-col gap-1 font-bold">
                         <span>© {currentYear} William Siqueira.</span>
                         <span className="opacity-50">All rights reserved.</span>
                     </p>
+                    
+                    {/* Assinatura Manuscrita */}
+                    <div className="absolute right-0 bottom-0 opacity-20 rotate-[-5deg]">
+                        <span className="font-hand text-3xl text-white">Will.</span>
+                    </div>
                 </div>
             </div>
 
