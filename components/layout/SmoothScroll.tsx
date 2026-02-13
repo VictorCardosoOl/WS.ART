@@ -1,50 +1,55 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useState, useContext, createContext } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LenisContext = React.createContext<Lenis | null>(null);
+const LenisContext = createContext<Lenis | null>(null);
 
-export const useLenis = () => React.useContext(LenisContext);
+export const useLenis = () => useContext(LenisContext);
 
 interface SmoothScrollProps {
   children: React.ReactNode;
 }
 
 const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
-  const [lenisInstance, setLenisInstance] = React.useState<Lenis | null>(null);
+  const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
 
   useLayoutEffect(() => {
-    // Configuração ULTRA OTIMIZADA para performance máxima
+    // 1. Initialize Lenis
     const lenis = new Lenis({
-      duration: 0.8, // Reduzido para resposta mais rápida
+      duration: 0.8,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.2, // Mais responsivo
+      wheelMultiplier: 1.2,
       touchMultiplier: 2,
       infinite: false,
-      autoResize: true, // Auto resize para evitar problemas
+      autoResize: true,
     });
 
     setLenisInstance(lenis);
 
+    // 2. Sync with ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Integração com GSAP Ticker
-    gsap.ticker.add((time) => {
+    // 3. Sync with GSAP Ticker (Optimized: External function reference for cleanup)
+    const update = (time: number) => {
       lenis.raf(time * 1000);
-    });
+    };
 
-    // Lag smoothing otimizado
-    gsap.ticker.lagSmoothing(500, 16); // Suaviza lags até 500ms, 16ms por frame
+    gsap.ticker.add(update);
 
+    // 4. Lag Smoothing
+    gsap.ticker.lagSmoothing(500, 16);
+
+    // 5. Cleanup
     return () => {
-      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+      gsap.ticker.remove(update); // Correct removal using function reference
       lenis.destroy();
+      setLenisInstance(null);
     };
   }, []);
 
