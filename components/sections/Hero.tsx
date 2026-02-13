@@ -9,6 +9,7 @@ const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
+  const titleTextRef = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -34,7 +35,29 @@ const Hero: React.FC = () => {
         stagger: 0.15
       }, "-=1.4");
 
-      // 2. SCROLL PARALLAX (Físico)
+      // 2. SCROLL PARALLAX E SKEW VELOCITY
+      const scrollTrigger = ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+        onUpdate: (self) => {
+           // Efeito de distorção (Skew) baseado na velocidade do scroll
+           const velocity = self.getVelocity();
+           const skew = velocity / 300; 
+           
+           if(titleTextRef.current) {
+               gsap.to(titleTextRef.current, { 
+                   skewX: -skew, 
+                   overwrite: 'auto', 
+                   duration: 0.1,
+                   ease: "power1.out"
+               });
+           }
+        }
+      });
+
+      // Parallax suave do fundo
       gsap.to(bgRef.current, {
         yPercent: 30,
         ease: "none",
@@ -42,19 +65,20 @@ const Hero: React.FC = () => {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: true
+          scrub: 0 // Sem inércia para evitar sensação de "deslizamento" tardio
         }
       });
 
-      // Texto Gigante (Foreground)
+      // Parallax do Texto Gigante
       gsap.to(titleRef.current, {
-        yPercent: -20,
+        yPercent: 15,
+        opacity: 0,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "bottom top",
-          scrub: 1 // Leve inércia
+          end: "50% top",
+          scrub: true
         }
       });
 
@@ -66,10 +90,9 @@ const Hero: React.FC = () => {
   return (
     <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden bg-[#FAF7F7] z-10 flex flex-col justify-between">
       
-      {/* Atmosphere Layer */}
+      {/* Atmosphere Layer - Removido Noise Local para usar o Global */}
       <div ref={bgRef} className="absolute inset-0 z-0 pointer-events-none will-change-transform">
-          <div className="absolute inset-0 bg-noise opacity-[0.04] mix-blend-overlay"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_var(--tw-gradient-stops))] from-rose-200/30 via-transparent to-transparent opacity-60"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_var(--tw-gradient-stops))] from-rose-200/40 via-transparent to-transparent opacity-60"></div>
       </div>
 
       <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
@@ -78,7 +101,6 @@ const Hero: React.FC = () => {
               <div className="hidden md:flex flex-col gap-3 hero-fade pointer-events-auto">
                  <div className="flex items-center gap-3">
                     <div className="w-1 h-1 bg-[#754548] rounded-full animate-pulse"></div>
-                    {/* Aumento do Tracking para 0.25em */}
                     <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">São Paulo, BR</span>
                  </div>
                  <span className="text-[10px] font-medium uppercase tracking-widest text-stone-300 pl-4">Est. 2018</span>
@@ -93,13 +115,12 @@ const Hero: React.FC = () => {
                   
                   <div className="hero-line w-full md:w-32 h-[1px] bg-[#754548] my-8 opacity-60"></div>
 
-                  {/* Line Height Luxury (2.0) e Tracking Ultra */}
                   <p className="hero-fade font-sans text-[10px] text-stone-500 leading-luxury tracking-ultra uppercase font-semibold text-right max-w-[280px]">
                       Conectamos narrativa pessoal e anatomia em obras neotradicionais.
                   </p>
 
                   <div className="hero-fade mt-10">
-                      <Magnetic strength={0.5}>
+                      <Magnetic strength={0.3}>
                         <a href="#gallery" className="group inline-flex items-center justify-end gap-4 text-[10px] font-bold uppercase tracking-widest text-[#754548] hover:text-stone-900 transition-colors p-4 -mr-4">
                             Explorar Portfólio
                             <div className="relative overflow-hidden w-4 h-4 flex items-center justify-center">
@@ -112,8 +133,8 @@ const Hero: React.FC = () => {
               </div>
           </div>
 
-          <div className="w-full relative pb-12 flex flex-col items-center">
-             <div className="hero-fade animate-bounce duration-[3000ms] mb-8 opacity-50">
+          <div className="w-full relative pb-12 flex flex-col items-center pointer-events-auto">
+             <div className="hero-fade animate-bounce duration-[3000ms] mb-8 opacity-50 cursor-pointer" onClick={() => document.getElementById('about')?.scrollIntoView({behavior: 'smooth'})}>
                 <ArrowDown size={18} className="text-[#754548]" />
              </div>
           </div>
@@ -123,7 +144,7 @@ const Hero: React.FC = () => {
         ref={titleRef}
         className="absolute bottom-0 left-0 w-full flex justify-center items-end leading-none z-10 mix-blend-darken pointer-events-none select-none pb-0 will-change-transform"
       >
-          <h1 className="font-sans font-black text-[22vw] text-[#12100E] tracking-tighter text-center leading-[0.7] w-full opacity-90 overflow-hidden translate-y-[2%]">
+          <h1 ref={titleTextRef} className="font-sans font-black text-[22vw] text-[#12100E] tracking-tighter text-center leading-[0.7] w-full opacity-90 overflow-hidden translate-y-[2%] will-change-transform transform-gpu">
                <SplitText charClass="char-reveal" wordClass="overflow-hidden pb-[1vw]">
                 WILLIAM
                </SplitText>

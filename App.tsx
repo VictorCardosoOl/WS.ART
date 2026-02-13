@@ -10,10 +10,8 @@ import AnimatedRoutes from './components/layout/AnimatedRoutes';
 import ThemeController from './components/layout/ThemeController';
 
 const App: React.FC = () => {
-  // Estado para controlar a exibição do Preloader
   const [loading, setLoading] = useState(true);
 
-  // Fallback de segurança caso a animação falhe (timeout de 5s)
   useEffect(() => {
     const timer = setTimeout(() => {
         setLoading(false);
@@ -23,24 +21,26 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      {/* O Preloader deve estar fora do SmoothScroll para não ser afetado pelo transform */}
       {loading && <Preloader onComplete={() => setLoading(false)} />}
       
       <SmoothScroll>
         <ThemeController />
         <ScrollToTop />
-        <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden relative transition-colors duration-700">
+        <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden relative transition-colors duration-700 bg-[#FAF7F7]">
           
-          {/* Global Noise Overlay (Static) */}
-          <div className="fixed inset-0 z-50 pointer-events-none mix-blend-overlay opacity-[0.05] overflow-hidden transform-gpu translate-z-0">
-             <div className="absolute inset-0 w-full h-full bg-noise bg-repeat"></div>
+          {/* 
+             GLOBAL OPTIMIZED NOISE 
+             Usa translate3d(0,0,0) para forçar aceleração de hardware.
+             Reduz repaints em comparação a múltiplos overlays por seção.
+          */}
+          <div className="fixed inset-0 z-[9999] pointer-events-none mix-blend-overlay opacity-[0.06] overflow-hidden" style={{ transform: 'translate3d(0,0,0)' }}>
+             <div className="absolute inset-0 w-full h-full bg-noise bg-repeat animate-grain will-change-transform"></div>
           </div>
           
           <CustomCursor />
           <Navbar />
           
-          {/* Main Content com Rotas Animadas */}
-          <main className="flex-grow relative z-10 w-full min-h-screen">
+          <main className="flex-grow relative z-10 w-full min-h-screen will-change-contents">
              <AnimatedRoutes />
           </main>
           
