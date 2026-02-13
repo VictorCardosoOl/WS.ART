@@ -13,33 +13,33 @@ const Footer: React.FC = () => {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Reveal animation on scroll
+            // Reveal animation simplificada
             if (footerRef.current) {
                 gsap.fromTo(
                     footerRef.current.querySelectorAll('.footer-col'),
-                    { y: 50, opacity: 0 },
+                    { y: 30, opacity: 0 },
                     {
                         y: 0,
                         opacity: 1,
-                        duration: 0.8,
-                        stagger: 0.1,
-                        ease: "power3.out",
+                        duration: 0.5, // Reduzido de 0.8s
+                        stagger: 0.05, // Reduzido de 0.1s
+                        ease: "power2.out",
                         scrollTrigger: {
                             trigger: footerRef.current,
-                            start: "top 80%",
-                            toggleActions: "play none none reverse"
+                            start: "top 85%",
+                            once: true // Anima apenas uma vez
                         }
                     }
                 );
             }
 
-            // Hover effects on social links
+            // Hover effects simplificados
             socialLinksRef.current.forEach((link) => {
                 if (link) {
                     link.addEventListener('mouseenter', () => {
                         gsap.to(link, {
-                            x: 8,
-                            duration: 0.3,
+                            x: 6, // Reduzido de 8px
+                            duration: 0.25, // Reduzido de 0.3s
                             ease: "power2.out"
                         });
                     });
@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
                     link.addEventListener('mouseleave', () => {
                         gsap.to(link, {
                             x: 0,
-                            duration: 0.3,
+                            duration: 0.25,
                             ease: "power2.out"
                         });
                     });

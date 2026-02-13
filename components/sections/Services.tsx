@@ -3,14 +3,9 @@ import Reveal from '../ui/Reveal';
 import { ArrowRight } from 'lucide-react';
 import { SERVICES_ITEMS } from '../../data/services';
 import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Services: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-  const titlesRef = useRef<(HTMLHeadingElement | null)[]>([]);
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
   const serviceImages = [
@@ -20,46 +15,7 @@ const Services: React.FC = () => {
     "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=800&auto=format&fit=crop"
   ];
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Parallax effect on section
-      gsap.to(sectionRef.current, {
-        yPercent: 5,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1
-        }
-      });
-
-      // Hover effects on titles
-      titlesRef.current.forEach((title) => {
-        if (title) {
-          title.addEventListener('mouseenter', () => {
-            gsap.to(title, {
-              x: 16,
-              duration: 0.5,
-              ease: "power2.out"
-            });
-          });
-
-          title.addEventListener('mouseleave', () => {
-            gsap.to(title, {
-              x: 0,
-              duration: 0.5,
-              ease: "power2.out"
-            });
-          });
-        }
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  // Smooth image transition with GSAP
+  // Smooth image transition with GSAP (otimizado)
   useEffect(() => {
     if (imageContainerRef.current) {
       const images = imageContainerRef.current.querySelectorAll('img');
@@ -67,13 +23,13 @@ const Services: React.FC = () => {
         if (hoveredIndex === index) {
           gsap.to(img, {
             opacity: 0.8,
-            duration: 0.5,
+            duration: 0.4, // Reduzido de 0.5s
             ease: "power2.out"
           });
         } else {
           gsap.to(img, {
             opacity: 0,
-            duration: 0.5,
+            duration: 0.4,
             ease: "power2.out"
           });
         }
@@ -82,7 +38,7 @@ const Services: React.FC = () => {
   }, [hoveredIndex]);
 
   return (
-    <section ref={sectionRef} id="services" data-theme="dark" className="py-32 md:py-48 text-stone-100 overflow-hidden relative transition-colors duration-700">
+    <section id="services" data-theme="dark" className="py-32 md:py-48 text-stone-100 overflow-hidden relative transition-colors duration-700">
       <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-20">
 
         <Reveal>
@@ -105,10 +61,7 @@ const Services: React.FC = () => {
                   <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-6 pointer-events-none">
                     <div className="flex items-baseline gap-8">
                       <span className="font-sans text-[10px] text-stone-600 font-bold tracking-widest group-hover:text-rose-500 transition-colors duration-300">0{index + 1}</span>
-                      <h3
-                        ref={el => titlesRef.current[index] = el}
-                        className="font-serif text-4xl md:text-6xl text-stone-300 group-hover:text-rose-100 transition-colors duration-300 font-light will-change-transform"
-                      >
+                      <h3 className="font-serif text-4xl md:text-6xl text-stone-300 group-hover:text-rose-100 transition-all duration-300 font-light group-hover:translate-x-4">
                         {service.title}
                       </h3>
                     </div>
