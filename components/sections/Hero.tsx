@@ -1,56 +1,60 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import { MapPin } from 'lucide-react';
+import { MoveRight, ArrowDown } from 'lucide-react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import SplitText from '../ui/SplitText';
+import Magnetic from '../ui/Magnetic';
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
+      // 1. INTRO ANIMATION (Load)
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      // Configuração Inicial
-      gsap.set(".hero-char", { yPercent: 120, opacity: 0 }); 
-      gsap.set(".construction-line", { scaleX: 0, opacity: 0 });
-      gsap.set(".construction-circle", { scale: 0, opacity: 0, rotation: -90 });
+      gsap.set(".char-reveal", { yPercent: 120, opacity: 0 }); 
+      gsap.set(".hero-fade", { y: 30, autoAlpha: 0 });
+      gsap.set(".hero-line", { scaleX: 0, transformOrigin: "left center" });
 
-      // 1. Linhas de Construção (Efeito Draft)
-      tl.to(".construction-line", {
-          scaleX: 1,
-          opacity: 0.4,
-          duration: 1.5,
-          stagger: 0.1,
-          ease: "expo.out"
-      })
-      .to(".construction-circle", {
-          scale: 1,
-          opacity: 0.4,
-          rotation: 0,
-          duration: 1.2,
-          ease: "back.out(1.7)"
-      }, "-=1.0");
-
-      // 2. Texto Principal
-      tl.to(".hero-char", {
+      tl.to(".char-reveal", {
         yPercent: 0,
         opacity: 1,
         duration: 1.6,
-        stagger: 0.05,
+        stagger: { amount: 0.8, from: "start" },
         ease: "power4.out"
-      }, "-=0.8");
+      })
+      .to(".hero-line", { scaleX: 1, duration: 1.8, ease: "expo.out" }, "-=1.2")
+      .to(".hero-fade", {
+        y: 0,
+        autoAlpha: 1,
+        duration: 1.4,
+        stagger: 0.15
+      }, "-=1.4");
 
-      // 3. Parallax
-      gsap.to(titleRef.current, {
-        yPercent: 20,
+      // 2. SCROLL PARALLAX (Físico)
+      gsap.to(bgRef.current, {
+        yPercent: 30,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
           scrub: true
+        }
+      });
+
+      // Texto Gigante (Foreground)
+      gsap.to(titleRef.current, {
+        yPercent: -20,
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1 // Leve inércia
         }
       });
 
@@ -62,67 +66,68 @@ const Hero: React.FC = () => {
   return (
     <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden bg-[#FAF7F7] z-10 flex flex-col justify-between">
       
-      {/* --- BACKGROUND SKETCH LINES (Concept Art Grid) --- */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-          {/* Linha do Horizonte (Azul Lápis) */}
-          <div className="absolute top-1/2 left-0 w-full h-[1px] bg-blue-300 opacity-20 construction-line origin-left" style={{ filter: 'url(#pencil-stroke)' }}></div>
-          
-          {/* Linha Vertical Central (Vermelho Lápis) */}
-          <div className="absolute top-0 left-1/2 h-full w-[1px] bg-red-300 opacity-20 construction-line origin-top" style={{ filter: 'url(#pencil-stroke)' }}></div>
-          
-          {/* Círculo de Proporção Áurea */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vh] h-[60vh] border border-stone-300 rounded-full opacity-10 construction-circle" style={{ filter: 'url(#pencil-stroke)' }}></div>
-          
-          {/* Notas de Medida */}
-          <div className="absolute top-[52%] left-[52%] text-[9px] font-hand text-blue-400 opacity-50 rotate-[-15deg]">
-              ( fig. 1.2 - axis alignment )
-          </div>
+      {/* Atmosphere Layer */}
+      <div ref={bgRef} className="absolute inset-0 z-0 pointer-events-none will-change-transform">
+          <div className="absolute inset-0 bg-noise opacity-[0.04] mix-blend-overlay"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_var(--tw-gradient-stops))] from-rose-200/30 via-transparent to-transparent opacity-60"></div>
       </div>
 
-      {/* --- TOP META INFO --- */}
-      <div className="relative z-20 w-full px-6 md:px-12 pt-8 flex justify-between items-start hero-meta">
-          <div className="flex flex-col gap-1 relative">
-              <span className="text-[10px] font-bold font-sans uppercase tracking-widest text-[#1c1917]">Est. 2018</span>
-              <span className="text-[9px] font-serif italic text-[#754548]">Private Studio</span>
-              
-              {/* Seta de anotação */}
-              <svg className="absolute -right-12 top-2 w-8 h-8 text-stone-400 opacity-50 rotate-12" viewBox="0 0 50 50">
-                  <path d="M0,25 Q25,0 50,25" fill="none" stroke="currentColor" strokeWidth="1" style={{ filter: 'url(#pencil-stroke)' }} />
-                  <path d="M40,15 L50,25 L40,35" fill="none" stroke="currentColor" strokeWidth="1" style={{ filter: 'url(#pencil-stroke)' }} />
-              </svg>
-          </div>
+      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
           
-          <div className="flex items-center gap-2 text-[#1c1917]">
-             <span className="text-[10px] font-bold font-sans uppercase tracking-widest text-right hidden md:block">São Paulo<br/>Brasil</span>
-             <MapPin size={14} className="text-[#754548]" />
-          </div>
-      </div>
+          <div className="flex flex-col md:flex-row justify-between items-start w-full">
+              <div className="hidden md:flex flex-col gap-3 hero-fade pointer-events-auto">
+                 <div className="flex items-center gap-3">
+                    <div className="w-1 h-1 bg-[#754548] rounded-full animate-pulse"></div>
+                    {/* Aumento do Tracking para 0.25em */}
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">São Paulo, BR</span>
+                 </div>
+                 <span className="text-[10px] font-medium uppercase tracking-widest text-stone-300 pl-4">Est. 2018</span>
+              </div>
 
-      {/* --- BOTTOM ANCHORED TITLE --- */}
-      <div className="relative z-10 w-full flex-grow flex items-end justify-center pb-12 md:pb-8 overflow-visible">
-          <div ref={titleRef} className="w-full text-center leading-none relative">
-              
-              {/* Construction Box around Title (The "Frame") */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[85%] h-full border-x border-dashed border-stone-300 opacity-30 pointer-events-none"></div>
+              <div className="flex flex-col items-end text-right pointer-events-auto ml-auto max-w-xl">
+                  <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-[#1c1917] leading-tight-editorial font-light tracking-tight mix-blend-darken overflow-hidden">
+                      <SplitText charClass="char-reveal" wordClass="overflow-hidden pb-2">
+                        A pele como tela eterna.
+                      </SplitText>
+                  </h2>
+                  
+                  <div className="hero-line w-full md:w-32 h-[1px] bg-[#754548] my-8 opacity-60"></div>
 
-              <h1 className="font-display font-bold text-[24vw] text-[#1c1917] tracking-tighter leading-[0.75] select-none whitespace-nowrap overflow-visible translate-y-[2%] relative">
-                   {/* Shadow Sketch Layer (Hachura) */}
-                   <span className="absolute top-2 left-2 w-full h-full text-transparent bg-clip-text pointer-events-none z-[-1] opacity-20" 
-                         style={{ backgroundImage: 'url(#hatch-pattern)', WebkitTextStroke: '1px rgba(0,0,0,0.1)' }}>
-                       WILLIAM
-                   </span>
+                  {/* Line Height Luxury (2.0) e Tracking Ultra */}
+                  <p className="hero-fade font-sans text-[10px] text-stone-500 leading-luxury tracking-ultra uppercase font-semibold text-right max-w-[280px]">
+                      Conectamos narrativa pessoal e anatomia em obras neotradicionais.
+                  </p>
 
-                   <SplitText charClass="hero-char inline-block will-change-transform" wordClass="overflow-visible inline-block">
-                    WILLIAM
-                   </SplitText>
-              </h1>
-              
-              {/* Assinatura "Lápis" */}
-              <div className="absolute bottom-1/3 right-[10%] md:right-[20%] rotate-[-10deg] mix-blend-multiply opacity-80 z-20">
-                  <span className="font-hand text-3xl md:text-5xl text-[#754548]">Concept Art.</span>
-                  <div className="w-full h-[2px] bg-[#754548] mt-[-5px]" style={{ filter: 'url(#pencil-stroke)' }}></div>
+                  <div className="hero-fade mt-10">
+                      <Magnetic strength={0.5}>
+                        <a href="#gallery" className="group inline-flex items-center justify-end gap-4 text-[10px] font-bold uppercase tracking-widest text-[#754548] hover:text-stone-900 transition-colors p-4 -mr-4">
+                            Explorar Portfólio
+                            <div className="relative overflow-hidden w-4 h-4 flex items-center justify-center">
+                              <MoveRight size={14} className="absolute transition-transform duration-500 group-hover:translate-x-full" />
+                              <MoveRight size={14} className="absolute -translate-x-full transition-transform duration-500 group-hover:translate-x-0" />
+                            </div>
+                        </a>
+                      </Magnetic>
+                  </div>
               </div>
           </div>
+
+          <div className="w-full relative pb-12 flex flex-col items-center">
+             <div className="hero-fade animate-bounce duration-[3000ms] mb-8 opacity-50">
+                <ArrowDown size={18} className="text-[#754548]" />
+             </div>
+          </div>
+      </div>
+
+      <div 
+        ref={titleRef}
+        className="absolute bottom-0 left-0 w-full flex justify-center items-end leading-none z-10 mix-blend-darken pointer-events-none select-none pb-0 will-change-transform"
+      >
+          <h1 className="font-sans font-black text-[22vw] text-[#12100E] tracking-tighter text-center leading-[0.7] w-full opacity-90 overflow-hidden translate-y-[2%]">
+               <SplitText charClass="char-reveal" wordClass="overflow-hidden pb-[1vw]">
+                WILLIAM
+               </SplitText>
+          </h1>
       </div>
 
     </section>

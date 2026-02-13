@@ -4,137 +4,166 @@ import Reveal from '../ui/Reveal';
 
 const FlashDay: React.FC = () => {
   return (
-    <section id="flashday" className="py-24 md:py-32 bg-[#EBE8E8] relative overflow-hidden">
+    <section id="flashday" className="py-24 md:py-32 bg-stone-50 border-b border-stone-100 relative overflow-hidden">
       
-      {/* Background Texture: Wall/Concrete vibe */}
-      <div className="absolute inset-0 opacity-[0.6] pointer-events-none mix-blend-multiply filter contrast-125 bg-[url('https://www.transparenttextures.com/patterns/concrete-wall.png')]"></div>
+      {/* Background Decorativo Global */}
+      <div className="absolute inset-0 opacity-[0.4] pointer-events-none mix-blend-multiply bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-rose-100/40 via-transparent to-transparent"></div>
 
       <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-10">
         
+        {/* Header da Seção */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 md:mb-24">
             <Reveal>
                 <div>
                     <div className="flex items-center gap-3 mb-4">
-                        {/* Fita adesiva decorativa */}
-                        <div className="w-12 h-4 bg-[#D48C95]/40 rotate-[-5deg] backdrop-blur-sm"></div>
-                        <span className="text-xs font-bold font-sans uppercase tracking-widest text-stone-500">Eventos & Agenda</span>
+                        <div className="h-[1px] w-8 bg-rose-400"></div>
+                        <span className="text-xs font-bold uppercase tracking-widest text-rose-500">Agendamento & Eventos</span>
                     </div>
-                    <h2 className="font-display font-bold text-6xl md:text-8xl text-stone-900 leading-[0.85] tracking-tighter uppercase transform -rotate-1">
-                        O Muro<br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#754548] to-stone-800">de Ofertas.</span>
+                    <h2 className="font-serif text-5xl md:text-7xl text-stone-900 leading-[0.9] tracking-tight">
+                        Escolha sua<br />
+                        <span className="italic text-stone-400">Experiência.</span>
                     </h2>
                 </div>
             </Reveal>
             <Reveal delay={200}>
-                <div className="mt-8 md:mt-0 max-w-md text-right relative">
-                    <p className="font-hand text-2xl text-stone-600 rotate-2">
-                        "Da correria do Flash à imersão do Full Day..."
+                <div className="mt-8 md:mt-0 max-w-md text-right">
+                    <p className="text-stone-500 text-sm leading-luxury font-medium">
+                        Da adrenalina dos eventos coletivos à quietude de uma sessão exclusiva.
+                        Duas formas de integrar arte à sua pele.
                     </p>
                 </div>
             </Reveal>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16">
+        {/* Grid de Cards Contrastantes */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
             
-            {/* POSTER 1: FLASH DAY (Visual Wheatpaste / Papel Colado) */}
+            {/* --- CARD 1: FLASH DAY (Raw / Organic Style) --- */}
             <Reveal width="100%">
-                <div className="relative group min-h-[600px] bg-[#F5F5F0] shadow-2xl transition-transform duration-500 hover:rotate-1 hover:scale-[1.01] flex flex-col"
-                     style={{ clipPath: "polygon(2% 0, 100% 1%, 99% 98%, 0% 100%)" }}>
+                <div className="relative group h-full min-h-[600px] bg-[#FAF9F6] rounded-sm overflow-hidden border border-stone-100 hover:border-stone-200 transition-colors duration-500 flex flex-col">
                     
-                    {/* Tape Effect */}
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-32 h-8 bg-yellow-100/60 rotate-2 z-20 backdrop-blur-sm shadow-sm"></div>
-
-                    {/* Image Layer with Halftone/Grain */}
-                    <div className="absolute inset-0 z-0">
-                         <img 
-                            src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1000&auto=format&fit=crop" 
-                            alt="Background" 
-                            className="w-full h-full object-cover opacity-80 mix-blend-multiply grayscale contrast-125 transition-all duration-700 group-hover:grayscale-0"
+                    {/* Background Texture: Sketches */}
+                    <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-700 pointer-events-none mix-blend-multiply">
+                        <img 
+                            src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=1000&auto=format&fit=crop" 
+                            alt="Sketches Background" 
+                            className="w-full h-full object-cover grayscale"
                         />
-                         <div className="absolute inset-0 bg-gradient-to-t from-[#F5F5F0] via-transparent to-transparent"></div>
                     </div>
                     
+                    {/* Top Tag */}
                     <div className="relative z-10 p-8 md:p-12 flex justify-between items-start">
-                        <div className="bg-[#1c1917] text-white px-4 py-2 text-xl font-hand rotate-[-3deg] shadow-lg">
-                            Flash Day !!
+                        <div className="bg-stone-900 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest inline-flex items-center gap-2">
+                            <Zap size={12} className="fill-white" />
+                            Flash Day
                         </div>
-                        <Ticket size={32} className="text-[#1c1917] rotate-12" strokeWidth={1.5} />
+                        <Ticket size={24} className="text-stone-300 group-hover:text-stone-900 transition-colors" strokeWidth={1} />
                     </div>
 
+                    {/* Content Body */}
                     <div className="relative z-10 px-8 md:px-12 flex-grow flex flex-col justify-center">
-                        <h3 className="font-display font-black text-5xl md:text-7xl text-stone-900 mb-2 uppercase tracking-tight leading-[0.9] mix-blend-darken">
-                            Sessões<br/>Rápidas
+                        <span className="text-[120px] leading-none font-serif text-stone-100 absolute top-1/2 -translate-y-1/2 left-4 pointer-events-none mix-blend-multiply select-none group-hover:text-stone-200 transition-colors">01</span>
+                        
+                        <h3 className="font-serif text-4xl md:text-5xl text-stone-900 relative z-10 mb-4">
+                            Sessões Rápidas <br/>
+                            <span className="italic text-stone-400">& Catálogo Pronto</span>
                         </h3>
-                        <p className="font-hand text-2xl text-[#754548] mb-8 rotate-[-1deg]">
-                            ( Ordem de chegada. Sem frescura. )
+                        {/* Leading Luxury aplicada */}
+                        <p className="text-stone-600 text-sm leading-luxury max-w-sm relative z-10 mb-8">
+                            O estúdio abre as portas para o público. Desenhos autorais pré-definidos, valores especiais e atendimento por ordem de chegada.
                         </p>
 
-                        <ul className="space-y-4 relative z-10 mb-8 bg-white/60 p-6 backdrop-blur-sm transform rotate-1 border border-stone-200">
-                            <li className="flex items-center gap-3 text-sm font-bold font-sans uppercase tracking-widest text-stone-900">
-                                <CheckCircle2 size={16} className="text-[#754548]" /> Designs Exclusivos
+                        <ul className="space-y-3 relative z-10 mb-8">
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-500">
+                                <CheckCircle2 size={14} className="text-rose-500" /> Desenhos Exclusivos do Dia
                             </li>
-                            <li className="flex items-center gap-3 text-sm font-bold font-sans uppercase tracking-widest text-stone-900">
-                                <CheckCircle2 size={16} className="text-[#754548]" /> Valores Promocionais
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-500">
+                                <CheckCircle2 size={14} className="text-rose-500" /> Valores Promocionais
+                            </li>
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-500">
+                                <CheckCircle2 size={14} className="text-rose-500" /> Ordem de Chegada
                             </li>
                         </ul>
                     </div>
 
-                    <div className="relative z-10 p-8 md:p-12 border-t-2 border-dashed border-stone-300 mt-auto bg-[#F5F5F0]">
+                    {/* Footer / CTA */}
+                    <div className="relative z-10 p-8 md:p-12 border-t border-stone-100 mt-auto bg-white/50 backdrop-blur-sm group-hover:bg-white transition-colors duration-500">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                                <span className="text-xs font-bold font-sans uppercase tracking-widest bg-stone-200 px-2 py-1">Próxima Data</span>
+                            <div className="flex items-center gap-2 text-stone-500">
+                                <Calendar size={16} />
+                                <span className="text-xs font-bold uppercase tracking-widest">Próxima Data:</span>
                             </div>
-                            <span className="text-[#754548] font-hand text-3xl font-bold rotate-[-2deg]">15 . OUT</span>
+                            <span className="text-stone-900 font-serif font-bold text-lg">15 . OUT</span>
                         </div>
-                        <button className="w-full py-4 bg-[#1c1917] text-white text-sm font-bold font-sans uppercase tracking-widest hover:bg-[#754548] transition-colors flex items-center justify-center gap-3 group/btn shadow-xl transform group-hover:translate-y-[-2px]">
-                            Ver Catálogo
-                            <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                        <button className="w-full py-4 bg-stone-900 text-white text-xs font-bold uppercase tracking-widest hover:bg-rose-900 transition-colors flex items-center justify-center gap-3 group/btn">
+                            Ver Designs Disponíveis
+                            <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                         </button>
                     </div>
                 </div>
             </Reveal>
 
-            {/* POSTER 2: FULL DAY (Visual Black Poster / Underground) */}
+            {/* --- CARD 2: FULL DAY (Premium / Noir Style) --- */}
             <Reveal width="100%" delay={200}>
-                <div className="relative group min-h-[600px] bg-[#1c1917] shadow-2xl transition-transform duration-500 hover:rotate-[-1deg] hover:scale-[1.01] flex flex-col text-white"
-                     style={{ clipPath: "polygon(0% 2%, 98% 0%, 100% 100%, 2% 99%)" }}>
+                <div className="relative group h-full min-h-[600px] bg-[#0c0a09] rounded-sm overflow-hidden text-white flex flex-col shadow-2xl shadow-stone-900/20 border border-transparent">
                     
-                    {/* Tape Effect */}
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-32 h-8 bg-white/20 rotate-[-2deg] z-20 backdrop-blur-sm"></div>
+                    {/* Background Texture: Ink/Noise */}
+                    <div className="absolute inset-0 opacity-40 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none">
+                        <img 
+                            src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=1000&auto=format&fit=crop" 
+                            alt="Ink Texture" 
+                            className="w-full h-full object-cover mix-blend-overlay"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] via-transparent to-transparent"></div>
+                    </div>
                     
-                    {/* Background Noise */}
-                    <div className="absolute inset-0 bg-noise opacity-10 pointer-events-none"></div>
-
+                    {/* Top Tag */}
                     <div className="relative z-10 p-8 md:p-12 flex justify-between items-start">
-                        <div className="bg-white text-black px-4 py-2 text-xl font-hand rotate-[2deg] shadow-lg border border-black">
-                            VIP . Premium
+                        <div className="bg-rose-900/80 text-rose-100 border border-rose-800/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest inline-flex items-center gap-2">
+                            <Crown size={12} />
+                            Experiência VIP
                         </div>
-                        <Crown size={32} className="text-white opacity-80" strokeWidth={1} />
+                        <Clock size={24} className="text-stone-600 group-hover:text-rose-200 transition-colors" strokeWidth={1} />
                     </div>
 
+                    {/* Content Body */}
                     <div className="relative z-10 px-8 md:px-12 flex-grow flex flex-col justify-center">
-                        <h3 className="font-display font-black text-5xl md:text-7xl text-white mb-2 uppercase tracking-tight leading-[0.9]">
-                            Full Day<br/>Imersão
+                        <span className="text-[120px] leading-none font-serif text-white absolute top-1/2 -translate-y-1/2 right-4 pointer-events-none opacity-[0.03] select-none">02</span>
+
+                        <h3 className="font-serif text-4xl md:text-5xl text-white relative z-10 mb-4">
+                            Full Day <br/>
+                            <span className="italic text-rose-200/60">& Imersão Total</span>
                         </h3>
-                        <p className="font-hand text-2xl text-stone-400 mb-8 rotate-[1deg]">
-                            ( Você é o único cliente do dia. )
+                        {/* Leading Luxury aplicada */}
+                        <p className="text-stone-400 text-sm leading-luxury max-w-sm relative z-10 mb-8">
+                            Você "aluga" o artista por um dia inteiro. Foco absoluto no seu projeto, sem pressa. Ideal para fechamentos de braço/costas.
                         </p>
 
-                        <div className="bg-stone-800/50 p-6 backdrop-blur-sm transform rotate-[-1deg] border border-stone-700">
-                             <p className="text-stone-300 text-sm leading-relaxed font-sans font-light">
-                                Foco absoluto. Sem interrupções. Ideal para fechamentos grandes (Sleeves/Costas) e projetos complexos que exigem tempo.
-                             </p>
-                        </div>
+                        <ul className="space-y-3 relative z-10 mb-8">
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-400">
+                                <CheckCircle2 size={14} className="text-rose-400" /> Diária Fechada (6h - 8h)
+                            </li>
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-400">
+                                <CheckCircle2 size={14} className="text-rose-400" /> Projetos Autorais Extensos
+                            </li>
+                            <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-400">
+                                <CheckCircle2 size={14} className="text-rose-400" /> Privacidade Total
+                            </li>
+                        </ul>
                     </div>
 
-                    <div className="relative z-10 p-8 md:p-12 border-t-2 border-dashed border-stone-800 mt-auto bg-[#1c1917]">
+                    {/* Footer / CTA */}
+                    <div className="relative z-10 p-8 md:p-12 border-t border-white/10 mt-auto bg-black/20 backdrop-blur-sm">
                         <div className="flex items-center justify-between mb-4">
-                             <span className="text-xs font-bold font-sans uppercase tracking-widest bg-stone-800 px-2 py-1 text-stone-400">Disponibilidade</span>
-                            <span className="text-white font-hand text-2xl">Sob Consulta</span>
+                             <div className="flex items-center gap-2 text-stone-400">
+                                <Calendar size={16} />
+                                <span className="text-xs font-bold uppercase tracking-widest">Disponibilidade:</span>
+                            </div>
+                            <span className="text-white font-serif font-bold text-lg">Sob Consulta</span>
                         </div>
-                        <button className="w-full py-4 bg-white text-black text-sm font-bold font-sans uppercase tracking-widest hover:bg-stone-300 transition-colors flex items-center justify-center gap-3 group/btn shadow-xl transform group-hover:translate-y-[-2px]">
-                            Solicitar Orçamento
-                            <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                        <button className="w-full py-4 bg-white text-stone-950 text-xs font-bold uppercase tracking-widest hover:bg-rose-200 transition-colors flex items-center justify-center gap-3 group/btn">
+                            Solicitar Orçamento Full Day
+                            <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                         </button>
                     </div>
                 </div>

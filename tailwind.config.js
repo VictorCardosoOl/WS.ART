@@ -35,7 +35,6 @@ export default {
       fontFamily: {
         serif: ['"Cormorant Garamond"', 'serif'],
         sans: ['"Montserrat"', 'sans-serif'],
-        hand: ['"Reenie Beanie"', 'cursive'], // Fonte Handwritten adicionada
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)', 
