@@ -9,13 +9,18 @@ const About: React.FC = () => {
     <section id="about" className="relative py-24 md:py-32 bg-white overflow-hidden">
       <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24">
         
+        {/* Grid ajustado: 2 Colunas. A primeira é vazia (spacer) para empurrar o texto para a direita */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20 md:mb-24 items-end">
-            {/* Elemento removido conforme solicitação */}
-            <div className="hidden lg:block relative h-full"></div>
+            
+            {/* Spacer Column (Restaurada para manter o layout original) */}
+            <div className="hidden lg:block relative h-full">
+               <div className="absolute bottom-4 left-0 w-2 h-2 bg-stone-900 rounded-full"></div>
+            </div>
 
             <div className="flex flex-col justify-end text-left">
                 <Reveal>
-                    <h2 className="font-display font-bold text-fluid-h2 leading-[1.0] text-stone-900 uppercase tracking-tighter mb-8 max-w-3xl">
+                    {/* Tamanho de fonte corrigido para classes fixas (4xl/5xl/6xl) ao invés de fluid-h2 instável */}
+                    <h2 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.0] text-stone-900 uppercase tracking-tighter mb-8 max-w-3xl">
                         Eu sou William Siqueira,<br /> e eu <span className="text-stone-400">Materializo</span><br /> Histórias.
                     </h2>
                 </Reveal>
