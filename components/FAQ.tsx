@@ -1,0 +1,1 @@
+// DELETED: Moved to components/sections/FAQ.tsx

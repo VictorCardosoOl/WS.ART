@@ -9,13 +9,13 @@ interface ParallaxImageProps {
   alt: string;
   className?: string;
   priority?: boolean;
-  aspectRatio?: string;
+  aspectRatio?: string; // ex: "aspect-[3/4]"
 }
 
-const ParallaxImage: React.FC<ParallaxImageProps> = ({
-  src,
-  alt,
-  className = "",
+const ParallaxImage: React.FC<ParallaxImageProps> = ({ 
+  src, 
+  alt, 
+  className = "", 
   priority = false,
   aspectRatio = "aspect-[3/4]"
 }) => {
@@ -23,57 +23,65 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({
   const imgRef = useRef<HTMLImageElement>(null);
 
   useLayoutEffect(() => {
-    // Safety check: ensure both refs exist before animating
-    if (!containerRef.current || !imgRef.current) return;
-
     const ctx = gsap.context(() => {
-      // 1. Parallax Effect
-      // Using 'yPercent' for performant GPU-accelerated translation
-      gsap.to(imgRef.current, {
-        yPercent: 15,
-        ease: "none",
+      if (!containerRef.current || !imgRef.current) return;
+
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top bottom", // Start when container enters viewport
-          end: "bottom top",   // End when container leaves
-          scrub: 0,            // Immediate sync with scroll
-          invalidateOnRefresh: true
+          start: "top bottom", 
+          end: "bottom top",   
+          scrub: 0.5, // Reduzido scrub time para resposta mais rápida
         }
       });
 
-      // 2. Initial Fade-In Reveal
-      gsap.fromTo(containerRef.current,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 90%", // Trigger slightly before enters fully
-            once: true        // Play only once
-          }
-        }
+      tl.fromTo(imgRef.current,
+        { scale: 1.2 },
+        { 
+          scale: 1.0, 
+          yPercent: 15, // Movimento vertical parallax
+          ease: "none",
+          force3D: true // Força uso da GPU
+        }, 
+        0
       );
-    }, containerRef); // Scope to this component instance
 
-    return () => ctx.revert(); // Cleanup on unmount
+      // Reveal Inicial Otimizado
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+             gsap.to(containerRef.current, {
+                 clipPath: "inset(0% 0% 0% 0% round 0px)",
+                 duration: 1.2,
+                 ease: "expo.out"
+             });
+             gsap.to(imgRef.current, {
+                 filter: "brightness(1) grayscale(0%)",
+                 duration: 1.2,
+                 ease: "power2.out"
+             });
+        }
+      });
+
+    }, containerRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
-    <div
-      ref={containerRef}
+    <div 
+      ref={containerRef} 
       className={`relative w-full overflow-hidden bg-stone-200 ${aspectRatio} ${className}`}
-      // Initial style to prevent FOUC (Flash of Unstyled Content), handle by GSAP
-      style={{ opacity: 0 }}
+      style={{ clipPath: "inset(10% 10% 10% 10% round 4px)", transform: "translate3d(0,0,0)" }}
     >
       <img
         ref={imgRef}
         src={src}
         alt={alt}
         className="w-full h-full object-cover will-change-transform"
-        // Force hardware acceleration for smoother parallax
-        style={{ transform: 'translate3d(0,0,0)' }}
+        style={{ filter: "brightness(0.8) grayscale(100%)", transform: "scale(1.2)" }}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
       />
@@ -81,4 +89,4 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({
   );
 };
 
-export default React.memo(ParallaxImage);
+export default ParallaxImage;

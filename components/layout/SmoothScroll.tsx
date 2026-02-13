@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useContext, createContext } from 'react';
+import React, { useLayoutEffect, createContext, useContext } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -14,50 +14,44 @@ interface SmoothScrollProps {
 }
 
 const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
-  const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
+  const [lenisInstance, setLenisInstance] = React.useState<Lenis | null>(null);
 
   useLayoutEffect(() => {
-    // 1. Initialize Lenis
+    // Configuração OTIMIZADA para performance
     const lenis = new Lenis({
-      duration: 0.8,
+      duration: 1.0, // Reduzido de 1.2 para resposta mais rápida
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.2,
-      touchMultiplier: 2,
+      wheelMultiplier: 0.9, // Um pouco mais de controle no trackpad
+      touchMultiplier: 2, 
       infinite: false,
-      autoResize: true,
     });
 
     setLenisInstance(lenis);
 
-    // 2. Sync with ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // 3. Sync with GSAP Ticker (Optimized: External function reference for cleanup)
-    const update = (time: number) => {
+    // Integração com GSAP Ticker para sincronia perfeita (evita jitter)
+    gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
-    };
+    });
 
-    gsap.ticker.add(update);
+    // Desativa lag smoothing para evitar que animações "pulem" ao carregar recursos pesados
+    gsap.ticker.lagSmoothing(0);
 
-    // 4. Lag Smoothing
-    gsap.ticker.lagSmoothing(500, 16);
-
-    // 5. Cleanup
     return () => {
-      gsap.ticker.remove(update); // Correct removal using function reference
+      gsap.ticker.remove((time) => lenis.raf(time * 1000));
       lenis.destroy();
-      setLenisInstance(null);
     };
   }, []);
 
   return (
     <LenisContext.Provider value={lenisInstance}>
-      <div className="w-full min-h-screen">
-        {children}
-      </div>
+        <div className="w-full min-h-screen">
+            {children}
+        </div>
     </LenisContext.Provider>
   );
 };

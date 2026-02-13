@@ -12,12 +12,12 @@ interface RevealProps {
   yOffset?: number;
 }
 
-const Reveal: React.FC<RevealProps> = ({
-  children,
-  width = 'fit-content',
+const Reveal: React.FC<RevealProps> = ({ 
+  children, 
+  width = 'fit-content', 
   delay = 0,
-  duration = 0.8, // Reduzido de 1.4s para 0.8s
-  yOffset = 30 // Reduzido de 50 para 30
+  duration = 1.4,
+  yOffset = 50
 }) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
@@ -25,29 +25,28 @@ const Reveal: React.FC<RevealProps> = ({
     const ctx = gsap.context(() => {
       if (!elementRef.current) return;
 
-      // Animação SUPER otimizada - apenas opacity e y (transform)
       gsap.fromTo(elementRef.current,
         {
           y: yOffset,
-          opacity: 0
+          opacity: 0,
+          scale: 0.96,
+          filter: "blur(6px)",
+          rotationX: 3, // Leve inclinação 3D
+          transformOrigin: "center top"
         },
         {
           y: 0,
           opacity: 1,
+          scale: 1,
+          filter: "blur(0px)",
+          rotationX: 0,
           duration: duration,
-          ease: "power2.out", // Ease mais leve
+          ease: "power3.out",
           delay: delay / 1000,
           scrollTrigger: {
             trigger: elementRef.current,
-            start: "top 90%",
-            toggleActions: "play none none none", // Não reverter para economizar performance
-            once: true // Anima apenas uma vez
-          },
-          onComplete: () => {
-            // Remove will-change após animação completar
-            if (elementRef.current) {
-              elementRef.current.style.willChange = 'auto';
-            }
+            start: "top 92%", // Aciona um pouco antes de entrar totalmente
+            toggleActions: "play none none reverse"
           }
         }
       );
@@ -57,8 +56,8 @@ const Reveal: React.FC<RevealProps> = ({
   }, [delay, duration, yOffset]);
 
   return (
-    <div style={{ width, overflow: 'visible' }}>
-      <div ref={elementRef} className="opacity-0" style={{ willChange: 'opacity, transform' }}>
+    <div style={{ width, overflow: 'visible', perspective: '1000px' }}>
+      <div ref={elementRef} className="will-change-transform opacity-0">
         {children}
       </div>
     </div>

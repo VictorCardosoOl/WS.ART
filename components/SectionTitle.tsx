@@ -1,0 +1,1 @@
+// DELETED: Moved to components/ui/SectionTitle.tsx
