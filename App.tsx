@@ -15,7 +15,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
         setLoading(false);
-    }, 5000);
+    }, 4500); // Tempo ajustado para o Preloader
     return () => clearTimeout(timer);
   }, []);
 
@@ -26,14 +26,14 @@ const App: React.FC = () => {
       <SmoothScroll>
         <ThemeController />
         <ScrollToTop />
-        <div className="min-h-screen font-sans text-pantone-ink selection:bg-pantone-accent selection:text-white w-full overflow-x-hidden relative transition-colors duration-700 bg-[#FAF7F7]">
+        <div className="min-h-screen font-sans text-pantone-ink selection:bg-stone-900 selection:text-white w-full overflow-x-hidden relative transition-colors duration-700 bg-[#FAF7F7]">
           
           {/* 
              GLOBAL OPTIMIZED NOISE 
              Usa translate3d(0,0,0) para forçar aceleração de hardware.
-             Reduz repaints em comparação a múltiplos overlays por seção.
+             Uma única camada para todo o app melhora drasticamente o FPS.
           */}
-          <div className="fixed inset-0 z-[9999] pointer-events-none mix-blend-overlay opacity-[0.06] overflow-hidden" style={{ transform: 'translate3d(0,0,0)' }}>
+          <div className="fixed inset-0 z-[9999] pointer-events-none mix-blend-overlay opacity-[0.05] overflow-hidden" style={{ transform: 'translate3d(0,0,0)' }}>
              <div className="absolute inset-0 w-full h-full bg-noise bg-repeat animate-grain will-change-transform"></div>
           </div>
           

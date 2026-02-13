@@ -1,90 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Reveal from '../ui/Reveal';
-import { ArrowRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { SERVICES_ITEMS } from '../../data/services';
+import gsap from 'gsap';
 
 const Services: React.FC = () => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number>(0);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
 
+  // Imagens de alta qualidade em P&B para o estilo "Noir/Brutalist"
   const serviceImages = [
-    "https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1515965885000-142962f872f8?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=800&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1598371839696-5c5bb3454091?q=80&w=1000&auto=format&fit=crop", // Projetos Autorais
+    "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=1000&auto=format&fit=crop", // Coberturas
+    "https://images.unsplash.com/photo-1590246468728-d3c09f30b910?q=80&w=1000&auto=format&fit=crop", // Flash Days
+    "https://images.unsplash.com/photo-1542359649-31e03cd4d909?q=80&w=1000&auto=format&fit=crop"  // Consultoria
   ];
 
+  const handleMouseEnter = (index: number) => {
+    setHoveredIndex(index);
+  };
+
   return (
-    <section id="services" data-theme="dark" className="py-32 md:py-48 text-stone-100 overflow-hidden relative transition-colors duration-700">
-      <div className="w-full max-w-[1920px] mx-auto px-5 md:px-12 lg:px-20 relative z-20">
+    // Fundo escuro para contraste forte (Brutalist)
+    <section id="services" data-theme="dark" className="py-32 md:py-48 bg-[#0c0a09] text-[#FAF7F7] overflow-hidden relative transition-colors duration-700">
+      
+      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-20">
         
+        {/* Header Minimalista */}
         <Reveal>
-            <div className="flex items-center gap-6 mb-24 md:mb-32">
-                <div className="h-[1px] w-16 bg-rose-500 opacity-60"></div>
-                <span className="uppercase tracking-ultra text-[10px] font-bold text-rose-500">Especialidades</span>
+            <div className="flex items-end justify-between mb-24 md:mb-32 border-b border-white/10 pb-8">
+                <h2 className="font-serif text-5xl md:text-8xl text-white leading-none tracking-tight">
+                    Especialidades<span className="text-[#754548]">.</span>
+                </h2>
+                <div className="hidden md:block text-right">
+                    <p className="text-[10px] uppercase tracking-widest text-stone-500">Service Menu</p>
+                    <p className="text-[10px] uppercase tracking-widest text-stone-500">2024 Collection</p>
+                </div>
             </div>
         </Reveal>
 
-        <div className="flex flex-col lg:flex-row gap-20 lg:gap-32 relative">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 relative">
           
-          <div className="w-full lg:w-2/3 z-20">
+          {/* LISTA DE SERVIÇOS (ESQUERDA) */}
+          <div className="w-full lg:w-1/2 z-20 flex flex-col">
             {SERVICES_ITEMS.map((service, index) => (
-              <Reveal key={index} delay={index * 50} width="100%">
-                <div 
-                  className="group relative py-12 md:py-16 cursor-pointer border-t border-white/5 hover:border-white/20 transition-colors duration-300"
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-6 pointer-events-none">
-                    <div className="flex items-baseline gap-8">
-                        <span className="font-sans text-[10px] text-stone-600 font-bold tracking-widest group-hover:text-rose-500 transition-colors duration-300">0{index + 1}</span>
-                        <h3 className="font-serif text-4xl md:text-6xl text-stone-300 group-hover:text-rose-100 transition-colors duration-300 font-light group-hover:translate-x-4 transform duration-500 ease-out">
-                          {service.title}
+              <div 
+                key={index}
+                className="group relative border-b border-white/10 last:border-b-0"
+                onMouseEnter={() => handleMouseEnter(index)}
+              >
+                 <div className="py-12 md:py-16 flex flex-col gap-6 cursor-pointer transition-all duration-500 hover:pl-8">
+                    
+                    {/* Linha Superior: ID + Título */}
+                    <div className="flex items-baseline gap-6 md:gap-12">
+                        <span className="text-xs font-bold text-stone-600 font-sans tracking-widest group-hover:text-[#754548] transition-colors">
+                            0{index + 1}
+                        </span>
+                        <h3 className="text-3xl md:text-5xl font-serif text-stone-300 group-hover:text-white transition-colors duration-300">
+                            {service.title}
                         </h3>
                     </div>
-                  </div>
-                  
-                  <div className="flex justify-between items-end mt-4 md:mt-0">
-                      <p className="text-stone-500 text-[10px] uppercase tracking-widest group-hover:text-white transition-colors duration-300 max-w-xs opacity-60 group-hover:opacity-100 md:ml-16">
-                          {service.description}
-                      </p>
-                      
-                      <ArrowRight 
-                        size={24} 
-                        strokeWidth={1}
-                        className="text-rose-500 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300 hidden md:block" 
-                      />
-                  </div>
-                </div>
-              </Reveal>
+
+                    {/* Descrição (Reveal on Hover) */}
+                    <div className="pl-[calc(1.5rem+24px)] md:pl-[calc(3rem+24px)] max-w-md overflow-hidden transition-all duration-500 max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 group-hover:mt-2">
+                         <p className="text-stone-400 text-sm leading-relaxed font-light">
+                             {service.details}
+                         </p>
+                         <div className="mt-6 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white">
+                             Detalhes <ArrowUpRight size={14} className="text-[#754548]" />
+                         </div>
+                    </div>
+
+                 </div>
+                 
+                 {/* Indicador de Hover (Barra Lateral) */}
+                 <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#754548] scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-top"></div>
+              </div>
             ))}
-            <div className="w-full h-[1px] bg-white/5"></div>
           </div>
 
-          {/* Floating Image Preview (Desktop Only) - Optimized */}
-          <div className="hidden lg:block w-1/3 relative pointer-events-none">
-            <div className="sticky top-40 w-full aspect-[3/4] overflow-hidden rounded-sm bg-stone-900">
-               {SERVICES_ITEMS.map((service, index) => (
-                   <img 
-                     key={index}
-                     src={serviceImages[index] || service.image} 
-                     alt={service.title}
-                     className={`absolute inset-0 w-full h-full object-cover grayscale transition-opacity duration-500 ease-in-out will-change-opacity ${
-                        hoveredIndex === index 
-                        ? 'opacity-80' 
-                        : 'opacity-0'
-                     }`}
-                     style={{ transform: 'translate3d(0,0,0)' }} // Force GPU
-                   />
-               ))}
-               
-               {/* Default State */}
-               <div className={`absolute inset-0 flex items-center justify-center bg-stone-800 transition-opacity duration-500 ${hoveredIndex !== null ? 'opacity-0' : 'opacity-100'}`}>
-                  <div className="text-center">
-                    <p className="text-stone-600 font-serif italic text-2xl tracking-wide opacity-50 mb-2">William Siqueira</p>
-                    <p className="text-[9px] uppercase tracking-widest text-stone-700">Selecione um serviço</p>
-                  </div>
-               </div>
-            </div>
+          {/* IMAGEM FLUTUANTE (DIREITA - STICKY) */}
+          <div className="hidden lg:block w-1/2 relative">
+             <div className="sticky top-32 w-full aspect-[4/5] overflow-hidden rounded-sm bg-stone-900 shadow-2xl shadow-black/50">
+                {serviceImages.map((img, idx) => (
+                    <img
+                        key={idx}
+                        src={img}
+                        alt="Service Preview"
+                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out will-change-transform ${
+                            hoveredIndex === idx 
+                            ? 'opacity-100 scale-100 grayscale-0' 
+                            : 'opacity-0 scale-110 grayscale'
+                        }`}
+                    />
+                ))}
+                
+                {/* Overlay Noise na Imagem */}
+                <div className="absolute inset-0 bg-noise opacity-[0.08] mix-blend-overlay pointer-events-none"></div>
+                
+                {/* Legenda Flutuante sobre a imagem */}
+                <div className="absolute bottom-8 left-8 bg-black/60 backdrop-blur-md px-4 py-2 border border-white/10">
+                     <p className="text-white font-serif italic text-lg">
+                        {SERVICES_ITEMS[hoveredIndex]?.description}
+                     </p>
+                </div>
+             </div>
           </div>
 
         </div>

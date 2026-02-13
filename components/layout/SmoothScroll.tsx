@@ -17,14 +17,14 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   const [lenisInstance, setLenisInstance] = React.useState<Lenis | null>(null);
 
   useLayoutEffect(() => {
-    // Configuração OTIMIZADA para performance
+    // Configuração OTIMIZADA para sensação "Luxury/Heavy" (Lass Tattoo vibe)
     const lenis = new Lenis({
-      duration: 1.0, // Reduzido de 1.2 para resposta mais rápida
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.2, 
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.9, // Um pouco mais de controle no trackpad
+      wheelMultiplier: 0.8, // Scroll um pouco mais "pesado" para dar tempo de ler
       touchMultiplier: 2, 
       infinite: false,
     });
@@ -33,12 +33,12 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
 
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Integração com GSAP Ticker para sincronia perfeita (evita jitter)
+    // Integração crucial com GSAP Ticker
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
 
-    // Desativa lag smoothing para evitar que animações "pulem" ao carregar recursos pesados
+    // Desativa lag smoothing para evitar saltos visuais em carregamentos pesados
     gsap.ticker.lagSmoothing(0);
 
     return () => {

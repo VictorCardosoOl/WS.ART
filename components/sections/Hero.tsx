@@ -7,77 +7,63 @@ import Magnetic from '../ui/Magnetic';
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
+  const titleWrapperRef = useRef<HTMLDivElement>(null);
   const titleTextRef = useRef<HTMLHeadingElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. INTRO ANIMATION (Load)
+      // 1. INTRO ANIMATION
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       gsap.set(".char-reveal", { yPercent: 120, opacity: 0 }); 
-      gsap.set(".hero-fade", { y: 30, autoAlpha: 0 });
-      gsap.set(".hero-line", { scaleX: 0, transformOrigin: "left center" });
-
-      tl.to(".char-reveal", {
-        yPercent: 0,
-        opacity: 1,
-        duration: 1.6,
-        stagger: { amount: 0.8, from: "start" },
-        ease: "power4.out"
+      gsap.set(".hero-fade", { y: 40, autoAlpha: 0 });
+      
+      // Animação do Título Gigante (Surgindo de baixo)
+      tl.to(".title-char", {
+          yPercent: 0,
+          opacity: 1,
+          duration: 1.8,
+          stagger: 0.04,
+          ease: "expo.out"
       })
-      .to(".hero-line", { scaleX: 1, duration: 1.8, ease: "expo.out" }, "-=1.2")
       .to(".hero-fade", {
         y: 0,
         autoAlpha: 1,
-        duration: 1.4,
-        stagger: 0.15
-      }, "-=1.4");
+        duration: 1.2,
+        stagger: 0.1
+      }, "-=1.2");
 
-      // 2. SCROLL PARALLAX E SKEW VELOCITY
-      const scrollTrigger = ScrollTrigger.create({
+      // 2. SCROLL VELOCITY SKEW EFFECT (Assinatura High-End)
+      ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top top",
         end: "bottom top",
-        scrub: true,
         onUpdate: (self) => {
-           // Efeito de distorção (Skew) baseado na velocidade do scroll
            const velocity = self.getVelocity();
-           const skew = velocity / 300; 
+           // Ajuste fino: divide a velocidade para obter um skew sutil
+           const skew = velocity / 250; 
            
            if(titleTextRef.current) {
                gsap.to(titleTextRef.current, { 
                    skewX: -skew, 
                    overwrite: 'auto', 
-                   duration: 0.1,
+                   duration: 0.1, // Resposta rápida
                    ease: "power1.out"
                });
            }
         }
       });
 
-      // Parallax suave do fundo
-      gsap.to(bgRef.current, {
-        yPercent: 30,
+      // 3. PARALLAX DO TÍTULO (Fica fixo enquanto o conteúdo sobe, depois some)
+      gsap.to(titleWrapperRef.current, {
+        yPercent: 20, // Move-se levemente para baixo
+        opacity: 0,   // Desaparece ao sair
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: 0 // Sem inércia para evitar sensação de "deslizamento" tardio
-        }
-      });
-
-      // Parallax do Texto Gigante
-      gsap.to(titleRef.current, {
-        yPercent: 15,
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "50% top",
           scrub: true
         }
       });
@@ -88,64 +74,76 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden bg-[#FAF7F7] z-10 flex flex-col justify-between">
+    <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden bg-[#FAF7F7] z-10 flex flex-col">
       
-      {/* Atmosphere Layer - Removido Noise Local para usar o Global */}
-      <div ref={bgRef} className="absolute inset-0 z-0 pointer-events-none will-change-transform">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_var(--tw-gradient-stops))] from-rose-200/40 via-transparent to-transparent opacity-60"></div>
+      {/* ATMOSPHERE / GRADIENT */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-rose-100/30 blur-[120px] rounded-full mix-blend-multiply"></div>
       </div>
 
-      <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 relative z-20 flex flex-col pt-32 md:pt-40 pointer-events-none flex-grow justify-between">
+      {/* CONTENT LAYER (Sobre o título) */}
+      <div ref={contentRef} className="relative z-20 w-full h-full max-w-[1920px] mx-auto px-6 md:px-12 lg:px-24 flex flex-col justify-between py-12 md:py-24 pointer-events-none">
           
-          <div className="flex flex-col md:flex-row justify-between items-start w-full">
-              <div className="hidden md:flex flex-col gap-3 hero-fade pointer-events-auto">
-                 <div className="flex items-center gap-3">
-                    <div className="w-1 h-1 bg-[#754548] rounded-full animate-pulse"></div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">São Paulo, BR</span>
+          {/* Top Bar */}
+          <div className="flex justify-between items-start w-full hero-fade pointer-events-auto">
+              <div className="flex flex-col gap-1">
+                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-900">Est. 2018</span>
+                 <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-stone-400">São Paulo — SP</span>
+              </div>
+              
+              <div className="hidden md:block">
+                  <Magnetic strength={0.3}>
+                    <a href="#booking" className="inline-block px-6 py-3 border border-stone-200 rounded-full hover:bg-stone-900 hover:text-white transition-all duration-300 text-[10px] uppercase font-bold tracking-widest">
+                        Agendar Sessão
+                    </a>
+                  </Magnetic>
+              </div>
+          </div>
+
+          {/* Middle/Bottom Information */}
+          <div className="flex flex-col md:flex-row justify-between items-end w-full pb-12 md:pb-24 pointer-events-auto">
+              
+              {/* Left: Scroll Indicator */}
+              <div className="hidden md:flex hero-fade flex-col gap-4 items-center">
+                 <span className="text-[9px] uppercase tracking-widest text-stone-400 -rotate-90 origin-center translate-y-8">Scroll</span>
+                 <div className="h-16 w-[1px] bg-stone-300 mt-12 overflow-hidden">
+                    <div className="h-full w-full bg-stone-900 animate-[shimmer_2s_infinite]"></div>
                  </div>
-                 <span className="text-[10px] font-medium uppercase tracking-widest text-stone-300 pl-4">Est. 2018</span>
               </div>
 
-              <div className="flex flex-col items-end text-right pointer-events-auto ml-auto max-w-xl">
-                  <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-[#1c1917] leading-tight-editorial font-light tracking-tight mix-blend-darken overflow-hidden">
-                      <SplitText charClass="char-reveal" wordClass="overflow-hidden pb-2">
-                        A pele como tela eterna.
-                      </SplitText>
+              {/* Right: Main Copy */}
+              <div className="max-w-xl text-right flex flex-col items-end">
+                  <h2 className="hero-fade font-serif text-3xl md:text-5xl lg:text-6xl text-[#1c1917] leading-[1.1] font-light mb-8">
+                      <span className="block italic text-stone-400">Sinto a sua energia</span>
+                      e a transfiro para a tela<br/> mais cara do mundo.
                   </h2>
                   
-                  <div className="hero-line w-full md:w-32 h-[1px] bg-[#754548] my-8 opacity-60"></div>
+                  <div className="hero-fade w-24 h-[1px] bg-stone-900 mb-8 opacity-20"></div>
 
-                  <p className="hero-fade font-sans text-[10px] text-stone-500 leading-luxury tracking-ultra uppercase font-semibold text-right max-w-[280px]">
-                      Conectamos narrativa pessoal e anatomia em obras neotradicionais.
+                  <p className="hero-fade font-sans text-xs md:text-sm text-stone-500 leading-relaxed max-w-xs uppercase tracking-wide font-medium">
+                      Especialista em Neotradicional e Coberturas.<br/>
+                      Arte perene para corpos efêmeros.
                   </p>
-
+                  
                   <div className="hero-fade mt-10">
-                      <Magnetic strength={0.3}>
-                        <a href="#gallery" className="group inline-flex items-center justify-end gap-4 text-[10px] font-bold uppercase tracking-widest text-[#754548] hover:text-stone-900 transition-colors p-4 -mr-4">
+                      <Magnetic strength={0.2}>
+                          <a href="#gallery" className="group flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#754548] hover:text-stone-900 transition-colors">
                             Explorar Portfólio
-                            <div className="relative overflow-hidden w-4 h-4 flex items-center justify-center">
-                              <MoveRight size={14} className="absolute transition-transform duration-500 group-hover:translate-x-full" />
-                              <MoveRight size={14} className="absolute -translate-x-full transition-transform duration-500 group-hover:translate-x-0" />
-                            </div>
-                        </a>
+                            <MoveRight size={16} className="group-hover:translate-x-2 transition-transform duration-300" />
+                          </a>
                       </Magnetic>
                   </div>
               </div>
           </div>
-
-          <div className="w-full relative pb-12 flex flex-col items-center pointer-events-auto">
-             <div className="hero-fade animate-bounce duration-[3000ms] mb-8 opacity-50 cursor-pointer" onClick={() => document.getElementById('about')?.scrollIntoView({behavior: 'smooth'})}>
-                <ArrowDown size={18} className="text-[#754548]" />
-             </div>
-          </div>
       </div>
 
+      {/* MASSIVE TITLE LAYER (Background / Behind Content) */}
       <div 
-        ref={titleRef}
-        className="absolute bottom-0 left-0 w-full flex justify-center items-end leading-none z-10 mix-blend-darken pointer-events-none select-none pb-0 will-change-transform"
+        ref={titleWrapperRef}
+        className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 mix-blend-darken pointer-events-none select-none flex justify-center items-center overflow-hidden"
       >
-          <h1 ref={titleTextRef} className="font-sans font-black text-[22vw] text-[#12100E] tracking-tighter text-center leading-[0.7] w-full opacity-90 overflow-hidden translate-y-[2%] will-change-transform transform-gpu">
-               <SplitText charClass="char-reveal" wordClass="overflow-hidden pb-[1vw]">
+          <h1 ref={titleTextRef} className="font-serif font-medium text-[24vw] md:text-[22vw] text-[#000000] tracking-tighter text-center leading-none opacity-[0.9] whitespace-nowrap will-change-transform">
+               <SplitText charClass="title-char opacity-0 translate-y-full inline-block" wordClass="inline-block">
                 WILLIAM
                </SplitText>
           </h1>
