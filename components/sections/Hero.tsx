@@ -7,42 +7,44 @@ import SplitText from '../ui/SplitText';
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
-  const doodleRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. INTRO ANIMATION
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      // Configuração inicial
+      // Configuração Inicial
       gsap.set(".hero-char", { yPercent: 120, opacity: 0 }); 
-      gsap.set(".hero-meta", { opacity: 0, y: -20 });
-      gsap.set(".doodle-path", { strokeDasharray: 1000, strokeDashoffset: 1000, opacity: 0 });
+      gsap.set(".construction-line", { scaleX: 0, opacity: 0 });
+      gsap.set(".construction-circle", { scale: 0, opacity: 0, rotation: -90 });
 
-      // Animação de Entrada
+      // 1. Linhas de Construção (Efeito Draft)
+      tl.to(".construction-line", {
+          scaleX: 1,
+          opacity: 0.4,
+          duration: 1.5,
+          stagger: 0.1,
+          ease: "expo.out"
+      })
+      .to(".construction-circle", {
+          scale: 1,
+          opacity: 0.4,
+          rotation: 0,
+          duration: 1.2,
+          ease: "back.out(1.7)"
+      }, "-=1.0");
+
+      // 2. Texto Principal
       tl.to(".hero-char", {
         yPercent: 0,
         opacity: 1,
         duration: 1.6,
         stagger: 0.05,
         ease: "power4.out"
-      })
-      .to(".hero-meta", {
-        y: 0,
-        opacity: 1,
-        duration: 1.0,
-      }, "-=1.2")
-      // Animação do Graffiti (Vibe Os Gêmeos/Sketch)
-      .to(".doodle-path", {
-        strokeDashoffset: 0,
-        opacity: 1,
-        duration: 2,
-        ease: "rough({ template: none.out, strength: 1, points: 20, taper: none, randomize: true, clamp: false})"
-      }, "-=1.0");
+      }, "-=0.8");
 
-      // 2. SCROLL PARALLAX & SURREAL FLOAT
+      // 3. Parallax
       gsap.to(titleRef.current, {
-        yPercent: 15,
+        yPercent: 20,
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
@@ -50,16 +52,6 @@ const Hero: React.FC = () => {
           end: "bottom top",
           scrub: true
         }
-      });
-
-      // Elemento flutuante (Magritte/Dalí vibe)
-      gsap.to(doodleRef.current, {
-        y: -30,
-        rotation: 5,
-        duration: 4,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
       });
 
     }, containerRef);
@@ -70,41 +62,34 @@ const Hero: React.FC = () => {
   return (
     <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden bg-[#FAF7F7] z-10 flex flex-col justify-between">
       
-      {/* ATMOSPHERE LAYER (Hokusai/Xilo Texture vibe) */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-          <div className="absolute inset-0 bg-noise opacity-[0.06] mix-blend-multiply"></div>
-          {/* Mancha de tinta sutil (Portinari/Watercolor) */}
-          <div className="absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-[#754548] opacity-[0.03] blur-[100px] rounded-full mix-blend-multiply"></div>
-      </div>
-
-      {/* --- SURREAL ELEMENT (Magritte Reference) --- */}
-      <div ref={doodleRef} className="absolute top-1/4 left-10 md:left-1/4 z-10 hidden md:block mix-blend-multiply opacity-80 pointer-events-none">
-          <div className="relative">
-             <p className="font-serif italic text-sm text-[#754548] -rotate-6">"Ceci n'est pas un tatouage."</p>
-             {/* Seta desenhada a mão */}
-             <svg width="40" height="40" viewBox="0 0 100 100" className="absolute -bottom-8 left-1/2 -translate-x-1/2">
-                <path d="M50,0 Q60,50 50,90 M40,80 L50,90 L60,80" fill="none" stroke="#1c1917" strokeWidth="2" className="doodle-path" />
-             </svg>
+      {/* --- BACKGROUND SKETCH LINES (Concept Art Grid) --- */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+          {/* Linha do Horizonte (Azul Lápis) */}
+          <div className="absolute top-1/2 left-0 w-full h-[1px] bg-blue-300 opacity-20 construction-line origin-left" style={{ filter: 'url(#pencil-stroke)' }}></div>
+          
+          {/* Linha Vertical Central (Vermelho Lápis) */}
+          <div className="absolute top-0 left-1/2 h-full w-[1px] bg-red-300 opacity-20 construction-line origin-top" style={{ filter: 'url(#pencil-stroke)' }}></div>
+          
+          {/* Círculo de Proporção Áurea */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vh] h-[60vh] border border-stone-300 rounded-full opacity-10 construction-circle" style={{ filter: 'url(#pencil-stroke)' }}></div>
+          
+          {/* Notas de Medida */}
+          <div className="absolute top-[52%] left-[52%] text-[9px] font-hand text-blue-400 opacity-50 rotate-[-15deg]">
+              ( fig. 1.2 - axis alignment )
           </div>
       </div>
 
-      {/* --- ANATOMY SKETCH (Medical/Da Vinci Reference) --- */}
-      <div className="absolute top-1/3 right-10 md:right-32 z-0 opacity-10 pointer-events-none mix-blend-multiply scale-75 md:scale-100">
-         <svg width="300" height="300" viewBox="0 0 200 200" className="rotate-12">
-            {/* Esboço abstrato de anatomia/músculos */}
-            <path d="M100,20 Q130,50 120,100 T100,180 T80,100 Q70,50 100,20" fill="none" stroke="#1c1917" strokeWidth="0.5" strokeDasharray="5,5" />
-            <path d="M100,20 L100,180" fill="none" stroke="#1c1917" strokeWidth="0.2" />
-            <path d="M80,100 L120,100" fill="none" stroke="#1c1917" strokeWidth="0.2" />
-            <circle cx="100" cy="60" r="10" fill="none" stroke="#754548" strokeWidth="1" />
-            <text x="120" y="60" fontSize="8" fontFamily="serif" fill="#1c1917" className="italic">Fig. 1</text>
-         </svg>
-      </div>
-
       {/* --- TOP META INFO --- */}
-      <div className="relative z-20 w-full px-6 md:px-12 pt-8 flex justify-between items-start hero-meta mix-blend-darken">
-          <div className="flex flex-col gap-1">
+      <div className="relative z-20 w-full px-6 md:px-12 pt-8 flex justify-between items-start hero-meta">
+          <div className="flex flex-col gap-1 relative">
               <span className="text-[10px] font-bold font-sans uppercase tracking-widest text-[#1c1917]">Est. 2018</span>
               <span className="text-[9px] font-serif italic text-[#754548]">Private Studio</span>
+              
+              {/* Seta de anotação */}
+              <svg className="absolute -right-12 top-2 w-8 h-8 text-stone-400 opacity-50 rotate-12" viewBox="0 0 50 50">
+                  <path d="M0,25 Q25,0 50,25" fill="none" stroke="currentColor" strokeWidth="1" style={{ filter: 'url(#pencil-stroke)' }} />
+                  <path d="M40,15 L50,25 L40,35" fill="none" stroke="currentColor" strokeWidth="1" style={{ filter: 'url(#pencil-stroke)' }} />
+              </svg>
           </div>
           
           <div className="flex items-center gap-2 text-[#1c1917]">
@@ -114,35 +99,29 @@ const Hero: React.FC = () => {
       </div>
 
       {/* --- BOTTOM ANCHORED TITLE --- */}
-      <div className="relative z-10 w-full flex-grow flex items-end justify-center pb-0 md:pb-0 overflow-visible">
+      <div className="relative z-10 w-full flex-grow flex items-end justify-center pb-12 md:pb-8 overflow-visible">
           <div ref={titleRef} className="w-full text-center leading-none relative">
               
-              {/* GRAFFITI CROWN (Os Gêmeos/Basquiat Reference) */}
-              <div className="absolute -top-[15%] left-[18%] md:left-[28%] w-[10vw] h-[10vw] z-20 pointer-events-none mix-blend-multiply">
-                 <svg viewBox="0 0 100 100" className="w-full h-full rotate-[-15deg]">
-                    <path 
-                        d="M10,70 L10,30 L30,50 L50,10 L70,50 L90,30 L90,70 Z" 
-                        fill="none" 
-                        stroke="#754548" 
-                        strokeWidth="3" 
-                        strokeLinejoin="round"
-                        className="doodle-path"
-                    />
-                    <path 
-                        d="M10,75 L90,75" 
-                        fill="none" 
-                        stroke="#754548" 
-                        strokeWidth="3" 
-                        className="doodle-path"
-                    />
-                 </svg>
-              </div>
+              {/* Construction Box around Title (The "Frame") */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[85%] h-full border-x border-dashed border-stone-300 opacity-30 pointer-events-none"></div>
 
-              <h1 className="font-display font-bold text-[24vw] text-[#1c1917] tracking-tighter leading-[0.75] select-none whitespace-nowrap overflow-visible translate-y-[2%]">
+              <h1 className="font-display font-bold text-[24vw] text-[#1c1917] tracking-tighter leading-[0.75] select-none whitespace-nowrap overflow-visible translate-y-[2%] relative">
+                   {/* Shadow Sketch Layer (Hachura) */}
+                   <span className="absolute top-2 left-2 w-full h-full text-transparent bg-clip-text pointer-events-none z-[-1] opacity-20" 
+                         style={{ backgroundImage: 'url(#hatch-pattern)', WebkitTextStroke: '1px rgba(0,0,0,0.1)' }}>
+                       WILLIAM
+                   </span>
+
                    <SplitText charClass="hero-char inline-block will-change-transform" wordClass="overflow-visible inline-block">
                     WILLIAM
                    </SplitText>
               </h1>
+              
+              {/* Assinatura "Lápis" */}
+              <div className="absolute bottom-1/3 right-[10%] md:right-[20%] rotate-[-10deg] mix-blend-multiply opacity-80 z-20">
+                  <span className="font-hand text-3xl md:text-5xl text-[#754548]">Concept Art.</span>
+                  <div className="w-full h-[2px] bg-[#754548] mt-[-5px]" style={{ filter: 'url(#pencil-stroke)' }}></div>
+              </div>
           </div>
       </div>
 

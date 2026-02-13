@@ -7,11 +7,10 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Ícone de Seta "Hand Drawn" (Vibe Sketchbook/Tim Burton)
 const SketchArrow = () => (
-    <svg width="24" height="24" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="stroke-current">
-        <path d="M10,40 Q25,25 40,10" strokeWidth="3" strokeLinecap="round" />
-        <path d="M25,10 L40,10 L40,25" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="40" height="20" viewBox="0 0 60 20" fill="none" className="stroke-stone-400 group-hover:stroke-[#754548] transition-colors duration-300">
+        <path d="M0,10 Q30,0 55,10" strokeWidth="2" fill="none" style={{ filter: 'url(#pencil-stroke)' }} />
+        <path d="M45,5 L55,10 L45,15" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'url(#pencil-stroke)' }} />
     </svg>
 );
 
@@ -59,52 +58,66 @@ const PortfolioItem: React.FC<PortfolioItemProps> = ({ item, index }) => {
         {/* Project Wrapper */}
         <div className={`relative group w-full ${wrapperClass}`}>
             
-            {/* GRAFFITI NUMBER OVERLAY (Os Gêmeos/Urban) */}
-            <div className={`absolute -top-10 z-20 text-[6rem] font-display font-bold text-[#754548] opacity-10 select-none mix-blend-multiply pointer-events-none transition-transform duration-500 group-hover:scale-110 ${isEven ? '-left-6 rotate-[-10deg]' : '-right-6 rotate-[10deg]'}`}>
+            {/* NUMBER SKETCH (Parece escrito a lápis no fundo) */}
+            <div className={`absolute -top-12 z-0 font-hand text-[8rem] text-stone-900 opacity-[0.05] select-none pointer-events-none ${isEven ? '-left-8' : '-right-8'}`} style={{ filter: 'url(#pencil-stroke)' }}>
                 {String(index + 1).padStart(2, '0')}
             </div>
 
-            {/* Imagem com Parallax Sutil e Borda "Torn" (Varejão) */}
-            <div className="relative overflow-hidden cursor-none rounded-sm transition-all duration-500 hover:rounded-[2rem]">
-                <ParallaxImage 
-                    src={item.src} 
-                    alt={item.altText} 
-                    aspectRatio={imageAspect}
-                    className="transition-transform duration-[1.5s] ease-out group-hover:scale-[1.05]"
-                />
+            {/* Imagem com Borda de Lápis */}
+            {/* O padding cria espaço para a borda SVG trêmula não cortar */}
+            <div className="relative p-2">
                 
-                {/* Overlay Texture (Xilogravura/Grain) */}
-                <div className="absolute inset-0 bg-noise opacity-[0.1] mix-blend-overlay pointer-events-none"></div>
-                <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/10 transition-colors duration-500 pointer-events-none"></div>
+                {/* A Borda Desenhada */}
+                <div className="absolute inset-0 border-2 border-stone-800 opacity-80 z-10 pointer-events-none transition-all duration-500 group-hover:scale-[1.01] group-hover:border-[#754548]"
+                     style={{ 
+                         filter: 'url(#pencil-stroke)', 
+                         borderRadius: '2px' 
+                     }}>
+                </div>
+
+                {/* Linhas de Canto (Corner Marks) */}
+                <div className="absolute -top-2 -left-2 w-4 h-4 border-t-2 border-l-2 border-stone-400 z-20"></div>
+                <div className="absolute -bottom-2 -right-2 w-4 h-4 border-b-2 border-r-2 border-stone-400 z-20"></div>
+
+                <div className="relative overflow-hidden cursor-none bg-stone-200">
+                    <ParallaxImage 
+                        src={item.src} 
+                        alt={item.altText} 
+                        aspectRatio={imageAspect}
+                        className="transition-transform duration-[1.5s] ease-out group-hover:scale-[1.05] grayscale contrast-[1.1] group-hover:grayscale-0"
+                    />
+                    
+                    {/* Graphite Smudge Overlay */}
+                    <div className="absolute inset-0 bg-noise opacity-[0.15] mix-blend-multiply pointer-events-none"></div>
+                </div>
             </div>
 
             {/* Info Block */}
-            <div ref={infoRef} className="mt-6 flex flex-col md:flex-row justify-between items-start md:items-end border-t border-stone-200 pt-4 relative">
+            <div ref={infoRef} className="mt-8 flex flex-col md:flex-row justify-between items-start md:items-end border-t border-stone-300/50 pt-4 relative">
                 
-                {/* Scribble Line Decor (Animated on Hover) */}
-                <div className="absolute top-0 left-0 w-full h-[2px] bg-[#754548] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                {/* Linha Rabiscada */}
+                <svg className="absolute top-0 left-0 w-full h-[3px] overflow-visible" preserveAspectRatio="none">
+                    <path d="M0,1 L1000,1" stroke="#1c1917" strokeWidth="1" fill="none" strokeDasharray="4 2" style={{ filter: 'url(#pencil-stroke)' }} />
+                </svg>
 
                 <div>
                     <div className="flex items-center gap-3 mb-2">
-                        <span className="text-[10px] font-bold font-sans uppercase tracking-widest text-[#754548]">
+                        <span className="text-[10px] font-bold font-sans uppercase tracking-widest text-[#754548] bg-[#754548]/10 px-2 py-1 rounded-sm">
                             {item.category}
                         </span>
                     </div>
-                    <h3 className="text-3xl md:text-5xl font-serif text-stone-900 leading-none italic group-hover:skew-x-[-10deg] transition-transform duration-300 origin-bottom-left">
+                    <h3 className="text-3xl md:text-5xl font-serif text-stone-900 leading-none italic group-hover:translate-x-2 transition-transform duration-300">
                         {item.title}
                     </h3>
                 </div>
 
-                <div className="mt-4 md:mt-0 flex items-center gap-8">
-                     <span className="text-[10px] font-sans font-medium text-stone-400 tracking-widest">
-                        EST. {item.year}
+                <div className="mt-4 md:mt-0 flex items-center gap-6">
+                     <span className="font-hand text-xl text-stone-500">
+                        ( {item.year} )
                      </span>
-                     {/* Botão com Vibe "Rubber Hose" (Elastic) */}
-                     <button className="hidden md:flex w-12 h-12 rounded-full border border-stone-300 items-center justify-center text-stone-400 group-hover:bg-[#1c1917] group-hover:border-[#1c1917] group-hover:text-white transition-all duration-300 group-hover:scale-110">
-                        <div className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform duration-300">
-                            <SketchArrow />
-                        </div>
-                     </button>
+                     <div className="group-hover:translate-x-2 transition-transform duration-300">
+                        <SketchArrow />
+                     </div>
                 </div>
 
             </div>
@@ -117,11 +130,12 @@ const Portfolio: React.FC = () => {
   return (
     <section id="gallery" className="relative bg-[#FAF7F7] pt-24 pb-24 md:pt-40 md:pb-40 overflow-hidden">
       
-      {/* Background Doodles (Tim Burton/Dreamworks Whimsy) - Faint */}
-      <div className="absolute top-[10%] left-[-5%] w-[300px] h-[300px] opacity-[0.03] pointer-events-none rotate-12">
+      {/* Background Graphite Doodles */}
+      <div className="absolute top-[20%] right-[-10%] w-[400px] h-[400px] opacity-[0.05] pointer-events-none rotate-45 mix-blend-multiply">
           <svg viewBox="0 0 200 200">
-              <path d="M10,100 Q50,10 90,100 T170,100" fill="none" stroke="black" strokeWidth="2" />
-              <path d="M10,120 Q50,30 90,120 T170,120" fill="none" stroke="black" strokeWidth="2" />
+              <circle cx="100" cy="100" r="80" stroke="black" strokeWidth="1" fill="none" style={{ filter: 'url(#pencil-stroke)' }} />
+              <line x1="20" y1="100" x2="180" y2="100" stroke="black" strokeWidth="0.5" />
+              <line x1="100" y1="20" x2="100" y2="180" stroke="black" strokeWidth="0.5" />
           </svg>
       </div>
 
@@ -135,34 +149,29 @@ const Portfolio: React.FC = () => {
                     
                     <div>
                         <div className="flex items-center gap-4 mb-6">
-                            {/* Pontos de "Reticula" (Pop Art/HQs) */}
-                            <div className="flex gap-1">
-                                <div className="w-1.5 h-1.5 bg-[#754548] rounded-full"></div>
-                                <div className="w-1.5 h-1.5 bg-[#754548] rounded-full opacity-60"></div>
-                                <div className="w-1.5 h-1.5 bg-[#754548] rounded-full opacity-30"></div>
+                            <div className="w-3 h-3 border border-[#754548] rounded-full flex items-center justify-center">
+                                <div className="w-1 h-1 bg-[#754548] rounded-full"></div>
                             </div>
                             <span className="text-xs font-bold uppercase tracking-[0.2em] text-stone-500">
                                 Acervo
                             </span>
                         </div>
-                        <h2 className="font-display font-bold text-6xl md:text-7xl lg:text-8xl text-stone-900 leading-[0.85] tracking-tighter uppercase mb-4">
+                        <h2 className="font-display font-bold text-6xl md:text-7xl lg:text-8xl text-stone-900 leading-[0.85] tracking-tighter uppercase mb-4 relative inline-block">
                             Obras<br/>
-                            <span className="text-stone-300 relative inline-block">
-                                Reais.
-                                {/* Sublinhado Riscado */}
-                                <svg className="absolute -bottom-2 left-0 w-full h-4 text-[#754548] opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                    <path d="M0,5 Q50,15 100,5" stroke="currentColor" strokeWidth="2" fill="none" />
-                                </svg>
-                            </span>
+                            <span className="text-stone-300">Reais.</span>
+                            
+                            {/* Círculo de Lápis Vermelho (Correção/Destaque) */}
+                            <svg className="absolute -bottom-4 -right-4 w-[120%] h-[60px] pointer-events-none" viewBox="0 0 200 60" preserveAspectRatio="none">
+                                <path d="M10,30 Q100,60 190,30 Q100,0 10,30" stroke="#ef4444" strokeWidth="2" fill="none" opacity="0.4" style={{ filter: 'url(#pencil-stroke)' }} />
+                            </svg>
                         </h2>
                     </div>
 
                     <div className="hidden lg:block">
-                        <p className="font-serif text-xl italic text-stone-600 leading-relaxed max-w-[200px]">
-                            "A pele é o único suporte artístico que sangra, cicatriza e envelhece junto com a obra."
+                        <p className="font-hand text-2xl text-stone-600 leading-relaxed max-w-[200px] rotate-[-2deg]">
+                            "Traços que sangram e contam histórias..."
                         </p>
-                        {/* Linha "Nervura" (Orgânica) */}
-                        <div className="mt-12 w-[2px] h-32 bg-[#754548] opacity-20" style={{ clipPath: "polygon(0 0, 100% 0, 80% 100%, 20% 100%)" }}></div>
+                        <div className="mt-12 w-full h-[1px] bg-gradient-to-r from-[#754548] to-transparent opacity-30"></div>
                     </div>
 
                 </div>
@@ -171,6 +180,9 @@ const Portfolio: React.FC = () => {
             {/* --- SCROLLABLE GALLERY --- */}
             <div className="w-full lg:w-[75%] relative">
                 
+                {/* Linha Guia Vertical */}
+                <div className="absolute left-[8px] md:left-1/2 top-0 bottom-0 w-[1px] bg-stone-300 opacity-30 -translate-x-1/2 hidden md:block border-l border-dashed"></div>
+
                 <div className="flex flex-col pt-12 lg:pt-32">
                     {PORTFOLIO_ITEMS.map((item, index) => (
                         <PortfolioItem key={item.id} item={item} index={index} />
@@ -178,7 +190,8 @@ const Portfolio: React.FC = () => {
                 </div>
 
                 <div className="mt-24 text-center">
-                     <a href="https://instagram.com" target="_blank" rel="noreferrer" className="inline-block py-4 px-8 border border-stone-300 text-xs font-bold uppercase tracking-widest hover:bg-[#1c1917] hover:text-white hover:border-[#1c1917] transition-all duration-300 hover:rotate-2">
+                     <a href="https://instagram.com" target="_blank" rel="noreferrer" className="inline-block py-4 px-12 border-2 border-stone-800 text-sm font-bold uppercase tracking-widest hover:bg-[#1c1917] hover:text-white transition-all duration-300"
+                        style={{ filter: 'url(#pencil-stroke)' }}>
                         Ver Arquivo Completo
                      </a>
                 </div>
